@@ -211,7 +211,7 @@
 <div class="container">
     <div class="header flex-between">
         <div class="logobox">
-            <img src="/GOTT.png" alt="GOTT 로고">
+            <img src="images/logo.png" alt="GOTT 로고">
         </div>
         <div class="nav flex-between">
             <div class="textzone">이벤트</div>
@@ -266,7 +266,7 @@
 
 <script>
     $("#signup").on("click", function(){
-        location.href="/members/signup";
+        location.href="/members/signuppage";
     })
 
 </script>

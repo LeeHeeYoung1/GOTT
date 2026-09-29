@@ -2,6 +2,7 @@ package com.kedu.controllers;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,10 +12,16 @@ import com.kedu.dao.MembersDAO;
 import com.kedu.dto.MembersDTO;
 
 @Controller
-@RequestMapping("/Members")
+@RequestMapping("/members")
 public class MembersControllers {
 	
+	@Autowired
 	private MembersDAO mdao;
+	
+	@RequestMapping("/loginpage")
+	public String loginPage() {
+	    return "members/login";
+	}
 	
 	@RequestMapping("/login")
 	public String login(MembersDTO mdto, HttpSession session) {
@@ -33,6 +40,11 @@ public class MembersControllers {
 	public int idcheck(String id) {
 		
 		return mdao.idcheck(id);
+	}
+	
+	@RequestMapping("/signuppage")
+	public String signuppage() {
+		return "members/signup";
 	}
 	
 	@ResponseBody

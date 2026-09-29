@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/public.css">
+<link rel="stylesheet" href="/css/public.css">
 <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <title>GOTT Sign up</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -248,7 +248,7 @@
 <div class="container">
     <div class="header flex-between">
         <div class="logobox">
-            <img src="/GOTT.png" alt="GOTT 로고">
+            <img src="/images/logo.png" alt="GOTT 로고">
         </div>
         <div class="nav flex-between">
             <div class="textzone">이벤트</div>
@@ -269,13 +269,13 @@
     </div>
 
     <div class="main flex-center">
-        <form action="/members/signup" method="post">
+        <form action="/members/signup" id="frm" method="post">
             <fieldset class="mainbox">
 
                 <legend>회원가입</legend>
 
                 <input id="id" name="id" type="text" placeholder="ID를 입력하세요">
-                <button id="idcheck">ID중복검사</button>
+                <button id="idcheck" type="button">ID중복검사</button>
                 <span class="idcheckresult"></span>
                 <input id="pw" name="pw" type="password" placeholder="Password를 입력하세요">
                 <input id="pw2" type="password" placeholder="Password를 재입력하세요">
@@ -287,7 +287,7 @@
                 <button id="nicknamecheck" type="button">중복확인</button>
                 <span class="nicknamecheckresult"></span>
 
-                <input name="phone" type="text" placeholder="'-' 를 제외한 번호를 입력하세요">
+                <input id="phone" name="phone" type="text" placeholder="'-' 를 제외한 번호를 입력하세요">
                 <input id="email" name="email" type="email" placeholder="email을 입력하세요.">
                 <span>* 성별을 선택하세요</span>
                 <input class="gender" name="gender" type="radio" value="남성">남성
@@ -329,7 +329,7 @@
     
     let frm = $("#frm");
     let idtext = $("#id");
-
+    
     $("#idcheck").on("click", function(){
         let id = $("#id").val();
 
@@ -342,11 +342,11 @@
             data:{id: id}
         }).done(function(resp) {
             if(resp == 1) {
-                $("#idcheckresult").text("이미 사용 중인 아이디입니다.").css("color", "red");
-                $("#idtext").removeAttr("check");
+                $(".idcheckresult").text("이미 사용 중인 아이디입니다.").css("color", "red");
+                $("#id").removeAttr("check");
             } else {
-                $("#idcheckresult").text("사용 가능한 아이디입니다..").css("color", "green");
-                $("#idtext").attr("check", "true");
+                $(".idcheckresult").text("사용 가능한 아이디입니다..").css("color", "green");
+                $("#id").attr("check", "true");
             }
         })
     })
@@ -362,6 +362,11 @@
         let pw2regex = /[a-z]/
         let pw3regex = /[0-9]/
         let pw4regex = /^[A-Z0-9a-z]{8,}$/
+        
+        if(pw == "" || pw2 == "") {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
 
         if(!pw1regex.test(pw)) {
             alert("비밀번호에 대문자를 포함해주세요.");
@@ -383,11 +388,6 @@
             return false;
         }
 
-        if(pw == "" || pw2 == "") {
-            alert("비밀번호를 입력해주세요.");
-            return;
-        }
-
         if(pw == pw2) {
             span.html("비밀번호가 일치합니다.").css("color", "green")
         } else {
@@ -395,23 +395,23 @@
         }        
     })
 
-    $("nicknamecheck").on("click", function(){
+    $("#nicknamecheck").on("click", function(){
         let nickname = $("#nickname").val();
 
-        if(nickname = "") {
+        if(nickname == "") {
             alert("닉네임을 입력해주세요.")
             return;
         }
         $.ajax({
             url:"/members/nicknamecheck",
-            data:{id: id}
+            data:{nickname: nickname}
         }).done(function(resp) {
             if(resp == 1) {
-                $("#nicknamecheckresult").text("이미 사용 중인 닉네임입니다.").css("color", "red");
-                $("#nicknametext").removeAttr("check");
+                $(".nicknamecheckresult").text("이미 사용 중인 닉네임입니다.").css("color", "red");
+                $("#nickname").removeAttr("check");
             } else {
-                $("#nicknamecheckresult").text("사용 가능한 닉네임입니다..").css("color", "green");
-                $("#nicknametext").attr("check", "true");
+                $(".nicknamecheckresult").text("사용 가능한 닉네임입니다..").css("color", "green");
+                $("#nickname").attr("check", "true");
             }
         })
     })
@@ -433,16 +433,26 @@
         location.href="/";
     })
 	
-    $("#frm").onsubmit = function() {
-    	if(!idtext.getAttribute("check")) {
-    		alert("아이디 중복검사를 실행해주세요.")
-    		return false;
-    	}
-    	if(!phoneregex.test(phonetext.value)) {
-    		alert("연락처의 양식에 맞춰 입력해주세요.")
-    		return false;
-    	}
-    }
+    $("#frm").on("submit", function(e) {
+
+	    if(!$("#id").attr("check")) {
+	        alert("아이디 중복검사를 실행해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    if(!$("#nickname").attr("check")) {
+	        alert("닉네임 중복검사를 실행해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    if(!phoneregex.test(phonetext.val())) {
+	        alert("연락처의 양식에 맞춰 입력해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+	});
     
 </script>
 
