@@ -25,16 +25,25 @@ public class MembersControllers {
 	    return "members/login";
 	}
 	
+	@ResponseBody
 	@RequestMapping("/login")
-	public String login(MembersDTO mdto, HttpSession session) {
+	public int login(MembersDTO mdto, HttpSession session) {
+		
+		
 		int result = mdao.login(mdto);
 		
 		if(result == 1) {
 			session.setAttribute("loginId", mdto.getId());
 			
-			return "redirect:/";
 		}
-		return "redirect:/members/login";
+		
+		return result;
+	}
+	
+	@RequestMapping("/logout")
+	public String logout(HttpSession session) throws Exception {
+		session.invalidate(); 
+		return "redirect:/";
 	}
 	
 	@ResponseBody

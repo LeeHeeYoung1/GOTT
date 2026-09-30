@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/public.css">
+<link rel="stylesheet" href="/css/public.css">
 <title>GOTT Login</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -238,18 +238,19 @@
             <div class="linkbar">
                 <div class="linkbartitle">메뉴</div>
                 <div class="linkbarmain">
-                    <a href="/members/login">로그인</a><br>
-                    <a href="/members/signup">회원가입</a><br>
+                	<a href="/">홈으로</a><br>
+                    <a href="/members/loginpage">로그인</a><br>
+                    <a href="/members/signuppage">회원가입</a><br>
                     <a href="/members/idsearch">아이디 찾기</a><br>
                     <a href="/members/pwsearch">비밀번호 찾기</a>
                 </div>
             </div>
         </div>
-        <form action="">
+        <form id="loginfrm" action="/members/login">
             <fieldset class="mainright">
                 <legend>로그인</legend>
-                <input name="id" type="text" placeholder="ID를 입력하세요">
-                <input name="pw" type="password" placeholder="Password를 입력하세요">
+                <input id="id" name="id" type="text" placeholder="ID를 입력하세요">
+                <input id="pw" name="pw" type="password" placeholder="Password를 입력하세요">
                 <button type="submit">로그인</button>
                 <button id="signup" type="button"> 회원가입</button>
             </fieldset>
@@ -265,6 +266,34 @@
 </div>
 
 <script>
+
+	$("#loginfrm").on("submit", function(e) {
+		e.preventDefault();
+		let id = $("#id").val();
+		let pw = $("#pw").val();
+		
+		if(id == "" || pw == "") {
+	        alert("아이디와 비밀번호를 입력해주세요.");
+	        return;
+	    }
+		
+		$.ajax({
+	        url: "/members/login",
+	        type: "post",
+	        data: {
+	            id: id,
+	            pw: pw
+	        }
+	    }).done(function(resp) {
+
+	        if(resp == 1) {
+	            location.href = "/";
+	        } else {
+	            alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+	        }
+	    });
+	})
+
     $("#signup").on("click", function(){
         location.href="/members/signuppage";
     })
