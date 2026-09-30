@@ -44,8 +44,8 @@ public class MembersDAO {
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(MembersDTO.class), id);
 	}
 
-	public int deleted(String id, String pw) {
+	public int deleted(String id, MembersDTO mdto) {
 	    String sql = "delete from members where id = ? and pw = ?";
-	    return jdbc.update(sql, id, pw);
+	    return jdbc.update(sql, id, mdto.getPw());
 	}
 }
