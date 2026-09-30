@@ -3,109 +3,152 @@ package com.kedu.dto;
 import java.sql.Timestamp;
 
 public class RoomDTO {
-	private int room_id;
-	private int place_id;
-	private String room_name;
-	private int room_count;
-	private int base_count;
-	private int max_count;
-	private int price_weekday;
-	private int price_weekend;
+
+	private int roomId;
+	private int placeId;
+	private String roomName;
+	private Integer roomCount;
+	private Integer baseCount;
+	private Integer maxCount;
+	private Integer priceWeekday;
+	private Integer priceWeekend;
 	private String image1;
+	private String image2;
+	private String image3;
+	private String image4;
+	private String image5;
 	private String amenities;
 	private String intro;
-	private Timestamp reg_date;
-	
-	public RoomDTO () {}
-	
-	public RoomDTO(int room_id, int place_id, String room_name, int room_count, int base_count, int max_count,
-			int price_weekday, int price_weekend, String image1, String amenities, String intro, Timestamp reg_date) {
+	private Timestamp regDate;
 
-		this.room_id = room_id;
-		this.place_id = place_id;
-		this.room_name = room_name;
-		this.room_count = room_count;
-		this.base_count = base_count;
-		this.max_count = max_count;
-		this.price_weekday = price_weekday;
-		this.price_weekend = price_weekend;
-		this.image1 = image1;
-		this.amenities = amenities;
-		this.intro = intro;
-		this.reg_date = reg_date;
+	public RoomDTO() {
 	}
-	public int getRoom_id() {
-		return room_id;
+
+	public int getRoomId() {
+		return roomId;
 	}
-	public void setRoom_id(int room_id) {
-		this.room_id = room_id;
+
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
 	}
-	public int getPlace_id() {
-		return place_id;
+
+	public int getPlaceId() {
+		return placeId;
 	}
-	public void setPlace_id(int place_id) {
-		this.place_id = place_id;
+
+	public void setPlaceId(int placeId) {
+		this.placeId = placeId;
 	}
-	public String getRoom_name() {
-		return room_name;
+
+	public String getRoomName() {
+		return roomName;
 	}
-	public void setRoom_name(String room_name) {
-		this.room_name = room_name;
+
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
 	}
-	public int getRoom_count() {
-		return room_count;
+
+	public Integer getRoomCount() {
+		return roomCount;
 	}
-	public void setRoom_count(int room_count) {
-		this.room_count = room_count;
+
+	public void setRoomCount(Integer roomCount) {
+		this.roomCount = roomCount;
 	}
-	public int getBase_count() {
-		return base_count;
+
+	public Integer getBaseCount() {
+		return baseCount;
 	}
-	public void setBase_count(int base_count) {
-		this.base_count = base_count;
+
+	public void setBaseCount(Integer baseCount) {
+		this.baseCount = baseCount;
 	}
-	public int getMax_count() {
-		return max_count;
+
+	public Integer getMaxCount() {
+		return maxCount;
 	}
-	public void setMax_count(int max_count) {
-		this.max_count = max_count;
+
+	public void setMaxCount(Integer maxCount) {
+		this.maxCount = maxCount;
 	}
-	public int getPrice_weekday() {
-		return price_weekday;
+
+	public Integer getPriceWeekday() {
+		return priceWeekday;
 	}
-	public void setPrice_weekday(int price_weekday) {
-		this.price_weekday = price_weekday;
+
+	public void setPriceWeekday(Integer priceWeekday) {
+		this.priceWeekday = priceWeekday;
 	}
-	public int getPrice_weekend() {
-		return price_weekend;
+
+	public Integer getPriceWeekend() {
+		return priceWeekend;
 	}
-	public void setPrice_weekend(int price_weekend) {
-		this.price_weekend = price_weekend;
+
+	public void setPriceWeekend(Integer priceWeekend) {
+		this.priceWeekend = priceWeekend;
 	}
+
 	public String getImage1() {
 		return image1;
 	}
+
 	public void setImage1(String image1) {
 		this.image1 = image1;
 	}
+
+	public String getImage2() {
+		return image2;
+	}
+
+	public void setImage2(String image2) {
+		this.image2 = image2;
+	}
+
+	public String getImage3() {
+		return image3;
+	}
+
+	public void setImage3(String image3) {
+		this.image3 = image3;
+	}
+
+	public String getImage4() {
+		return image4;
+	}
+
+	public void setImage4(String image4) {
+		this.image4 = image4;
+	}
+
+	public String getImage5() {
+		return image5;
+	}
+
+	public void setImage5(String image5) {
+		this.image5 = image5;
+	}
+
 	public String getAmenities() {
 		return amenities;
 	}
+
 	public void setAmenities(String amenities) {
 		this.amenities = amenities;
 	}
+
 	public String getIntro() {
 		return intro;
 	}
+
 	public void setIntro(String intro) {
 		this.intro = intro;
 	}
-	public Timestamp getReg_date() {
-		return reg_date;
+
+	public Timestamp getRegDate() {
+		return regDate;
 	}
-	public void setReg_date(Timestamp reg_date) {
-		this.reg_date = reg_date;
+
+	public void setRegDate(Timestamp regDate) {
+		this.regDate = regDate;
 	}
-	
-	
 }
