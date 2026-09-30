@@ -35,6 +35,15 @@ public class MembersControllers {
 			MembersDTO member = mdao.selectById(mdto.getId());
 			
 			session.setAttribute("loginId", member.getId());
+			session.setAttribute("name", member.getName());
+			session.setAttribute("pw", member.getPw());
+			session.setAttribute("phone", member.getPhone());
+			session.setAttribute("email", member.getEmail());
+			session.setAttribute("gender", member.getGender());
+			session.setAttribute("Dob", member.getDob());
+			session.setAttribute("zipcode", member.getZipcode());
+			session.setAttribute("address1", member.getAddress1());
+			session.setAttribute("address2", member.getAddress2());
 			session.setAttribute("nickname", member.getNickname());
 		}
 		return result;
@@ -76,6 +85,11 @@ public class MembersControllers {
 	@RequestMapping("/mypage")
 	public String mypage() {
 		return "members/mypage";
+	}
+	
+	@RequestMapping("/update")
+	public String update() {
+		return "members/update";
 	}
 	
 	@RequestMapping("/deleted")

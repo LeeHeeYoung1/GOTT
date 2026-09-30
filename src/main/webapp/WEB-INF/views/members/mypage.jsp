@@ -689,7 +689,7 @@
 
             <span style="font-size: 12px; color: #797472; margin: 15px;">계정</span>
             <ul style=" list-style: none;">
-              <li><a href="#">내 정보 수정</a></li>
+              <li><a href="/members/update">내 정보 수정</a></li>
               <li><a href="#">비밀번호 변경</a></li>
               <li><a href="#">알림 설정</a></li>
               <li><a href="#">1:1 문의</a></li>
