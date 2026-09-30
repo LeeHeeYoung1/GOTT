@@ -384,11 +384,9 @@
                 <input id="phone" name="phone" type="text" value="${phone}" placeholder="'-' 를 제외한 번호를 입력하세요">
                 <input id="email" name="email" type="email" value="${email}" placeholder="email을 입력하세요.">
 
-                <span>성별</span>
-                <input class="gender" name="gender" type="radio" value="남성" ${gender} readonly>남성
-                <input class="gender" name="gender" type="radio" value="여성" ${gender} readonly>여성
-
-                <input name="dob" type="date" value="${Dob}" style="margin-top: 5px;" readonly>
+                <span>성별</span> 
+                <input class="gender" name="gender" type="radio" value="남성" ${gender == '남성' ? 'checked' : ''}> 남성 
+                <input class="gender" name="gender" type="radio" value="여성" ${gender == '여성' ? 'checked' : ''}> 여성 <input name="dob" type="date" value="${Dob}" style="margin-top: 5px;" readonly>
 
                 <input id="zipcode" name="zipcode" type="text" value="${zipcode}" readonly placeholder="우편번호">
                 <button id="postbtn" type="button">주소 찾기</button>

@@ -331,7 +331,7 @@
         <div class="sideBox">
 
           <div class="loginId">
-            <strong>${list.nickname}</strong><span>님</span>
+            <strong>${nickname}</strong><span>님</span>
             <br>
             <span>일반회원</span>
             <span>등급</span>
@@ -359,7 +359,7 @@
 
             <span>계정</span>
             <ul>
-              <li><a href="#">내 정보 수정</a></li>
+              <li><a href="/members/update">내 정보 수정</a></li>
               <li><a href="#">비밀번호 변경</a></li>
               <li><a href="#">알림 설정</a></li>
               <li><a href="#">1:1 문의</a></li>

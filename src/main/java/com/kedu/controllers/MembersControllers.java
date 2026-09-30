@@ -4,9 +4,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.commons.EncryptionUtils;
@@ -35,16 +35,15 @@ public class MembersControllers {
 			MembersDTO member = mdao.selectById(mdto.getId());
 			
 			session.setAttribute("loginId", member.getId());
-			session.setAttribute("name", member.getName());
-			session.setAttribute("pw", member.getPw());
-			session.setAttribute("phone", member.getPhone());
-			session.setAttribute("email", member.getEmail());
-			session.setAttribute("gender", member.getGender());
-			session.setAttribute("Dob", member.getDob());
-			session.setAttribute("zipcode", member.getZipcode());
-			session.setAttribute("address1", member.getAddress1());
-			session.setAttribute("address2", member.getAddress2());
-			session.setAttribute("nickname", member.getNickname());
+		    session.setAttribute("name", member.getName());
+		    session.setAttribute("phone", member.getPhone());
+		    session.setAttribute("email", member.getEmail());
+		    session.setAttribute("gender", member.getGender());
+		    session.setAttribute("Dob", member.getDob());
+		    session.setAttribute("zipcode", member.getZipcode());
+		    session.setAttribute("address1", member.getAddress1());
+		    session.setAttribute("address2", member.getAddress2());
+		    session.setAttribute("nickname", member.getNickname());
 		}
 		return result;
 	}
@@ -88,8 +87,11 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/update")
-	public String update() {
-		return "members/update";
+	public String update(HttpSession session, Model model) {
+	    String id = (String) session.getAttribute("loginId");
+	    MembersDTO member = mdao.selectById(id);
+	    model.addAttribute("member", member);
+	    return "members/update";
 	}
 	
 	@RequestMapping("/deleted")

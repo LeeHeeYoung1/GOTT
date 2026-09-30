@@ -608,6 +608,11 @@
       font-size: 12px;
       color: #777;
     }
+    
+     .logobox img {
+            width: 100%;
+            height: 100%;
+        }
   </style>
 </head>
 
@@ -618,7 +623,7 @@
     <c:when test="${loginId != null}">
 
       <div class="headercontainer">
-        <div class="logoBox">로고사진</div>
+        <div class="logoBox"></div>
 
         <nav class="nav">
           <a href="#">이벤트</a>
@@ -632,7 +637,7 @@
 
         <div class="signBox">
           <a href="/members/mypage">마이페이지</a>
-          <a href="home">로그아웃</a>
+          <a href="/members/logout">로그아웃</a>
         </div>
 
         <div class="menu-icon">☰</div>
