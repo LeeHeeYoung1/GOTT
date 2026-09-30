@@ -1,6 +1,7 @@
 package com.kedu.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -38,9 +39,13 @@ public class MembersDAO {
 		
 	}
 	
+	public MembersDTO selectById(String id) {
+		String sql = "select * from members where id=?";
+		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(MembersDTO.class), id);
+	}
+
 	public int deleted(String id, String pw) {
 	    String sql = "delete from members where id = ? and pw = ?";
 	    return jdbc.update(sql, id, pw);
 	}
-
 }
