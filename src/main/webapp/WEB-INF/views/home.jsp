@@ -291,7 +291,7 @@
 <div class="container">
     <div class="header flex-between">
         <div class="logobox">
-            <img src="/GOTT.png" alt="GOTT 로고">
+            <img src="images/logo.png" alt="GOTT 로고">
         </div>
         <div class="navi flex-between">
             <div class="textzone"><a href="">이벤트</a></div>
@@ -303,11 +303,11 @@
             <div class="textzone"><a href="">공지사항</a></div>
         </div>
         <c:choose>
-	        <c:when test="${loginId}">
+	        <c:when test="${loginId != null}">
 		        <div class="user-menu">
 		       	 	<div class="textbox">${nickname}님</div>
 		            <div class="textbox"><a href="/members/logout">로그아웃</a></div>
-		            <div class="textbox"><a href="/members/mypage">마이페이지</a></div>
+		            <div class="textbox"><a href="members/mypage">마이페이지</a></div>
 		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
 		        </div>
 	        </c:when>

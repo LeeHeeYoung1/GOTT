@@ -29,14 +29,14 @@ public class MembersControllers {
 	@RequestMapping("/login")
 	public int login(MembersDTO mdto, HttpSession session) {
 		
-		
 		int result = mdao.login(mdto);
 		
 		if(result == 1) {
-			session.setAttribute("loginId", mdto.getId());
+			MembersDTO member = mdao.selectById(mdto.getId());
 			
+			session.setAttribute("loginId", member.getId());
+			session.setAttribute("nickname", member.getNickname());
 		}
-		
 		return result;
 	}
 	
@@ -72,7 +72,6 @@ public class MembersControllers {
 		
 		return "redirect:/members/login";
 	}
-	
 	@RequestMapping("/deleted")
 	public String deleted() {
 		return "members/deleted";
@@ -88,7 +87,6 @@ public class MembersControllers {
 	    }
 	    return "members/login";
 	}
-
-
+	
 	
 }
