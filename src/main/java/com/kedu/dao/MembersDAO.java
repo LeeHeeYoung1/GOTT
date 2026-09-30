@@ -38,4 +38,9 @@ public class MembersDAO {
 		
 	}
 	
+	public int deleted(String id, String pw) {
+	    String sql = "delete from members where id = ? and pw = ?";
+	    return jdbc.update(sql, id, pw);
+	}
+
 }

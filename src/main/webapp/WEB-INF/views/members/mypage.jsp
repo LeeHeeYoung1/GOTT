@@ -1,0 +1,907 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      color: #263238;
+      background-color: #f8fafa;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+
+
+    .headercontainer {
+      width: 1200px;
+      max-width: calc(100% - 40px);
+      margin: 0 auto;
+
+      display: flex;
+      align-items: center;
+
+      padding: 0 30px;
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .flex-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flex-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+
+    /* 로고 */
+    .logoBox {
+      width: 100px;
+      height: 40px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      margin-right: 50px;
+    }
+
+
+    /* 메뉴 */
+    .nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav a {
+      color: black;
+    }
+
+
+    /* 로그인 / 마이페이지 */
+    .signBox {
+      margin-left: auto;
+      margin-right: 40px;
+
+      display: flex;
+      gap: 10px;
+    }
+
+    .signBox a {
+      color: black;
+    }
+
+
+    /* 제목 */
+    h2,
+    h5 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    /* =========================
+     마이페이지 전체
+     ========================= */
+
+    .mypageContainer {
+      width: 1200px;
+      max-width: calc(100% - 40px);
+      margin: 0 auto;
+    }
+
+
+    /* =========================
+     사이드바
+     ========================= */
+
+    .sideBox {
+      border: 1px solid black;
+
+      width: 17%;
+      height: 660px;
+
+      float: left;
+    }
+
+
+    /* 회원정보 */
+    .loginId {
+      height: 80px;
+
+      text-align: center;
+
+      padding: 15px 20px;
+    }
+
+    .loginId strong {
+      font-size: 14px;
+    }
+
+    .loginId span {
+      font-size: 12px;
+      color: #797472;
+    }
+
+
+    /* 구분선 */
+    .sideBox hr {
+      margin: 0;
+
+      border: 0;
+      border-top: 1px solid #aaa;
+    }
+
+
+    /* 메뉴 제목 */
+    .sideTitle>span {
+      display: block;
+
+      margin: 12px 20px 5px;
+
+      font-size: 12px;
+      color: #797472;
+    }
+
+
+    /* 메뉴 목록 */
+    .sideTitle ul {
+      list-style: none;
+
+      padding: 0;
+      margin: 0;
+    }
+
+
+    /* 메뉴 */
+    .sideTitle li {
+      padding: 6px 20px;
+
+      font-size: 14px;
+    }
+
+
+    /* 메뉴 링크 */
+    .sideTitle li a {
+      color: #222;
+    }
+
+
+    /* 마우스 올렸을 때 */
+    .sideTitle li:hover {
+      background-color: #f2f2f2;
+    }
+
+
+    /* =========================
+     오른쪽 메인 영역
+     ========================= */
+
+    .mainContainer {
+      width: 83%;
+      margin-left: 17%;
+      padding-left: 20px;
+    }
+
+
+    /*여기부터 상단 바*/
+    .mybarBox {
+      width: 100%;
+
+      display: flex;
+    }
+
+
+
+    .a1,
+    .a2,
+    .a3,
+    .a4 {
+      width: 25%;
+      height: 80px;
+
+      border: 1px solid black;
+
+      display: flex;
+      flex-direction: column;
+
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    .a1 p,
+    .a2 p,
+    .a3 p,
+    .a4 p {
+      margin: 0;
+      font-size: 24px;
+    }
+
+
+
+    .a1 span,
+    .a2 span,
+    .a3 span,
+    .a4 span {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    /*여기부터 플래너 부분 */
+    .plannerContainer {
+      margin-top: 80px;
+    }
+
+
+    .plannerBox {
+      border: 1px solid black;
+      width: 100%;
+      padding: 20px;
+    }
+
+
+
+    /*여기부터 예약부분*/
+    .reservationContainer {
+      margin-top: 80px;
+    }
+
+    .reservationList {
+      display: flex;
+      margin-top: 10px;
+      padding: 20px;
+      border: 1px solid #ccc;
+    }
+
+    .reservationVar {
+      display: flex;
+      margin-top: 15px;
+      border-bottom: 1px solid #222;
+    }
+
+    .tab {
+      width: 100px;
+      height: 40px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border: 1px solid #ccc;
+      border-bottom: none;
+
+      background-color: white;
+
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .tab:hover {
+      background-color: #222;
+      color: white;
+      border-color: #222;
+    }
+
+    button {
+      border: 1px solid black;
+      background-color: white;
+    }
+
+    button:hover {
+      background-color: #222;
+      color: white;
+      border-color: #222;
+    }
+
+
+    /* =========================
+   찜한 여행지 · 숙소
+   ========================= */
+
+    .wishlistContainer {
+      margin-top: 80px;
+    }
+
+    /* 제목 + 더보기 */
+    .wishlistTitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .wishlistTitle>a {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .wishlistTitle>span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .wishlistTitle>a {
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* 찜 탭 */
+    .wishlistTabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+      margin-bottom: 20px;
+    }
+
+    .wishlistTabs .tab {
+      width: auto;
+      height: 30px;
+      padding: 0 14px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 1px solid #333;
+      background-color: white;
+
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .wishlistTabs .tab.active {
+      background-color: #222;
+      color: white;
+    }
+
+    /* 카드 전체 */
+    .wishlistList {
+      display: flex;
+      gap: 23px;
+    }
+
+    /* 카드 */
+    .wishlistImg {
+      width: 250px;
+      border: 1px solid #333;
+      background-color: white;
+    }
+
+    /* 카드 이미지 */
+    .wishlistImg>img {
+      display: block;
+
+      width: 100%;
+      height: 185px;
+
+      object-fit: cover;
+    }
+
+    /* 카드 내용 */
+    .wishlistInfo {
+      padding: 14px 15px 18px;
+    }
+
+    .wishlistInfo h3 {
+      margin: 0 0 6px;
+
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .wishlistInfo p {
+      margin: 0 0 14px;
+
+      font-size: 13px;
+      color: #777;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 자세히 보기 버튼 */
+    .wishlistInfo button {
+      padding: 6px 12px;
+
+      border: 1px solid #333;
+      background-color: white;
+
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .wishlistInfo button:hover {
+      background-color: #222;
+      color: white;
+    }
+
+    /* =========================
+   내가 쓴 리뷰
+   ========================= */
+
+    .reviewContainer {
+      margin-top: 80px;
+    }
+
+    /* 제목 */
+    .reviewTitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 15px;
+    }
+
+    .reviewTitle>span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .reviewTitle>a {
+      font-size: 12px;
+      color: #777;
+    }
+
+
+    /* 리뷰 카드 전체 */
+    .reviewList {
+      display: flex;
+      gap: 23px;
+    }
+
+
+    /* 리뷰 카드 */
+    .reviewCard {
+      width: 250px;
+
+      border: 1px solid #333;
+      background-color: white;
+    }
+
+
+    /* 작성자 */
+    .reviewUser {
+      height: 48px;
+
+      display: flex;
+      align-items: center;
+
+      padding: 0 12px;
+
+      border-bottom: 1px solid #333;
+    }
+
+    .reviewUser strong {
+      font-size: 13px;
+    }
+
+
+    /* 리뷰 이미지 */
+    .reviewImage {
+      width: 100%;
+      height: 248px;
+    }
+
+    .reviewImage img {
+      width: 100%;
+      height: 100%;
+
+      display: block;
+
+      object-fit: cover;
+    }
+
+
+    /* 리뷰 정보 */
+    .reviewInfo {
+      padding: 10px 12px 14px;
+    }
+
+
+    /* 아이콘 */
+    .reviewIcons {
+      display: flex;
+      gap: 15px;
+
+      margin-bottom: 7px;
+    }
+
+    .reviewIcons span {
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+
+    /* 좋아요 */
+    .reviewLike {
+      margin: 0 0 4px;
+
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+
+    /* 여행지 제목 */
+    .reviewTitleText {
+      margin: 0 0 2px;
+
+      font-size: 12px;
+      font-weight: bold;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+
+    /* 리뷰 내용 */
+    .reviewDescription {
+      margin: 0;
+
+      font-size: 12px;
+      line-height: 1.5;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+
+    /* 날짜 */
+    .reviewDate {
+      margin: 7px 0 0;
+
+      font-size: 10px;
+      color: #777;
+    }
+
+    .reviewDate a {
+      color: #777;
+    }
+
+    /* =========================
+   섹션 제목 + 더보기
+   ========================= */
+
+    .sectionTitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sectionTitle>span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .sectionTitle>a {
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <c:choose>
+
+    <c:when test="${loginId != null}">
+
+      <div class="headercontainer">
+        <div class="logoBox">로고사진</div>
+
+        <nav class="nav">
+          <a href="#">이벤트</a>
+          <a href="#">지역</a>
+          <a href="#">추천여행지</a>
+          <a href="#">숙박업소</a>
+          <a href="#">리뷰</a>
+          <a href="#">여행 플래너</a>
+          <a href="#">공지사항</a>
+        </nav>
+
+        <div class="signBox">
+          <a href="/members/mypage">마이페이지</a>
+          <a href="home">로그아웃</a>
+        </div>
+
+        <div class="menu-icon">☰</div>
+      </div>
+
+      <hr>
+
+
+      <h2>마이페이지</h2>
+      <h5 style="font-size: 13px; color: #7c7c7c;">예약 내역과 찜한 여행지, 내가 남긴 기록을 한 곳에서 관리</h5>
+      <hr style="border: 1px solid rgb(248, 246, 246);">
+
+
+
+
+      <div class="mypageContainer">
+
+        <div class="breadcrumb" style="font-size: 12px; margin: 20px;">홈 > 마이페이지 > 대시보드</div>
+
+
+        <!--여기부터 사이드박스 끼미히끼잉~~~~-->
+        <div class="sideBox">
+
+          <div class="loginId">
+            <strong>${list.nickname}</strong><span style="font-size: 13px;">님</span>
+            <br>
+            <span>일반회원</span>
+            <span>등급</span>
+          </div>
+
+          <hr>
+
+          <div class="sideTitle">
+
+            <span style="font-size: 12px; color: #797472; margin: 15px;">예약/활동</span>
+            <ul style=" list-style: none;">
+              <li><a href="#">마이페이지 홈</a></li>
+              <li><a href="#">예약 내역</a></li>
+              <li><a href="#">찜한 여행지 · 숙소</a></li>
+              <li><a href="#">여행 일정 플래너</a></li>
+              <li><a href="#">내가 쓴 리뷰</a></li>
+              <li><a href="#">내가 쓴 게시글</a></li>
+            </ul>
+
+
+
+            <span style="font-size: 12px; color: #797472; margin: 15px;">혜택</span>
+            <ul style=" list-style: none;">
+              <li><a href="#">포인트 내역</a></li>
+              <li><a href="#">쿠폰함</a></li>
+            </ul>
+
+
+
+            <span style="font-size: 12px; color: #797472; margin: 15px;">계정</span>
+            <ul style=" list-style: none;">
+              <li><a href="#">내 정보 수정</a></li>
+              <li><a href="#">비밀번호 변경</a></li>
+              <li><a href="#">알림 설정</a></li>
+              <li><a href="#">1:1 문의</a></li>
+              <li><a href="/members/deleted">회원탈퇴</a></li>
+            </ul>
+
+          </div>
+
+        </div>
+
+
+        <!--여기부터 메인 끼미히끼잉~~~~-->
+        <div class="mainContainer">
+
+          <nav class="mybarBox">
+            <a class="a1">
+              <p>??</p>
+              <span>다가오는 예약</span>
+            </a>
+            <a class="a2">
+              <p>??</p>
+              <span>찜한 목록</span>
+            </a>
+            <a class="a3">
+              <p>??</p>
+              <span>작성한 리뷰</span>
+            </a>
+            <a class="a4">
+              <p>?,???M</p>
+              <span>보유 마일리지</span>
+            </a>
+          </nav>
+
+
+
+          <!--여기부터 일정 플래너-->
+          <div class="plannerContainer">
+            <div class="sectionTitle">
+              <span>여행 일정 플래너</span>
+              <a href="#" style="float: right;">플래너 열기</a>
+            </div>
+            
+            <div class="plannerBox">
+              <p>찜해둔 장소를 일차별 일정으로 정리해보세요.</p>
+              <p>관광지·맛집·숙소를 드래그해 일정에 추가하고 완성한 여행을 게시판에 공유할 수 있습니다.</p>
+              <button>새 일정 만들기</button>
+            </div>
+          </div>
+
+
+
+          <!--여기부터 예약리스트-->
+          <div class="reservationContainer">
+
+            <div class="sectionTitle">
+              <span>예약내역</span>
+              <a href="#" style="float: right;">예약내역 열기</a>
+            </div>
+
+
+            <div class="reservationVar">
+              <span class="tab active">전체</span>
+              <span class="tab">이용 예정</span>
+              <span class="tab">이용 완료</span>
+              <span class="tab">취소 / 환불</span>
+            </div>
+
+
+            <c:forEach var="reservation" items="${reservation}">
+
+              <div class="reservationList">
+
+                <div class="img">
+                  <img src="${reservation.image}" alt="호텔 이미지">
+                </div>
+
+                <div class="reservationInfo">
+                  <h3>${reservation.guestnum} · ${reservation.roomName}</h3>
+
+                  <p>
+                    체크인 ${reservation.check_in}
+                    / 체크아웃 ${reservation.check_Out}
+                    · 박
+                  </p>
+
+                  <p>
+                    성인 ${reservation.guestnum}명
+                    · 예약번호 ${reservation.reservationId}
+                  </p>
+
+                  <p>
+                    결제금액 ${reservation.price}원
+                  </p>
+                </div>
+
+                <div class="reservationCondition">
+                  <button>${reservation.status}</button>
+                  <button>예약 상세</button>
+                  <button>예약 취소</button>
+                </div>
+
+              </div>
+
+            </c:forEach>
+
+
+          </div>
+
+
+          <!--여기부터 찜 리스트-->
+
+          <div class="wishlistContainer">
+            <div class="sectionTitle">
+              <span>찜한 여행지 숙소</span>
+              <a href="#">더 보기 &gt;</a>
+            </div>
+            <c:forEach var="wishlist" items="${wishlist}">
+
+              <div class="wishlistImg">
+
+                <img src="${i.image}" alt="${i.title}">
+
+                <div class="wishlistInfo">
+                  <h3>${i.title}</h3>
+                  <p>${i.description}</p>
+                  <button>자세히 보기</button>
+                </div>
+
+              </div>
+
+            </c:forEach>
+
+          </div>
+
+          <!-- 여기부터 내가 쓴 리뷰 -->
+
+          <div class="reviewContainer">
+
+            <div class="sectionTitle">
+              <span>내가 쓴 리뷰</span>
+              <a href="#">더 보기 &gt;</a>
+            </div>
+
+            <div class="reviewList">
+
+              <c:forEach var="review" items="${review}">
+
+                <div class="reviewCard">
+
+                  <div class="reviewUser">
+                    <strong>${review.nickname}</strong>
+                  </div>
+
+                  <div class="reviewImage">
+                    <img src="${review.image}" alt="${review.title}">
+                  </div>
+
+                  <div class="reviewInfo">
+
+                    <div class="reviewIcons">
+                      <span>♡</span>
+                      <span>⊙</span>
+                      <span>↗</span>
+                    </div>
+
+
+                    <p class="reviewLike">
+                      좋아요 ${review.likeCount}개
+                    </p>
+
+
+                    <p class="reviewTitleText">
+                      ${review.title}
+                    </p>
+
+
+                    <p class="reviewDescription">
+                      후기 · "${review.description}"
+                    </p>
+
+
+                    <p class="reviewDate">
+                      ${review.writeDate} · <a href="#">수정</a> / <a href="#">삭제</a>
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </c:forEach>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+      </div>
+
+      </div>
+
+    </c:when>
+
+
+
+
+
+  </c:choose>
+
+</body>
+
+</html>

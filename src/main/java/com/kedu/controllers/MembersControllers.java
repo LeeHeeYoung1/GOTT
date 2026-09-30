@@ -73,4 +73,22 @@ public class MembersControllers {
 		return "redirect:/members/login";
 	}
 	
+	@RequestMapping("/deleted")
+	public String deleted() {
+		return "members/deleted";
+	}
+	
+	@RequestMapping(value = "/deleted", method = RequestMethod.POST)
+	public String deleted(@RequestParam("pw") String pw,HttpSession session) {
+	    String id = (String) session.getAttribute("loginId");
+	    int result = mdao.deleted(id, pw);
+	    if (result > 0) {
+	        session.invalidate();
+	        return "redirect:/";
+	    }
+	    return "members/login";
+	}
+
+
+	
 }
