@@ -48,4 +48,6 @@ public class MembersDAO {
 	    String sql = "delete from members where id = ? and pw = ?";
 	    return jdbc.update(sql, id, mdto.getPw());
 	}
+	
+	
 }

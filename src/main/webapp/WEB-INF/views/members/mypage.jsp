@@ -41,26 +41,6 @@
       padding: 0 30px;
     }
 
-    .section {
-      padding: 80px 0;
-    }
-
-    .flex {
-      display: flex;
-    }
-
-    .flex-center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .flex-between {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
 
     /* 로고 */
     .logoBox {
@@ -72,6 +52,11 @@
       align-items: center;
 
       margin-right: 50px;
+    }
+
+    .logoBox img {
+      width: 100%;
+      height: 100%;
     }
 
 
@@ -332,63 +317,6 @@
       margin-top: 80px;
     }
 
-    /* 제목 + 더보기 */
-    .wishlistTitle {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .wishlistTitle>a {
-      font-size: 12px;
-      color: #777;
-    }
-
-    .wishlistTitle>span {
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .wishlistTitle>a {
-      font-size: 12px;
-      color: #777;
-    }
-
-    /* 찜 탭 */
-    .wishlistTabs {
-      display: flex;
-      gap: 8px;
-      margin-top: 15px;
-      margin-bottom: 20px;
-    }
-
-    .wishlistTabs .tab {
-      width: auto;
-      height: 30px;
-      padding: 0 14px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      border: 1px solid #333;
-      background-color: white;
-
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .wishlistTabs .tab.active {
-      background-color: #222;
-      color: white;
-    }
-
-    /* 카드 전체 */
-    .wishlistList {
-      display: flex;
-      gap: 23px;
-    }
-
     /* 카드 */
     .wishlistImg {
       width: 250px;
@@ -451,25 +379,6 @@
 
     .reviewContainer {
       margin-top: 80px;
-    }
-
-    /* 제목 */
-    .reviewTitle {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      margin-bottom: 15px;
-    }
-
-    .reviewTitle>span {
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .reviewTitle>a {
-      font-size: 12px;
-      color: #777;
     }
 
 
@@ -608,11 +517,6 @@
       font-size: 12px;
       color: #777;
     }
-    
-     .logobox img {
-            width: 100%;
-            height: 100%;
-        }
   </style>
 </head>
 
@@ -623,7 +527,7 @@
     <c:when test="${loginId != null}">
 
       <div class="headercontainer">
-        <div class="logoBox"></div>
+        <div class="logoBox"><img src="/images/logo.png" alt="GOTT 로고"></div>
 
         <nav class="nav">
           <a href="#">이벤트</a>
@@ -763,16 +667,16 @@
             </div>
 
 
-            <c:forEach var="reservation" items="${reservation}">
+            <c:forEach var="roomList" items="${roomList}">
 
               <div class="reservationList">
 
                 <div class="img">
-                  <img src="${reservation.image}" alt="호텔 이미지">
+                  <img src="${roomList.image}" alt="호텔 이미지">
                 </div>
 
                 <div class="reservationInfo">
-                  <h3>${reservation.guestnum} · ${reservation.roomName}</h3>
+                  <h3>${roomList.guestnum} · ${roomList.roomName}</h3>
 
                   <p>
                     체크인 ${reservation.check_in}

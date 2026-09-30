@@ -380,13 +380,18 @@
                 <input id="nickname" name="nickname" type="text" value="${nickname}" placeholder="닉네임을 입력하세요">
                 <button id="nicknamecheck" type="button">중복확인</button>
                 <span class="nicknamecheckresult"></span>
+                
+                <input id="pw" name="pw" type="password" placeholder="수정할 Password를 입력하세요">
+                <input id="pw2" type="password" placeholder="수정할 Password를 재입력하세요">
+                <span class="pwresult"></span>
 
                 <input id="phone" name="phone" type="text" value="${phone}" placeholder="'-' 를 제외한 번호를 입력하세요">
                 <input id="email" name="email" type="email" value="${email}" placeholder="email을 입력하세요.">
 
                 <span>성별</span> 
-                <input class="gender" name="gender" type="radio" value="남성" ${gender == '남성' ? 'checked' : ''}> 남성 
-                <input class="gender" name="gender" type="radio" value="여성" ${gender == '여성' ? 'checked' : ''}> 여성 <input name="dob" type="date" value="${Dob}" style="margin-top: 5px;" readonly>
+                <input class="gender" name="gender" type="radio" value="남성" ${gender == '남성' ? 'checked' : ''}  disabled> 남성 
+                <input class="gender" name="gender" type="radio" value="여성" ${gender == '여성' ? 'checked' : ''}  disabled> 여성 
+                <input name="dob" type="date" value="${Dob}" style="margin-top: 5px;" readonly>
 
                 <input id="zipcode" name="zipcode" type="text" value="${zipcode}" readonly placeholder="우편번호">
                 <button id="postbtn" type="button">주소 찾기</button>
@@ -428,7 +433,7 @@
             return;
         }
         if(nickname == originalNick) {
-            $(".nicknamecheckresult").text("현재 사용 중인 닉네임입니다.").css("color", "green");
+            $(".nicknamecheckresult").text("같은뎅~~히히").css("color", "red");
             $("#nickname").attr("check", "true");
             return;
         }
@@ -488,6 +493,50 @@
         }
 
     });
+    
+    $("#pw2").on("input", function(){
+
+        let pw = $("#pw").val();
+        let pw2 = $("#pw2").val();
+        let span = $(".pwresult");
+
+        if(pw2 == "") {
+            span.text("");
+            return;
+        }
+
+        if(pw == pw2) {
+            span.text("비밀번호가 일치합니다.").css("color", "green");
+        } else {
+            span.text("비밀번호가 일치하지 않습니다.").css("color", "red");
+        }
+
+        let pw1regex = /[A-Z]/
+        let pw2regex = /[a-z]/
+        let pw3regex = /[0-9]/
+        let pw4regex = /^[A-Z0-9a-z]{8,}$/
+
+        if(!pw1regex.test(pw)) {
+            alert("비밀번호에 대문자를 포함해주세요.");
+            return false;
+        }
+
+        if(!pw2regex.test(pw)) {
+            alert("비밀번호에 소문자를 포함해주세요.");
+            return false;
+        }
+
+        if(!pw3regex.test(pw)) {
+            alert("비밀번호에 숫자를 포함해주세요.");
+            return false;
+        }
+
+        if(!pw4regex.test(pw)) {
+            alert("비밀번호는 영문과 숫자로 8자 이상 입력해주세요.");
+            return false;
+        }
+
+    })
 
 </script>
 
