@@ -15,8 +15,11 @@ public class PlaceDAO {
 	@Autowired
 	private JdbcTemplate jdbc;
 	
-	public List<PlaceDTO> search(String keyword, int start, int end) {
-
+	public List<PlaceDTO> search(String keyword,String type, int start, int end) {
+	
+		String search = "%" + keyword + "%";
+		
+		if(type.equals("ÀüÃ¼")) {
 	    String sql = "select * from "
 	    	   + "(select Place.*, row_number() over(order by name) rn "
 	           + "from Place " 
@@ -26,21 +29,87 @@ public class PlaceDAO {
 	           + "or address LIKE ?) " 
 	           + "where rn between ? and ?";
 
-	    String search = "%" + keyword + "%";
+	
 
 	    return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),
 	            search, search, search, search, start, end);
-	}
-	
-	public int searchCount(String keyword) {
-		String sql = "select count(*) from Place "
-				+ "where name like ? "
+	} else {
+		String dbType = type;
+		
+		if(type.equals("°ü±¤Áö")) {
+			dbType = "SPOT";
+		}
+		
+		if(type.equals("¸ÀÁý")) {
+			dbType = "FOOD";
+		}
+		
+		if(type.equals("¼÷¹Ú¾÷¼Ò")) {
+			dbType = "STAY";
+		}
+		
+		String sql = "select * from "
+				+ "(select place.*, row_number() over(order by name) rn "
+				+ "from place "
+				+ "where (name like ? "
 				+ "or region like ? "
 				+ "or sigungu like ? "
-				+ "or address like ?";
+				+ "or address like ?) "
+				+ "and place_type = ?) "
+				+ "where rn between ? and ?";
 		
-		String search = "%" + keyword + "%";
-		
-		return jdbc.queryForObject(sql, Integer.class, search, search, search, search);
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),search, search, search, search,
+                dbType, start, end);
+		}
+	}
+	
+	public int searchCount(String keyword, String type) {
+
+	    String search = "%" + keyword + "%";
+
+	    if(type.equals("ÀüÃ¼")) {
+
+	        String sql = "select count(*) from Place "
+	                + "where name like ? "
+	                + "or region like ? "
+	                + "or sigungu like ? "
+	                + "or address like ?";
+
+	        return jdbc.queryForObject(
+	                sql,
+	                Integer.class,
+	                search, search, search, search
+	        );
+
+	    } else {
+
+	        String dbType = type;
+
+	        if(type.equals("°ü±¤Áö")) {
+	            dbType = "SPOT";
+	        }
+
+	        if(type.equals("¸ÀÁý")) {
+	            dbType = "FOOD";
+	        }
+
+	        if(type.equals("¼÷¹Ú¾÷¼Ò")) {
+	            dbType = "STAY";
+	        }
+
+	        String sql = "select count(*) from Place "
+	                + "where (name like ? "
+	                + "or region like ? "
+	                + "or sigungu like ? "
+	                + "or address like ?) "
+	                + "and place_type = ?";
+
+	        return jdbc.queryForObject(
+	                sql,
+	                Integer.class,
+	                search, search, search, search,
+	                dbType
+	        );
+	    }
 	}
 }

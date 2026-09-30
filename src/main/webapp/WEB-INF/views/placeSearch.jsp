@@ -174,6 +174,43 @@ button {
 	cursor: default;
 }
 
+.paging {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+.paging a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    width: 36px;
+    height: 36px;
+    
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    
+    color: #555;
+    background-color: white;
+    
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.paging a:hover {
+    background-color: #f5f5f5;
+}
+
+.paging a.active {
+    color: white;
+    background-color: #333;
+    border-color: #333;
+}
+
 @media ( max-width : 800px) {
 	.grid {
 		grid-template-columns: repeat(2, 1fr);
@@ -200,10 +237,14 @@ button {
 	<main class="wrap">
 		<div class="filters">
 			<span class="label">유형</span>
-			<button type="button" class="chip active" data-type="전체">전체</button>
-			<button type="button" class="chip" data-type="관광지">관광지</button>
-			<button type="button" class="chip" data-type="맛집">맛집</button>
-			<button type="button" class="chip" data-type="숙박업소">숙박업소</button>
+			<button type="button" class="chip ${type == '전체' ? 'active' : ''}" data-type="전체">전체</button>
+
+			<button type="button" class="chip ${type == '관광지' ? 'active' : ''}" data-type="관광지">관광지</button>
+
+			<button type="button" class="chip ${type == '맛집' ? 'active' : ''}" data-type="맛집">맛집</button>
+
+			<button type="button" class="chip ${type == '숙박업소' ? 'active' : ''}" data-type="숙박업소">숙박업소</button>
+			
 		</div>
 
 		<div class="count" id="count"></div>
@@ -215,7 +256,14 @@ button {
 					<c:if test="${not empty place.imageName}">
 					<img src="${place.imageName}" alt="${place.name}">
 					</c:if>
-					<span class="tag"></span>
+		<span class="tag">
+   			 <c:choose>
+        		<c:when test="${place.place_Type == 'SPOT'}">관광지</c:when>
+        		<c:when test="${place.place_Type == 'FOOD'}">맛집</c:when>
+        		<c:when test="${place.place_Type == 'STAY'}">숙박업소</c:when>
+        		<c:otherwise>${place.place_Type}</c:otherwise>
+    		</c:choose>
+		</span>
 				</div>
 				<div class="info">
 				<div class="region">
@@ -258,44 +306,24 @@ button {
 		}
 		
 		let chips = document.getElementsByClassName("chip");
-		let cards = document.getElementsByClassName("card")
-		let emptyMsg = document.getElementById("emptyMsg");
-		
+
 		for(let i = 0; i < chips.length; i++) {
-			chips[i].onclick = function() {
-				for(let j=0; j < chips.length; j++) {
-					chips[j].classList.remove("active");
-				}
-				
-				this.classList.add("active");
-				
-				let type = this.getAttribute("data-type");
-				let count = 0;
-				
-				for(let j=0; j<cards.length; j++) {
-					
-					let cardType = getType(cards[j].getAttribute("data-type"));
-					
-					if(type == "전체" || type == cardType) {
-						cards[j].style.display = "";
-						count ++
-					} else {
-						cards[j].style.display = "none";
-					}
-				}
-				if(count == 0) {
-					emptyMsg.style.display = "block";
-				} else {
-					emptyMsg.style.display = "none";
-				}
-			} 
-		
+
+		    chips[i].onclick = function() {
+
+		        let type = this.getAttribute("data-type");
+
+		        location.href = "/place/search?keyword=${keyword}&type="
+		                + type + "&cpage=1";
+		    }
 		}
+	
 		
 		let recordTotalCount = ${recordTotalCount};
 		let recordCountPerPage = ${recordCountPerPage};
 		let naviCountPerPage = ${naviCountPerPage};
 		let currentPage = ${cpage};
+		let type = "${type}";
 		
 		let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
 		
@@ -316,7 +344,7 @@ button {
 		if (needPrev) {
 			let prev = document.createElement("a");
 			
-			prev.setAttribute("href", "/place/search?keyword=${keyword}&cpage=" + (startNavi -1));
+			prev.setAttribute("href", "/place/search?keyword=${keyword}&type=${type}&cpage=" + (startNavi -1));
 			
 			prev.innerHTML = "<";
 			
@@ -327,7 +355,7 @@ button {
 			
 			let num = document.createElement("a");
 			
-			num.setAttribute("href", "/place/search?keyword=${keyword}&cpage=" + i);
+			num.setAttribute("href", "/place/search?keyword=${keyword}&type=${type}&cpage=" + i);
 			
 			num.innerHTML = i;
 			
@@ -339,7 +367,7 @@ button {
 			
 			let next = document.createElement("a");
 			
-			next.setAttribute("href", "/place/search?keyword=${keyword}&cpage=" + (endNavi + 1));
+			next.setAttribute("href", "/place/search?keyword=${keyword}&type=${type}&cpage=" + (endNavi + 1));
 			
 			next.innerHTML = ">";
 			
