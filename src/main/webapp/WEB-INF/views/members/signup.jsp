@@ -165,8 +165,7 @@
         
         #id,
         #nickname,
-        #zipcode,
-        #pw2 {
+        #zipcode {
             width: 70%;
             height: 48px;
             margin-bottom: 8px;
@@ -279,7 +278,6 @@
                 <span class="idcheckresult"></span>
                 <input id="pw" name="pw" type="password" placeholder="Password를 입력하세요">
                 <input id="pw2" type="password" placeholder="Password를 재입력하세요">
-                <button id="pwcheck" type="button">PW 확인</button>
                 <span class="pwresult"></span>
                 
                 <input name="name" type="text" placeholder="이름을 입력하세요">
@@ -319,16 +317,8 @@
 
 <script>
 
-    let pwtext1 = $("#pw");
-    let pwtext2 = $("#pw2");
-    
     let phonetext = $("#phone");
     let phoneregex = /^010[0-9]{8}$/
-    
-    
-    
-    let frm = $("#frm");
-    let idtext = $("#id");
     
     $("#idcheck").on("click", function(){
         let id = $("#id").val();
@@ -345,28 +335,40 @@
                 $(".idcheckresult").text("이미 사용 중인 아이디입니다.").css("color", "red");
                 $("#id").removeAttr("check");
             } else {
-                $(".idcheckresult").text("사용 가능한 아이디입니다..").css("color", "green");
+                $(".idcheckresult").text("사용 가능한 아이디입니다.").css("color", "green");
                 $("#id").attr("check", "true");
             }
         })
     })
 
-    $("#pwcheck").on("click", function(){
+    $("#id").on("input", function(){
+        $(this).removeAttr("check");
+        $(".idcheckresult").text("");
+    });
 
-        let span = $(".pwresult");
+    
+
+    $("#pw2").on("input", function(){
 
         let pw = $("#pw").val();
         let pw2 = $("#pw2").val();
+        let span = $(".pwresult");
+
+        if(pw2 == "") {
+            span.text("");
+            return;
+        }
+
+        if(pw == pw2) {
+            span.text("비밀번호가 일치합니다.").css("color", "green");
+        } else {
+            span.text("비밀번호가 일치하지 않습니다.").css("color", "red");
+        }
 
         let pw1regex = /[A-Z]/
         let pw2regex = /[a-z]/
         let pw3regex = /[0-9]/
         let pw4regex = /^[A-Z0-9a-z]{8,}$/
-        
-        if(pw == "" || pw2 == "") {
-            alert("비밀번호를 입력해주세요.");
-            return;
-        }
 
         if(!pw1regex.test(pw)) {
             alert("비밀번호에 대문자를 포함해주세요.");
@@ -388,13 +390,8 @@
             return false;
         }
 
-        if(pw == pw2) {
-            span.html("비밀번호가 일치합니다.").css("color", "green")
-        } else {
-            span.html("비밀번호가 일치하지 않습니다.").css("color", "red")
-        }        
     })
-
+    
     $("#nicknamecheck").on("click", function(){
         let nickname = $("#nickname").val();
 
@@ -410,11 +407,16 @@
                 $(".nicknamecheckresult").text("이미 사용 중인 닉네임입니다.").css("color", "red");
                 $("#nickname").removeAttr("check");
             } else {
-                $(".nicknamecheckresult").text("사용 가능한 닉네임입니다..").css("color", "green");
+                $(".nicknamecheckresult").text("사용 가능한 닉네임입니다.").css("color", "green");
                 $("#nickname").attr("check", "true");
             }
         })
     })
+
+    $("#nickname").on("input", function(){
+        $(this).removeAttr("check");
+        $(".nicknamecheckresult").text("");
+    });
 
     $("#postbtn").on("click", function(){
         new kakao.Postcode({
@@ -435,6 +437,9 @@
 	
     $("#frm").on("submit", function(e) {
 
+        let pw = $("#pw").val();
+        let pw2 = $("#pw2").val();
+
 	    if(!$("#id").attr("check")) {
 	        alert("아이디 중복검사를 실행해주세요.");
 	        e.preventDefault();
@@ -452,6 +457,18 @@
 	        e.preventDefault();
 	        return;
 	    }
+
+        if(pw == "" || pw2 == "") {
+            alert("비밀번호를 입력해주세요.");
+            e.preventDefault();
+            return;
+        }
+        if(pw != pw2) {
+            alert("비밀번호가 일치하지 않습니다.");
+            e.preventDefault();
+            return;
+        }
+        
 	});
     
 </script>
