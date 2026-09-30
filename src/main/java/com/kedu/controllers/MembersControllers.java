@@ -87,11 +87,17 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/update")
-	public String update(HttpSession session, Model model) {
+	public String update() {
+		return "members/update";
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(MembersDTO mdto, HttpSession session) {
 	    String id = (String) session.getAttribute("loginId");
-	    MembersDTO member = mdao.selectById(id);
-	    model.addAttribute("member", member);
-	    return "members/update";
+	    mdto.setId(id);
+	    mdto.setPw(EncryptionUtils.encryptSHA512(mdto.getPw()));
+	    int result = mdao.update(mdto);
+	    return "redirect:/members/mypage";
 	}
 	
 	@RequestMapping("/deleted")
