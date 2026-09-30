@@ -4,68 +4,32 @@ import java.sql.Timestamp;
 
 public class PlaceDTO {
 
-	private int placeId;
-	private String placeType;
+	private int place_id;
 	private String name;
 	private String region;
-	private String sigungu;
 	private String address;
+	private String place_type;
+	private String intro;
+	private String image_name;
 	private Double latitude;
 	private Double longitude;
-	private String tel;
-	private String intro;
-	private String imageName;
 	private Integer price;
-	private Double avgRating;
-	private Integer reviewCount;
-	private String apiContentId;
-	private Timestamp regDate;
-	private String source;
+	private Double avg_rating;
+	private Integer review_count;
+	private Timestamp reg_date;
 
-	// --- 조회 전용 (Room과 JOIN하기 위함) ---
-	private Integer minPrice;
-	private int roomCount;
-	private String roomImg;
+	// --- 조회 전용 (Room 서브쿼리 결과) ---
+	private Integer min_price;
+	private Integer room_count;
+	private String room_img;
+	private String amenities;
 
-	public PlaceDTO() {
+	public int getPlace_id() {
+		return place_id;
 	}
 
-	public PlaceDTO(int placeId, String placeType, String name, String region, String sigungu, String address,
-			double latitude, double longitude, String tel, String intro, String imageName, int price, double avgRating,
-			int reviewCount, String apiContentId, Timestamp regDate, String source) {
-		this.placeId = placeId;
-		this.placeType = placeType;
-		this.name = name;
-		this.region = region;
-		this.sigungu = sigungu;
-		this.address = address;
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.tel = tel;
-		this.intro = intro;
-		this.imageName = imageName;
-		this.price = price;
-		this.avgRating = avgRating;
-		this.reviewCount = reviewCount;
-		this.apiContentId = apiContentId;
-		this.regDate = regDate;
-		this.source = source;
-	}
-
-	public int getPlaceId() {
-		return placeId;
-	}
-
-	public void setPlaceId(int placeId) {
-		this.placeId = placeId;
-	}
-
-	public String getPlaceType() {
-		return placeType;
-	}
-
-	public void setPlaceType(String placeType) {
-		this.placeType = placeType;
+	public void setPlace_id(int place_id) {
+		this.place_id = place_id;
 	}
 
 	public String getName() {
@@ -84,20 +48,36 @@ public class PlaceDTO {
 		this.region = region;
 	}
 
-	public String getSigungu() {
-		return sigungu;
-	}
-
-	public void setSigungu(String sigungu) {
-		this.sigungu = sigungu;
-	}
-
 	public String getAddress() {
 		return address;
 	}
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getPlace_type() {
+		return place_type;
+	}
+
+	public void setPlace_type(String place_type) {
+		this.place_type = place_type;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
+
+	public String getImage_name() {
+		return image_name;
+	}
+
+	public void setImage_name(String image_name) {
+		this.image_name = image_name;
 	}
 
 	public Double getLatitude() {
@@ -116,30 +96,6 @@ public class PlaceDTO {
 		this.longitude = longitude;
 	}
 
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-
-	public String getIntro() {
-		return intro;
-	}
-
-	public void setIntro(String intro) {
-		this.intro = intro;
-	}
-
-	public String getImageName() {
-		return imageName;
-	}
-
-	public void setImageName(String imageName) {
-		this.imageName = imageName;
-	}
-
 	public Integer getPrice() {
 		return price;
 	}
@@ -148,67 +104,59 @@ public class PlaceDTO {
 		this.price = price;
 	}
 
-	public Double getAvgRating() {
-		return avgRating;
+	public Double getAvg_rating() {
+		return avg_rating;
 	}
 
-	public void setAvgRating(Double avgRating) {
-		this.avgRating = avgRating;
+	public void setAvg_rating(Double avg_rating) {
+		this.avg_rating = avg_rating;
 	}
 
-	public Integer getReviewCount() {
-		return reviewCount;
+	public Integer getReview_count() {
+		return review_count;
 	}
 
-	public void setReviewCount(Integer reviewCount) {
-		this.reviewCount = reviewCount;
+	public void setReview_count(Integer review_count) {
+		this.review_count = review_count;
 	}
 
-	public String getApiContentId() {
-		return apiContentId;
+	public Timestamp getReg_date() {
+		return reg_date;
 	}
 
-	public void setApiContentId(String apiContentId) {
-		this.apiContentId = apiContentId;
+	public void setReg_date(Timestamp reg_date) {
+		this.reg_date = reg_date;
 	}
 
-	public Timestamp getRegDate() {
-		return regDate;
+	public Integer getMin_price() {
+		return min_price;
 	}
 
-	public void setRegDate(Timestamp regDate) {
-		this.regDate = regDate;
+	public void setMin_price(Integer min_price) {
+		this.min_price = min_price;
 	}
 
-	public String getSource() {
-		return source;
+	public Integer getRoom_count() {
+		return room_count;
 	}
 
-	public void setSource(String source) {
-		this.source = source;
+	public void setRoom_count(Integer room_count) {
+		this.room_count = room_count;
 	}
 
-	public Integer getMinPrice() {
-		return minPrice;
+	public String getRoom_img() {
+		return room_img;
 	}
 
-	public void setMinPrice(Integer minPrice) {
-		this.minPrice = minPrice;
+	public void setRoom_img(String room_img) {
+		this.room_img = room_img;
 	}
 
-	public int getRoomCount() {
-		return roomCount;
+	public String getAmenities() {
+		return amenities;
 	}
 
-	public void setRoomCount(int roomCount) {
-		this.roomCount = roomCount;
-	}
-
-	public String getRoomImg() {
-		return roomImg;
-	}
-
-	public void setRoomImg(String roomImg) {
-		this.roomImg = roomImg;
+	public void setAmenities(String amenities) {
+		this.amenities = amenities;
 	}
 }
