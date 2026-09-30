@@ -5,6 +5,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.commons.EncryptionUtils;
@@ -71,5 +73,22 @@ public class MembersControllers {
 		return "redirect:/members/login";
 	}
 	
+	@RequestMapping("/deleted")
+	public String deleted() {
+		return "members/deleted";
+	}
+	
+	@RequestMapping(value = "/deleted", method = RequestMethod.POST)
+	public String deleted(@RequestParam("pw") String pw,HttpSession session) {
+	    String id = (String) session.getAttribute("loginId");
+	    int result = mdao.deleted(id, pw);
+	    if (result > 0) {
+	        session.invalidate();
+	        return "redirect:/";
+	    }
+	    return "members/login";
+	}
+
+
 	
 }
