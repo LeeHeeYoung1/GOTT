@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 
 public class PlaceDTO {
 
-	private int placeId;
-	private String placeType;
+	private int place_Id;
+	private String place_Type;
 	private String name;
 	private String region;
 	private String sigungu;
@@ -16,10 +16,10 @@ public class PlaceDTO {
 	private String intro;
 	private String imageName;
 	private Integer price;
-	private Double avgRating;
-	private Integer reviewCount;
-	private String apiContentId;
-	private Timestamp regDate;
+	private Double avg_Rating;
+	private Integer review_Count;
+	private String api_Content_Id;
+	private Timestamp reg_Date;
 	private String source;
 
 	// --- 조회 전용 (Room과 JOIN하기 위함) ---
@@ -33,8 +33,8 @@ public class PlaceDTO {
 	public PlaceDTO(int placeId, String placeType, String name, String region, String sigungu, String address,
 			double latitude, double longitude, String tel, String intro, String imageName, int price, double avgRating,
 			int reviewCount, String apiContentId, Timestamp regDate, String source) {
-		this.placeId = placeId;
-		this.placeType = placeType;
+		this.place_Id = placeId;
+		this.place_Type = placeType;
 		this.name = name;
 		this.region = region;
 		this.sigungu = sigungu;
@@ -45,27 +45,27 @@ public class PlaceDTO {
 		this.intro = intro;
 		this.imageName = imageName;
 		this.price = price;
-		this.avgRating = avgRating;
-		this.reviewCount = reviewCount;
-		this.apiContentId = apiContentId;
-		this.regDate = regDate;
+		this.avg_Rating = avgRating;
+		this.review_Count = reviewCount;
+		this.api_Content_Id = apiContentId;
+		this.reg_Date = regDate;
 		this.source = source;
 	}
 
-	public int getPlaceId() {
-		return placeId;
+	public int getPlace_Id() {
+		return place_Id;
 	}
 
-	public void setPlaceId(int placeId) {
-		this.placeId = placeId;
+	public void setPlace_Id(int placeId) {
+		this.place_Id = placeId;
 	}
 
-	public String getPlaceType() {
-		return placeType;
+	public String getPlace_Type() {
+		return place_Type;
 	}
 
-	public void setPlaceType(String placeType) {
-		this.placeType = placeType;
+	public void setPlace_Type(String placeType) {
+		this.place_Type = placeType;
 	}
 
 	public String getName() {
@@ -148,36 +148,36 @@ public class PlaceDTO {
 		this.price = price;
 	}
 
-	public Double getAvgRating() {
-		return avgRating;
+	public Double getAvg_Rating() {
+		return avg_Rating;
 	}
 
-	public void setAvgRating(Double avgRating) {
-		this.avgRating = avgRating;
+	public void setAvg_Rating(Double avgRating) {
+		this.avg_Rating = avgRating;
 	}
 
-	public Integer getReviewCount() {
-		return reviewCount;
+	public Integer getReview_Count() {
+		return review_Count;
 	}
 
-	public void setReviewCount(Integer reviewCount) {
-		this.reviewCount = reviewCount;
+	public void setReview_Count(Integer reviewCount) {
+		this.review_Count = reviewCount;
 	}
 
-	public String getApiContentId() {
-		return apiContentId;
+	public String getApi_Content_Id() {
+		return api_Content_Id;
 	}
 
-	public void setApiContentId(String apiContentId) {
-		this.apiContentId = apiContentId;
+	public void setApi_Content_Id(String apiContentId) {
+		this.api_Content_Id = apiContentId;
 	}
 
-	public Timestamp getRegDate() {
-		return regDate;
+	public Timestamp getReg_Date() {
+		return reg_Date;
 	}
 
-	public void setRegDate(Timestamp regDate) {
-		this.regDate = regDate;
+	public void setReg_Date(Timestamp regDate) {
+		this.reg_Date = regDate;
 	}
 
 	public String getSource() {
