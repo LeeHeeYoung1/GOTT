@@ -365,7 +365,7 @@
             <div class="textzone"><a href="">이벤트</a></div>
             <div class="textzone"><a href="">지역</a></div>
             <div class="textzone"><a href="">추천여행지</a></div>
-            <div class="textzone"><a href="">숙박업소</a></div>
+            <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
             <div class="textzone"><a href="">리뷰</a></div>
             <div class="textzone"><a href="">여행플래너</a></div>
             <div class="textzone"><a href="">공지사항</a></div>
