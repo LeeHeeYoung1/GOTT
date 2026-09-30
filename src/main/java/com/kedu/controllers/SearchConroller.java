@@ -18,7 +18,11 @@ public class SearchConroller {
 	private PlaceDAO dao;
 	
 	@RequestMapping("/search")
-	public String search(String keyword,Integer cpage, Model model) {
+	public String search(String keyword,Integer cpage, String type, Model model) {
+		
+		if(type == null) {
+	        type = "ÀüÃ¼";
+	    }
 		
 		if(cpage == null) {
 		        cpage = 1;
@@ -27,11 +31,12 @@ public class SearchConroller {
 		int start = cpage * 9 - 8;
 		int end = cpage * 9;
 		
-		List<PlaceDTO> list = dao.search(keyword, start, end);
-		model.addAttribute("recordTotalCount", dao.searchCount(keyword));
+		List<PlaceDTO> list = dao.search(keyword, type, start, end);
+		model.addAttribute("recordTotalCount", dao.searchCount(keyword, type));
 		model.addAttribute("recordCountPerPage", 9);
 		model.addAttribute("naviCountPerPage", 10);
 		model.addAttribute("cpage", cpage);
+		model.addAttribute("type", type);
 
 	    model.addAttribute("list", list);
 	    model.addAttribute("keyword", keyword);
