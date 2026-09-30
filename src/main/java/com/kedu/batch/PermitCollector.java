@@ -18,8 +18,6 @@ public class PermitCollector {
 	private static final String KEY =
 			"37e2e99edbaeec122328fc0298b377d9e68117f67d049bade4930aa58662e172";
 
-	private static final String AREA = "전남광주통합특별시";
-
 	/** 여행 서비스에 부적합한 업태 */
 	private static final Set<String> BLOCK = new HashSet<String>(Arrays.asList(
 			"룸살롱", "단란주점", "간이주점", "감성주점", "다방",
@@ -31,8 +29,9 @@ public class PermitCollector {
 	/**
 	 * @param service   "general_restaurants" / "lodgings"
 	 * @param placeType "FOOD" / "STAY"
+	 * @param area      "서울특별시" / "서울특별시 강남구" / "전남광주통합특별시"
 	 */
-	public String collect(String service, String placeType) throws Exception {
+	public String collect(String service, String placeType, String area) throws Exception {
 
 		int page = 1, saved = 0, skipped = 0;
 
@@ -42,7 +41,7 @@ public class PermitCollector {
 					+ "?serviceKey=" + KEY
 					+ "&pageNo="     + page
 					+ "&numOfRows=100"
-					+ "&cond%5BROAD_NM_ADDR::LIKE%5D=" + URLEncoder.encode(AREA, "UTF-8")
+					+ "&cond%5BROAD_NM_ADDR::LIKE%5D=" + URLEncoder.encode(area, "UTF-8")
 					+ "&cond%5BSALS_STTS_CD::EQ%5D=01";
 
 			JsonObject root = ApiUtil.get(url);
@@ -52,8 +51,8 @@ public class PermitCollector {
 			if (page == 1) {
 				int total = root.getAsJsonObject("response").getAsJsonObject("body")
 								.get("totalCount").getAsInt();
-				System.out.println(">> " + service + " 대상 " + total + "건, 약 "
-						+ ((total / 100) + 1) + "페이지");
+				System.out.println(">> " + service + " [" + area + "] 대상 " + total
+						+ "건, 약 " + ((total / 100) + 1) + "페이지");
 			}
 
 			List<Object[]> batch = new ArrayList<Object[]>();
@@ -66,9 +65,9 @@ public class PermitCollector {
 				String tel   = ApiUtil.str(o, "TELNO");
 				String mngNo = ApiUtil.str(o, "MNG_NO");
 
-				if (name.isEmpty() || mngNo.isEmpty())      { skipped++; continue; }
-				if (BLOCK.contains(uptae))                  { skipped++; continue; }
-				if ("기타".equals(uptae) && tel.isEmpty())   { skipped++; continue; }
+				if (name.isEmpty() || mngNo.isEmpty())       { skipped++; continue; }
+				if (BLOCK.contains(uptae))                   { skipped++; continue; }
+				if ("기타".equals(uptae) && tel.isEmpty())    { skipped++; continue; }
 				if (!ApiUtil.str(o, "CLSBIZ_YMD").isEmpty()) { skipped++; continue; }
 
 				double[] c = CoordUtil.toWgs84(
@@ -79,6 +78,8 @@ public class PermitCollector {
 				String addr = ApiUtil.str(o, "ROAD_NM_ADDR");
 				if (addr.isEmpty()) addr = ApiUtil.str(o, "LOTNO_ADDR");
 				if (addr.isEmpty()) { skipped++; continue; }
+
+				addr = normalizeAddr(addr);
 
 				String[] rs = splitRegion(addr);
 
@@ -94,7 +95,7 @@ public class PermitCollector {
 						Double.valueOf(c[0]),           // latitude
 						Double.valueOf(c[1]),           // longitude
 						null,                           // image_name
-						cut(uptae, 2000)                // intro (업태를 임시로)
+						cut(uptae, 2000)                // intro (업태)
 				});
 			}
 
@@ -109,10 +110,22 @@ public class PermitCollector {
 			Thread.sleep(120);
 		}
 
-		return service + " → 저장 " + saved + "건, 제외 " + skipped + "건";
+		return service + " [" + area + "] → 저장 " + saved + "건, 제외 " + skipped + "건";
 	}
 
-	/** "전남광주통합특별시 광산구 ..." → {"전남광주통합특별시", "광산구"} */
+	/** 지역명 표기 통일 */
+	private String normalizeAddr(String addr) {
+		if (addr == null) return null;
+		if (addr.startsWith("서울시"))
+			return "서울특별시" + addr.substring("서울시".length());
+		if (addr.startsWith("광주광역시"))
+			return "전남광주통합특별시" + addr.substring("광주광역시".length());
+		if (addr.startsWith("전라남도"))
+			return "전남광주통합특별시" + addr.substring("전라남도".length());
+		return addr;
+	}
+
+	/** "서울특별시 강남구 ..." → {"서울특별시", "강남구"} */
 	private String[] splitRegion(String addr) {
 		String[] p = addr.trim().split("\\s+");
 		String region  = p.length > 0 ? p[0] : "기타";

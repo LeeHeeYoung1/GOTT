@@ -6,7 +6,7 @@ public class RunTour {
 
 		TourApiCollector t = new TourApiCollector();
 
-		int[] areas = { 5, 38 };          // 광주, 전남
+		int[] areas = { 1 };          // 광주, 전남
 		int[] types = { 12, 32, 39 };     // 관광지, 숙박, 음식점
 
 		for (int a : areas) {
