@@ -251,17 +251,17 @@ button {
 		
 		<div class="grid" id="grid">
 			<c:forEach var="place" items="${list}">
-				<article class="card" data-type="${place.place_Type}">
+				<article class="card" data-type="${place.place_type}">
 				<div class="thumb">
-					<c:if test="${not empty place.imageName}">
-					<img src="${place.imageName}" alt="${place.name}">
+					<c:if test="${not empty place.image_name}">
+					<img src="${place.image_name}" alt="${place.name}">
 					</c:if>
 		<span class="tag">
    			 <c:choose>
-        		<c:when test="${place.place_Type == 'SPOT'}">관광지</c:when>
-        		<c:when test="${place.place_Type == 'FOOD'}">맛집</c:when>
-        		<c:when test="${place.place_Type == 'STAY'}">숙박업소</c:when>
-        		<c:otherwise>${place.place_Type}</c:otherwise>
+        		<c:when test="${place.place_type == 'SPOT'}">관광지</c:when>
+        		<c:when test="${place.place_type == 'FOOD'}">맛집</c:when>
+        		<c:when test="${place.place_type == 'STAY'}">숙박업소</c:when>
+        		<c:otherwise>${place.place_type}</c:otherwise>
     		</c:choose>
 		</span>
 				</div>
