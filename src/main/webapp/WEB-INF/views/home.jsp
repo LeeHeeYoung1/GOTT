@@ -23,6 +23,74 @@
             height: 70px;
             padding: 0 30px;
         }
+        
+        .searchBox {
+			width: 750px;
+			height: 60px;
+			margin: 40px auto;
+			position: relative;
+		}
+		
+		.searchBox input {
+			width: 100%;
+			height: 100%;
+			box-sizing: border-box;
+			padding: 0 70px 0 28px;
+			border: 1px solid #e2ded9;
+			border-radius: 30px;
+			background-color: white;
+			font-size: 17px;
+			color: #444;
+			outline: none;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+		}
+		
+		.searchBox input::placeholder {
+			color: #aaa;
+		}
+		
+		.searchBox input:focus {
+			border-color: #c8b9aa;
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+		}
+		/* 검색 버튼 */
+		.searchBtn {
+			width: 46px;
+			height: 46px;
+			position: absolute;
+			right: 7px;
+			top: 7px;
+			border: none;
+			border-radius: 50%;
+			background-color: #f0ebe5;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.searchBtn:hover {
+			background-color: #e5ddd5;
+		} /* 돋보기 */
+		.searchIcon {
+			width: 14px;
+			height: 14px;
+			border: 2px solid #6f665f;
+			border-radius: 50%;
+			position: relative;
+		}
+		
+		.searchIcon::after {
+			content: "";
+			width: 7px;
+			height: 2px;
+			background-color: #6f665f;
+			position: absolute;
+			right: -6px;
+			bottom: -3px;
+			transform: rotate(45deg);
+			border-radius: 2px;
+		}
 
         .logobox {
             width: 120px;
@@ -324,9 +392,16 @@
     <div class="title">
         <h1>대한민국 구석구석, 당신의 여행을 찾아보세요</h1>
     </div>
-    <div class="subtitle">
-        <h5>어디로 떠나고 싶으신가요?(예: 제주도, 부산)</h5>
-    </div>
+    <form action="/place/search" method="get">
+		<div class="searchBox">
+			<input type="text" name="keyword" placeholder="어디로 떠나고 싶으신가요?">
+			<button type="submit" class="searchBtn">
+				<span class="searchIcon"></span>
+			</button>
+		</div>
+	</form>
+	
+    
     <div class="title">
         <h2>진행 중인 이벤트</h2>
     </div>
