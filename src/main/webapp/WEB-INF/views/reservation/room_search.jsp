@@ -248,7 +248,7 @@ body {
 	grid-column: 1/-1;
 }
 
-.filter-group input[type=checkbox] {
+.filter-group input[type=checkbox], .filter-group input[type=radio] {
 	width: 14px;
 	height: 14px;
 	margin: 0;
@@ -463,6 +463,11 @@ body {
 .footer p {
 	margin: 0;
 }
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
 </style>
 </head>
 <body>
@@ -522,9 +527,9 @@ body {
 					</div>
 					<div class="sb_4"></div>
 					<label>인원</label> <span>성인</span> <input type="number" name="adult"
-						min="1" max="10" value="2"> <span>아동</span> <input
-						type="number" name="child" min="0" max="10" value="0">
-					<div class="sb_4">
+						id="adult" min="1" max="10" value="2"> <span>아동</span> <input
+						type="number" name="child" id="child" min="0" max="10" value="0">
+					<div class="sb_5">
 						<button>검색</button>
 					</div>
 
@@ -533,16 +538,6 @@ body {
 			</div>
 			<div class="body2">
 				<div class="filter">
-
-					<div class="filter-group">
-						<h4>숙소 유형</h4>
-						<input type="checkbox" name="type" value="호텔" checked>호텔 <input
-							type="checkbox" name="type" value="모텔">모텔 <input
-							type="checkbox" name="type" value="펜션">펜션 <input
-							type="checkbox" name="type" value="민박">민박 <input
-							type="checkbox" name="type" value="게스트하우스">게스트하우스 <input
-							type="checkbox" name="type" value="캠핑">캠핑/글램핑
-					</div>
 					<div class="filter-group">
 						<h4>1박 가격</h4>
 						<div class="price-range">
@@ -553,46 +548,49 @@ body {
 					</div>
 					<div class="filter-group">
 						<h4>편의 시설</h4>
-						<input type="checkbox" name="amenity" value="주차" checked>무료
-						주차 <input type="checkbox" name="amenity" value="조식">조식 포함
-						<input type="checkbox" name="amenity" value="수영장">수영장 <input
-							type="checkbox" name="amenity" value="반려동물">반려동물 동반 <input
-							type="checkbox" name="amenity" value="오션뷰">바다 전망
+						<input type="checkbox" class="amenity" name="amenity" value="에어컨">에어컨
+						<input type="checkbox" class="amenity" name="amenity" value="인터넷">인터넷
+						<input type="checkbox" class="amenity" name="amenity" value="취사">취사
+						가능 <input type="checkbox" class="amenity" name="amenity"
+							value="냉장고">냉장고 <input type="checkbox" class="amenity"
+							name="amenity" value="PC">PC
 					</div>
-					<button type="submit" class="reset">검색</button>
+					<button type="submit" class="reset">필터 적용</button>
 					<button type="reset" class="reset">필터 초기화</button>
 
 				</div>
-				<div class="room_select">
-					<div class="room_buttons">
-						<button type="button">전체</button>
-						<button type="button">호텔</button>
-						<button type="button">펜션</button>
-						<button type="button">게스트하우스</button>
-					</div>
-					<div class="room_list">
-						<c:forEach var="i" items="${roomList}">
-							<div class="room_card">
-								<div class="room_img">
-									<img src="${i.roomImg}">
-								</div>
-								<div class="room_info">
-									<p class="type">${i.intro}</p>
-									<p class="addr">${i.name}</p>
-									<div class="tags">
-										<span>무료 주차</span> <span>조식 포함</span> <span>수영장</span> <span>바다
-											전망</span>
-									</div>
-								</div>
 
-								<div class="room_price">
-									<fmt:formatNumber value="${i.minPrice}" pattern="#,###" />
-									원 ~
+				<div class="room_list">
+					<c:forEach var="i" items="${roomList}">
+						<a class="room_card"
+							href="/reservation/room_detail?placeId=${i.place_id}">
+							<div class="room_img">
+								<img src="${i.room_img}">
+							</div>
+							<div class="room_info">
+								<p class="type">${i.intro}</p>
+								<p class="addr">${i.name}</p>
+								<div class="tags">
+									<c:forEach var="j" items="${i.amenities}">
+										<span>${j}</span>
+									</c:forEach>
 								</div>
 							</div>
-						</c:forEach>
-					</div>
+
+							<div class="room_price">
+								<c:choose>
+									<c:when test="${i.min_price != null}">
+										<fmt:formatNumber value="${i.min_price}" pattern="#,###" />
+								원 ~</c:when>
+									<c:otherwise>
+								가격은 해당 숙소에 문의하여 주시기 바랍니다.
+							</c:otherwise>
+								</c:choose>
+							</div>
+						</a>
+					</c:forEach>
 				</div>
+
 
 			</div>
 		</form>
@@ -612,6 +610,18 @@ body {
 			let price = Number(maxPrice.val());
 			maxPriceText.text(price);
 		});
+
+		$("#region").val("${param.region}");
+		$("#checkIn").val("${param.checkIn}");
+		$("#checkOut").val("${param.checkOut}");
+		if ("${param.adult}" !== "")
+			$("#adult").val("${param.adult}");
+		if ("${param.child}" !== "")
+			$("#child").val("${param.child}");
+
+		<c:forEach var="i" items="${paramValues.amenity}">
+		$(".amenity[value='${i}']").prop("checked", true);
+		</c:forEach>
 	</script>
 </body>
 </html>
