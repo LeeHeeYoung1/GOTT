@@ -60,8 +60,23 @@ public class MembersDAO {
 			return jdbc.queryForObject(sql, String.class, mdto.getName(), mdto.getEmail());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}	
+	}
+	
+	public MembersDTO findEmail(String id, String email) {
+		String sql = "select * from members where id=? and email=?";
+		try {
+			return jdbc.queryForObject(sql, new BeanPropertyRowMapper<MembersDTO>(MembersDTO.class), id, email);
+		} catch(EmptyResultDataAccessException e) {
+			return null;
 		}
+	}
+	
+	public int updatePassword(String id, String pw) {
 		
+	    String sql = "update members set pw=? where id=?";
+
+	    return jdbc.update(sql, pw, id);
 	}
 
 	
