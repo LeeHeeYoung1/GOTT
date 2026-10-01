@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -346,6 +347,7 @@
                         <li><a href="#">여행 일정 플래너</a></li>
                         <li><a href="#">내가 쓴 리뷰</a></li>
                         <li><a href="#">내가 쓴 게시글</a></li>
+                        <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
                     </ul>
 
                     <span>혜택</span>
@@ -381,10 +383,6 @@
                 <button id="nicknamecheck" type="button">중복확인</button>
                 <span class="nicknamecheckresult"></span>
                 
-                <input id="pw" name="pw" type="password" placeholder="수정할 Password를 입력하세요">
-                <input id="pw2" type="password" placeholder="수정할 Password를 재입력하세요">
-                <span class="pwresult"></span>
-
                 <input id="phone" name="phone" type="text" value="${phone}" placeholder="'-' 를 제외한 번호를 입력하세요">
                 <input id="email" name="email" type="email" value="${email}" placeholder="email을 입력하세요.">
 
@@ -407,6 +405,8 @@
         </form>
 
     </div>
+    
+    <div class="point_coupon"></div>
     <hr>
     <div class="footer">
         <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
@@ -421,8 +421,8 @@
     let phonetext = $("#phone");
     let phoneregex = /^010[0-9]{8}$/
 
-    // 처음 화면에 뜬 닉네임 (이 값과 같으면 중복검사를 통과한 것으로 취급)
-    let originalNick = "${member.nickname}";
+    let originalNick = "${nickname}";
+    
     $("#nickname").attr("check", "true");
 
     $("#nicknamecheck").on("click", function(){
@@ -433,7 +433,7 @@
             return;
         }
         if(nickname == originalNick) {
-            $(".nicknamecheckresult").text("같은뎅~~히히").css("color", "red");
+            $(".nicknamecheckresult").text("닉네임 확인 완료!").css("color", "green");
             $("#nickname").attr("check", "true");
             return;
         }
@@ -493,51 +493,6 @@
         }
 
     });
-    
-    $("#pw2").on("input", function(){
-
-        let pw = $("#pw").val();
-        let pw2 = $("#pw2").val();
-        let span = $(".pwresult");
-
-        if(pw2 == "") {
-            span.text("");
-            return;
-        }
-
-        if(pw == pw2) {
-            span.text("비밀번호가 일치합니다.").css("color", "green");
-        } else {
-            span.text("비밀번호가 일치하지 않습니다.").css("color", "red");
-        }
-
-        let pw1regex = /[A-Z]/
-        let pw2regex = /[a-z]/
-        let pw3regex = /[0-9]/
-        let pw4regex = /^[A-Z0-9a-z]{8,}$/
-
-        if(!pw1regex.test(pw)) {
-            alert("비밀번호에 대문자를 포함해주세요.");
-            return false;
-        }
-
-        if(!pw2regex.test(pw)) {
-            alert("비밀번호에 소문자를 포함해주세요.");
-            return false;
-        }
-
-        if(!pw3regex.test(pw)) {
-            alert("비밀번호에 숫자를 포함해주세요.");
-            return false;
-        }
-
-        if(!pw4regex.test(pw)) {
-            alert("비밀번호는 영문과 숫자로 8자 이상 입력해주세요.");
-            return false;
-        }
-
-    })
-
 </script>
 
 </body>

@@ -20,19 +20,18 @@ public class PlaceDAO {
 		String search = "%" + keyword + "%";
 		
 		if(type.equals("ÀüÃ¼")) {
-	    String sql = "select * from "
-	    	   + "(select Place.*, row_number() over(order by name) rn "
-	           + "from Place " 
-	           + "where name like ? " 
-	           + "or region like ? " 	
-	           + "or sigungu LIKE ? " 
-	           + "or address LIKE ?) " 
-	           + "where rn between ? and ?";
+			   String sql = "select * from "
+			            + "(select Place.*, row_number() over(order by name) rn "
+			            + "from Place "
+			            + "where name like ? "
+			            + "or region like ? "
+			            + "or sigungu like ?) "
+			            + "where rn between ? and ?";
 
 	
 
 	    return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),
-	            search, search, search, search, start, end);
+	            search, search, search, start, end);
 	} else {
 		String dbType = type;
 		
@@ -53,12 +52,11 @@ public class PlaceDAO {
 				+ "from place "
 				+ "where (name like ? "
 				+ "or region like ? "
-				+ "or sigungu like ? "
-				+ "or address like ?) "
+				+ "or sigungu like ?) "
 				+ "and place_type = ?) "
 				+ "where rn between ? and ?";
 		
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),search, search, search, search,
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),search, search, search,
                 dbType, start, end);
 		}
 	}
@@ -72,13 +70,12 @@ public class PlaceDAO {
 	        String sql = "select count(*) from Place "
 	                + "where name like ? "
 	                + "or region like ? "
-	                + "or sigungu like ? "
-	                + "or address like ?";
+	                + "or sigungu like ? ";
 
 	        return jdbc.queryForObject(
 	                sql,
 	                Integer.class,
-	                search, search, search, search
+	                search, search, search
 	        );
 
 	    } else {
@@ -100,16 +97,43 @@ public class PlaceDAO {
 	        String sql = "select count(*) from Place "
 	                + "where (name like ? "
 	                + "or region like ? "
-	                + "or sigungu like ? "
-	                + "or address like ?) "
+	                + "or sigungu like ?) "
 	                + "and place_type = ?";
 
 	        return jdbc.queryForObject(
 	                sql,
 	                Integer.class,
-	                search, search, search, search,
-	                dbType
+	                search, search, search, dbType
 	        );
 	    }
+	}
+	
+	public List<String> searchKeyword(String keyword) {
+
+	    String sql = "SELECT area "
+	               + "FROM ("
+	               + "    SELECT DISTINCT region AS area, 1 AS type_order "
+	               + "    FROM Place "
+	               + "    WHERE region LIKE ? "
+	               + "    UNION "
+	               + "    SELECT DISTINCT sigungu AS area, 2 AS type_order "
+	               + "    FROM Place "
+	               + "    WHERE sigungu LIKE ? "
+	               + ") "
+	               + "ORDER BY "
+	               + "type_order, "
+	               + "CASE WHEN area LIKE ? THEN 1 ELSE 2 END, "
+	               + "area";
+
+	    String search = "%" + keyword + "%";
+	    String startSearch = keyword + "%";
+
+	    return jdbc.queryForList(
+	        sql,
+	        String.class,
+	        search,
+	        search,
+	        startSearch
+	    );
 	}
 }

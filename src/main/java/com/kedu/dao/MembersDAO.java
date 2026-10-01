@@ -1,6 +1,7 @@
 package com.kedu.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -36,7 +37,6 @@ public class MembersDAO {
 		return jdbc.update(sql, mdto.getId(), mdto.getPw(), mdto.getName(), mdto.getNickname()
 				, mdto.getPhone(), mdto.getEmail(), mdto.getGender(), mdto.getDob(), mdto.getZipcode()
 				, mdto.getAddress1(), mdto.getAddress2());
-		
 	}
 	
 	public MembersDTO selectById(String id) {
@@ -50,8 +50,19 @@ public class MembersDAO {
 	}
 	
 	public int update(MembersDTO mdto) {
-		String sql = "update members set nickname = ?, pw = ? ,phone = ?, email = ?, zipcode = ?, address1 = ?, address2 = ? WHERE id = ?";
-		return jdbc.update(sql, mdto.getNickname(), mdto.getPw(),mdto.getPhone(), mdto.getEmail(), mdto.getZipcode(),mdto.getAddress1(), mdto.getAddress2(), mdto.getId());
+		String sql = "update members set nickname = ?,phone = ?, email = ?, zipcode = ?, address1 = ?, address2 = ? WHERE id = ?";
+		return jdbc.update(sql, mdto.getNickname(),mdto.getPhone(), mdto.getEmail(), mdto.getZipcode(),mdto.getAddress1(), mdto.getAddress2(), mdto.getId());
 	}
+	
+	public String findId(MembersDTO mdto) {
+		String sql = "select id from members where name=? and email=?";
+		try {
+			return jdbc.queryForObject(sql, String.class, mdto.getName(), mdto.getEmail());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
+	}
+
 	
 }

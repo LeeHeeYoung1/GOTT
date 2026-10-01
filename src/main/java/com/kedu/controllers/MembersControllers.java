@@ -4,14 +4,15 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.commons.EncryptionUtils;
 import com.kedu.dao.MembersDAO;
+import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dto.MembersDTO;
+import com.kedu.dto.Travel_TypeDTO;
 
 @Controller
 @RequestMapping("/members")
@@ -19,6 +20,8 @@ public class MembersControllers {
 	
 	@Autowired
 	private MembersDAO mdao;
+	@Autowired
+	private Travel_TypeDAO tdao;
 	
 	@RequestMapping("/loginpage")
 	public String loginPage() {
@@ -44,6 +47,8 @@ public class MembersControllers {
 		    session.setAttribute("address1", member.getAddress1());
 		    session.setAttribute("address2", member.getAddress2());
 		    session.setAttribute("nickname", member.getNickname());
+		    session.setAttribute("mileage", member.getMileage());
+		    session.setAttribute("regdate", member.getRegdate());
 		}
 		return result;
 	}
@@ -78,7 +83,7 @@ public class MembersControllers {
 		mdto.setPw(EncryptionUtils.encryptSHA512(mdto.getPw()));
 		mdao.signup(mdto);
 		
-		return "redirect:/members/login";
+		return "redirect:/members/loginpage";
 	}
 	
 	@RequestMapping("/mypage")
@@ -95,8 +100,15 @@ public class MembersControllers {
 	public String update(MembersDTO mdto, HttpSession session) {
 	    String id = (String) session.getAttribute("loginId");
 	    mdto.setId(id);
-	    mdto.setPw(EncryptionUtils.encryptSHA512(mdto.getPw()));
 	    int result = mdao.update(mdto);
+	    if(result>0) {
+	    	session.setAttribute("nickname", mdto.getNickname());
+	    	session.setAttribute("phone", mdto.getPhone());
+	    	session.setAttribute("email", mdto.getEmail());
+	    	session.setAttribute("zipcode", mdto.getZipcode());
+	    	session.setAttribute("address1", mdto.getAddress1());
+	    	session.setAttribute("address2", mdto.getAddress2());
+	    }
 	    return "redirect:/members/mypage";
 	}
 	
@@ -116,6 +128,45 @@ public class MembersControllers {
 	    }
 	    return "members/login";
 	}
+	
+	
+	@RequestMapping("event/tourTypeTest")
+	public String tourTypeTest() {
+		return "event/tourTypeTest";
+	}
+	
+	@RequestMapping("/tourTypeTestResult")
+	public String tourTypeTestResult(Travel_TypeDTO dto, HttpSession session) {
+		String id = (String)session.getAttribute("loginId");
+		dto.setMember_id(id);
+		tdao.insertType(dto);
+		return "redirect:/members/mypage";
+	}
+	
+	@RequestMapping("/idsearchpage")
+	public String idsearchpage() {
+		return "members/idsearch";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/idsearch")
+	public String idsearch(MembersDTO mdto) {
+		
+		  System.out.println("이름 : " + mdto.getName());
+		    System.out.println("이메일 : " + mdto.getEmail());
+		
+		String id = mdao.findId(mdto);
+		
+		 System.out.println("찾은 ID : " + id);
+		 
+		if(id == null) {
+			return "";
+		}
+		
+		return id;
+	}
+
+	
 	
 	
 }

@@ -13,23 +13,25 @@ public class PlaceDTO {
 	private String image_name;
 	private Double latitude;
 	private Double longitude;
+	private String sigungu;
 	private Integer price;
 	private Double avg_rating;
 	private Integer review_count;
 	private Timestamp reg_date;
-	private String sigungu;
-	
-	public String getSigungu() {
-		return sigungu;
-	}
 
-	public PlaceDTO () {}
+	// --- 조회 전용 (Room 서브쿼리 결과) ---
+	private Integer min_price;
+	private Integer room_count;
+	private String room_img;
+	private String amenities;
+	
+	public PlaceDTO () {};
 	
 	public PlaceDTO(int place_id, String name, String region, String address, String place_type, String intro,
-			String image_name, Double latitude, Double longitude, Integer price, Double avg_rating,
-			Integer review_count, Timestamp reg_date, String sigungu, Integer min_price, Integer room_count,
-			String room_img, String amenities) {
-	
+			String image_name, Double latitude, Double longitude, String sigungu, Integer price, Double avg_rating,
+			Integer review_count, Timestamp reg_date, Integer min_price, Integer room_count, String room_img,
+			String amenities) {
+		super();
 		this.place_id = place_id;
 		this.name = name;
 		this.region = region;
@@ -39,27 +41,17 @@ public class PlaceDTO {
 		this.image_name = image_name;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.sigungu = sigungu;
 		this.price = price;
 		this.avg_rating = avg_rating;
 		this.review_count = review_count;
 		this.reg_date = reg_date;
-		this.sigungu = sigungu;
 		this.min_price = min_price;
 		this.room_count = room_count;
 		this.room_img = room_img;
 		this.amenities = amenities;
 	}
-
-	public void setSigungu(String sigungu) {
-		this.sigungu = sigungu;
-	}
-
-	// --- 조회 전용 (Room 서브쿼리 결과) ---
-	private Integer min_price;
-	private Integer room_count;
-	private String room_img;
-	private String amenities;
-
+	
 	public int getPlace_id() {
 		return place_id;
 	}
@@ -130,6 +122,14 @@ public class PlaceDTO {
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
+	}
+	
+	public String getSigungu() {
+		return sigungu;
+	}
+
+	public void setSigungu(String sigungu) {
+		this.sigungu = sigungu;
 	}
 
 	public Integer getPrice() {

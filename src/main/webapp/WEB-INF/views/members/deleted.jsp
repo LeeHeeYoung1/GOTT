@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 
@@ -288,7 +288,7 @@
     <div class="header flex-between">
 
       <div class="logobox">
-        <img src="images/logo.png" alt="GOTT 로고">
+        <img src="/images/logo.png" alt="GOTT 로고">
       </div>
 
       <div class="nav flex-between">
@@ -343,12 +343,13 @@
 
             <span>예약/활동</span>
             <ul>
-              <li><a href="/mypage">마이페이지 홈</a></li>
+              <li><a href="/members/mypage">마이페이지 홈</a></li>
               <li><a href="#">예약 내역</a></li>
               <li><a href="#">찜한 여행지 · 숙소</a></li>
               <li><a href="#">여행 일정 플래너</a></li>
               <li><a href="#">내가 쓴 리뷰</a></li>
               <li><a href="#">내가 쓴 게시글</a></li>
+              <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
             </ul>
 
             <span>혜택</span>

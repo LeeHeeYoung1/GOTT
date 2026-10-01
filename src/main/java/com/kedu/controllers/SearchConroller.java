@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.dao.PlaceDAO;
 import com.kedu.dto.PlaceDTO;
@@ -42,5 +43,12 @@ public class SearchConroller {
 	    model.addAttribute("keyword", keyword);
 
 	    return "placeSearch";
+	}
+	
+	@RequestMapping("/keyword")
+	@ResponseBody
+	public List<String> keyword(String keyword) {
+		
+		return dao.searchKeyword(keyword);
 	}
 }
