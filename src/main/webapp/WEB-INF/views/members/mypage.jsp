@@ -113,7 +113,7 @@
       border: 1px solid black;
 
       width: 17%;
-      height: 660px;
+      height: 690px;
 
       float: left;
     }
@@ -584,6 +584,7 @@
               <li><a href="#">여행 일정 플래너</a></li>
               <li><a href="#">내가 쓴 리뷰</a></li>
               <li><a href="#">내가 쓴 게시글</a></li>
+              <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
             </ul>
 
 

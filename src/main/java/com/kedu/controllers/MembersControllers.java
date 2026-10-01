@@ -126,4 +126,11 @@ public class MembersControllers {
 	}
 	
 	
+	@RequestMapping("event/tourTypeTest")
+	public String tourTypeTest() {
+		return "event/tourTypeTest";
+	}
+	
+	
+	
 }
