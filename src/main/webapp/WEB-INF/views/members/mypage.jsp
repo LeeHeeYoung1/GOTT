@@ -566,7 +566,7 @@
         <div class="sideBox">
 
           <div class="loginId">
-            <strong>${list.nickname}</strong><span style="font-size: 13px;">님</span>
+            <strong>${nickname}</strong><span style="font-size: 13px;">님</span>
             <br>
             <span>일반회원</span>
             <span>등급</span>
@@ -611,30 +611,18 @@
 
 
         <!--여기부터 메인 끼미히끼잉~~~~-->
+        
         <div class="mainContainer">
 
-          <nav class="mybarBox">
-            <a class="a1">
-              <p>??</p>
-              <span>다가오는 예약</span>
-            </a>
-            <a class="a2">
-              <p>??</p>
-              <span>찜한 목록</span>
-            </a>
-            <a class="a3">
-              <p>??</p>
-              <span>작성한 리뷰</span>
-            </a>
-            <a class="a4">
-              <p>?,???M</p>
-              <span>보유 마일리지</span>
-            </a>
-          </nav>
+			<nav class="mybarBox">
+				<a class="a1"> <strong>??</strong> <span>다가오는 예약</span></a> 
+				<a class="a2"> <strong>??</strong> <span>찜한 목록</span></a> 
+				<a class="a3"> <strong>??</strong> <span>작성한 리뷰</span></a>
+				<a class="a4"> <strong>${mileage}M</strong> <span>보유마일리지</span></a>
+			</nav>
 
-
-
-          <!--여기부터 일정 플래너-->
+		<!--여기부터 일정 플래너-->
+		
           <div class="plannerContainer">
             <div class="sectionTitle">
               <span>여행 일정 플래너</span>
