@@ -331,7 +331,6 @@
         <div class="sideBox">
 
           <div class="loginId">
-          	<strong style="font-size: 10px;">가입날짜:</strong><span><fmt:formatDate value="${regdate}" pattern="  yyyy-MM-dd"/></span><br>
             <strong>${nickname}</strong><span>님</span>
             <br>
             <span>일반회원</span>
