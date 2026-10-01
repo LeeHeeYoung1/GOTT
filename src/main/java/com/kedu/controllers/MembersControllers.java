@@ -143,4 +143,30 @@ public class MembersControllers {
 		return "redirect:/members/mypage";
 	}
 	
+	@RequestMapping("/idsearchpage")
+	public String idsearchpage() {
+		return "members/idsearch";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/idsearch")
+	public String idsearch(MembersDTO mdto) {
+		
+		  System.out.println("이름 : " + mdto.getName());
+		    System.out.println("이메일 : " + mdto.getEmail());
+		
+		String id = mdao.findId(mdto);
+		
+		 System.out.println("찾은 ID : " + id);
+		 
+		if(id == null) {
+			return "";
+		}
+		
+		return id;
+	}
+
+	
+	
+	
 }
