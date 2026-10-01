@@ -563,13 +563,20 @@ a {
 				<div class="room_list">
 					<c:forEach var="i" items="${roomList}">
 						<a class="room_card"
-							href="/reservation/room_detail?placeId=${i.place_id}">
+							href="/reservation/room_detail?placeId=${i.place_id}&checkIn=${param.checkIn}&checkOut=${param.checkOut}&adult=${param.adult}&child=${param.child}"">
 							<div class="room_img">
-								<img src="${i.room_img}">
+								<c:choose>
+									<c:when test="${not empty i.image_name}">
+										<img src="${i.image_name}">
+									</c:when>
+									<c:otherwise>
+										<img src="${i.alter_image}">
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="room_info">
-								<p class="type">${i.intro}</p>
-								<p class="addr">${i.name}</p>
+								<p class="info">${i.name}</p>
+								<p class="info">${i.address}</p>
 								<div class="tags">
 									<c:forEach var="j" items="${i.amenities}">
 										<span>${j}</span>

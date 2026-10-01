@@ -2,12 +2,17 @@ package com.kedu.dao;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kedu.commons.NullZeroUtil;
 import com.kedu.dto.PlaceDTO;
+import com.kedu.dto.PlaceRoomDTO;
+import com.kedu.dto.RoomDTO;
 
 @Repository
 public class ReservationDAO {
@@ -15,31 +20,26 @@ public class ReservationDAO {
 	@Autowired
 	private JdbcTemplate jdbc;
 
-	public PlaceDTO placeOne(int placeId) {
-		String sql = "SELECT * FROM Place WHERE place_id = ?";
-		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeId);
-	}
-	
-	public List<PlaceDTO> roomList() {
-		String sql = "SELECT * FROM (" + "  SELECT p.*,"
-				+ "         (SELECT MIN(r.price_weekday) FROM Room r WHERE r.place_id = p.place_id) AS min_price,"
-				+ "         (SELECT COUNT(*)             FROM Room r WHERE r.place_id = p.place_id) AS room_count,"
-				+ "         (SELECT MAX(r.amenities)     FROM Room r WHERE r.place_id = p.place_id) AS amenities,"
-				+ "         COALESCE(" + "           (SELECT MAX(r.image1) FROM Room r WHERE r.place_id = p.place_id),"
-				+ "           p.image_name" + "         ) AS room_img" + "    FROM Place p"
-				+ "   WHERE p.place_type = 'STAY'" + "   ORDER BY p.name" + ") WHERE ROWNUM <= 50";
+	public List<PlaceRoomDTO> roomList() {
+		String sql = "select t.place_id, t.name, t.region, t.address, t.place_type, t.image_name, t.latitude, t.longitude, t.avg_rating, "
+				+ "min(t.price_weekday) as min_price, sum(t.room_count) as total_room_count, max(t.amenities) as amenities, max(t.image1) as alter_image from "
+				+ "(select p.place_id, p.name, p.region, p.address, p.place_type, p.image_name, p.latitude, p.longitude, p.avg_rating, "
+				+ "r.price_weekday, r.room_count, r.amenities, r.image1 " + "from place p "
+				+ "join room r on p.place_id = r.place_id " + "where p.place_type='STAY') t "
+				+ "group by t.place_id, t.name, t.region, t.address, t.place_type, t.image_name, t.latitude, t.longitude, t.avg_rating ";
 
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class));
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceRoomDTO.class));
 	}
 
-	public List<PlaceDTO> searchList(PlaceDTO pdto, String[] amenity, Integer maxPrice, String checkIn, String checkOut, Integer adult, Integer child) {
+	public List<PlaceRoomDTO> searchList(PlaceDTO pdto, String[] amenity, Integer maxPrice, String checkIn,
+			String checkOut, Integer adult, Integer child) {
 
 		String a1 = null;
 		String a2 = null;
 		String a3 = null;
 		String a4 = null;
 		String a5 = null;
-
+		
 		if (amenity != null) {
 			if (amenity.length > 0)
 				a1 = "%" + amenity[0] + "%";
@@ -52,65 +52,56 @@ public class ReservationDAO {
 			if (amenity.length > 4)
 				a5 = "%" + amenity[4] + "%";
 		}
-		
-		Integer guest = null;
-		int a = adult.intValue();
-		int c = child.intValue();
 
-		String sql =  "SELECT * FROM ("
-				+ "  SELECT p.*,"
-				+ "         (SELECT MIN(r.price_weekday) FROM Room r WHERE r.place_id = p.place_id) AS min_price,"
-				+ "         (SELECT COUNT(*)             FROM Room r WHERE r.place_id = p.place_id) AS room_count,"
-				+ "         (SELECT MAX(r.amenities)     FROM Room r WHERE r.place_id = p.place_id) AS amenities,"
-				+ "         COALESCE("
-				+ "           (SELECT MAX(r.image1) FROM Room r WHERE r.place_id = p.place_id),"
-				+ "           p.image_name"
-				+ "         ) AS room_img"
-				+ "    FROM Place p"
-				+ "   WHERE p.place_type = 'STAY'"
+		String region = NullZeroUtil.nullZero(pdto.getRegion());
+		String in = NullZeroUtil.nullZero(checkIn);
+		String out = NullZeroUtil.nullZero(checkOut);
 
-				// ¡ˆø™
-				+ "     AND (? IS NULL OR p.region = ?)"
+		int a = (adult == null) ? 0 : adult;
+		int c = (child == null) ? 0 : child;
+		int guest = (a + c > 0) ? (a + c) : null;
 
-				// ∆Ì¿«Ω√º≥ 5ƒ≠
-				+ "     AND (? IS NULL OR EXISTS (SELECT 1 FROM Room r"
-				+ "                                WHERE r.place_id = p.place_id"
-				+ "                                  AND r.amenities LIKE ?))"
-				+ "     AND (? IS NULL OR EXISTS (SELECT 1 FROM Room r"
-				+ "                                WHERE r.place_id = p.place_id"
-				+ "                                  AND r.amenities LIKE ?))"
-				+ "     AND (? IS NULL OR EXISTS (SELECT 1 FROM Room r"
-				+ "                                WHERE r.place_id = p.place_id"
-				+ "                                  AND r.amenities LIKE ?))"
-				+ "     AND (? IS NULL OR EXISTS (SELECT 1 FROM Room r"
-				+ "                                WHERE r.place_id = p.place_id"
-				+ "                                  AND r.amenities LIKE ?))"
-				+ "     AND (? IS NULL OR EXISTS (SELECT 1 FROM Room r"
-				+ "                                WHERE r.place_id = p.place_id"
-				+ "                                  AND r.amenities LIKE ?))"
+		String sql = "select * from ("
+				+ "select t.place_id, t.name, t.region, t.address, t.place_type, t.image_name, t.latitude, t.longitude, t.avg_rating, "
+				+ "min(t.price_weekday) as min_price, sum(t.room_count) as total_room_count, max(t.amenities) as amenities, max(t.image1) as place_image from "
+				+ "(select p.place_id, p.name, p.region, p.address, p.place_type, p.image_name, p.latitude, p.longitude, p.avg_rating, "
+				+ "r.price_weekday, r.room_count, r.amenities, r.image1 " + "from place p "
+				+ "join room r on p.place_id = r.place_id " + "where p.place_type='STAY' "
 
-				// 1π⁄ ∞°∞› (√÷¿˙∞° ±‚¡ÿ)
-				+ "     AND (? IS NULL OR"
-				+ "          (SELECT MIN(r.price_weekday) FROM Room r"
-				+ "            WHERE r.place_id = p.place_id) <= ?)"
+				// ÏßÄÏó≠
+				+ "and (? is null or p.region = ?) "
 
-				// ¿Œø¯ + ≥Ø¬• : ¡∂∞«¿ª ∏∏¡∑«œ¥¬ ∞¥Ω«¿Ã «œ≥™∂Ûµµ ¿÷æÓæﬂ «‘
-				+ "     AND EXISTS ("
-				+ "           SELECT 1 FROM Room r"
-				+ "            WHERE r.place_id = p.place_id"
-				+ "              AND (? IS NULL OR r.max_count >= ?)"
-				+ "              AND (? IS NULL OR ? IS NULL OR NOT EXISTS ("
-				+ "                    SELECT 1 FROM Reservation v"
-				+ "                     WHERE v.room_id = r.room_id"
-				+ "                       AND NVL(v.status, 'øπæ‡øœ∑·') <> '√Îº“'"
-				+ "                       AND v.check_in  < TO_DATE(?, 'YYYY-MM-DD')"
-				+ "                       AND v.check_out > TO_DATE(?, 'YYYY-MM-DD')))"
-				+ "         )"
+				// Ìé∏ÏùòÏãúÏÑ§ 5Ïπ∏
+				+ "and (? is null or r.amenities like ?) " + "and (? is null or r.amenities like ?) "
+				+ "and (? is null or r.amenities like ?) " + "and (? is null or r.amenities like ?) "
+				+ "and (? is null or r.amenities like ?) "
 
-				+ "   ORDER BY p.name"
-				+ ") WHERE ROWNUM <= 50";
+				// Ïù∏Ïõê
+				+ "and (? is null or r.max_count >= ?) "
 
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), pdto.getRegion(), pdto.getRegion(), a1, a1,
-				a2, a2, a3, a3, a4, a4, a5, a5, maxPrice, maxPrice, guest, guest, checkIn, checkOut, checkOut, checkIn);
+				// ÎÇ†Ïßú Í≤πÏπ®
+				+ "and (? is null or ? is null or not exists (" + "      select 1 from reservation v "
+				+ "       where v.room_id = r.room_id " + "         and nvl(v.status, 'ÏòàÏïΩÏôÑÎ£å') <> 'Ï∑®ÏÜå' "
+				+ "         and v.check_in  < to_date(?, 'YYYY-MM-DD') "
+				+ "         and v.check_out > to_date(?, 'YYYY-MM-DD'))) "
+
+				+ ") t "
+				+ "group by t.place_id, t.name, t.region, t.address, t.place_type, t.image_name, t.latitude, t.longitude, t.avg_rating "
+
+				// 1Î∞ï Í∞ÄÍ≤© ‚Äî ÏßëÍ≥Ñ Í≤∞Í≥ºÎ•º Í±∞Î•¥Îãà having
+				+ "having (? is null or min(t.price_weekday) <= ?) " + "order by t.name" + ")";
+
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceRoomDTO.class), region, region, a1, a1, a2, a2, a3, a3,
+				a4, a4, a5, a5, guest, guest, in, out, out, in, maxPrice, maxPrice);
+	}
+
+	public PlaceDTO placeOne(int placeId) {
+		String sql = "SELECT * FROM Place WHERE place_id = ?";
+		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeId);
+	}
+
+	public int insert(RoomDTO dto, String checkIn, String checkOut, int guest, HttpSession session) {
+		String sql = "insert into reservation values(reservation_seq.nextval, ?, systimestamp, ?, ?, ?, ?, 'ÏòàÏïΩÏôÑÎ£å', ?, ?)";
+		return jdbc.update(sql, session.getAttribute("loginId"), dto.getPriceWeekday(), checkIn, checkOut, guest, (dto.getPriceWeekday()*0.05), dto.getRoomId());
 	}
 }
