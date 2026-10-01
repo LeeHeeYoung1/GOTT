@@ -216,7 +216,7 @@ a {
 		<div class="room_list">
 			<c:forEach var="i" items="${detailList}">
 				<div class="room_card_div">
-					<a class="room_card" href="#">
+					<a class="room_card" href="/reservation/reservation?roomId=${i.roomId}&checkIn=${param.checkIn}&checkOut=${param.checkOut}&adult=${param.adult}&child=${param.child}">
 						<div class="room_img">
 							<c:if test="${not empty i.image1}">
 								<img src="${i.image1}">
@@ -239,7 +239,8 @@ a {
 						</div>
 						<div class="room_info">
 							<p class="roomName">${i.roomName}</p>
-							<p class="roomCount">잔여 객실 수 : ${i.roomCount}</p>
+							<p class="roomCount">잔여 객실 수 :
+								${i.roomCount}</p>
 							<div class="roomAmenity">
 								<c:forEach var="j" items="${i.amenities}">
 									<span>${j}</span>
@@ -250,9 +251,9 @@ a {
 						<div class="room_price">
 							<c:choose>
 								<c:when test="${i.priceWeekday != null}">
-									<fmt:formatNumber value="${i.priceWeekday}" pattern="#,###" />
+									<fmt:formatNumber value="${i.priceWeekday}" pattern="#,###"/>
 								원 ~
-								<fmt:formatNumber value="${i.priceWeekend}" pattern="#,###" />
+								<fmt:formatNumber value="${i.priceWeekend}" pattern="#,###"/>
 								원</c:when>
 								<c:otherwise>
 								가격은 해당 숙소에 문의하여 주시기 바랍니다.

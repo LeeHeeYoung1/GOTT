@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.RoomDTO;
 
 @Repository
@@ -18,5 +19,10 @@ public class RoomDAO {
 	public List<RoomDTO> detailList(int placeId){
 		String sql = "select * from Room where place_id = ? order by price_weekday";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(RoomDTO.class), placeId);
+	}
+	
+	public RoomDTO roomOne(int roomId) {
+		String sql = "select * from room where room_id = ?";
+		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(RoomDTO.class), roomId);
 	}
 }
