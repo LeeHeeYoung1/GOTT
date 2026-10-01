@@ -13,6 +13,7 @@ import com.kedu.dao.MembersDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dto.MembersDTO;
 import com.kedu.dto.Travel_TypeDTO;
+import com.kedu.services.EmailService;
 
 @Controller
 @RequestMapping("/members")
@@ -22,6 +23,8 @@ public class MembersControllers {
 	private MembersDAO mdao;
 	@Autowired
 	private Travel_TypeDAO tdao;
+	@Autowired
+	private EmailService emailService;
 	
 	@RequestMapping("/loginpage")
 	public String loginPage() {
@@ -165,7 +168,80 @@ public class MembersControllers {
 		
 		return id;
 	}
-
+	@ResponseBody
+	@RequestMapping("/sendpwcode")
+	public String sendpwcode(String id, String email, HttpSession session) {
+		MembersDTO mdto = mdao.findEmail(id, email);
+		
+		if(mdto == null) {
+			return "notfound";
+		}
+		
+		int random = (int)(Math.random() * 900000) + 100000;
+		String code = String.valueOf(random);
+		
+		try {
+			emailService.sendEmail(email, code);
+			session.setAttribute("pwEmailcode", code);
+			session.setAttribute("pwFindId", id);
+			session.setAttribute("pwFindEmail", email);
+			
+			return "success";
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "fail";
+		}
+	}
+	
+	@RequestMapping("/pwsearchpage")
+	public String pwsearchpage() {
+		return "members/pwsearch";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/verifypwcode")
+	public String verifypwcode(String code, HttpSession session) {
+		String savedCode = (String)session.getAttribute("pwEmailcode");
+		
+		if(savedCode == null) {
+			return "fail";
+		} else if(savedCode.equals(code)) {
+			session.setAttribute("pwVerified", true);
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping("/updatepw")
+	public String updatepw(String pw, HttpSession session) {
+		// 이메일 인증 여부 확인
+	    Boolean verified = (Boolean)session.getAttribute("pwVerified");
+	    if(verified == null || !verified) {
+	        return "notVerified";
+	    }
+	    // 비밀번호를 변경할 아이디 가져오기
+	    String id = (String)session.getAttribute("pwFindId");
+	    if(id == null) {
+	        return "fail";
+	    }
+	    // 비밀번호 암호화
+	    String encryptedPw = EncryptionUtils.encryptSHA512(pw);
+	    // DB 비밀번호 변경
+	    int result = mdao.updatePassword(id, encryptedPw);
+	    if(result > 0) {
+	        // 비밀번호 찾기 관련 세션 삭제
+	        session.removeAttribute("pwEmailcode");
+	        session.removeAttribute("pwFindId");
+	        session.removeAttribute("pwFindEmail");
+	        session.removeAttribute("pwVerified");
+	        return "success";
+	    }
+	    return "fail";
+	}
+	
+	
 	
 	
 	

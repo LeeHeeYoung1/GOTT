@@ -8,11 +8,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/css/public.css">
 <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<title>GOTT 회원가입</title>
+<title>GOTT 비밀번호 찾기</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         
 <style>
+
         .header {
             width: 100%;
             height: 70px;
@@ -24,12 +25,9 @@
             height: 70px;
             margin-left: 50px;
         }
-        .logobox:hover {
-            cursor: pointer;
-        }
 
         .logobox img {
-            width: 80%;
+            width: 100%;
             height: 100%;
         }
 
@@ -42,7 +40,6 @@
             font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            margin: 0 10px;
         }
 
         .textzone:hover {
@@ -74,7 +71,7 @@
             cursor: pointer;
         }
         .icon:active {
-            
+
         }
         .title {
             width: 100%;
@@ -90,7 +87,6 @@
             font-size: 32px;
             font-weight: 700;
         }
-
 
         .main {
             width: 100%;
@@ -136,7 +132,9 @@
             color: #2563eb;
         }
 
-        .mainbox {
+        .mainright {
+            flex: 1;
+            height: auto;
             max-width: 600px;
             margin: 0 auto;
             padding: 35px 40px;
@@ -146,52 +144,28 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
         }
 
-        .mainbox legend {
+        .mainright legend {
             padding: 0 10px;
             font-size: 20px;
             font-weight: 700;
         }
 
-        .mainbox input {
+        .mainright input {
             width: 100%;
             height: 48px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             padding: 0 15px;
             border: 1px solid #d1d5db;
             border-radius: 6px;
             font-size: 14px;
             outline: none;
-        }
-        
-        #id,
-        #nickname,
-        #zipcode {
-            width: 70%;
-            height: 48px;
-            margin-bottom: 8px;
-            margin-right: 16px;
-            padding: 0 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-            outline: none;
-        }
-        .mainbox .gender {
-            width: 15px;
-            height: 15px;
-            margin: 0 5px 0 0;
-            padding: 0;
-            border: none;
-            align-items: center;
-            line-height: 2;
         }
 
-        .mainbox input:focus {
+        .mainright input:focus {
             border-color: #1d97c0;
         }
 
-        .mainbox button {
-            width: 135px;
+        .mainright button {
             height: 45px;
             padding: 0 25px;
             border: none;
@@ -199,14 +173,8 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            background-color: #2A9D8F;
+            background-color: #2563eb;
             color: white;
-
-            transition: 0.2s;
-        }
-        .mainbox button:hover {
-            background-color: #238276;
-            color: #FFF8F0;
         }
 
         hr {
@@ -235,10 +203,46 @@
             color: #6B7280;
             background-color: #F8FAFA;
         }
-        .btnbox button {
-            margin: auto;
+        .mainright input {
+            width: 100%;
+            height: 48px;
+            margin-bottom: 8px;
+            padding: 0 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
         }
-       
+        #email,
+        #emailcheck {
+            width: 69%;
+            height: 48px;
+            margin-bottom: 8px;
+            margin-right: 16px;
+            padding: 0 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .mainright button {
+            width: 140px;
+            height: 45px;
+            padding: 0 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            background-color: #2563eb;
+            color: white;
+        }
+        .mainright button:hover {
+            background-color: #2463ebe5;
+            color: white;
+        }
+        
+        
     </style>
 </head>
 
@@ -252,59 +256,55 @@
         <div class="nav flex-between">
             <div class="textzone">이벤트</div>
             <div class="textzone">지역</div>
-            <div class="textzone">추천 여행지</div>
+            <div class="textzone">추천여행지</div>
             <div class="textzone">숙박업소</div>
             <div class="textzone">리뷰</div>
-            <div class="textzone">여행 플래너</div>
+            <div class="textzone">여행플래너</div>
             <div class="textzone">공지사항</div>
         </div>
         <div class="user-menu">
             <div class="icon"><i class="fa-solid fa-bars"></i></div>
         </div>
+
     </div>
 
     <div class="title">
-        <h1>회원가입</h1>
+        <h1>비밀번호 찾기</h1>
     </div>
 
-    <div class="main flex-center">
-        <form action="/members/signup" id="frm" method="post">
-            <fieldset class="mainbox">
-
-                <legend>회원가입</legend>
-
-                <input id="id" name="id" type="text" placeholder="ID를 입력하세요">
-                <button id="idcheck" type="button">ID중복검사</button>
-                <span class="idcheckresult"></span>
-                <input id="pw" name="pw" type="password" placeholder="Password를 입력하세요">
-                <input id="pw2" type="password" placeholder="Password를 재입력하세요">
-                <span class="pwresult"></span>
-                
-                <input name="name" type="text" placeholder="이름을 입력하세요">
-                <input id="nickname" name="nickname" type="text" placeholder="닉네임을 입력하세요">
-                <button id="nicknamecheck" type="button">중복확인</button>
-                <span class="nicknamecheckresult"></span>
-
-                <input id="phone" name="phone" type="text" placeholder="'-' 를 제외한 번호를 입력하세요">
-                <input id="email" name="email" type="email" placeholder="email을 입력하세요.">
-                <span>* 성별을 선택하세요</span>
-                <input class="gender" name="gender" type="radio" value="남성">남성
-                <input class="gender" name="gender" type="radio" value="여성">여성
-
-                <input name="dob" type="date" style="margin-top: 5px;">
-
-                <input id="zipcode" name="zipcode" type="text" readonly placeholder="우편번호">
-                <button id="postbtn" type="button">주소 찾기</button>
-                <input id="address1" name="address1" type="text" readonly placeholder="주소 입력">
-                <input id="address2" name="address2" type="text" placeholder="상세주소">
-
-                <div class="btnbox flex-between">
-                    <button id="signup" type="submit">회원가입</button>
-                    <button id="cancel" type="button">취소</button>
+    <div class="main">
+        <div class="mainleft">
+            <div class="linkbar">
+                <div class="linkbartitle">메뉴</div>
+                <div class="linkbarmain">
+                	<a href="/">홈으로</a><br>
+                    <a href="/members/loginpage">로그인</a><br>
+                    <a href="/members/signuppage">회원가입</a><br>
+                    <a href="/members/idsearchpage">아이디 찾기</a><br>
+                    <a href="/members/pwsearchpage">비밀번호 찾기</a>
                 </div>
+            </div>
+        </div>
+            <fieldset class="mainright">
+                <legend>비밀번호 찾기</legend>
+                <input id="id" name="id" type="text" placeholder="아이디을 입력하세요">
+                <input id="email" name="email" type="email" placeholder="회원가입시 기입한 이메일을 입력하세요">
+                <button id="emailVerification" type="button">이메일 인증</button>
 
+                <div id="emailcheckbox" style="display: none;">
+                    <input id="emailcheck" type="text" placeholder="인증번호를 입력하세요.">
+                    <button id="verifyemail" type="button">인증번호 확인</button>
+                </div>
+                <div id="updatepw" style="display: none;">
+                    <input id="pw" name="pw" type="password" placeholder="새 비밀번호를 입력하세요">
+                    <input id="pw2" type="password" placeholder="새 비밀번호를 재입력하세요"><br>
+                    <span class="pwresult"></span><br>
+                    <button id="pwchange" type="button">비밀번호 변경</button>
+                </div>
+                <div class="flex-center">
+                    <button id="homebtn" type="button">홈으로</button>
+                </div>
             </fieldset>
-        </form>
     </div>
     <hr>
     <div class="footer">
@@ -317,36 +317,62 @@
 
 <script>
 
-    let phonetext = $("#phone");
-    let phoneregex = /^010[0-9]{8}$/
-    
-    $("#idcheck").on("click", function(){
-        let id = $("#id").val();
+	$("#emailVerification").on("click", function() {
+		
+		let id = $("#id").val();
+		let email = $("#email").val();
+		
+		if(id == "" || email == "") {
+	        alert("아이디와 이메일을 입력해주세요.");
+	        return;
+	    }
+		
+		$.ajax({
+	        url: "/members/sendpwcode",
+	        type: "post",
+	        data: {
+	            id: id,
+	            email: email
+	        }
+	    }).done(function(resp) {
 
-        if(id=="") {
-            alert("아이디를 입력해주세요.")
+	        if(resp == "success") {
+	            alert("해당 이메일로 인증번호를 발송하였습니다.");
+
+                $("#emailcheckbox").show();
+
+	        } else if(resp == "notfound") {
+	            alert("존재하지 않는 아이디와 이메일입니다.");
+	        } else {
+                alert("이메일 발송에 실패하였습니다.")
+            }
+
+	    });
+	});
+
+    $("#verifyemail").on("click", function(){
+        let code = $("#emailcheck").val();
+
+        if(code == "") {
+            alert("인증번호를 입력하세요.");
             return;
-        }
+        } 
         $.ajax({
-            url:"/members/idcheck",
-            data:{id: id}
+            url: "/members/verifypwcode",
+            type: "post",
+            data: {
+                code: code
+            }
         }).done(function(resp) {
-            if(resp == 1) {
-                $(".idcheckresult").text("이미 사용 중인 아이디입니다.").css("color", "red");
-                $("#id").removeAttr("check");
+            if(resp == "success") {
+                alert("이메일 인증이 완료되었습니다.");
+                $("#emailcheckbox").hide();
+                $("#updatepw").show();
             } else {
-                $(".idcheckresult").text("사용 가능한 아이디입니다.").css("color", "green");
-                $("#id").attr("check", "true");
+                alert("이메일 인증에 실패하였습니다.");
             }
         })
-    })
-
-    $("#id").on("input", function(){
-        $(this).removeAttr("check");
-        $(".idcheckresult").text("");
     });
-
-    
 
     $("#pw2").on("input", function(){
 
@@ -386,91 +412,47 @@
         }
 
         if(!pw4regex.test(pw)) {
-            alert("비밀번호는 영문과 숫자로 8자 이상 입력해주세요.");
+            alert("비밀번호는 알파벳 대문자,소문자,숫자로 8자 이상 입력해주세요.");
             return false;
         }
 
     })
-    
-    $("#nicknamecheck").on("click", function(){
-        let nickname = $("#nickname").val();
 
-        if(nickname == "") {
-            alert("닉네임을 입력해주세요.")
-            return;
-        }
-        $.ajax({
-            url:"/members/nicknamecheck",
-            data:{nickname: nickname}
-        }).done(function(resp) {
-            if(resp == 1) {
-                $(".nicknamecheckresult").text("이미 사용 중인 닉네임입니다.").css("color", "red");
-                $("#nickname").removeAttr("check");
-            } else {
-                $(".nicknamecheckresult").text("사용 가능한 닉네임입니다.").css("color", "green");
-                $("#nickname").attr("check", "true");
-            }
-        })
-    })
-
-    $("#nickname").on("input", function(){
-        $(this).removeAttr("check");
-        $(".nicknamecheckresult").text("");
-    });
-
-    $("#postbtn").on("click", function(){
-        new kakao.Postcode({
-            oncomplete: function(data) {
-                console.log(data)
-                let zipcode = $("#zipcode");
-                let address1 = $("#address1");
-
-                zipcode.val(data.zonecode);
-                address1.val(data.jibunAddress);
-            }
-        }).open();
-    })
-
-    $("#cancel").on("click", function(){
-        location.href="/";
-    })
-	
-    $("#frm").on("submit", function(e) {
-
+    $("#pwchange").on("click", function() {
         let pw = $("#pw").val();
         let pw2 = $("#pw2").val();
 
-	    if(!$("#id").attr("check")) {
-	        alert("아이디 중복검사를 실행해주세요.");
-	        e.preventDefault();
-	        return;
-	    }
-	
-	    if(!$("#nickname").attr("check")) {
-	        alert("닉네임 중복검사를 실행해주세요.");
-	        e.preventDefault();
-	        return;
-	    }
-	
-	    if(!phoneregex.test(phonetext.val())) {
-	        alert("연락처의 양식에 맞춰 입력해주세요.");
-	        e.preventDefault();
-	        return;
-	    }
-
         if(pw == "" || pw2 == "") {
-            alert("비밀번호를 입력해주세요.");
-            e.preventDefault();
+            alert("새 비밀번호를 입력해주세요.");
             return;
-        }
+        } 
         if(pw != pw2) {
             alert("비밀번호가 일치하지 않습니다.");
-            e.preventDefault();
             return;
         }
-        alert("회원가입을 환영합니다.")
-	});
-    
+        $.ajax({
+            url: "/members/updatepw",
+            type: "post",
+            data: {
+                pw: pw
+            }
+        }).done(function(resp) {
+            if(resp=="success") {
+                alert("비밀번호가 변경되었습니다.")
+                location.href = "/members/loginpage";
+            } else if (resp == "notVerified") {
+                alert("이메일 인증을 먼저 진행하세요.");
+
+            } else {
+                alert("비밀번호 변경에 실패하였습니다.");
+            }
+        })
+    });
+
+    $("#homebtn").on("click", function(){
+        location.href="/";
+    });
+
 </script>
 
 </body>
