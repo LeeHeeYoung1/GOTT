@@ -45,6 +45,7 @@ public class MembersControllers {
 		    session.setAttribute("address2", member.getAddress2());
 		    session.setAttribute("nickname", member.getNickname());
 		    session.setAttribute("mileage", member.getMileage());
+		    session.setAttribute("regdate", member.getRegdate());
 		}
 		return result;
 	}
