@@ -30,28 +30,6 @@
 			margin: 40px auto;
 			position: relative;
 		}
-		#searchResult {
-		    position: absolute;
-		    top: 65px;
-		    left: 0;
-		    width: 100%;
-		    background-color: white;
-		    border: 1px solid #e2ded9;
-		    border-radius: 10px;
-		    box-sizing: border-box;
-		    z-index: 1000;
-		    overflow: hidden;
-		}
-		
-		.searchItem {
-		    padding: 12px 20px;
-		    font-size: 15px;
-		    cursor: pointer;
-		}
-		
-		.searchItem:hover {
-		    background-color: #f5f5f5;
-		}
 		
 		.searchBox input {
 			width: 100%;
@@ -411,16 +389,16 @@
 		</c:choose>
     </div>
 
-    <div class="title">
+    <div id="eventbannerzone" class="title">
         <h1>대한민국 구석구석, 당신의 여행을 찾아보세요</h1>
     </div>
     <form action="/place/search" method="get">
 		<div class="searchBox">
-			<input type="text" id="searchInput" name="keyword" placeholder="어디로 떠나고 싶으신가요?">
+			<input type="text" name="keyword" placeholder="어디로 떠나고 싶으신가요?">
 			<button type="submit" class="searchBtn">
 				<span class="searchIcon"></span>
 			</button>
-		 <div id="searchResult"></div>
+		<div id="searchResult"></div>
 		</div>
 	</form>
 	
@@ -445,7 +423,7 @@
     </div>
 
     <hr>
-    <div class="title">
+    <div id="ourpromise" class="title">
         <h2>우리의 약속</h2>
     </div>
     <div class="subtitle">
@@ -481,14 +459,21 @@
     </div>
 
     <hr>
-
+    
+	<div id="mapzone" class="title">
+        <h2>여행지도</h2>
+    </div>
+    <div class="subtitle">
+        <h5>대한민국 지도를 이용해 여행지를 탐색해보세요</h5>
+    </div>
+    <br>
     <div class="mapzone">
         지도 API
     </div>
 
     <hr>
 
-    <div class="title">
+    <div id="placesuggest" class="title">
         <h2>추천 여행지</h2>
     </div>
     <div class="subtitle">
@@ -497,12 +482,7 @@
     <div class="title-link" style="font-size: 10px; color:#2563eb">
         <a href="">찜한 장소로 나만의 여행 일정 만들기</a>
     </div>
-    <div class="titlebtn">
-        <button></button>
-        <button></button>
-        <button></button>
-    </div>
-
+   
     <div class="placesuggest">
         <i class="fa-solid fa-circle-chevron-left"></i>
         <div class="placezone">
@@ -537,7 +517,7 @@
 
     <hr>
     
-    <div class="title">
+    <div id="hotelsuggest" class="title">
         <h2>숙박업소 추천</h2>
     </div>
     <div class="subtitle">
@@ -578,7 +558,7 @@
 
     <hr>
 
-    <div class="title">
+    <div id="popularboard" class="title">
         <h2>인기 게시글</h2>
     </div>
     <div class="subtitle">
@@ -615,20 +595,18 @@
 
     <hr>
 
-    <div class="title">
+    <div id="notice" class="title">
         <h2>공지사항</h2>
     </div>
     
     <div class="notice">
         <div class="moreview"><a href="">더 보기</a></div>
-        <%-- <c:choose>
-            <c:forEach>
+        <%-- 
                 <div class="noticebox">
                     <div class="noticetitle" style="float: left;">사이트 점검 안내</div>
                     <div class="noticewritedate" style="float: left;">날짜</div>
                 </div>
-            </c:forEach>
-        </c:choose> --%>
+ --%>
     </div>
 
 
@@ -636,13 +614,13 @@
         <nav>
             <div id="vertical-underline"></div>
             <h2 style="margin-top: 10px;">MENU</h2>
-            <a href="#">이벤트</a>
-            <a href="#">우리의 약속</a>
-            <a href="#">여행지도</a>
-            <a href="#">여행지 추천</a>
-            <a href="#">숙박업소 추천</a>
-            <a href="#">인기 게시글</a>
-            <a href="#">공지사항</a>
+            <a href="#eventbannerzone">이벤트</a>
+            <a href="#ourpromise">우리의 약속</a>
+            <a href="#mapzone">여행지도</a>
+            <a href="#placesuggest">여행지 추천</a>
+            <a href="#hotelsuggest">숙박업소 추천</a>
+            <a href="#popularboard">인기 게시글</a>
+            <a href="#notice">공지사항</a>
         </nav>
     </div>
     
@@ -660,18 +638,17 @@
 
     let verticalunderline = document.getElementById("vertical-underline");
     let verticalmenus = document.querySelectorAll("nav:first-child a");
-
-    verticalmenus.forEach(menu=>menu.addEventListener("click", (e)=>createunderline(e)));
-
+    
+    verticalmenus.forEach(menu=>menu.addEventListener("click", (e)=>createunderline(e)))
     function createunderline(e) {
         verticalunderline.style.left = e.currentTarget.offsetLeft + "px";
         verticalunderline.style.width = e.currentTarget.offsetWidth + "px";
-        verticalunderline.style.top = e.currentTarget.offsetTop +
-                                      e.currentTarget.offsetHeight + "px";
+        verticalunderline.style.top = e.currentTarget.offsetTop + 
+                                        e.currentTarget.offsetHeight + "px";
+
     }
 
-
-    $("#searchInput").on("keyup", function () {
+$("#searchInput").on("keyup", function () {
 
         let keyword = $(this).val();
 

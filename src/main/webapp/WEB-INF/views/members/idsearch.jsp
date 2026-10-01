@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/css/public.css">
-<title>GOTT Login</title>
+<title>GOTT 아이디 찾기</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	
@@ -87,7 +88,6 @@
             font-weight: 700;
         }
 
-
         .main {
             width: 100%;
             height: 400px;
@@ -134,7 +134,7 @@
 
         .mainright {
             flex: 1;
-            max-width: 600px;
+            width: 600px;
             margin: 0 auto;
             padding: 35px 40px;
             border: 1px solid #e5e7eb;
@@ -202,6 +202,24 @@
             color: #6B7280;
             background-color: #F8FAFA;
         }
+        #resultbox {
+        	flex: 1;
+            width: 600px;
+            margin: 0 auto;
+            padding: 35px 40px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        #resultbox h3 {
+            margin: 20px 0;
+            font-size: 28px;
+            color: #2563eb;
+        }
+
 
     </style>
 </head>
@@ -229,7 +247,7 @@
     </div>
 
     <div class="title">
-        <h1>로그인</h1>
+        <h1>아이디 찾기</h1>
     </div>
 
     <div class="main">
@@ -245,13 +263,22 @@
                 </div>
             </div>
         </div>
-        <form id="loginfrm" action="/members/login">
+        <form id="idsearch">
             <fieldset class="mainright">
-                <legend>로그인</legend>
-                <input id="id" name="id" type="text" placeholder="ID를 입력하세요">
-                <input id="pw" name="pw" type="password" placeholder="Password를 입력하세요">
-                <button type="submit">로그인</button>
-                <button id="signup" type="button"> 회원가입</button>
+                <legend>아이디 찾기</legend>
+                <div id="searchbox">
+                    <input id="name" name="name" type="text" placeholder="이름을 입력하세요">
+                    <input id="email" name="email" type="email" placeholder="회원가입시 기입한 이메일을 입력하세요">
+                    <div class="btnzone flex-between">
+                        <button type="submit">아이디 찾기</button>
+                        <button id="homebtn" type="button">홈으로</button>
+                    </div>
+                </div>
+
+                <div id="resultbox" style="display: none;">
+                    <!-- 아이디 결과 화면 -->
+                </div>
+
             </fieldset>
         </form>
     </div>
@@ -266,35 +293,48 @@
 
 <script>
 
-	$("#loginfrm").on("submit", function(e) {
+	$("#idsearch").on("submit", function(e) {
 		e.preventDefault();
-		let id = $("#id").val();
-		let pw = $("#pw").val();
+		let name = $("#name").val();
+		let email = $("#email").val();
 		
-		if(id == "" || pw == "") {
-	        alert("아이디와 비밀번호를 입력해주세요.");
+		if(name == "" || email == "") {
+	        alert("이름과 이메일을 입력해주세요.");
 	        return;
 	    }
 		
 		$.ajax({
-	        url: "/members/login",
+	        url: "/members/idsearch",
 	        type: "post",
 	        data: {
-	            id: id,
-	            pw: pw
+	            name: name,
+	            email: email
 	        }
 	    }).done(function(resp) {
+	    	 		console.log("응답값 : [" + resp + "]");
+	        if(resp != "") {
+                
+                $("#searchbox").hide();
+                
+                $("#resultbox").html("<div>" +
+                	    "<h3>아이디 찾기 완료</h3>" +
+                	    "<p>가입된 아이디 : " + resp + "</p>" +
+                	    "<br>" + 
+                	    "<button type='button' onclick="+"location.href='/members/loginpage'"+">로그인</button>" +
+                	    "<button type='button' onclick="+"location.href='/members/pwsearch'"+">비밀번호 찾기</button>" +
+                	    "</div>");
+              
 
-	        if(resp == 1) {
-	            location.href = "/";
+                $("#resultbox").show();
+                
 	        } else {
-	            alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+	            alert("존재하지 않는 이름과 이메일입니다.");
 	        }
 	    });
 	})
 
-    $("#signup").on("click", function(){
-        location.href="/members/signuppage";
+    $("#homebtn").on("click", function(){
+        location.href="/";
     })
 
 </script>
