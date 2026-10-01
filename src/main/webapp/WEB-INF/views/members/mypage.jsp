@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,10 +10,6 @@
   <title>Document</title>
 
   <style>
-   /* =========================================================
-   1. 공통
-   ========================================================= */
-
 * {
   box-sizing: border-box;
 }
@@ -332,12 +329,16 @@ button:hover {
 /* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
 
 .wishlistContainer {
+  width: 100%;
   margin-top: 80px;
+  display: flow-root;   /* 안의 float 카드 높이까지 감싸서 아래 영역이 올라오지 않게 */
 }
 
 /* 카드 */
 .wishlistImg {
   width: 250px;
+  float: left;
+  margin-right: 23px;
   border: 1px solid #333;
   background-color: white;
 }
@@ -504,7 +505,138 @@ button:hover {
 .reviewDate a {
   color: #777;
 }
-  </style>
+
+
+/* ---------- 5-6. 마일리지 · 쿠폰 ---------- */
+
+.couponContainer {
+  margin-top: 80px;
+  width: 100%;
+}
+
+/* 제목 + 더보기 */
+.couponSectionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.couponSectionTitle span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.couponSectionTitle a {
+  font-size: 13px;
+  color: #888;
+  text-decoration: none;
+}
+
+/* 마일리지 + 쿠폰 전체 박스 */
+.coupon_point {
+  border: 1px solid #555;
+  box-sizing: border-box;
+}
+
+/* 마일리지 테이블 */
+.coupon_point table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.coupon_point th {
+  height: 35px;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #999;
+  font-size: 13px;
+}
+
+.coupon_point td {
+  height: 35px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+/* 마지막 줄 밑줄 제거 */
+.coupon_point tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 날짜 */
+.coupon_point th:nth-child(1),
+.coupon_point td:nth-child(1) {
+  width: 20%;
+  text-align: left;
+}
+
+/* 내용 */
+.coupon_point th:nth-child(2),
+.coupon_point td:nth-child(2) {
+  width: 40%;
+  text-align: left;
+}
+
+/* 구분 */
+.coupon_point th:nth-child(3),
+.coupon_point td:nth-child(3) {
+  width: 20%;
+  text-align: center;
+}
+
+/* 포인트 */
+.coupon_point th:nth-child(4),
+.coupon_point td:nth-child(4) {
+  width: 20%;
+  text-align: right;
+}
+
+/* 쿠폰 목록 */
+.couponList {
+  display: flex;
+  gap: 20px;
+  margin-top: 14px;
+}
+
+/* 쿠폰 하나 */
+.couponBox {
+  width: 40%;
+  min-height: 105px;
+
+  border: 1px solid #555;
+  padding: 13px 14px;
+
+  box-sizing: border-box;
+}
+
+/* 쿠폰 제목 */
+.couponBox strong {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 15px;
+}
+
+/* 쿠폰 설명 */
+.couponBox p {
+  margin: 0 0 12px;
+
+  font-size: 12px;
+  color: #777;
+}
+
+/* 사용하기 버튼 */
+.couponBox button {
+  width: 65px;
+  height: 30px;
+
+  background: white;
+  border: 1px solid #777;
+
+  font-size: 12px;
+  cursor: pointer;
+}
+</style>
 </head>
 
 <body>
@@ -553,6 +685,7 @@ button:hover {
                 <div class="sideBox">
 
           <div class="loginId">
+          	<strong style="font-size: 10px;">가입날짜:</strong><span><fmt:formatDate value="${regdate}" pattern="  yyyy-MM-dd"/></span><br>
             <strong>${nickname}</strong><span>님</span>
             <br>
             <span>일반회원</span>
@@ -700,6 +833,30 @@ button:hover {
                 </div>
 
               </div>
+              
+              <div class="wishlistImg">
+
+                <img src="${i.image}" alt="${i.title}">
+
+                <div class="wishlistInfo">
+                  <h3>${i.title}</h3>
+                  <p>${i.description}</p>
+                  <button>자세히 보기</button>
+                </div>
+
+              </div>
+              
+              <div class="wishlistImg">
+
+                <img src="${i.image}" alt="${i.title}">
+
+                <div class="wishlistInfo">
+                  <h3>${i.title}</h3>
+                  <p>${i.description}</p>
+                  <button>자세히 보기</button>
+                </div>
+
+              </div>
 
             </c:forEach>
 
@@ -764,8 +921,70 @@ button:hover {
 
             </div>
 
-          </div>
+        
 
+        </div>
+        
+        <div class="couponContainer">
+        
+        	<div class="couponSectionTitle">
+    			<span>마일리지 · 쿠폰</span>
+    			<a href="#">더 보기 &gt;</a>
+			</div>
+       		
+       		<div class="coupon_point" style="padding:20px 20px 12px">
+       		
+       			<table align="center">
+       			<thead>
+       				<tr>
+                		<th>날짜</th>
+                		<th>내용</th>
+                		<th>구분</th>
+                		<th>포인트</th>
+              		</tr>
+              	</thead>
+              	
+              	<tbody>
+              		<tr>
+                		<td>2026-09-02</td>
+                		<td>리뷰 작성 적립</td>
+                		<td>적립</td>
+                		<td>+???M</td>
+                	</tr>
+              		<tr>
+                		<td>2026-08-14</td>
+                		<td>제주 오션뷰 호텔 결제 사용</td>
+                		<td>사용</td>
+                		<td>-????M</td>
+                	</tr>
+                	<tr>
+                		<td>2026-08-03</td>
+                		<td>첫 예약 이벤트 적립</td>
+                		<td>적립</td>
+                		<td>+????0M</td>
+              		</tr>
+              	</tbody>
+       			</table>
+       			
+       			<div class="couponList">
+       				<div class="couponBox">
+       					<Strong>첫 회원가입 3%쿠폰</Strong>
+       					<p>?????까지 100만원 이상 결제시</p>
+       					<button type="button">사용하기</button>
+       				</div>
+       				
+       				<div class="couponBox">
+       					<Strong>첫 회원가입 10%쿠폰</Strong>
+       					<p>?????까지 300만원 이상 결제시</p>
+       					<button type="button">사용하기</button>
+       				</div>
+       			</div>
+       			
+       			
+       			
+       			
+       		</div>
+       		
         </div>
 
 
@@ -776,6 +995,10 @@ button:hover {
       </div>
 
     </c:when>
+    
+    <c:otherwise>
+    	<div>로그인하세용 ㅈㅈ</div>
+    </c:otherwise>
 
 
 
