@@ -12,7 +12,7 @@
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-}
+	}
 
 body {
 	font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
@@ -229,7 +229,7 @@ button {
 
 	<section class="hero">
 		<div class="wrap">
-			<h1>${keyword} 여행지</h1>
+			<h1>여행지 검색결과</h1>
 			<p>관광지, 맛집, 숙박업소를 모아봤어요.</p>
 		</div>
 	</section>

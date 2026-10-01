@@ -30,6 +30,28 @@
 			margin: 40px auto;
 			position: relative;
 		}
+		#searchResult {
+		    position: absolute;
+		    top: 65px;
+		    left: 0;
+		    width: 100%;
+		    background-color: white;
+		    border: 1px solid #e2ded9;
+		    border-radius: 10px;
+		    box-sizing: border-box;
+		    z-index: 1000;
+		    overflow: hidden;
+		}
+		
+		.searchItem {
+		    padding: 12px 20px;
+		    font-size: 15px;
+		    cursor: pointer;
+		}
+		
+		.searchItem:hover {
+		    background-color: #f5f5f5;
+		}
 		
 		.searchBox input {
 			width: 100%;
@@ -394,10 +416,11 @@
     </div>
     <form action="/place/search" method="get">
 		<div class="searchBox">
-			<input type="text" name="keyword" placeholder="어디로 떠나고 싶으신가요?">
+			<input type="text" id="searchInput" name="keyword" placeholder="어디로 떠나고 싶으신가요?">
 			<button type="submit" class="searchBtn">
 				<span class="searchIcon"></span>
 			</button>
+		 <div id="searchResult"></div>
 		</div>
 	</form>
 	
@@ -637,16 +660,64 @@
 
     let verticalunderline = document.getElementById("vertical-underline");
     let verticalmenus = document.querySelectorAll("nav:first-child a");
-    
-    verticalmenus.forEach(menu=>menu.addEventListener("click", (e)=>createunderline(e)))
+
+    verticalmenus.forEach(menu=>menu.addEventListener("click", (e)=>createunderline(e)));
+
     function createunderline(e) {
         verticalunderline.style.left = e.currentTarget.offsetLeft + "px";
         verticalunderline.style.width = e.currentTarget.offsetWidth + "px";
-        verticalunderline.style.top = e.currentTarget.offsetTop + 
-                                        e.currentTarget.offsetHeight + "px";
-
+        verticalunderline.style.top = e.currentTarget.offsetTop +
+                                      e.currentTarget.offsetHeight + "px";
     }
 
+
+    $("#searchInput").on("keyup", function () {
+
+        let keyword = $(this).val();
+
+        if(keyword == "") {
+            $("#searchResult").empty();
+            return;
+        }
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/place/keyword",
+            type: "get",
+            data: {
+                keyword: keyword
+            },
+
+            success: function(result) {
+	
+            	 console.log(result);
+            	    console.log(result.length);
+            	
+                $("#searchResult").empty();
+
+                for(let i = 0; i < result.length && i <10; i++) {
+
+                    let div = $("<div>");
+
+                    div.addClass("searchItem");
+
+                    div.text(result[i]);
+
+                    div.on("click", function() {
+
+                        $("#searchInput").val(result[i]);
+
+                        $("#searchResult").empty();
+                    });
+
+                    $("#searchResult").append(div);
+                }
+            },
+
+            error: function() {
+                console.log("연관검색어 검색 실패");
+            }
+        });
+    });
 
 </script>
 
