@@ -44,6 +44,7 @@ public class MembersControllers {
 		    session.setAttribute("address1", member.getAddress1());
 		    session.setAttribute("address2", member.getAddress2());
 		    session.setAttribute("nickname", member.getNickname());
+		    session.setAttribute("mileage", member.getMileage());
 		}
 		return result;
 	}
@@ -95,8 +96,15 @@ public class MembersControllers {
 	public String update(MembersDTO mdto, HttpSession session) {
 	    String id = (String) session.getAttribute("loginId");
 	    mdto.setId(id);
-	    mdto.setPw(EncryptionUtils.encryptSHA512(mdto.getPw()));
 	    int result = mdao.update(mdto);
+	    if(result>0) {
+	    	session.setAttribute("nickname", mdto.getNickname());
+	    	session.setAttribute("phone", mdto.getPhone());
+	    	session.setAttribute("email", mdto.getEmail());
+	    	session.setAttribute("zipcode", mdto.getZipcode());
+	    	session.setAttribute("address1", mdto.getAddress1());
+	    	session.setAttribute("address2", mdto.getAddress2());
+	    }
 	    return "redirect:/members/mypage";
 	}
 	
