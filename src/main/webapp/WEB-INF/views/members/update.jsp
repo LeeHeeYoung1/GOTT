@@ -346,6 +346,7 @@
                         <li><a href="#">여행 일정 플래너</a></li>
                         <li><a href="#">내가 쓴 리뷰</a></li>
                         <li><a href="#">내가 쓴 게시글</a></li>
+                        <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
                     </ul>
 
                     <span>혜택</span>
@@ -403,6 +404,8 @@
         </form>
 
     </div>
+    
+    <div class="point_coupon"></div>
     <hr>
     <div class="footer">
         <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
