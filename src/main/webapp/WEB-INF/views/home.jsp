@@ -368,7 +368,7 @@
             <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
             <div class="textzone"><a href="">리뷰</a></div>
             <div class="textzone"><a href="">여행플래너</a></div>
-            <div class="textzone"><a href="">게시판</a></div>
+            <div class="textzone"><a href="/board/freeBoard">게시판</a></div>
         </div>
         <c:choose>
 	        <c:when test="${loginId != null}">
