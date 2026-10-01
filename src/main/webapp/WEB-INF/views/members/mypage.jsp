@@ -240,8 +240,9 @@ button:hover {
 .a1,
 .a2,
 .a3,
-.a4 {
-  width: 25%;
+.a4,
+.a5 {
+  width: 20%;
   height: 80px;
 
   border: 1px solid black;
@@ -256,7 +257,8 @@ button:hover {
 .a1 p,
 .a2 p,
 .a3 p,
-.a4 p {
+.a4 p, 
+.a5 p {
   margin: 0;
   font-size: 24px;
 }
@@ -264,7 +266,8 @@ button:hover {
 .a1 span,
 .a2 span,
 .a3 span,
-.a4 span {
+.a4 span, 
+.a5 span {
   margin: 0;
   font-size: 13px;
 }
@@ -685,7 +688,6 @@ button:hover {
                 <div class="sideBox">
 
           <div class="loginId">
-          	<strong style="font-size: 10px;">가입날짜:</strong><span><fmt:formatDate value="${regdate}" pattern="  yyyy-MM-dd"/></span><br>
             <strong>${nickname}</strong><span>님</span>
             <br>
             <span>일반회원</span>
@@ -736,6 +738,7 @@ button:hover {
 				<a class="a2"> <strong>??</strong> <span>찜한 목록</span></a> 
 				<a class="a3"> <strong>??</strong> <span>작성한 리뷰</span></a>
 				<a class="a4"> <strong>${mileage}M</strong> <span>보유마일리지</span></a>
+				<a class="a5"> <strong><fmt:formatDate value="${regdate}" pattern="yyyy-MM-dd"/></strong> <span>가입일자</span></a>
 			</nav>
 
 		<!--여기부터 일정 플래너-->
