@@ -35,6 +35,10 @@
       padding: 20px;
       border: 1px solid black;
     }
+    
+    h3 {
+      text-align : center;
+    }
 
     h4 {
       margin: 0 0 10px 0;
@@ -110,6 +114,29 @@
     margin-top: 30px;
     font-size: 22px;
     font-weight: bold;
+}
+#saveResult {
+    display: block;
+    margin: 40px auto;
+    padding: 12px 40px;
+
+    border: none;
+    border-radius: 25px;
+
+    background-color: #6CC070;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#saveResult:hover {
+    background-color: #4FA653;
+    transform: translateY(-2px);
 }
 p {
   text-align: center;
@@ -434,6 +461,24 @@ p {
     </div>
     <div id="resultText"></div>
     <div id="typeDescription"></div>
+    
+    <form id="saveForm" action="/members/tourTypeTestResult" method="post">
+
+    <input type="hidden" id="typeCode" name="type_code">
+
+    <input type="hidden" id="planScore" name="plan_score">
+    <input type="hidden" id="exploreScore" name="explore_score">
+    <input type="hidden" id="healingScore" name="healing_score">
+    <input type="hidden" id="emotionScore" name="emotion_score">
+    <input type="hidden" id="foodScore" name="food_score">
+    <input type="hidden" id="activityScore" name="activity_score">
+
+    <button type="button" id="saveResult">
+        결과 저장하기
+    </button>
+
+</form>
+    
 </div>
 
   </div>
@@ -562,34 +607,48 @@ p {
 
     });
     
-    let result = [];
-    for(let typeName in score) {
+     let result = [];
 
-      result.push({
-        name : typeName,
-        score : score[typeName]
-      });
-    }
-    result.sort(function(a,b) {
-      return b.score - a.score;
-    });
+     for(let typeName in score) {
 
-    let first = result[0].score;
-    let second = result[1].score;
+         result.push({
+             name : typeName,
+             score : score[typeName]
+         });
 
-    let resultText = "";
+     }
 
-    for(let i = 0; i <result.length; i++) {
-      if(result[i].score == first || result[i].score == second) {
-        if(resultText != "") {
-          resultText += ", ";
-        }
-        resultText += result[i].name;
-      }
-    }
+     result.sort(function(a,b) {
+         return b.score - a.score;
+     });
+
+     let first = result[0].score;
+
+     let resultText = "";
+
+     for(let i = 0; i < result.length; i++) {
+
+         if(result[i].score == first) {
+
+             if(resultText != "") {
+                 resultText += ", ";
+             }
+
+             resultText += result[i].name;
+         }
+     }
 
     $("#resultText").html("당신의 여행성향은 " + resultText + "입니다.<br><br>");
+	
+    $("#typeCode").val(resultText);
 
+    $("#planScore").val(score["계획형"]);
+    $("#exploreScore").val(score["탐험형"]);
+    $("#healingScore").val(score["힐링형"]);
+    $("#emotionScore").val(score["감성형"]);
+    $("#foodScore").val(score["미식형"]);
+    $("#activityScore").val(score["액티비티형"]);
+    
    let description = "";
 
 if(resultText.includes("계획형")) {
@@ -667,6 +726,12 @@ if(resultText.includes("액티비티형")) {
 $("#typeDescription").html(description);
 
 });
+    
+    $("#saveResult").on("click", function() {
+
+        $("#saveForm").submit();
+
+    });
 
 </script>
 
