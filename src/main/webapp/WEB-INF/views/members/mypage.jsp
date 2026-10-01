@@ -9,514 +9,501 @@
   <title>Document</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 16px;
-      color: #263238;
-      background-color: #f8fafa;
-      line-height: 1.5;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-
-
-    .headercontainer {
-      width: 1200px;
-      max-width: calc(100% - 40px);
-      margin: 0 auto;
-
-      display: flex;
-      align-items: center;
-
-      padding: 0 30px;
-    }
-
-
-    /* 로고 */
-    .logoBox {
-      width: 100px;
-      height: 40px;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      margin-right: 50px;
-    }
-
-    .logoBox img {
-      width: 100%;
-      height: 100%;
-    }
-
-
-    /* 메뉴 */
-    .nav {
-      display: flex;
-      gap: 30px;
-    }
-
-    .nav a {
-      color: black;
-    }
-
-
-    /* 로그인 / 마이페이지 */
-    .signBox {
-      margin-left: auto;
-      margin-right: 40px;
-
-      display: flex;
-      gap: 10px;
-    }
-
-    .signBox a {
-      color: black;
-    }
-
-
-    /* 제목 */
-    h2,
-    h5 {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-
-    /* =========================
-     마이페이지 전체
-     ========================= */
-
-    .mypageContainer {
-      width: 1200px;
-      max-width: calc(100% - 40px);
-      margin: 0 auto;
-    }
-
-
-    /* =========================
-     사이드바
-     ========================= */
-
-    .sideBox {
-      border: 1px solid black;
-
-      width: 17%;
-      height: 690px;
-
-      float: left;
-    }
-
-
-    /* 회원정보 */
-    .loginId {
-      height: 80px;
-
-      text-align: center;
-
-      padding: 15px 20px;
-    }
-
-    .loginId strong {
-      font-size: 14px;
-    }
-
-    .loginId span {
-      font-size: 12px;
-      color: #797472;
-    }
-
-
-    /* 구분선 */
-    .sideBox hr {
-      margin: 0;
-
-      border: 0;
-      border-top: 1px solid #aaa;
-    }
-
-
-    /* 메뉴 제목 */
-    .sideTitle>span {
-      display: block;
-
-      margin: 12px 20px 5px;
-
-      font-size: 12px;
-      color: #797472;
-    }
-
-
-    /* 메뉴 목록 */
-    .sideTitle ul {
-      list-style: none;
-
-      padding: 0;
-      margin: 0;
-    }
-
-
-    /* 메뉴 */
-    .sideTitle li {
-      padding: 6px 20px;
-
-      font-size: 14px;
-    }
-
-
-    /* 메뉴 링크 */
-    .sideTitle li a {
-      color: #222;
-    }
-
-
-    /* 마우스 올렸을 때 */
-    .sideTitle li:hover {
-      background-color: #f2f2f2;
-    }
-
-
-    /* =========================
-     오른쪽 메인 영역
-     ========================= */
-
-    .mainContainer {
-      width: 83%;
-      margin-left: 17%;
-      padding-left: 20px;
-    }
-
-
-    /*여기부터 상단 바*/
-    .mybarBox {
-      width: 100%;
-
-      display: flex;
-    }
-
-
-
-    .a1,
-    .a2,
-    .a3,
-    .a4 {
-      width: 25%;
-      height: 80px;
-
-      border: 1px solid black;
-
-      display: flex;
-      flex-direction: column;
-
-      justify-content: center;
-      align-items: center;
-    }
-
-
-    .a1 p,
-    .a2 p,
-    .a3 p,
-    .a4 p {
-      margin: 0;
-      font-size: 24px;
-    }
-
-
-
-    .a1 span,
-    .a2 span,
-    .a3 span,
-    .a4 span {
-      margin: 0;
-      font-size: 13px;
-    }
-
-    /*여기부터 플래너 부분 */
-    .plannerContainer {
-      margin-top: 80px;
-    }
-
-
-    .plannerBox {
-      border: 1px solid black;
-      width: 100%;
-      padding: 20px;
-    }
-
-
-
-    /*여기부터 예약부분*/
-    .reservationContainer {
-      margin-top: 80px;
-    }
-
-    .reservationList {
-      display: flex;
-      margin-top: 10px;
-      padding: 20px;
-      border: 1px solid #ccc;
-    }
-
-    .reservationVar {
-      display: flex;
-      margin-top: 15px;
-      border-bottom: 1px solid #222;
-    }
-
-    .tab {
-      width: 100px;
-      height: 40px;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      border: 1px solid #ccc;
-      border-bottom: none;
-
-      background-color: white;
-
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .tab:hover {
-      background-color: #222;
-      color: white;
-      border-color: #222;
-    }
-
-    button {
-      border: 1px solid black;
-      background-color: white;
-    }
-
-    button:hover {
-      background-color: #222;
-      color: white;
-      border-color: #222;
-    }
-
-
-    /* =========================
-   찜한 여행지 · 숙소
-   ========================= */
-
-    .wishlistContainer {
-      margin-top: 80px;
-    }
-
-    /* 카드 */
-    .wishlistImg {
-      width: 250px;
-      border: 1px solid #333;
-      background-color: white;
-    }
-
-    /* 카드 이미지 */
-    .wishlistImg>img {
-      display: block;
-
-      width: 100%;
-      height: 185px;
-
-      object-fit: cover;
-    }
-
-    /* 카드 내용 */
-    .wishlistInfo {
-      padding: 14px 15px 18px;
-    }
-
-    .wishlistInfo h3 {
-      margin: 0 0 6px;
-
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .wishlistInfo p {
-      margin: 0 0 14px;
-
-      font-size: 13px;
-      color: #777;
-
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* 자세히 보기 버튼 */
-    .wishlistInfo button {
-      padding: 6px 12px;
-
-      border: 1px solid #333;
-      background-color: white;
-
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .wishlistInfo button:hover {
-      background-color: #222;
-      color: white;
-    }
-
-    /* =========================
-   내가 쓴 리뷰
-   ========================= */
-
-    .reviewContainer {
-      margin-top: 80px;
-    }
-
-
-    /* 리뷰 카드 전체 */
-    .reviewList {
-      display: flex;
-      gap: 23px;
-    }
-
-
-    /* 리뷰 카드 */
-    .reviewCard {
-      width: 250px;
-
-      border: 1px solid #333;
-      background-color: white;
-    }
-
-
-    /* 작성자 */
-    .reviewUser {
-      height: 48px;
-
-      display: flex;
-      align-items: center;
-
-      padding: 0 12px;
-
-      border-bottom: 1px solid #333;
-    }
-
-    .reviewUser strong {
-      font-size: 13px;
-    }
-
-
-    /* 리뷰 이미지 */
-    .reviewImage {
-      width: 100%;
-      height: 248px;
-    }
-
-    .reviewImage img {
-      width: 100%;
-      height: 100%;
-
-      display: block;
-
-      object-fit: cover;
-    }
-
-
-    /* 리뷰 정보 */
-    .reviewInfo {
-      padding: 10px 12px 14px;
-    }
-
-
-    /* 아이콘 */
-    .reviewIcons {
-      display: flex;
-      gap: 15px;
-
-      margin-bottom: 7px;
-    }
-
-    .reviewIcons span {
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-
-    /* 좋아요 */
-    .reviewLike {
-      margin: 0 0 4px;
-
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-
-    /* 여행지 제목 */
-    .reviewTitleText {
-      margin: 0 0 2px;
-
-      font-size: 12px;
-      font-weight: bold;
-
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-
-    /* 리뷰 내용 */
-    .reviewDescription {
-      margin: 0;
-
-      font-size: 12px;
-      line-height: 1.5;
-
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-
-    /* 날짜 */
-    .reviewDate {
-      margin: 7px 0 0;
-
-      font-size: 10px;
-      color: #777;
-    }
-
-    .reviewDate a {
-      color: #777;
-    }
-
-    /* =========================
-   섹션 제목 + 더보기
-   ========================= */
-
-    .sectionTitle {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .sectionTitle>span {
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .sectionTitle>a {
-      font-size: 12px;
-      color: #777;
-    }
+   /* =========================================================
+   1. 공통
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #263238;
+  background-color: #f8fafa;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 제목 */
+h2,
+h5 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 버튼 */
+button {
+  border: 1px solid black;
+  background-color: white;
+}
+
+button:hover {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+}
+
+/* 섹션 제목 + 더보기 (플래너 / 예약 / 찜 / 리뷰 공용) */
+.sectionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionTitle>span {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.sectionTitle>a {
+  font-size: 12px;
+  color: #777;
+}
+
+
+/* =========================================================
+   2. 헤더
+   ========================================================= */
+
+.headercontainer {
+  width: 1200px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 30px;
+}
+
+/* 로고 */
+.logoBox {
+  width: 100px;
+  height: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-right: 50px;
+}
+
+.logoBox img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 메뉴 */
+.nav {
+  display: flex;
+  gap: 30px;
+}
+
+.nav a {
+  color: black;
+}
+
+/* 마이페이지 / 로그아웃 */
+.signBox {
+  margin-left: auto;
+  margin-right: 40px;
+
+  display: flex;
+  gap: 10px;
+}
+
+.signBox a {
+  color: black;
+}
+
+
+/* =========================================================
+   3. 마이페이지 전체 틀
+   ========================================================= */
+
+.mypageContainer {
+  width: 1200px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   4. 왼쪽 사이드바
+   ========================================================= */
+
+.sideBox {
+  width: 17%;
+  float: left;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+}
+
+/* 회원정보 */
+.loginId {
+  padding: 20px;
+  text-align: center;
+}
+
+.loginId strong {
+  font-size: 14px;
+}
+
+.loginId span {
+  font-size: 12px;
+  color: #797472;
+}
+
+/* 구분선 */
+.sideBox hr {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.sideTitle {
+  padding-bottom: 10px;
+}
+
+/* 메뉴 제목 */
+.sideTitle>span {
+  display: block;
+  margin: 12px 20px 5px;
+  font-size: 12px;
+  color: #797472;
+}
+
+/* 메뉴 목록 */
+.sideTitle ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 메뉴 */
+.sideTitle li {
+  padding: 6px 20px;
+  font-size: 14px;
+}
+
+/* 메뉴 링크 */
+.sideTitle li a {
+  display: block;
+  color: #222;
+  text-decoration: none;
+}
+
+/* 마우스 올렸을 때 */
+.sideTitle li:hover {
+  background-color: #f2f2f2;
+}
+
+/* 현재 페이지 표시 */
+.sideTitle li.active {
+  background-color: #eff6ff;
+}
+
+.sideTitle li.active a {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   5. 오른쪽 메인 영역
+   ========================================================= */
+
+.mainContainer {
+  width: 83%;
+  margin-left: 17%;
+  padding-left: 20px;
+}
+
+
+/* ---------- 5-1. 상단 요약 바 ---------- */
+
+.mybarBox {
+  width: 100%;
+
+  display: flex;
+}
+
+.a1,
+.a2,
+.a3,
+.a4 {
+  width: 25%;
+  height: 80px;
+
+  border: 1px solid black;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.a1 p,
+.a2 p,
+.a3 p,
+.a4 p {
+  margin: 0;
+  font-size: 24px;
+}
+
+.a1 span,
+.a2 span,
+.a3 span,
+.a4 span {
+  margin: 0;
+  font-size: 13px;
+}
+
+
+/* ---------- 5-2. 여행 일정 플래너 ---------- */
+
+.plannerContainer {
+  margin-top: 80px;
+}
+
+.plannerBox {
+  border: 1px solid black;
+  width: 100%;
+  padding: 20px;
+}
+
+
+/* ---------- 5-3. 예약 내역 ---------- */
+
+.reservationContainer {
+  margin-top: 80px;
+}
+
+.reservationVar {
+  display: flex;
+  margin-top: 15px;
+  border-bottom: 1px solid #222;
+}
+
+.tab {
+  width: 100px;
+  height: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid #ccc;
+  border-bottom: none;
+
+  background-color: white;
+
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+}
+
+.reservationList {
+  display: flex;
+  margin-top: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+
+/* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
+
+.wishlistContainer {
+  margin-top: 80px;
+}
+
+/* 카드 */
+.wishlistImg {
+  width: 250px;
+  border: 1px solid #333;
+  background-color: white;
+}
+
+/* 카드 이미지 */
+.wishlistImg>img {
+  display: block;
+
+  width: 100%;
+  height: 185px;
+
+  object-fit: cover;
+}
+
+/* 카드 내용 */
+.wishlistInfo {
+  padding: 14px 15px 18px;
+}
+
+.wishlistInfo h3 {
+  margin: 0 0 6px;
+
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.wishlistInfo p {
+  margin: 0 0 14px;
+
+  font-size: 13px;
+  color: #777;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 자세히 보기 버튼 */
+.wishlistInfo button {
+  padding: 6px 12px;
+
+  border: 1px solid #333;
+  background-color: white;
+
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.wishlistInfo button:hover {
+  background-color: #222;
+  color: white;
+}
+
+
+/* ---------- 5-5. 내가 쓴 리뷰 ---------- */
+
+.reviewContainer {
+  margin-top: 80px;
+}
+
+/* 리뷰 카드 전체 */
+.reviewList {
+  display: flex;
+  gap: 23px;
+}
+
+/* 리뷰 카드 */
+.reviewCard {
+  width: 250px;
+
+  border: 1px solid #333;
+  background-color: white;
+}
+
+/* 작성자 */
+.reviewUser {
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 12px;
+
+  border-bottom: 1px solid #333;
+}
+
+.reviewUser strong {
+  font-size: 13px;
+}
+
+/* 리뷰 이미지 */
+.reviewImage {
+  width: 100%;
+  height: 248px;
+}
+
+.reviewImage img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+/* 리뷰 정보 */
+.reviewInfo {
+  padding: 10px 12px 14px;
+}
+
+/* 아이콘 */
+.reviewIcons {
+  display: flex;
+  gap: 15px;
+
+  margin-bottom: 7px;
+}
+
+.reviewIcons span {
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* 좋아요 */
+.reviewLike {
+  margin: 0 0 4px;
+
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* 여행지 제목 */
+.reviewTitleText {
+  margin: 0 0 2px;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 리뷰 내용 */
+.reviewDescription {
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 날짜 */
+.reviewDate {
+  margin: 7px 0 0;
+
+  font-size: 10px;
+  color: #777;
+}
+
+.reviewDate a {
+  color: #777;
+}
   </style>
 </head>
 
@@ -563,10 +550,10 @@
 
 
         <!--여기부터 사이드박스 끼미히끼잉~~~~-->
-        <div class="sideBox">
+                <div class="sideBox">
 
           <div class="loginId">
-            <strong>${nickname}</strong><span style="font-size: 13px;">님</span>
+            <strong>${nickname}</strong><span>님</span>
             <br>
             <span>일반회원</span>
             <span>등급</span>
@@ -576,9 +563,9 @@
 
           <div class="sideTitle">
 
-            <span style="font-size: 12px; color: #797472; margin: 15px;">예약/활동</span>
-            <ul style=" list-style: none;">
-              <li><a href="#">마이페이지 홈</a></li>
+            <span>예약/활동</span>
+            <ul>
+              <li class="active"><a href="/members/mypage">마이페이지 홈</a></li>
               <li><a href="#">예약 내역</a></li>
               <li><a href="#">찜한 여행지 · 숙소</a></li>
               <li><a href="#">여행 일정 플래너</a></li>
@@ -587,18 +574,14 @@
               <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
             </ul>
 
-
-
-            <span style="font-size: 12px; color: #797472; margin: 15px;">혜택</span>
-            <ul style=" list-style: none;">
+            <span>혜택</span>
+            <ul>
               <li><a href="#">포인트 내역</a></li>
               <li><a href="#">쿠폰함</a></li>
             </ul>
 
-
-
-            <span style="font-size: 12px; color: #797472; margin: 15px;">계정</span>
-            <ul style=" list-style: none;">
+            <span>계정</span>
+            <ul>
               <li><a href="/members/update">내 정보 수정</a></li>
               <li><a href="#">비밀번호 변경</a></li>
               <li><a href="#">알림 설정</a></li>
