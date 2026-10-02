@@ -8,6 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/public.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea87fc26ee3f75472cb75c454c18b302"></script>
 
 <title>GOTT 메인화면</title>
 <script
@@ -469,7 +470,8 @@
     </div>
     <br>
     <div class="mapzone">
-        지도 API
+        <div id="map" style="width:100%; height:100%;"></div>
+        
     </div>
 
     <hr>
@@ -636,6 +638,14 @@
 </div>
 
 <script>
+
+	var container = document.getElementById('map');
+	var options = {
+		center: new kakao.maps.LatLng(33.450701, 126.570667),
+		level: 3
+	};
+	
+	var map = new kakao.maps.Map(container, options);
 
     let verticalunderline = document.getElementById("vertical-underline");
     let verticalmenus = document.querySelectorAll("nav:first-child a");
