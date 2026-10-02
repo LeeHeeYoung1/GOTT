@@ -649,7 +649,9 @@ button:hover {
     <c:when test="${loginId != null}">
 
       <div class="headercontainer">
-        <div class="logoBox"><img src="/images/logo.png" alt="GOTT 로고"></div>
+        <div class="logoBox">
+        <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
+        </div>
 
         <nav class="nav">
           <a href="#">이벤트</a>
