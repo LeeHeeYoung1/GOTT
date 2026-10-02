@@ -348,8 +348,12 @@ form {
         }
 
         location.href =
-            "/reservation/paymentComplete?paymentId="
-            + encodeURIComponent(paymentId);
+            "/reservation/paymentComplete"
+            + "?paymentId=" + encodeURIComponent(paymentId)
+            + "&roomId=" + encodeURIComponent("${roomDto.roomId}")
+            + "&checkIn=" + encodeURIComponent("${checkIn}")
+            + "&checkOut=" + encodeURIComponent("${checkOut}")
+            + "&guest=" + encodeURIComponent("${adult + child}");
 
     } catch (error) {
 
