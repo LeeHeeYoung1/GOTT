@@ -37,6 +37,10 @@ public class ReservationController {
 	public String search(PlaceDTO pdto, String[] amenity, Integer maxPrice, String checkIn, String checkOut, Integer adult, Integer child, Model model) {
 		List<PlaceRoomDTO> searchList = rdao.searchList(pdto, amenity, maxPrice, checkIn, checkOut, adult, child);
 		model.addAttribute("roomList", searchList);
+		model.addAttribute("checkIn", checkIn);
+		model.addAttribute("checkOut", checkOut);
+		model.addAttribute("adult", adult);
+		model.addAttribute("child", child);
 		return "reservation/room_search";
 	}
 	
@@ -53,6 +57,12 @@ public class ReservationController {
 	public String reservation(int placeId, int roomId, String checkIn, String checkOut, Integer adult, Integer child, HttpSession session, Model model) {
 		RoomDTO roomDto = roomDao.roomOne(roomId);
 		PlaceDTO placeOne = rdao.placeOne(placeId);
+		
+		System.out.println("checkIn = [" + checkIn + "]");
+	    System.out.println("checkOut = [" + checkOut + "]");
+	    System.out.println("adult = [" + adult + "]");
+	    System.out.println("child = [" + child + "]");
+		
 		
 		int total_price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
 		
@@ -72,5 +82,10 @@ public class ReservationController {
 		RoomDTO roomDto = roomDao.roomOne(roomId);
 		rdao.insert(roomDto, checkIn, checkOut, guest, session);
 		return "reservation/room_search";
+	}
+	
+	@RequestMapping("/paymentComplete")
+	public String paymentComplete() {
+		return "redirect:/";
 	}
 }

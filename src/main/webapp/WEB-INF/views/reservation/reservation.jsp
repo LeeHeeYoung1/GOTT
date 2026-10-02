@@ -10,7 +10,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
 	integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
 	crossorigin="anonymous"></script>
-
+<script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
 <style>
 * {
 	box-sizing: border-box;
@@ -275,7 +275,7 @@ form {
 			</div>
 
 			<div class="buttons">
-				<button>결제하기</button>
+				<button type="button" class="payment">결제하기</button>
 				<button type="button" class="backBtn">돌아가기</button>
 			</div>
 		</form>
@@ -306,6 +306,59 @@ form {
 		$(".backBtn").on("click", function() {
 			history.back();
 		})
+		
+		
+		
+		$(".payment").on("click", async function() {
+
+    const paymentId = "GOTT-" + crypto.randomUUID();
+
+    const totalAmount = Number("${total_price}");
+
+    try {
+
+        const response = await PortOne.requestPayment({
+
+            storeId: "store-d4a75cb3-13cc-4226-b7fc-33d40089bf40",
+
+            channelKey: "channel-key-6b882be9-c6c2-4429-a3ba-2a04d40b1f0a",
+
+            paymentId: paymentId,
+
+            orderName: "${placeOne.name} ${roomDto.roomName}",
+
+            totalAmount: totalAmount,
+
+            currency: "CURRENCY_KRW",
+
+            payMethod: "CARD",
+
+            customer: {
+            	fullName: "테스트",
+                phoneNumber: "010-0000-1234",
+                email: "test@test.com"
+            }
+        });
+
+        console.log(response);
+
+        if (response.code != null) {
+            alert("결제 실패 : " + response.message);
+            return;
+        }
+
+        location.href =
+            "/reservation/paymentComplete?paymentId="
+            + encodeURIComponent(paymentId);
+
+    } catch (error) {
+
+        console.error(error);
+        alert("결제 중 오류가 발생했습니다.");
+
+    }
+
+});
 	</script>
 </body>
 </html>

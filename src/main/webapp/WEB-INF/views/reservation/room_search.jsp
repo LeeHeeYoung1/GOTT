@@ -521,7 +521,7 @@
 			<div class="room_list">
 				<c:forEach var="i" items="${roomList}">
 					<a class="room_card"
-						href="/reservation/room_detail?placeId=${i.place_id}&checkIn=${param.checkIn}&checkOut=${param.checkOut}&adult=${param.adult}&child=${param.child}"">
+						href="/reservation/room_detail?placeId=${i.place_id}&checkIn=${checkIn}&checkOut=${checkOut}&adult=${adult}&child=${child}">
 						<div class="room_img">
 							<c:choose>
 								<c:when test="${not empty i.image_name}">
