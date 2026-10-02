@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 	
-	private String senderEmail = "whgud15@gmail.com";
-	private String senderPassword = "gbewyhsbovezutuw";
+	private String senderEmail = System.getenv("GOTT_EMAIL");
+	private String senderPassword = System.getenv("GOTT_EMAIL_PASSWORD");
 	
 	public void sendEmail(String receiverEmail, String code) throws Exception {
 		Properties props = new Properties();

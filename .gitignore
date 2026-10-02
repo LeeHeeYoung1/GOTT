@@ -139,3 +139,8 @@ $RECYCLE.BIN/
 .classpath
 .project
 target/
+
+# 개인 설정 / 비밀정보
+.env
+email.properties
+application-local.properties
