@@ -2,711 +2,1014 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="public.css">
-    <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <title>GOTT 여행 일정 플래너</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  <style>
+* {
+  box-sizing: border-box;
+}
 
-        hr {
-            margin: 0;
-            border: none;
-            border-top: 1px solid #e5e7eb;
-        }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #263238;
+  background-color: #f8fafa;
+  line-height: 1.5;
+}
 
-        .textbox {
-            padding: 7px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-        }
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-        .textbox:hover {
-            background-color: #f3f4f6;
-        }
+/* 제목 */
+h2,
+h5 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 버튼 */
+button {
+  border: 1px solid black;
+  background-color: white;
+}
+
+button:hover {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+}
+
+/* 섹션 제목 + 더보기 (플래너 / 예약 / 찜 / 리뷰 공용) */
+.sectionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionTitle>span {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.sectionTitle>a {
+  font-size: 12px;
+  color: #777;
+}
 
 
-        /* =========================================================
+/* =========================================================
    2. 헤더
    ========================================================= */
 
-        .header {
-            width: 100%;
-            height: 70px;
-            padding: 0 30px;
-        }
+.headercontainer {
+  width: 1200px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
 
-        .logobox {
-            width: 120px;
-            height: 70px;
-            margin-left: 50px;
-        }
+  display: flex;
+  align-items: center;
 
-        .logobox:hover {
-            cursor: pointer;
-        }
+  padding: 0 30px;
+}
 
-        .logobox img {
-            width: 80%;
-            height: 100%;
-        }
+/* 로고 */
+.logoBox {
+  width: 100px;
+  height: 40px;
 
-        .nav {
-            width: 50%;
-            margin: 0 auto;
-        }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-        .textzone {
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            margin: 0 10px;
-        }
+  margin-right: 50px;
+}
 
-        .textzone:hover {
-            color: #2563eb;
-        }
+.logoBox img {
+  width: 100%;
+  height: 100%;
+}
 
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+/* 메뉴 */
+.nav {
+  display: flex;
+  gap: 30px;
+}
 
-        .icon {
-            margin-left: 10px;
-            font-size: 20px;
-        }
+.nav a {
+  color: black;
+}
 
-        .icon:hover {
-            cursor: pointer;
-        }
+/* 마이페이지 / 로그아웃 */
+.signBox {
+  margin-left: auto;
+  margin-right: 40px;
+
+  display: flex;
+  gap: 10px;
+}
+
+.signBox a {
+  color: black;
+}
 
 
-        /* =========================================================
-   3. 제목 영역
+/* =========================================================
+   3. 마이페이지 전체 틀
    ========================================================= */
 
-        .title {
-            width: 100%;
-            height: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8fafc;
-        }
-
-        .title h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-        }
+.mypageContainer {
+  width: 1200px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+}
 
 
-        /* =========================================================
-   4. 메인 (위: 일정 입력 바 / 아래: 3단 플래너)
+/* =========================================================
+   4. 왼쪽 사이드바
    ========================================================= */
 
-        .main {
-            width: 100%;
-            height: auto;
-            display: flex;
-            flex-direction: column;
-            /* 위에서 아래로 쌓기 */
-            padding: 40px 60px;
-            gap: 50px;
-        }
+.sideBox {
+  width: 17%;
+  float: left;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+}
+
+/* 회원정보 */
+.loginId {
+  padding: 20px;
+  text-align: center;
+}
+
+.loginId strong {
+  font-size: 14px;
+}
+
+.loginId span {
+  font-size: 12px;
+  color: #797472;
+}
+
+/* 구분선 */
+.sideBox hr {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.sideTitle {
+  padding-bottom: 10px;
+}
+
+/* 메뉴 제목 */
+.sideTitle>span {
+  display: block;
+  margin: 12px 20px 5px;
+  font-size: 12px;
+  color: #797472;
+}
+
+/* 메뉴 목록 */
+.sideTitle ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 메뉴 */
+.sideTitle li {
+  padding: 6px 20px;
+  font-size: 14px;
+}
+
+/* 메뉴 링크 */
+.sideTitle li a {
+  display: block;
+  color: #222;
+  text-decoration: none;
+}
+
+/* 마우스 올렸을 때 */
+.sideTitle li:hover {
+  background-color: #f2f2f2;
+}
+
+/* 현재 페이지 표시 */
+.sideTitle li.active {
+  background-color: #eff6ff;
+}
+
+.sideTitle li.active a {
+  color: #2563eb;
+  font-weight: 600;
+}
 
 
-        /* ---------- 4-1. 일정 입력 바 ---------- */
-
-        .barContainer {
-            width: 100%;
-            border: 1px solid black;
-            padding: 15px 20px;
-        }
-
-        .barContainer form {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .formItem {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            flex-shrink: 1;
-        }
-
-        .formItem span {
-            font-size: 13px;
-        }
-
-        .formItem input,
-        .formItem select {
-            height: 36px;
-            padding: 0 8px;
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
-        }
-
-        .formItem input[name="title"] {
-            width: 180px;
-        }
-
-        .formItem input[type="date"] {
-            width: 125px;
-        }
-
-        .formItem select {
-            width: 80px;
-        }
-
-        .createBtn {
-            height: 36px;
-            padding: 0 15px;
-            border: 1px solid #333;
-            border-radius: 5px;
-            background-color: #222;
-            color: white;
-            cursor: pointer;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        /* ---------- 4-2. 3단 틀: 찜 목록 | 일정표 | 지도 ---------- */
-
-        .plannerLayout {
-            display: grid;
-            grid-template-columns: 280px 1fr 320px;
-            gap: 24px;
-            align-items: start;
-        }
-
-
-        /* ---------- 4-3. 왼쪽: 찜 목록 패널 ---------- */
-
-        /* 패널 전체 박스 (탭 + 검색창 + 카드 목록) */
-        .trableContainer {
-            border: 1px solid #333;
-            background-color: white;
-        }
-
-        /* 탭 줄: 3칸을 똑같은 너비로 */
-        .wishList {
-            display: flex;
-        }
-
-        .trableTitle {
-            flex: 1;
-            padding: 12px 0;
-            text-align: center;
-            border-bottom: 1px solid #333;
-            cursor: pointer;
-        }
-
-        .trableTitle+.trableTitle {
-            border-left: 1px solid #333;
-        }
-
-        /* 선택된 탭 */
-        .trableTitle.active {
-            background-color: #222;
-            color: white;
-        }
-
-        /* 검색창 */
-        .wishSearch {
-            padding: 12px;
-        }
-
-        .wishSearch input {
-            width: 100%;
-            height: 40px;
-            padding: 0 12px;
-            border: 1px solid #333;
-        }
-
-        /* 카드 목록 영역 (길어지면 안에서 스크롤) */
-        .tablewishContainer {
-            padding: 12px;
-            max-height: 560px;
-            overflow-y: auto;
-        }
-
-        /* 카드 하나: 안쪽 요소를 가로로 한 줄 배치 */
-        .wishItem {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-            border: 1px solid #333;
-            background-color: white;
-        }
-
-        /* 이미지 */
-        .wishThumb img {
-            width: 60px;
-            height: 60px;
-            display: block;
-        }
-
-        /* 지역 + 이름 (남는 공간을 차지해서 + 버튼이 오른쪽 끝으로 감) */
-        .wishText {
-            flex: 1;
-        }
-
-        .wishText p {
-            margin: 0;
-            font-size: 10px;
-            color: #777;
-        }
-
-        /* + 버튼 */
-        .addBtn {
-            width: auto;
-            height: 20px;
-            font-size: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-
-        /* ---------- 4-4. 가운데: 일정표 ---------- */
-
-        .addContainer {
-            border: 1px solid #333;
-            background-color: white;
-        }
-
-        /* Day 탭 */
-        .dayTabs {
-            display: flex;
-            flex-wrap: wrap;
-            border-bottom: 1px solid #333;
-        }
-
-        .dayTab {
-            padding: 12px 20px;
-            font-size: 13px;
-            border-right: 1px solid #333;
-            cursor: pointer;
-        }
-
-        .dayTab.active {
-            background-color: #222;
-            color: white;
-        }
-
-        .dayBody {
-            padding: 20px;
-        }
-
-        .dayDate {
-            margin: 0 0 16px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* 타임라인 한 줄: 번호 + 카드 */
-        .timelineItem {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 16px;
-        }
-
-        .orderMark {
-            width: 26px;
-            height: 26px;
-            flex-shrink: 0;
-            border: 1px solid #333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .timelineCard {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border: 1px solid #333;
-        }
-
-        .timeInput {
-            width: 84px;
-            padding: 6px 8px;
-            border: 1px solid #333;
-            font-size: 12px;
-        }
-
-        /* 장소 사이 이동 안내 */
-        .transport {
-            margin: -4px 0 16px 40px;
-            font-size: 11px;
-            color: #666;
-        }
-
-        /* 비어 있을 때 안내 */
-        .dropEmpty {
-            padding: 28px;
-            border: 1px dashed #999;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .dayFooter {
-            padding: 14px 20px;
-            border-top: 1px solid #eee;
-            font-size: 12px;
-            color: #666;
-        }
-
-
-        /* ---------- 4-5. 오른쪽: 지도 ---------- */
-
-        .mapContainer {
-            border: 1px solid #333;
-            background-color: white;
-            position: sticky;
-            /* 스크롤해도 따라오게 */
-            top: 20px;
-        }
-
-        .mapTitle {
-            padding: 12px 14px;
-            border-bottom: 1px solid #333;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .mapSlot {
-            width: 100%;
-            aspect-ratio: 3 / 4;
-            background-color: #e6e6e6;
-            border-bottom: 1px solid #333;
-        }
-
-        .mapSummary {
-            padding: 14px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .mapSummary div {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-
-        /* ---------- 4-6. 하단 완료 바 ---------- */
-
-        .finishBar {
-            position: sticky;
-            bottom: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 60px;
-            border-top: 1px solid #333;
-            background-color: white;
-            font-size: 13px;
-        }
-
-        .finishBtns {
-            display: flex;
-            gap: 8px;
-        }
-
-        .finishBtns button {
-            padding: 9px 16px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-
-        /* =========================================================
-   5. 푸터
+/* =========================================================
+   5. 오른쪽 메인 영역
    ========================================================= */
 
-        .footer {
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #777;
-            background-color: #f8fafc;
-            font-size: 13px;
-        }
-
-        .footer p {
-            margin: 0;
-        }
-
-        .footer .textbox {
-            margin-top: 10px;
-            color: #6B7280;
-            background-color: #F8FAFA;
-        }
+.mainContainer {
+  width: 83%;
+  margin-left: 17%;
+  padding-left: 20px;
+}
 
 
-        /* =========================================================
-   6. 좁은 화면
-   ========================================================= */
+/* ---------- 5-1. 상단 요약 바 ---------- */
 
-        @media (max-width: 1024px) {
-            .plannerLayout {
-                grid-template-columns: 1fr;
-            }
+.mybarBox {
+  width: 100%;
 
-            .mapContainer {
-                position: static;
-            }
-        }
-    </style>
+  display: flex;
+}
+
+.a1,
+.a2,
+.a3,
+.a4,
+.a5 {
+  width: 20%;
+  height: 80px;
+
+  border: 1px solid black;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.a1 p,
+.a2 p,
+.a3 p,
+.a4 p, 
+.a5 p {
+  margin: 0;
+  font-size: 24px;
+}
+
+.a1 span,
+.a2 span,
+.a3 span,
+.a4 span, 
+.a5 span {
+  margin: 0;
+  font-size: 13px;
+}
+
+
+/* ---------- 5-2. 여행 일정 플래너 ---------- */
+
+.plannerContainer {
+  margin-top: 80px;
+}
+
+.plannerBox {
+  border: 1px solid black;
+  width: 100%;
+  padding: 20px;
+}
+
+
+/* ---------- 5-3. 예약 내역 ---------- */
+
+.reservationContainer {
+  margin-top: 80px;
+}
+
+.reservationVar {
+  display: flex;
+  margin-top: 15px;
+  border-bottom: 1px solid #222;
+}
+
+.tab {
+  width: 100px;
+  height: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid #ccc;
+  border-bottom: none;
+
+  background-color: white;
+
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+}
+
+.reservationList {
+  display: flex;
+  margin-top: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+
+/* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
+
+.wishlistContainer {
+  width: 100%;
+  margin-top: 80px;
+  display: flow-root;   /* 안의 float 카드 높이까지 감싸서 아래 영역이 올라오지 않게 */
+}
+
+/* 카드 */
+.wishlistImg {
+  width: 250px;
+  float: left;
+  margin-right: 23px;
+  border: 1px solid #333;
+  background-color: white;
+}
+
+/* 카드 이미지 */
+.wishlistImg>img {
+  display: block;
+
+  width: 100%;
+  height: 185px;
+
+  object-fit: cover;
+}
+
+/* 카드 내용 */
+.wishlistInfo {
+  padding: 14px 15px 18px;
+}
+
+.wishlistInfo h3 {
+  margin: 0 0 6px;
+
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.wishlistInfo p {
+  margin: 0 0 14px;
+
+  font-size: 13px;
+  color: #777;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 자세히 보기 버튼 */
+.wishlistInfo button {
+  padding: 6px 12px;
+
+  border: 1px solid #333;
+  background-color: white;
+
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.wishlistInfo button:hover {
+  background-color: #222;
+  color: white;
+}
+
+
+/* ---------- 5-5. 내가 쓴 리뷰 ---------- */
+
+.reviewContainer {
+  margin-top: 80px;
+}
+
+/* 리뷰 카드 전체 */
+.reviewList {
+  display: flex;
+  gap: 23px;
+}
+
+/* 리뷰 카드 */
+.reviewCard {
+  width: 250px;
+
+  border: 1px solid #333;
+  background-color: white;
+}
+
+/* 작성자 */
+.reviewUser {
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 12px;
+
+  border-bottom: 1px solid #333;
+}
+
+.reviewUser strong {
+  font-size: 13px;
+}
+
+/* 리뷰 이미지 */
+.reviewImage {
+  width: 100%;
+  height: 248px;
+}
+
+.reviewImage img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+/* 리뷰 정보 */
+.reviewInfo {
+  padding: 10px 12px 14px;
+}
+
+/* 아이콘 */
+.reviewIcons {
+  display: flex;
+  gap: 15px;
+
+  margin-bottom: 7px;
+}
+
+.reviewIcons span {
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* 좋아요 */
+.reviewLike {
+  margin: 0 0 4px;
+
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* 여행지 제목 */
+.reviewTitleText {
+  margin: 0 0 2px;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 리뷰 내용 */
+.reviewDescription {
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 날짜 */
+.reviewDate {
+  margin: 7px 0 0;
+
+  font-size: 10px;
+  color: #777;
+}
+
+.reviewDate a {
+  color: #777;
+}
+
+
+/* ---------- 5-6. 마일리지 · 쿠폰 ---------- */
+
+.couponContainer {
+  margin-top: 80px;
+  width: 100%;
+}
+
+/* 제목 + 더보기 */
+.couponSectionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.couponSectionTitle span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.couponSectionTitle a {
+  font-size: 13px;
+  color: #888;
+  text-decoration: none;
+}
+
+/* 마일리지 + 쿠폰 전체 박스 */
+.coupon_point {
+  border: 1px solid #555;
+  box-sizing: border-box;
+}
+
+/* 마일리지 테이블 */
+.coupon_point table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.coupon_point th {
+  height: 35px;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #999;
+  font-size: 13px;
+}
+
+.coupon_point td {
+  height: 35px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+/* 마지막 줄 밑줄 제거 */
+.coupon_point tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 날짜 */
+.coupon_point th:nth-child(1),
+.coupon_point td:nth-child(1) {
+  width: 20%;
+  text-align: left;
+}
+
+/* 내용 */
+.coupon_point th:nth-child(2),
+.coupon_point td:nth-child(2) {
+  width: 40%;
+  text-align: left;
+}
+
+/* 구분 */
+.coupon_point th:nth-child(3),
+.coupon_point td:nth-child(3) {
+  width: 20%;
+  text-align: center;
+}
+
+/* 포인트 */
+.coupon_point th:nth-child(4),
+.coupon_point td:nth-child(4) {
+  width: 20%;
+  text-align: right;
+}
+
+/* 쿠폰 목록 */
+.couponList {
+  display: flex;
+  gap: 20px;
+  margin-top: 14px;
+}
+
+/* 쿠폰 하나 */
+.couponBox {
+  width: 40%;
+  min-height: 105px;
+
+  border: 1px solid #555;
+  padding: 13px 14px;
+
+  box-sizing: border-box;
+}
+
+/* 쿠폰 제목 */
+.couponBox strong {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 15px;
+}
+
+/* 쿠폰 설명 */
+.couponBox p {
+  margin: 0 0 12px;
+
+  font-size: 12px;
+  color: #777;
+}
+
+/* 사용하기 버튼 */
+.couponBox button {
+  width: 65px;
+  height: 30px;
+
+  background: white;
+  border: 1px solid #777;
+
+  font-size: 12px;
+  cursor: pointer;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="header flex-between">
-            <div class="logobox">
-                <img src="/images/logo.png" alt="GOTT 로고">
-            </div>
-            <div class="nav flex-between">
-                <div class="textzone">이벤트</div>
-                <div class="textzone">지역</div>
-                <div class="textzone">추천 여행지</div>
-                <div class="textzone">숙박업소</div>
-                <div class="textzone">리뷰</div>
-                <div class="textzone">여행 플래너</div>
-                <div class="textzone">공지사항</div>
-            </div>
-            <div class="user-menu">
-                <button onclick="location.href='/members/logout'">로그아웃</button>
-                <button onclick="location.href='/members/mypage'">마이페이지</button>
-                <div class="icon"><i class="fa-solid fa-bars"></i></div>
-            </div>
+  <c:choose>
+
+    <c:when test="${loginId != null}">
+
+      <div class="headercontainer">
+        <div class="logoBox">
+        <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
         </div>
 
-        <div class="title">
-            <h1>나만의 여행일정 만들기</h1>
+        <nav class="nav">
+          <a href="#">이벤트</a>
+          <a href="#">지역</a>
+          <a href="#">추천여행지</a>
+          <a href="#">숙박업소</a>
+          <a href="#">리뷰</a>
+          <a href="#">여행 플래너</a>
+          <a href="#">공지사항</a>
+        </nav>
+
+        <div class="signBox">
+          <a href="/members/mypage">마이페이지</a>
+          <a href="/members/logout">로그아웃</a>
+        </div>
+
+        <div class="menu-icon">☰</div>
+      </div>
+
+      <hr>
+
+
+      <h2>마이페이지</h2>
+      <h5 style="font-size: 13px; color: #7c7c7c;">예약 내역과 찜한 여행지, 내가 남긴 기록을 한 곳에서 관리</h5>
+      <hr style="border: 1px solid rgb(248, 246, 246);">
+
+
+
+
+      <div class="mypageContainer">
+
+        <div class="breadcrumb" style="font-size: 12px; margin: 20px;">홈 > 마이페이지 > 대시보드</div>
+
+
+        <!--여기부터 사이드박스 끼미히끼잉~~~~-->
+                <div class="sideBox">
+
+          <div class="loginId">
+            <strong>${nickname}</strong><span>님</span>
             <br>
-            <p style="font-size: 13px;">찜해둔 관광지 맛집 숙소를 끌어다 놓아 일차별 일정표를 완성해보세요.</p>
+            <span>일반회원</span>
+            <span>등급</span>
+          </div>
+
+          <hr>
+
+          <div class="sideTitle">
+
+            <span>예약/활동</span>
+            <ul>
+              <li class="active"><a href="/members/mypage">마이페이지 홈</a></li>
+              <li><a href="#">예약 내역</a></li>
+              <li><a href="#">찜한 여행지 · 숙소</a></li>
+              <li><a href="#">여행 일정 플래너</a></li>
+              <li><a href="#">내가 쓴 리뷰</a></li>
+              <li><a href="#">내가 쓴 게시글</a></li>
+              <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
+            </ul>
+
+            <span>혜택</span>
+            <ul>
+              <li><a href="#">포인트 내역</a></li>
+              <li><a href="#">쿠폰함</a></li>
+            </ul>
+
+            <span>계정</span>
+            <ul>
+              <li><a href="/members/update">내 정보 수정</a></li>
+              <li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
+              <li><a href="#">알림 설정</a></li>
+              <li><a href="#">1:1 문의</a></li>
+              <li><a href="/members/deleted">회원탈퇴</a></li>
+            </ul>
+
+          </div>
+
         </div>
 
-        <hr>
 
-        <div class="main">
+        <!--여기부터 메인 끼미히끼잉~~~~-->
+        
+        <div class="mainContainer">
 
-            <!-- 위: 일정 입력 바 -->
-            <div class="barContainer">
+			<nav class="mybarBox">
+				<a class="a1"> <strong>??</strong> <span>다가오는 예약</span></a> 
+				<a class="a2"> <strong>??</strong> <span>찜한 목록</span></a> 
+				<a class="a3"> <strong>??</strong> <span>작성한 리뷰</span></a>
+				<a class="a4"> <strong>${mileage}M</strong> <span>보유마일리지</span></a>
+				<a class="a5"> <strong><fmt:formatDate value="${regdate}" pattern="yyyy-MM-dd"/></strong> <span>가입일자</span></a>
+			</nav>
 
-                <form action="">
+		<!--여기부터 일정 플래너-->
+		
+          <div class="plannerContainer">
+            <div class="sectionTitle">
+              <span>여행 일정 플래너</span>
+              <a href="#" style="float: right;">플래너 열기</a>
+            </div>
+            
+            <div class="plannerBox">
+              <p>찜해둔 장소를 일차별 일정으로 정리해보세요.</p>
+              <p>관광지·맛집·숙소를 드래그해 일정에 추가하고 완성한 여행을 게시판에 공유할 수 있습니다.</p>
+              <button>새 일정 만들기</button>
+            </div>
+          </div>
 
-                    <div class="formItem">
-                        <span>일정 제목</span>
-                        <input type="text" name="title" placeholder="예: 제주도 3박 4일 힐링 여행">
+
+
+          <!--여기부터 예약리스트-->
+          <div class="reservationContainer">
+
+            <div class="sectionTitle">
+              <span>예약내역</span>
+              <a href="#" style="float: right;">예약내역 열기</a>
+            </div>
+
+
+            <div class="reservationVar">
+              <span class="tab active">전체</span>
+              <span class="tab">이용 예정</span>
+              <span class="tab">이용 완료</span>
+              <span class="tab">취소 / 환불</span>
+            </div>
+
+
+            <c:forEach var="roomList" items="${roomList}">
+
+              <div class="reservationList">
+
+                <div class="img">
+                  <img src="${roomList.image}" alt="호텔 이미지">
+                </div>
+
+                <div class="reservationInfo">
+                  <h3>${roomList.guestnum} · ${roomList.roomName}</h3>
+
+                  <p>
+                    체크인 ${reservation.check_in}
+                    / 체크아웃 ${reservation.check_Out}
+                    · 박
+                  </p>
+
+                  <p>
+                    성인 ${reservation.guestnum}명
+                    · 예약번호 ${reservation.reservationId}
+                  </p>
+
+                  <p>
+                    결제금액 ${reservation.price}원
+                  </p>
+                </div>
+
+                <div class="reservationCondition">
+                  <button>${reservation.status}</button>
+                  <button>예약 상세</button>
+                  <button>예약 취소</button>
+                </div>
+
+              </div>
+
+            </c:forEach>
+
+
+          </div>
+
+
+          <!--여기부터 찜 리스트-->
+
+          <div class="wishlistContainer">
+            <div class="sectionTitle">
+              <span>찜한 여행지 숙소</span>
+              <a href="#">더 보기 &gt;</a>
+            </div>
+            <c:forEach var="wishlist" items="${wishlist}">
+
+              <div class="wishlistImg">
+
+                <img src="${i.image}" alt="${i.title}">
+
+                <div class="wishlistInfo">
+                  <h3>${i.title}</h3>
+                  <p>${i.description}</p>
+                  <button>자세히 보기</button>
+                </div>
+
+              </div>
+              
+              <div class="wishlistImg">
+
+                <img src="${i.image}" alt="${i.title}">
+
+                <div class="wishlistInfo">
+                  <h3>${i.title}</h3>
+                  <p>${i.description}</p>
+                  <button>자세히 보기</button>
+                </div>
+
+              </div>
+              
+              <div class="wishlistImg">
+
+                <img src="${i.image}" alt="${i.title}">
+
+                <div class="wishlistInfo">
+                  <h3>${i.title}</h3>
+                  <p>${i.description}</p>
+                  <button>자세히 보기</button>
+                </div>
+
+              </div>
+
+            </c:forEach>
+
+          </div>
+
+          <!-- 여기부터 내가 쓴 리뷰 -->
+
+          <div class="reviewContainer">
+
+            <div class="sectionTitle">
+              <span>내가 쓴 리뷰</span>
+              <a href="#">더 보기 &gt;</a>
+            </div>
+
+            <div class="reviewList">
+
+              <c:forEach var="review" items="${review}">
+
+                <div class="reviewCard">
+
+                  <div class="reviewUser">
+                    <strong>${review.nickname}</strong>
+                  </div>
+
+                  <div class="reviewImage">
+                    <img src="${review.image}" alt="${review.title}">
+                  </div>
+
+                  <div class="reviewInfo">
+
+                    <div class="reviewIcons">
+                      <span>♡</span>
+                      <span>⊙</span>
+                      <span>↗</span>
                     </div>
 
-                    <div class="formItem">
-                        <span>시작일</span>
-                        <input type="date" name="startDate">
-                    </div>
 
-                    <div class="formItem">
-                        <span>종료일</span>
-                        <input type="date" name="endDate">
-                    </div>
+                    <p class="reviewLike">
+                      좋아요 ${review.likeCount}개
+                    </p>
 
-                    <div class="formItem">
-                        <span>인원</span>
-                        <select id="count" name="count">
-                            <option value="1">1명</option>
-                            <option value="2" selected>2명</option>
-                            <option value="3">3명</option>
-                            <option value="4">4명</option>
-                            <option value="5">5명</option>
-                            <option value="6">6명</option>
-                            <option value="7">7명</option>
-                            <option value="8">8명</option>
-                        </select>
-                    </div>
 
-                    <div class="formItem">
-                        <span>공개범위</span>
-                        <select id="tf" name="tf">
-                            <option value="true">전체 공개</option>
-                            <option value="false">비공개</option>
-                        </select>
-                    </div>
+                    <p class="reviewTitleText">
+                      ${review.title}
+                    </p>
 
-                    <button type="submit" class="createBtn">일정 생성</button>
 
-                </form>
+                    <p class="reviewDescription">
+                      후기 · "${review.description}"
+                    </p>
+
+
+                    <p class="reviewDate">
+                      ${review.writeDate} · <a href="#">수정</a> / <a href="#">삭제</a>
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </c:forEach>
 
             </div>
 
-            <!-- 아래: 3단 (찜 목록 | 일정표 | 지도) -->
-            <div class="plannerLayout">
-
-                <!-- 왼쪽: 찜 목록 -->
-                <div class="trableContainer">
-
-                    <div class="wishList">
-                        <div class="trableTitle active"><span>관광지</span></div>
-                        <div class="trableTitle"><span>맛집</span></div>
-                        <div class="trableTitle"><span>숙소</span></div>
-                    </div>
-
-                    <div class="wishSearch">
-                        <input type="text" name="search" placeholder="찜 목록 내 검색">
-                    </div>
-
-                    <div class="tablewishContainer">
-
-                        <div class="wishItem" draggable="true">
-                            <span class="dragHandle">⋮⋮</span>
-                            <div class="wishThumb">
-                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
-                            </div>
-
-                            <div class="wishText">
-                                <p>제주특별자치도</p>
-                                <span>한라산 국립공원</span>
-                            </div>
-
-                            <button type="button" class="addBtn">+</button>
-                        </div>
-
-                        <div class="wishItem" draggable="true">
-                            <span class="dragHandle">⋮⋮</span>
-                            <div class="wishThumb">
-                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
-                            </div>
-
-                            <div class="wishText">
-                                <p>제주특별자치도</p>
-                                <span>협재 해수욕장</span>
-                            </div>
-
-                            <button type="button" class="addBtn">+</button>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- 가운데: 일정표 -->
-                <div class="addContainer">
-
-                    <div class="dayTabs">
-                        <div class="dayTab active">Day 1</div>
-                        <div class="dayTab">Day 2</div>
-                        <div class="dayTab">Day 3</div>
-                        <div class="dayTab">Day 4</div>
-                        <div class="dayTab">＋ 일자 추가</div>
-                    </div>
-
-                    <div class="dayBody">
-                        <p class="dayDate">2026.10.10 (토) · 1일차</p>
-
-                        <div class="timelineItem">
-                            <span class="orderMark">1</span>
-                            <div class="timelineCard">
-                                <span class="dragHandle">⋮⋮</span>
-                                <div class="wishThumb"><img src="/images/logo.png" style="width: 50px; height: 50px;">
-                                </div>
-                                <div class="wishText">
-                                    <p>관광지</p>
-                                    <span>제주국제공항 도착</span>
-                                </div>
-                                <input type="text" class="timeInput" value="09:30">
-                                <button type="button">✕</button>
-                            </div>
-                        </div>
-
-                        <p class="transport">🚗 차량 이동 · 약 35분 · 22.4km</p>
-
-                        <div class="timelineItem">
-                            <span class="orderMark">2</span>
-                            <div class="timelineCard">
-                                <span class="dragHandle">⋮⋮</span>
-                                <div class="wishThumb"><img src="/images/logo.png" style="width: 50px; height: 50px;">
-                                </div>
-                                <div class="wishText">
-                                    <p>맛집</p>
-                                    <span>협재 흑돼지 맛집</span>
-                                </div>
-                                <input type="text" class="timeInput" value="12:00">
-                                <button type="button">✕</button>
-                            </div>
-                        </div>
-
-                        <div class="dropEmpty">＋ 왼쪽 목록에서 장소를 끌어다 놓거나 ＋ 버튼으로 추가하세요</div>
-                    </div>
-
-                    <div class="dayFooter">Day 1 · 방문지 2곳 · 이동거리 약 22.4km</div>
-
-                </div>
-
-                <!-- 오른쪽: 지도 + 요약 -->
-                <div class="mapContainer">
-                    <div class="mapTitle">동선 미리보기</div>
-                    <div class="mapSlot" id="map"></div>
-                    <div class="mapSummary">
-                        <div><span>총 일정 기간</span><b>3박 4일</b></div>
-                        <div><span>총 방문지 수</span><b>14곳</b></div>
-                    </div>
-                </div>
-
-            </div>
+        
 
         </div>
-
-        <!-- 하단 완료 바 -->
-        <div class="finishBar">
-            <div>총 <b>4일</b> 일정 · 방문지 <b>14곳</b> 등록됨</div>
-            <div class="finishBtns">
-                <button type="button">취소</button>
-                <button type="button">미리보기</button>
-                <button type="button">완성하고 링크 공유하기</button>
-            </div>
+        
+        <div class="couponContainer">
+        
+        	<div class="couponSectionTitle">
+    			<span>마일리지 · 쿠폰</span>
+    			<a href="#">더 보기 &gt;</a>
+			</div>
+       		
+       		<div class="coupon_point" style="padding:20px 20px 12px">
+       		
+       			<table align="center">
+       			<thead>
+       				<tr>
+                		<th>날짜</th>
+                		<th>내용</th>
+                		<th>구분</th>
+                		<th>포인트</th>
+              		</tr>
+              	</thead>
+              	
+              	<tbody>
+              		<tr>
+                		<td>2026-09-02</td>
+                		<td>리뷰 작성 적립</td>
+                		<td>적립</td>
+                		<td>+???M</td>
+                	</tr>
+              		<tr>
+                		<td>2026-08-14</td>
+                		<td>제주 오션뷰 호텔 결제 사용</td>
+                		<td>사용</td>
+                		<td>-????M</td>
+                	</tr>
+                	<tr>
+                		<td>2026-08-03</td>
+                		<td>첫 예약 이벤트 적립</td>
+                		<td>적립</td>
+                		<td>+????0M</td>
+              		</tr>
+              	</tbody>
+       			</table>
+       			
+       			<div class="couponList">
+       				<div class="couponBox">
+       					<Strong>첫 회원가입 3%쿠폰</Strong>
+       					<p>?????까지 100만원 이상 결제시</p>
+       					<button type="button">사용하기</button>
+       				</div>
+       				
+       				<div class="couponBox">
+       					<Strong>첫 회원가입 10%쿠폰</Strong>
+       					<p>?????까지 300만원 이상 결제시</p>
+       					<button type="button">사용하기</button>
+       				</div>
+       			</div>
+       			
+       			
+       			
+       			
+       		</div>
+       		
         </div>
 
-        <hr>
-        <div class="footer">
-            <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-            <p>회사명 : GOTT | 대표 : ??? | 사업자등록번호 : 123-45-67890</p>
-            <p>이용약관 | 개인정보처리방침 | 고객센터</p>
-            <div class="textbox">사이트로고</div>
-        </div>
-    </div>
+
+
+
+      </div>
+
+      </div>
+
+    </c:when>
+    
+    <c:otherwise>
+    	<div>로그인하세용 ㅈㅈ</div>
+    </c:otherwise>
+
+
+
+
+
+  </c:choose>
 
 </body>
 
