@@ -334,9 +334,9 @@ form {
             payMethod: "CARD",
 
             customer: {
-            	fullName: "테스트",
-                phoneNumber: "010-0000-1234",
-                email: "test@test.com"
+            	fullName: "${name}",
+                phoneNumber: "${phone}",
+                email: "${email}"
             }
         });
 

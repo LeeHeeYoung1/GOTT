@@ -709,7 +709,7 @@ button:hover {
               <li class="active"><a href="/members/mypage">마이페이지 홈</a></li>
               <li><a href="#">예약 내역</a></li>
               <li><a href="#">찜한 여행지 · 숙소</a></li>
-              <li><a href="#">여행 일정 플래너</a></li>
+              <li><a href="/members/planner">여행 일정 플래너</a></li>
               <li><a href="#">내가 쓴 리뷰</a></li>
               <li><a href="#">내가 쓴 게시글</a></li>
               <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
