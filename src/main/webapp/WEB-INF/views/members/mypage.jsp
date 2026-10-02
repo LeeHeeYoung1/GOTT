@@ -781,7 +781,9 @@ button:hover {
             </div>
 
 
+
             <c:forEach var="reservationList" items="${reservationList}">
+
 
               <div class="reservationList">
 
@@ -804,7 +806,7 @@ button:hover {
                   </p>
 
                   <p>
-                    결제금액 ${reservation.price}원
+                    결제금액 ${roomList.total_price}원
                   </p>
                 </div>
 
