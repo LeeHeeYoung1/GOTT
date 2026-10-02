@@ -28,7 +28,7 @@ button {
 }
 .container {
     width: 1200px;
-    max-width: calc(100% -40px);
+    max-width: calc(100% - 40px);
     margin: 0 auto;
 }
 .section {
