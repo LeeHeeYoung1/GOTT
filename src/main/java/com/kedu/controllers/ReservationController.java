@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.kedu.commons.PriceUtil;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.RoomDAO;
 import com.kedu.dto.PlaceDTO;
@@ -49,13 +50,20 @@ public class ReservationController {
 	}
 	
 	@RequestMapping("/reservation")
-	public String reservation(int roomId, String checkIn, String checkOut, Integer adult, Integer child, HttpSession session, Model model) {
+	public String reservation(int placeId, int roomId, String checkIn, String checkOut, Integer adult, Integer child, HttpSession session, Model model) {
 		RoomDTO roomDto = roomDao.roomOne(roomId);
+		PlaceDTO placeOne = rdao.placeOne(placeId);
+		
+		int total_price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+		
+		model.addAttribute("placeOne", placeOne);
 		model.addAttribute("roomDto", roomDto);
 		model.addAttribute("checkIn", checkIn);
 		model.addAttribute("checkOut", checkOut);
 		model.addAttribute("adult", adult);
 		model.addAttribute("child", child);
+		model.addAttribute("total_price", total_price);
+		
 		return "reservation/reservation";
 	}
 	
