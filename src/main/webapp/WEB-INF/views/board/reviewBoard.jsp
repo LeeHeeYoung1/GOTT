@@ -300,7 +300,7 @@ hr {
 <div class="headercontainer">
 
     <div class="logoBox">
-        <img src="/images/logo.png" alt="GOTT 로고">
+        <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
     </div>
 
     <nav class="nav">

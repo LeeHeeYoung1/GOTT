@@ -288,7 +288,7 @@
     <div class="header flex-between">
 
       <div class="logobox">
-        <img src="/images/logo.png" alt="GOTT 로고">
+        <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
       </div>
 
       <div class="nav flex-between">

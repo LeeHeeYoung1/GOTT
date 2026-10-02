@@ -25,6 +25,7 @@
             height: 70px;
             margin-left: 50px;
         }
+        
         .logobox:hover {
             cursor: pointer;
         }
@@ -300,7 +301,7 @@
 <div class="container">
     <div class="header flex-between">
         <div class="logobox">
-            <img src="/images/logo.png" alt="GOTT 로고">
+            <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
         </div>
         <div class="nav flex-between">
             <div class="textzone">이벤트</div>

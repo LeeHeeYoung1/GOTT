@@ -15,6 +15,7 @@
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
   <style>
+  
         body{
             position: relative;
         }
@@ -359,7 +360,7 @@
 <div class="container">
     <div class="header flex-between">
         <div class="logobox">
-            <img src="images/logo.png" alt="GOTT 로고">
+            <a href="/"><img src="images/logo.png" alt="GOTT 로고"></a>
         </div>
         <div class="navi flex-between">
             <div class="textzone"><a href="">이벤트</a></div>
