@@ -92,7 +92,7 @@ public class ReservationController {
 		return "reservation/room_search";
 	}
 	@RequestMapping("/paymentComplete")
-	public String paymentComplete(String paymentId, int roomId, String checkIn, String checkOut, int guest, HttpSession session) throws Exception {
+	public String paymentComplete(String paymentId, int roomId, String checkIn, String checkOut, int guest, HttpSession session,Model model) throws Exception {
 	    System.out.println("===== 결제 완료 처리 시작 =====");
 	    System.out.println("paymentId = " + paymentId);
 	    System.out.println("roomId = " + roomId);

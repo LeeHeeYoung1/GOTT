@@ -13,6 +13,29 @@ public class RoomDTO {
 	private Integer priceWeekday;
 	private Integer priceWeekend;
 	private String image1;
+	
+	public RoomDTO(int roomId, int placeId, String roomName, Integer roomCount, Integer baseCount, Integer maxCount,
+			Integer priceWeekday, Integer priceWeekend, String image1, String image2, String image3, String image4,
+			String image5, String amenities, String intro, Timestamp regDate) {
+	
+		this.roomId = roomId;
+		this.placeId = placeId;
+		this.roomName = roomName;
+		this.roomCount = roomCount;
+		this.baseCount = baseCount;
+		this.maxCount = maxCount;
+		this.priceWeekday = priceWeekday;
+		this.priceWeekend = priceWeekend;
+		this.image1 = image1;
+		this.image2 = image2;
+		this.image3 = image3;
+		this.image4 = image4;
+		this.image5 = image5;
+		this.amenities = amenities;
+		this.intro = intro;
+		this.regDate = regDate;
+	}
+
 	private String image2;
 	private String image3;
 	private String image4;
