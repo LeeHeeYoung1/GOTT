@@ -781,25 +781,25 @@ button:hover {
             </div>
 
 
-            <c:forEach var="roomList" items="${roomList}">
+            <c:forEach var="reservationList" items="${reservationList}">
 
               <div class="reservationList">
 
                 <div class="img">
-                  <img src="${roomList.image}" alt="호텔 이미지">
+                  <img src="${reservationList.image}" alt="호텔 이미지">
                 </div>
 
                 <div class="reservationInfo">
-                  <h3>${roomList.guestnum} · ${roomList.roomName}</h3>
+                  <h3>${reservationList.guestNum} · ${reservationList.roomName}</h3>
 
                   <p>
-                    체크인 ${reservation.check_in}
-                    / 체크아웃 ${reservation.check_Out}
+                    체크인 ${reservationList.check_in}
+                    / 체크아웃 ${reservationList.check_Out}
                     · 박
                   </p>
 
                   <p>
-                    성인 ${reservation.guestnum}명
+                    성인 ${reservationList.guestnum}명
                     · 예약번호 ${reservation.reservationId}
                   </p>
 
