@@ -211,7 +211,7 @@ form {
 </head>
 <body>
 	<div class="container">
-		<div class="header">나는 헤더요</div>
+		<div class="header">${placeOne.name}</div>
 		<hr>
 		<form action="/reservation/reserve" method="post">
 			<div class="photo">
@@ -267,15 +267,10 @@ form {
 			</div>
 			<div class="room_price">
 				<c:choose>
-					<c:when test="${roomDto.priceWeekday != null}">
-						<fmt:formatNumber value="${roomDto.priceWeekday}" pattern="#,###" />
-								원 ~
-								<fmt:formatNumber value="${roomDto.priceWeekend}"
-							pattern="#,###" />
-								원</c:when>
-					<c:otherwise>
-								가격은 해당 숙소에 문의하여 주시기 바랍니다.
-							</c:otherwise>
+					<c:when test="${total_price != null}">
+						<fmt:formatNumber value="${total_price}" pattern="#,###" />
+								원
+					</c:when>
 				</c:choose>
 			</div>
 

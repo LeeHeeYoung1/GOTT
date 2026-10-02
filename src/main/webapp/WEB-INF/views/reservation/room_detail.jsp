@@ -216,7 +216,7 @@ a {
 		<div class="room_list">
 			<c:forEach var="i" items="${detailList}">
 				<div class="room_card_div">
-					<a class="room_card" href="/reservation/reservation?roomId=${i.roomId}&checkIn=${param.checkIn}&checkOut=${param.checkOut}&adult=${param.adult}&child=${param.child}">
+					<a class="room_card" href="/reservation/reservation?placeId=${placeOne.place_id}&roomId=${i.roomId}&checkIn=${param.checkIn}&checkOut=${param.checkOut}&adult=${param.adult}&child=${param.child}">
 						<div class="room_img">
 							<c:if test="${not empty i.image1}">
 								<img src="${i.image1}">
