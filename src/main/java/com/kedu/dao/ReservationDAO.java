@@ -100,8 +100,8 @@ public class ReservationDAO {
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeId);
 	}
 
-	public int insert(RoomDTO dto, String checkIn, String checkOut, int guest, HttpSession session) {
+	public int insert(RoomDTO dto, String checkIn, String checkOut, int price, int guest, HttpSession session) {
 		String sql = "insert into reservation values(reservation_seq.nextval, ?, systimestamp, ?, ?, ?, ?, '예약완료', ?, ?)";
-		return jdbc.update(sql, session.getAttribute("loginId"), dto.getPriceWeekday(), checkIn, checkOut, guest, (dto.getPriceWeekday()*0.05), dto.getRoomId());
+		return jdbc.update(sql, session.getAttribute("loginId"), price, checkIn, checkOut, guest, (dto.getPriceWeekday()*0.05), dto.getRoomId());
 	}
 }

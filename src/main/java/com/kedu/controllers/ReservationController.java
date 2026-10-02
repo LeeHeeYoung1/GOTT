@@ -5,10 +5,17 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kedu.commons.PriceUtil;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.RoomDAO;
@@ -78,14 +85,71 @@ public class ReservationController {
 	}
 	
 	@RequestMapping("/reserve")
-	public String reserve(int roomId, String checkIn, String checkOut, int guest, HttpSession session) {
+	public String reserve(int roomId, String checkIn, String checkOut,int guest, HttpSession session) {
 		RoomDTO roomDto = roomDao.roomOne(roomId);
-		rdao.insert(roomDto, checkIn, checkOut, guest, session);
+		int price = roomDto.getPriceWeekday();
+		rdao.insert(roomDto, checkIn, checkOut, price,guest, session);
 		return "reservation/room_search";
 	}
-	
 	@RequestMapping("/paymentComplete")
-	public String paymentComplete() {
-		return "redirect:/";
+	public String paymentComplete(String paymentId, int roomId, String checkIn, String checkOut, int guest, HttpSession session) throws Exception {
+	    System.out.println("===== 결제 완료 처리 시작 =====");
+	    System.out.println("paymentId = " + paymentId);
+	    System.out.println("roomId = " + roomId);
+	    System.out.println("checkIn = " + checkIn);
+	    System.out.println("checkOut = " + checkOut);
+	    System.out.println("guest = " + guest);
+	    String apiSecret = "1eCHxu85LeGUbtZZ3YDLU1SfgU2aZVuA6qROvuuNFiSuzSWOiRdaqGcoVVoMfbKxxbtNaRPOM6qsxBHH";
+	    String url = "https://api.portone.io/payments/" + paymentId;
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set("Authorization", "PortOne " + apiSecret);
+	    HttpEntity<String> entity = new HttpEntity<>(headers);
+	    RestTemplate restTemplate = new RestTemplate();
+	    ResponseEntity<String> response = restTemplate.exchange(
+	            url,
+	            HttpMethod.GET,
+	            entity,
+	            String.class
+	    );
+	    String body = response.getBody();
+	    System.out.println("PortOne 응답 = " + body);
+	    ObjectMapper mapper = new ObjectMapper();
+	    JsonNode payment = mapper.readTree(body);
+	    String status = payment.get("status").asText();
+	    int paid = payment.get("amount").get("paid").asInt();
+	    String currency = payment.get("currency").asText();
+
+	    System.out.println("결제 상태 = " + status);
+	    System.out.println("실제 결제 금액 = " + paid);
+	    System.out.println("통화 = " + currency);
+
+	    if (!"PAID".equals(status)) {
+	        System.out.println("결제 상태가 PAID가 아닙니다.");
+	        return "redirect:/";
+	    }
+
+	    if (!"KRW".equals(currency)) {
+	        System.out.println("결제 통화가 KRW가 아닙니다.");
+	        return "redirect:/";
+	    }
+
+	    RoomDTO roomDto = roomDao.roomOne(roomId);
+
+	    if (roomDto == null) {
+	        System.out.println("객실 정보를 찾을 수 없습니다.");
+	        return "redirect:/";
+	    }
+
+	    int result = rdao.insert(roomDto, checkIn, checkOut, paid, guest, session);
+	    if (result > 0) {
+	        System.out.println("예약 저장 성공");
+	        System.out.println("결제 금액 = " + paid);
+	    } else {
+	        System.out.println("예약 저장 실패");
+	    }
+
+	    System.out.println("===== 결제 완료 처리 종료 =====");
+
+	    return "redirect:/";
 	}
 }
