@@ -359,6 +359,134 @@
             color: #6B7280;
             background-color: #F8FAFA;
         }
+        .searchBox {
+    width: 750px;
+    height: 60px;
+    margin: 40px auto;
+    position: relative;
+}
+
+.searchBox input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 70px 0 28px;
+    border: 1px solid #e2ded9;
+    border-radius: 30px;
+    background-color: white;
+    font-size: 17px;
+    color: #444;
+    outline: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+.searchBox input::placeholder {
+    color: #aaa;
+}
+
+.searchBox input:focus {
+    border-color: #c8b9aa;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+}
+
+.searchBtn {
+    width: 46px;
+    height: 46px;
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    border: none;
+    border-radius: 50%;
+    background-color: #f0ebe5;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchBtn:hover {
+    background-color: #e5ddd5;
+}
+
+.searchIcon {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #6f665f;
+    border-radius: 50%;
+    position: relative;
+}
+
+.searchIcon::after {
+    content: "";
+    width: 7px;
+    height: 2px;
+    background-color: #6f665f;
+    position: absolute;
+    right: -6px;
+    bottom: -3px;
+    transform: rotate(45deg);
+    border-radius: 2px;
+}
+
+#searchResult {
+    position: absolute;
+    top: 68px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(60, 50, 40, 0.12);
+    overflow: hidden;
+    z-index: 1000;
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+.searchItem {
+    height: 48px;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #555;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.searchItem + .searchItem {
+    border-top: 1px solid #f1ede8;
+}
+
+.searchItem:hover {
+    background-color: #faf7f3;
+    color: #333;
+}
+
+.searchItem::before {
+    content: "⌕";
+    margin-right: 12px;
+    font-size: 18px;
+    color: #a69a8e;
+}
+
+#searchResult::-webkit-scrollbar {
+    width: 6px;
+}
+
+#searchResult::-webkit-scrollbar-track {
+    background: #faf8f5;
+}
+
+#searchResult::-webkit-scrollbar-thumb {
+    background: #d8cec4;
+    border-radius: 10px;
+}
+
+#searchResult::-webkit-scrollbar-thumb:hover {
+    background: #bdb0a4;
+}
 
     </style>
 </head>
@@ -403,7 +531,7 @@
     </div>
     <form action="/place/search" method="get">
 		<div class="searchBox">
-			<input type="text" name="keyword" placeholder="어디로 떠나고 싶으신가요?">
+			<input type="text" id="searchInput" name="keyword" placeholder="어디로 떠나고 싶으신가요?">
 			<button type="submit" class="searchBtn">
 				<span class="searchIcon"></span>
 			</button>

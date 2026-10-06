@@ -2,6 +2,7 @@ package com.kedu.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -85,10 +88,10 @@ public class ReservationController {
 	}
 	
 	@RequestMapping("/reserve")
-	public String reserve(int roomId, String checkIn, String checkOut,int guest, HttpSession session) {
+	public String reserve(int roomId, String checkIn, String checkOut,int guest,String paymentId,HttpSession session) {
 		RoomDTO roomDto = roomDao.roomOne(roomId);
 		int price = roomDto.getPriceWeekday();
-		rdao.insert(roomDto, checkIn, checkOut, price,guest, session);
+		rdao.insert(roomDto, checkIn, checkOut, price,guest, paymentId,session);
 		return "reservation/room_search";
 	}
 	
@@ -130,14 +133,57 @@ public class ReservationController {
 	        return "redirect:/";
 	    }
 
-	    int result = rdao.insert(roomDto, checkIn, checkOut, paid, guest, session);
+	    int result = rdao.insert(roomDto, checkIn, checkOut, paid, guest, paymentId,session);
 	    if (result > 0) {
 	        System.out.println("예약 저장 성공");
 	        System.out.println("결제 금액 = " + paid);
 	    } else {
 	        System.out.println("예약 저장 실패");
 	    }
+	    model.addAttribute("orderName", roomDto.getRoomName());
+	    model.addAttribute("total", paid);
+	    model.addAttribute("paymentId", paymentId);
 	    return "reservation/paymentOk";
+	}
+	
+	@RequestMapping("/cancel")
+	@ResponseBody
+	public String cancelPayment(
+	    @RequestParam String paymentId,
+	    HttpServletResponse response) throws Exception {
+	    
+	    response.setCharacterEncoding("UTF-8");
+	    response.setContentType("text/plain; charset=UTF-8");
+	    
+	    String apiSecret = "1eCHxu85LeGUbtZZ3YDLU1SfgU2aZVuA6qROvuuNFiSuzSWOiRdaqGcoVVoMfbKxxbtNaRPOM6qsxBHH";
+	    String url = "https://api.portone.io/payments/" + paymentId + "/cancel";
+	    
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set("Authorization", "PortOne " + apiSecret);
+	    headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+	    
+	    String body = "{\"reason\": \"CUSTOMER_REQUEST\"}";
+	    HttpEntity<String> entity = new HttpEntity<>(body, headers);
+	    
+	    RestTemplate restTemplate = new RestTemplate();
+	    
+	    try {
+	        ResponseEntity<String> result = restTemplate.exchange(
+	            url,
+	            HttpMethod.POST,
+	            entity,
+	            String.class
+	        );
+	        
+	        if (result.getStatusCode().is2xxSuccessful()) {
+	            rdao.delete(paymentId);
+	            return "OK";
+	        }
+	    } catch (Exception e) {
+	        return "결제 취소에 실패했습니다.";
+	    }
+	    
+	    return "결제 취소에 실패했습니다.";
 	}
 
 }
