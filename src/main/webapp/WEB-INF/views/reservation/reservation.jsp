@@ -311,9 +311,9 @@ form {
 		
 		$(".payment").on("click", async function() {
 
-    const paymentId = "GOTT-" + crypto.randomUUID();
+    	const paymentId = "GOTT-" + crypto.randomUUID();
 
-    const totalAmount = Number("${total_price}");
+    	const totalAmount = Number("${total_price}");
 
     try {
 
