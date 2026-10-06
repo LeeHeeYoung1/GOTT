@@ -127,8 +127,9 @@ public class ReservationDAO {
 	}
 	
 	public ReservationDTO reservationOne(String paymentId) {
-	    String sql = "SELECT reservation.*, room.room_name, room.image1, room.place_id " + "FROM reservation " + "JOIN room " + "ON reservation.room_id = room.room_id " +
-	    				"WHERE reservation.payment_id = ?";
+	    String sql = "SELECT reservation.*, room.room_name, room.image1, room.place_id " + "FROM reservation " + "JOIN room " + 
+	    				"ON reservation.room_id = room.room_id " + "WHERE reservation.payment_id = ?";
+
 	    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
 	}
 }
