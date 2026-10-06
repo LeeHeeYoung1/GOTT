@@ -21,11 +21,12 @@ public class ReservationDTO {
 	private String paymentId;
 	private String roomName;
 	private String image1;
+	private int placeId;
 	
 	public ReservationDTO() {}
 	
 	public ReservationDTO(int seq, String memberId, Timestamp reserveDate, int price, Date checkIn, Date checkOut,
-			int guestNum, String status, int mileage, int roomId,String paymentId,String roomName,String image1) {
+			int guestNum, String status, int mileage, int roomId,String paymentId,String roomName,String image1,int placeId) {
 		this.seq = seq;
 		this.memberId = memberId;
 		this.reserveDate = reserveDate;
@@ -39,6 +40,7 @@ public class ReservationDTO {
 		this.paymentId = paymentId;
 		this.roomName = roomName;
 		this.image1 = image1;
+		this.placeId = placeId;
 	}
 	public int getSeq() {
 		return seq;
@@ -122,6 +124,13 @@ public class ReservationDTO {
 
 	public void setImage1(String image1) {
 	    this.image1 = image1;
+	}
+	public int getPlaceId() {
+	    return placeId;
+	}
+
+	public void setPlaceId(int placeId) {
+	    this.placeId = placeId;
 	}
 	
 }

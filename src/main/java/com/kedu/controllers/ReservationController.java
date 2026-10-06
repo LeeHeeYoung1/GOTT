@@ -187,8 +187,21 @@ public class ReservationController {
 	
 	@RequestMapping("/reservationUpdate")
 	public String reservationUpdate(String paymentId, Model model) {
+
+	    // 1. 현재 예약 조회
 	    ReservationDTO rsdto = rdao.reservationOne(paymentId);
+
+	    // 2. 현재 예약의 숙소 ID 가져오기
+	    int placeId = rsdto.getPlaceId();
+
+	    // 3. 같은 숙소의 모든 객실 조회
+	    List<RoomDTO> detailList = roomDao.detailList(placeId);
+
+	    // 4. JSP로 전달
 	    model.addAttribute("reservation", rsdto);
+	    model.addAttribute("placeOne", rdao.placeOne(placeId));
+	    model.addAttribute("detailList", detailList);
+
 	    return "reservation/reservationUpdate";
 	}
 
