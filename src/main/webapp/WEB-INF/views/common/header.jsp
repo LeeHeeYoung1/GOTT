@@ -18,11 +18,18 @@
   
         body{
             position: relative;
+            padding-top: 70px;
         }
         .header {
             width: 100%;
             height: 70px;
             padding: 0 30px;
+            position : fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 100;
+            
         }
         
         .logobox {

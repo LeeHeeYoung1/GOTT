@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/public.css">
+<link rel="stylesheet" href="/css/public.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea87fc26ee3f75472cb75c454c18b302"></script>
 
@@ -22,11 +22,19 @@
   		
         body{
             position: relative;
+            padding-top: 70px;
         }
         .header {
             width: 100%;
             height: 70px;
             padding: 0 30px;
+            position : fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 100;
+            border: 1px solid black;
+            background-color: #F8FAFC;
         }
         
         .searchBox {
@@ -486,7 +494,7 @@
 
 #searchResult::-webkit-scrollbar-thumb:hover {
     background: #bdb0a4;
-}
+}	
 
     </style>
 </head>
@@ -499,13 +507,13 @@
             <a href="/"><img src="images/logo.png" alt="GOTT 로고"></a>
         </div>
         <div class="navi flex-between">
-            <div class="textzone"><a href="">이벤트</a></div>
+            <div class="textzone"><a href="/event/eventpage">이벤트</a></div>
             <div class="textzone"><a href="">지역</a></div>
             <div class="textzone"><a href="">추천여행지</a></div>
             <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
-            <div class="textzone"><a href="">리뷰</a></div>
-            <div class="textzone"><a href="">여행플래너</a></div>
+            <div class="textzone"><a href="/members/planner">여행플래너</a></div>
             <div class="textzone"><a href="/board/freeBoard">게시판</a></div>
+            <div class="textzone"><a href="">문의사항</a></div>
         </div>
         <c:choose>
 	        <c:when test="${loginId != null}">
