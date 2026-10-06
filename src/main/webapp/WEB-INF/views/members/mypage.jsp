@@ -426,6 +426,64 @@ button:hover {
     border-color: #222;
 }
 
+/* 예약 상태 탭 */
+.reservationVar {
+    display: flex;
+    align-items: center;
+
+    margin-top: 20px;
+
+    border-bottom: 1px solid #222;
+}
+
+
+/* 탭 */
+.tab {
+    width: 110px;
+    height: 42px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 7px 7px 0 0;
+
+    background-color: #f8f8f8;
+
+    font-size: 13px;
+    color: #777;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+
+/* 탭 사이 간격 */
+.tab + .tab {
+    margin-left: 3px;
+}
+
+
+/* 마우스 올렸을 때 */
+.tab:hover {
+    background-color: #222;
+    color: white;
+    border-color: #222;
+}
+
+
+/* 현재 선택된 탭 */
+.tab.active {
+    background-color: #222;
+    color: white;
+    border-color: #222;
+
+    font-weight: 600;
+}
+
 /* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
 
 .wishlistContainer {
@@ -858,6 +916,7 @@ button:hover {
 
 
           <!--여기부터 예약리스트-->
+          
           <div class="reservationContainer">
 
             <div class="sectionTitle">
@@ -885,14 +944,21 @@ button:hover {
 			        <div class="reservationInfo">
 			            <h3>${rs.roomName}</h3>			
 			            <p>
-			                체크인 ${rs.checkIn}
-			                / 체크아웃 ${rs.checkOut}
-			                · 박
+			                · 체크인 ${rs.checkIn} / 체크아웃 ${rs.checkOut}
 			            </p>
 			
 			            <p>
-			                성인 ${rs.guestNum}명
-			                · 예약번호 ${rs.paymentId}
+			                · 성인 ${rs.guestNum}명<br>
+			                · 예약번호 ${rs.paymentId}<br>
+			                <c:choose>
+						    	<c:when test="${rs.status ne '예약취소'}">
+						        	<strong>· 적립 마일리지 + ${rs.mileage}M </strong>
+						    	</c:when>
+						
+						    	<c:otherwise>
+						        	<strong>· 적립 마일리지 - ${rs.mileage}M </strong>
+						    	</c:otherwise>
+							</c:choose>
 			            </p>
 			
 			            <p>
@@ -903,7 +969,9 @@ button:hover {
 			        <div class="reservationCondition">
 			            <button disabled>${rs.status}</button>
 			            <button>예약 상세</button>
-			            <button type="button" id="cancelBtn">예약 취소</button>
+						<c:if test="${rs.status ne '예약취소'}">
+        					<button type="button" id="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
+    					</c:if>
 			        </div>
 			
 			    </div>
@@ -1104,30 +1172,28 @@ button:hover {
 
 $("#cancelBtn").on("click", async function () {
 
-    if (!confirm("이 결제를 취소할까요?")) return;
+    const paymentId = $(this).data("payment-id");
+    console.log("paymentId:", paymentId);
+    
+    if (!confirm("이 예약을 취소할까요?")) return;
 
     try {
-        const res = await fetch("/reservation/cancel", {
+        const res = await fetch("/reservation/cancelReservation", {
             method: "POST",
             headers: { 
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: "paymentId=" + encodeURIComponent("${paymentId}")
+            body: "paymentId=" + encodeURIComponent(paymentId)
         });
         
-        // ← charset 지정해서 읽기
         const text = await res.text();
-        
         console.log("취소 응답:", text);
-        console.log("응답 길이:", text.length);
 
         if (text.trim() === "OK") {
-            alert("결제가 취소되었습니다.");
-            location.href = "/reservation/list";
+            alert("예약이 취소되었습니다.");
+            location.reload();
         } else {
-            // 에러 메시지 표시
-            document.getElementById("msg").textContent = text;
-            console.error("취소 실패:", text);
+            alert(text);
         }
     } catch (error) {
         console.error("요청 실패:", error);
