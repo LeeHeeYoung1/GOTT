@@ -175,7 +175,9 @@
         <c:choose>
 	        <c:when test="${loginId != null}">
 		        <div class="user-menu">
+
 		       	 	<div class="textbox">${nickname}님${nickname}님</div>
+
 		            <div class="textbox"><a href="/members/logout">로그아웃</a></div>
 		            <div class="textbox"><a href="members/mypage">마이페이지</a></div>
 		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
@@ -204,3 +206,4 @@
             <a href="#notice">공지사항</a>
         </nav>
     </div>
+</div>
