@@ -148,9 +148,7 @@ public class ReservationController {
 	
 	@RequestMapping("/cancel")
 	@ResponseBody
-	public String cancelPayment(
-	    @RequestParam String paymentId,
-	    HttpServletResponse response) throws Exception {
+	public String cancelPayment(String paymentId, HttpServletResponse response) throws Exception {
 	    
 	    response.setCharacterEncoding("UTF-8");
 	    response.setContentType("text/plain; charset=UTF-8");
@@ -184,6 +182,13 @@ public class ReservationController {
 	    }
 	    
 	    return "결제 취소에 실패했습니다.";
+	}
+	
+	@RequestMapping("/cancelReservation")
+	@ResponseBody
+	public String cancelReservation(String paymentId) {
+	    rdao. updateReservation(paymentId, "예약취소");
+	    return "OK";
 	}
 
 }

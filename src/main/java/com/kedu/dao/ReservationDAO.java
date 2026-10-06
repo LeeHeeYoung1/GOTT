@@ -121,4 +121,9 @@ public class ReservationDAO {
 	    return list;
 	}
 	
+	public int updateReservation(String paymentId, String status) {
+	    String sql = "UPDATE RESERVATION SET status = ? WHERE payment_Id = ?";
+	    return jdbc.update(sql, status, paymentId);
+	}
+	
 }
