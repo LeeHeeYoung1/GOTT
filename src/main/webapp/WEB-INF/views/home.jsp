@@ -216,8 +216,8 @@
         }
 
         .mapzone {
-            width: 800px;
-            height: 800px;
+            width: 700px;
+            height: 700px;
             border: 2px solid black;
             margin: auto;
         }
@@ -641,8 +641,8 @@
 
 	var container = document.getElementById('map');
 	var options = {
-		center: new kakao.maps.LatLng(33.450701, 126.570667),
-		level: 3
+		center: new kakao.maps.LatLng(36.35, 127.85),
+		level: 13
 	};
 	
 	var map = new kakao.maps.Map(container, options);
