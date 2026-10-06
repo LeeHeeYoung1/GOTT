@@ -1,5 +1,6 @@
 package com.kedu.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.kedu.commons.NullZeroUtil;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.PlaceRoomDTO;
+import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.RoomDTO;
 
 @Repository
@@ -100,8 +102,23 @@ public class ReservationDAO {
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeId);
 	}
 
-	public int insert(RoomDTO dto, String checkIn, String checkOut, int price, int guest, HttpSession session) {
-		String sql = "insert into reservation values(reservation_seq.nextval, ?, systimestamp, ?, ?, ?, ?, '예약완료', ?, ?)";
-		return jdbc.update(sql, session.getAttribute("loginId"), price, checkIn, checkOut, guest, (dto.getPriceWeekday()*0.05), dto.getRoomId());
+	public int insert(RoomDTO dto, String checkIn, String checkOut, int price, int guest,String paymentId, HttpSession session) {
+		String sql = "insert into reservation values(reservation_seq.nextval, ?, systimestamp, ?, ?, ?, ?, '예약완료', ?, ?, ?)";
+		int mileage = (int)(price * 0.05);
+		return jdbc.update(sql, session.getAttribute("loginId"), price, checkIn, checkOut, guest, mileage, dto.getRoomId(),paymentId);
 	}
+	
+	public int delete(String paymentId) {
+		String sql = "update reservation set status = '예약취소' where payment_Id = ?";
+	    return jdbc.update(sql,paymentId);
+	}
+	
+	public ArrayList<ReservationDTO> myRsList(String memberId) {
+		String sql = "SELECT reservation.*, room.room_name, room.image1 " + "FROM reservation " + "JOIN room "
+				+ "ON reservation.room_id = room.room_id " + "WHERE reservation.member_id = ? "
+				+ "ORDER BY reservation.reserve_date DESC";
+		ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(sql,new BeanPropertyRowMapper<>(ReservationDTO.class), memberId);
+	    return list;
+	}
+	
 }

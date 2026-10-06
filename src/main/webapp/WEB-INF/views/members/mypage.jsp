@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -290,48 +291,140 @@ button:hover {
 }
 
 
-/* ---------- 5-3. 예약 내역 ---------- */
-
-.reservationContainer {
-  margin-top: 80px;
+/* 예약 리스트 */
+.reservationContainer{
+	margin-top: 80px;
 }
 
-.reservationVar {
-  display: flex;
-  margin-top: 15px;
-  border-bottom: 1px solid #222;
+
+.reservationList {	
+    display: flex !important;
+    flex-direction: row;
+    align-items: stretch;
+
+    width: 100%;
+    min-height: 180px;
+    margin-top: 12px;
+    padding: 18px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background-color: white;
+    box-sizing: border-box;
+
+    transition: box-shadow 0.2s ease;
 }
 
-.tab {
-  width: 100px;
-  height: 40px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border: 1px solid #ccc;
-  border-bottom: none;
-
-  background-color: white;
-
-  font-size: 13px;
-  cursor: pointer;
+.reservationList:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.tab:hover {
-  background-color: #222;
-  color: white;
-  border-color: #222;
+
+/* 이미지 */
+.reservationList .img {
+    width: 210px;
+    height: 145px;
+
+    flex-shrink: 0;
+    overflow: hidden;
+
+    border-radius: 8px;
+    background-color: #f1f1f1;
 }
 
-.reservationList {
-  display: flex;
-  margin-top: 10px;
-  padding: 20px;
-  border: 1px solid #ccc;
+.reservationList .img img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
 }
 
+
+/* 예약 정보 */
+.reservationInfo {
+    flex: 1;
+
+    min-width: 0;
+    padding: 5px 25px;
+}
+
+.reservationInfo h3 {
+    margin: 0 0 12px;
+
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+}
+
+.reservationInfo p {
+    margin: 6px 0;
+
+    font-size: 13px;
+    color: #666;
+}
+
+.reservationInfo p:last-child {
+    margin-top: 14px;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+}
+
+
+/* 오른쪽 버튼 영역 */
+.reservationCondition {
+    width: 120px;
+
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding-left: 15px;
+    border-left: 1px solid #eee;
+
+    flex-shrink: 0;
+}
+
+.reservationCondition button {
+    width: 100%;
+    height: 34px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+
+    background-color: white;
+
+    font-size: 12px;
+    color: #333;
+
+    cursor: pointer;
+}
+
+.reservationCondition button:first-child {
+    border: none;
+
+    background-color: #eff6ff;
+    color: #2563eb;
+
+    font-weight: 600;
+
+    cursor: default;
+}
+
+.reservationCondition button:disabled {
+    opacity: 1;
+}
+
+.reservationCondition button:not(:disabled):hover {
+    background-color: #222;
+    color: white;
+    border-color: #222;
+}
 
 /* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
 
@@ -782,43 +875,41 @@ button:hover {
 
 
 
-            <c:forEach var="reservationList" items="${reservationList}">
 
+			<c:forEach var="rs" items="${myRsList}">
+			    <div class="reservationList">
+			        <div class="img">
+			            <img src="${rs.image1}" alt="호텔 이미지">
+			        </div>
+			
+			        <div class="reservationInfo">
+			            <h3>${rs.roomName}</h3>			
+			            <p>
+			                체크인 ${rs.checkIn}
+			                / 체크아웃 ${rs.checkOut}
+			                · 박
+			            </p>
+			
+			            <p>
+			                성인 ${rs.guestNum}명
+			                · 예약번호 ${rs.paymentId}
+			            </p>
+			
+			            <p>
+			                결제금액 ${rs.price}원
+			            </p>
+			        </div>
+			
+			        <div class="reservationCondition">
+			            <button disabled>${rs.status}</button>
+			            <button>예약 상세</button>
+			            <button type="button" id="cancelBtn">예약 취소</button>
+			        </div>
+			
+			    </div>
+		
+			</c:forEach>
 
-              <div class="reservationList">
-
-                <div class="img">
-                  <img src="${reservationList.image}" alt="호텔 이미지">
-                </div>
-
-                <div class="reservationInfo">
-                  <h3>${reservationList.guestNum} · ${reservationList.roomName}</h3>
-
-                  <p>
-                    체크인 ${reservationList.check_in}
-                    / 체크아웃 ${reservationList.check_Out}
-                    · 박
-                  </p>
-
-                  <p>
-                    성인 ${reservationList.guestnum}명
-                    · 예약번호 ${reservation.reservationId}
-                  </p>
-
-                  <p>
-                    결제금액 ${roomList.total_price}원
-                  </p>
-                </div>
-
-                <div class="reservationCondition">
-                  <button>${reservation.status}</button>
-                  <button>예약 상세</button>
-                  <button>예약 취소</button>
-                </div>
-
-              </div>
-
-            </c:forEach>
 
 
           </div>
@@ -1006,17 +1097,45 @@ button:hover {
       </div>
 
     </c:when>
-    
-    <c:otherwise>
-    	<div>로그인하세용 ㅈㅈ</div>
-    </c:otherwise>
-
-
-
-
 
   </c:choose>
 
+<script>
+
+$("#cancelBtn").on("click", async function () {
+
+    if (!confirm("이 결제를 취소할까요?")) return;
+
+    try {
+        const res = await fetch("/reservation/cancel", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+            body: "paymentId=" + encodeURIComponent("${paymentId}")
+        });
+        
+        // ← charset 지정해서 읽기
+        const text = await res.text();
+        
+        console.log("취소 응답:", text);
+        console.log("응답 길이:", text.length);
+
+        if (text.trim() === "OK") {
+            alert("결제가 취소되었습니다.");
+            location.href = "/reservation/list";
+        } else {
+            // 에러 메시지 표시
+            document.getElementById("msg").textContent = text;
+            console.error("취소 실패:", text);
+        }
+    } catch (error) {
+        console.error("요청 실패:", error);
+        alert("취소 요청 중 오류가 발생했습니다.");
+    }
+});
+
+</script>
 </body>
 
 </html>
