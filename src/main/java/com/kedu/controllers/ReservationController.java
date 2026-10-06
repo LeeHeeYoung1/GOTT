@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,6 +23,7 @@ import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.RoomDAO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.PlaceRoomDTO;
+import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.RoomDTO;
 
 @Controller
@@ -67,12 +67,6 @@ public class ReservationController {
 	public String reservation(int placeId, int roomId, String checkIn, String checkOut, Integer adult, Integer child, HttpSession session, Model model) {
 		RoomDTO roomDto = roomDao.roomOne(roomId);
 		PlaceDTO placeOne = rdao.placeOne(placeId);
-		
-		System.out.println("checkIn = [" + checkIn + "]");
-	    System.out.println("checkOut = [" + checkOut + "]");
-	    System.out.println("adult = [" + adult + "]");
-	    System.out.println("child = [" + child + "]");
-		
 		
 		int total_price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
 		
@@ -189,6 +183,26 @@ public class ReservationController {
 	public String cancelReservation(String paymentId) {
 	    rdao. updateReservation(paymentId, "예약취소");
 	    return "OK";
+	}
+	
+	@RequestMapping("/reservationUpdate")
+	public String reservationUpdate(String paymentId, Model model) {
+
+	    // 1. 현재 예약 조회
+	    ReservationDTO rsdto = rdao.reservationOne(paymentId);
+
+	    // 2. 현재 예약의 숙소 ID 가져오기
+	    int placeId = rsdto.getPlaceId();
+
+	    // 3. 같은 숙소의 모든 객실 조회
+	    List<RoomDTO> detailList = roomDao.detailList(placeId);
+
+	    // 4. JSP로 전달
+	    model.addAttribute("reservation", rsdto);
+	    model.addAttribute("placeOne", rdao.placeOne(placeId));
+	    model.addAttribute("detailList", detailList);
+
+	    return "reservation/reservationUpdate";
 	}
 
 }

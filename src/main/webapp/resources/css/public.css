@@ -40,7 +40,9 @@ button {
 .flex {
     display: flex;
 }
-
+.float {
+    float: left;
+}
 .flex-center {
     display: flex;
     align-items: center;
