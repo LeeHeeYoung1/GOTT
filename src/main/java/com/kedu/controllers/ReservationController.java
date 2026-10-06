@@ -91,14 +91,9 @@ public class ReservationController {
 		rdao.insert(roomDto, checkIn, checkOut, price,guest, session);
 		return "reservation/room_search";
 	}
+	
 	@RequestMapping("/paymentComplete")
 	public String paymentComplete(String paymentId, int roomId, String checkIn, String checkOut, int guest, HttpSession session,Model model) throws Exception {
-	    System.out.println("===== 결제 완료 처리 시작 =====");
-	    System.out.println("paymentId = " + paymentId);
-	    System.out.println("roomId = " + roomId);
-	    System.out.println("checkIn = " + checkIn);
-	    System.out.println("checkOut = " + checkOut);
-	    System.out.println("guest = " + guest);
 	    String apiSecret = "1eCHxu85LeGUbtZZ3YDLU1SfgU2aZVuA6qROvuuNFiSuzSWOiRdaqGcoVVoMfbKxxbtNaRPOM6qsxBHH";
 	    String url = "https://api.portone.io/payments/" + paymentId;
 	    HttpHeaders headers = new HttpHeaders();
@@ -112,16 +107,11 @@ public class ReservationController {
 	            String.class
 	    );
 	    String body = response.getBody();
-	    System.out.println("PortOne 응답 = " + body);
 	    ObjectMapper mapper = new ObjectMapper();
 	    JsonNode payment = mapper.readTree(body);
 	    String status = payment.get("status").asText();
 	    int paid = payment.get("amount").get("paid").asInt();
 	    String currency = payment.get("currency").asText();
-
-	    System.out.println("결제 상태 = " + status);
-	    System.out.println("실제 결제 금액 = " + paid);
-	    System.out.println("통화 = " + currency);
 
 	    if (!"PAID".equals(status)) {
 	        System.out.println("결제 상태가 PAID가 아닙니다.");
@@ -147,9 +137,7 @@ public class ReservationController {
 	    } else {
 	        System.out.println("예약 저장 실패");
 	    }
-
-	    System.out.println("===== 결제 완료 처리 종료 =====");
-
-	    return "redirect:/";
+	    return "reservation/paymentOk";
 	}
+
 }
