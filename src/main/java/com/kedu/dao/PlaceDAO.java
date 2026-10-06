@@ -19,7 +19,7 @@ public class PlaceDAO {
 	
 		String search = "%" + keyword + "%";
 		
-		if(type.equals("ÀüÃ¼")) {
+		if(type.equals("ì „ì²´")) {
 			   String sql = "select * from "
 			            + "(select Place.*, row_number() over(order by name) rn "
 			            + "from Place "
@@ -35,15 +35,15 @@ public class PlaceDAO {
 	} else {
 		String dbType = type;
 		
-		if(type.equals("°ü±¤Áö")) {
+		if(type.equals("ê´€ê´‘ì§€")) {
 			dbType = "SPOT";
 		}
 		
-		if(type.equals("¸ÀÁý")) {
+		if(type.equals("ë§›ì§‘")) {
 			dbType = "FOOD";
 		}
 		
-		if(type.equals("¼÷¹Ú¾÷¼Ò")) {
+		if(type.equals("ìˆ™ë°•ì—…ì†Œ")) {
 			dbType = "STAY";
 		}
 		
@@ -65,7 +65,7 @@ public class PlaceDAO {
 
 	    String search = "%" + keyword + "%";
 
-	    if(type.equals("ÀüÃ¼")) {
+	    if(type.equals("ì „ì²´")) {
 
 	        String sql = "select count(*) from Place "
 	                + "where name like ? "
@@ -82,15 +82,15 @@ public class PlaceDAO {
 
 	        String dbType = type;
 
-	        if(type.equals("°ü±¤Áö")) {
+	        if(type.equals("ê´€ê´‘ì§€")) {
 	            dbType = "SPOT";
 	        }
 
-	        if(type.equals("¸ÀÁý")) {
+	        if(type.equals("ë§›ì§‘")) {
 	            dbType = "FOOD";
 	        }
 
-	        if(type.equals("¼÷¹Ú¾÷¼Ò")) {
+	        if(type.equals("ìˆ™ë°•ì—…ì†Œ")) {
 	            dbType = "STAY";
 	        }
 

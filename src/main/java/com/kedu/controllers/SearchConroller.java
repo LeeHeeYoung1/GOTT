@@ -22,7 +22,7 @@ public class SearchConroller {
 	public String search(String keyword,Integer cpage, String type, Model model) {
 		
 		if(type == null) {
-	        type = "ÀüÃ¼";
+	        type = "ì „ì²´";
 	    }
 		
 		if(cpage == null) {
