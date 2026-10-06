@@ -147,8 +147,8 @@
 
 		<script>
 			$("#regBtn").on("click", function() {
+				location.href = "/notice/notice_register";
 			})
-			location.href = "/notice/notice_register";
 		</script>
 	</c:otherwise>
 </c:choose>

@@ -17,11 +17,12 @@ public class MembersDTO {
 		private String address2;
 		private Timestamp regdate;
 		private int mileage;
+		private String roll;
 		
 		public MembersDTO() {}
 		
 		public MembersDTO(String id, String pw, String name, String nickname, String phone, String email, String gender,
-				String dob, String zipcode, String address1, String address2, Timestamp regdate, int mileage) {
+				String dob, String zipcode, String address1, String address2, Timestamp regdate, int mileage, String roll) {
 			this.id = id;
 			this.pw = pw;
 			this.name = name;
@@ -35,8 +36,17 @@ public class MembersDTO {
 			this.address2 = address2;
 			this.regdate = regdate;
 			this.mileage = mileage;
+			this.roll = roll;
 		}
 		
+		public String getRoll() {
+			return roll;
+		}
+
+		public void setRoll(String roll) {
+			this.roll = roll;
+		}
+
 		public String getId() {
 			return id;
 		}
