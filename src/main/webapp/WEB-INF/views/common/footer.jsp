@@ -8,7 +8,7 @@
         <p>이용약관 | 개인정보처리방침 | 고객센터</p>
         <div class="textbox">사이트로고</div>
     </div>
-</div>
+
 
 <script>
 

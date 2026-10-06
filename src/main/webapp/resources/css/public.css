@@ -12,6 +12,8 @@ body {
     background-color: #f1f5f9;
 
     line-height: 1.5;
+    position: relative;
+   	padding-top: 70px;
 }
 
 a {
@@ -31,7 +33,7 @@ button {
     width: 1200px;
     height: auto;
     max-width: calc(100% - 40px);
-    margin: 0px 0px;
+    margin: 0px auto;
     background-color: #F8fafc;
 }
 .section {
