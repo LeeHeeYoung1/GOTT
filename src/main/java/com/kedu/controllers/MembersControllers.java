@@ -155,12 +155,12 @@ public class MembersControllers {
 	@RequestMapping("/idsearch")
 	public String idsearch(MembersDTO mdto) {
 		
-		  System.out.println("ï¿½Ì¸ï¿½ : " + mdto.getName());
-		    System.out.println("ï¿½Ì¸ï¿½ï¿½ï¿½ : " + mdto.getEmail());
+		System.out.println("ÀÌ¸§ : " + mdto.getName());
+		System.out.println("ÀÌ¸ÞÀÏ : " + mdto.getEmail());
 		
 		String id = mdao.findId(mdto);
 		
-		 System.out.println("Ã£ï¿½ï¿½ ID : " + id);
+		System.out.println("Ã£Àº ID : " + id);
 		 
 		if(id == null) {
 			return "";
@@ -216,22 +216,22 @@ public class MembersControllers {
 	@ResponseBody
 	@RequestMapping("/updatepw")
 	public String updatepw(String pw, HttpSession session) {
-		// ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+		// ÀÌ¸ÞÀÏ ÀÎÁõ ¿©ºÎ È®ÀÎ
 	    Boolean verified = (Boolean)session.getAttribute("pwVerified");
 	    if(verified == null || !verified) {
 	        return "notVerified";
 	    }
-	    // ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	    // ºñ¹Ð¹øÈ£¸¦ º¯°æÇÒ ¾ÆÀÌµð °¡Á®¿À±â
 	    String id = (String)session.getAttribute("pwFindId");
 	    if(id == null) {
 	        return "fail";
 	    }
-	    // ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½È£È­
+	    // ºñ¹Ð¹øÈ£ ¾ÏÈ£È­
 	    String encryptedPw = EncryptionUtils.encryptSHA512(pw);
-	    // DB ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½
+	    // DB ºñ¹Ð¹øÈ£ º¯°æ
 	    int result = mdao.updatePassword(id, encryptedPw);
 	    if(result > 0) {
-	        // ï¿½ï¿½Ð¹ï¿½È£ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	        // ºñ¹Ð¹øÈ£ Ã£±â °ü·Ã ¼¼¼Ç »èÁ¦
 	        session.removeAttribute("pwEmailcode");
 	        session.removeAttribute("pwFindId");
 	        session.removeAttribute("pwFindEmail");
@@ -245,7 +245,5 @@ public class MembersControllers {
 	public String planner() {
 		return "members/planner";
 	}
-	
-	
 	
 }

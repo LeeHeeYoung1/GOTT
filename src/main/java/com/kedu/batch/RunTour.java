@@ -6,8 +6,8 @@ public class RunTour {
 
 		TourApiCollector t = new TourApiCollector();
 
-		int[] areas = { 1 };          // ±¤ÁÖ, Àü³²
-		int[] types = { 12, 32, 39 };     // °ü±¤Áö, ¼÷¹Ú, À½½ÄÁ¡
+		int[] areas = { 1 };          // ê´‘ì£¼, ì „ë‚¨
+		int[] types = { 12, 32, 39 };     // ê´€ê´‘ì§€, ìˆ™ë°•, ìŒì‹ì 
 
 		for (int a : areas) {
 			for (int ty : types) {

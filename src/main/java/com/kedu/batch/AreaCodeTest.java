@@ -25,7 +25,7 @@ public class AreaCodeTest {
 								  .getAsJsonObject("items")
 								  .getAsJsonArray("item");
 
-			System.out.println("ΔΪµε   ΑφΏªΈν");
+			System.out.println("μ½”λ“   μ§€μ—­λª…");
 			System.out.println("------------------------");
 			for (JsonElement el : items) {
 				JsonObject o = el.getAsJsonObject();
@@ -33,7 +33,7 @@ public class AreaCodeTest {
 						ApiUtil.str(o, "code"), ApiUtil.str(o, "name"));
 			}
 		} catch (Exception e) {
-			System.out.println("ΐΐ΄δ Θ®ΐΞ:");
+			System.out.println("μ‘λ‹µ ν™•μΈ:");
 			ApiUtil.print(root);
 		}
 	}

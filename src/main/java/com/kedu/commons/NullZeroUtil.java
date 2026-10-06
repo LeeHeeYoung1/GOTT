@@ -4,13 +4,13 @@ public class NullZeroUtil {
 
 	public static String nullZero(String s) {
 		if(s == null) {
-			return null;				// ÀÌ¹Ì nullÀÌ¸é ±×´ë·Î
+			return null;				// ì´ë¯¸ nullì´ë©´ ê·¸ëŒ€ë¡œ
 		}
 		else if(s.trim().isEmpty()) {
-			return null;				// °ø¹é»ÓÀÌ¸é null·Î
+			return null;				// ê³µë°±ë¿ì´ë©´ nullë¡œ
 		}
 		else {
-			return s;					// °ªÀÌ ÀÖÀ¸¸é ±×´ë·Î
+			return s;					// ê°’ì´ ìˆìœ¼ë©´ ê·¸ëŒ€ë¡œ
 		}
 	}
 }

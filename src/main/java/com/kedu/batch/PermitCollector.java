@@ -18,18 +18,18 @@ public class PermitCollector {
 	private static final String KEY =
 			"37e2e99edbaeec122328fc0298b377d9e68117f67d049bade4930aa58662e172";
 
-	/** ¿©Çà ¼­ºñ½º¿¡ ºÎÀûÇÕÇÑ ¾÷ÅÂ */
+	/** ì—¬í–‰ ì„œë¹„ìŠ¤ì— ë¶€ì í•©í•œ ì—…íƒœ */
 	private static final Set<String> BLOCK = new HashSet<String>(Arrays.asList(
-			"·ë»ì·Õ", "´Ü¶õÁÖÁ¡", "°£ÀÌÁÖÁ¡", "°¨¼ºÁÖÁ¡", "´Ù¹æ",
-			"¿©ÀÎ¼÷¾÷", "ÀÌµ¿Á¶¸®", "ÃâÀåÁ¶¸®",
-			"½ÄÇ°¼ÒºĞ¾÷", "½ÄÇ°µî ¼öÀÔÆÇ¸Å¾÷"));
+			"ë£¸ì‚´ë¡±", "ë‹¨ë€ì£¼ì ", "ê°„ì´ì£¼ì ", "ê°ì„±ì£¼ì ", "ë‹¤ë°©",
+			"ì—¬ì¸ìˆ™ì—…", "ì´ë™ì¡°ë¦¬", "ì¶œì¥ì¡°ë¦¬",
+			"ì‹í’ˆì†Œë¶„ì—…", "ì‹í’ˆë“± ìˆ˜ì…íŒë§¤ì—…"));
 
 	private PlaceBatchDao dao = new PlaceBatchDao();
 
 	/**
 	 * @param service   "general_restaurants" / "lodgings"
 	 * @param placeType "FOOD" / "STAY"
-	 * @param area      "¼­¿ïÆ¯º°½Ã" / "¼­¿ïÆ¯º°½Ã °­³²±¸" / "Àü³²±¤ÁÖÅëÇÕÆ¯º°½Ã"
+	 * @param area      "ì„œìš¸íŠ¹ë³„ì‹œ" / "ì„œìš¸íŠ¹ë³„ì‹œ ê°•ë‚¨êµ¬" / "ì „ë‚¨ê´‘ì£¼í†µí•©íŠ¹ë³„ì‹œ"
 	 */
 	public String collect(String service, String placeType, String area) throws Exception {
 
@@ -51,8 +51,8 @@ public class PermitCollector {
 			if (page == 1) {
 				int total = root.getAsJsonObject("response").getAsJsonObject("body")
 								.get("totalCount").getAsInt();
-				System.out.println(">> " + service + " [" + area + "] ´ë»ó " + total
-						+ "°Ç, ¾à " + ((total / 100) + 1) + "ÆäÀÌÁö");
+				System.out.println(">> " + service + " [" + area + "] ëŒ€ìƒ " + total
+						+ "ê±´, ì•½ " + ((total / 100) + 1) + "í˜ì´ì§€");
 			}
 
 			List<Object[]> batch = new ArrayList<Object[]>();
@@ -67,7 +67,7 @@ public class PermitCollector {
 
 				if (name.isEmpty() || mngNo.isEmpty())       { skipped++; continue; }
 				if (BLOCK.contains(uptae))                   { skipped++; continue; }
-				if ("±âÅ¸".equals(uptae) && tel.isEmpty())    { skipped++; continue; }
+				if ("ê¸°íƒ€".equals(uptae) && tel.isEmpty())    { skipped++; continue; }
 				if (!ApiUtil.str(o, "CLSBIZ_YMD").isEmpty()) { skipped++; continue; }
 
 				double[] c = CoordUtil.toWgs84(
@@ -95,45 +95,45 @@ public class PermitCollector {
 						Double.valueOf(c[0]),           // latitude
 						Double.valueOf(c[1]),           // longitude
 						null,                           // image_name
-						cut(uptae, 2000)                // intro (¾÷ÅÂ)
+						cut(uptae, 2000)                // intro (ì—…íƒœ)
 				});
 			}
 
 			saved += dao.saveBatch(batch);
 
 			if (page % 20 == 0 || items.size() < 100)
-				System.out.println("[" + service + " " + page + "p] ÀúÀå " + saved
-						+ " / Á¦¿Ü " + skipped);
+				System.out.println("[" + service + " " + page + "p] ì €ì¥ " + saved
+						+ " / ì œì™¸ " + skipped);
 
 			if (items.size() < 100) break;
 			page++;
 			Thread.sleep(120);
 		}
 
-		return service + " [" + area + "] ¡æ ÀúÀå " + saved + "°Ç, Á¦¿Ü " + skipped + "°Ç";
+		return service + " [" + area + "] â†’ ì €ì¥ " + saved + "ê±´, ì œì™¸ " + skipped + "ê±´";
 	}
 
-	/** Áö¿ª¸í Ç¥±â ÅëÀÏ */
+	/** ì§€ì—­ëª… í‘œê¸° í†µì¼ */
 	private String normalizeAddr(String addr) {
 		if (addr == null) return null;
-		if (addr.startsWith("¼­¿ï½Ã"))
-			return "¼­¿ïÆ¯º°½Ã" + addr.substring("¼­¿ï½Ã".length());
-		if (addr.startsWith("±¤ÁÖ±¤¿ª½Ã"))
-			return "Àü³²±¤ÁÖÅëÇÕÆ¯º°½Ã" + addr.substring("±¤ÁÖ±¤¿ª½Ã".length());
-		if (addr.startsWith("Àü¶ó³²µµ"))
-			return "Àü³²±¤ÁÖÅëÇÕÆ¯º°½Ã" + addr.substring("Àü¶ó³²µµ".length());
+		if (addr.startsWith("ì„œìš¸ì‹œ"))
+			return "ì„œìš¸íŠ¹ë³„ì‹œ" + addr.substring("ì„œìš¸ì‹œ".length());
+		if (addr.startsWith("ê´‘ì£¼ê´‘ì—­ì‹œ"))
+			return "ì „ë‚¨ê´‘ì£¼í†µí•©íŠ¹ë³„ì‹œ" + addr.substring("ê´‘ì£¼ê´‘ì—­ì‹œ".length());
+		if (addr.startsWith("ì „ë¼ë‚¨ë„"))
+			return "ì „ë‚¨ê´‘ì£¼í†µí•©íŠ¹ë³„ì‹œ" + addr.substring("ì „ë¼ë‚¨ë„".length());
 		return addr;
 	}
 
-	/** "¼­¿ïÆ¯º°½Ã °­³²±¸ ..." ¡æ {"¼­¿ïÆ¯º°½Ã", "°­³²±¸"} */
+	/** "ì„œìš¸íŠ¹ë³„ì‹œ ê°•ë‚¨êµ¬ ..." â†’ {"ì„œìš¸íŠ¹ë³„ì‹œ", "ê°•ë‚¨êµ¬"} */
 	private String[] splitRegion(String addr) {
 		String[] p = addr.trim().split("\\s+");
-		String region  = p.length > 0 ? p[0] : "±âÅ¸";
+		String region  = p.length > 0 ? p[0] : "ê¸°íƒ€";
 		String sigungu = p.length > 1 ? p[1] : null;
 		return new String[] { region, sigungu };
 	}
 
-	/** ÄÃ·³ ±æÀÌ ÃÊ°ú ¹æÁö */
+	/** ì»¬ëŸ¼ ê¸¸ì´ ì´ˆê³¼ ë°©ì§€ */
 	private String cut(String s, int len) {
 		if (s == null || s.isEmpty()) return null;
 		return s.length() <= len ? s : s.substring(0, len);
@@ -145,7 +145,7 @@ public class PermitCollector {
 
 			String code = res.getAsJsonObject("header").get("resultCode").getAsString();
 			if (!"0".equals(code)) {
-				System.out.println("API ¿¡·¯: " + res.getAsJsonObject("header"));
+				System.out.println("API ì—ëŸ¬: " + res.getAsJsonObject("header"));
 				return null;
 			}
 
@@ -154,7 +154,7 @@ public class PermitCollector {
 					  .getAsJsonArray("item");
 
 		} catch (Exception e) {
-			System.out.println("=== ÀÀ´ä ±¸Á¶ È®ÀÎ ÇÊ¿ä ===");
+			System.out.println("=== ì‘ë‹µ êµ¬ì¡° í™•ì¸ í•„ìš” ===");
 			ApiUtil.print(root);
 			return null;
 		}

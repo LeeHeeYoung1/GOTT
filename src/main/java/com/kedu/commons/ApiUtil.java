@@ -13,7 +13,7 @@ import java.net.URL;
 
 public class ApiUtil {
 
-	/** URL È£Ãâ ÈÄ JSON ÆÄ½Ì */
+	/** URL í˜¸ì¶œ í›„ JSON íŒŒì‹± */
 	public static JsonObject get(String url) throws Exception {
 
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
@@ -29,13 +29,13 @@ public class ApiUtil {
 		return root;
 	}
 
-	/** null ¾ÈÀü ¹®ÀÚ¿­ ÃßÃâ */
+	/** null ì•ˆì „ ë¬¸ìì—´ ì¶”ì¶œ */
 	public static String str(JsonObject o, String key) {
 		JsonElement e = o.get(key);
 		return (e == null || e.isJsonNull()) ? "" : e.getAsString().trim();
 	}
 
-	/** º¸±â ÁÁ°Ô Ãâ·Â (±¸Á¶ È®ÀÎ¿ë) */
+	/** ë³´ê¸° ì¢‹ê²Œ ì¶œë ¥ (êµ¬ì¡° í™•ì¸ìš©) */
 	public static void print(JsonElement e) {
 		Gson g = new GsonBuilder().setPrettyPrinting().create();
 		System.out.println(g.toJson(e));

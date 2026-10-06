@@ -6,6 +6,6 @@ public class RunPermit {
 
 		PermitCollector c = new PermitCollector();
 
-		System.out.println(c.collect("lodgings", "STAY", "Ό­ΏοΖ―Ί°½Γ"));
+		System.out.println(c.collect("lodgings", "STAY", "μ„μΈνΉλ³„μ‹"));
 	}
 }
