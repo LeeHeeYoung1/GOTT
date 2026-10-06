@@ -126,4 +126,9 @@ public class ReservationDAO {
 	    return jdbc.update(sql, status, paymentId);
 	}
 	
+	public ReservationDTO reservationOne(String paymentId) {
+	    String sql = "SELECT reservation.*, room.room_name, room.image1, room.place_id " + "FROM reservation " + "JOIN room " + "ON reservation.room_id = room.room_id " +
+	    				"WHERE reservation.payment_id = ?";
+	    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
+	}
 }
