@@ -59,7 +59,7 @@ public class MembersControllers {
 		    session.setAttribute("nickname", member.getNickname());
 		    session.setAttribute("mileage", member.getMileage());
 		    session.setAttribute("regdate", member.getRegdate());
-		    session.setAttribute("roll", member.getRoll());
+		    session.setAttribute("role", member.getRole());
 		}
 		return result;
 	}
