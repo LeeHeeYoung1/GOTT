@@ -15,8 +15,11 @@
   src="https://code.jquery.com/jquery-3.7.1.js"
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
-  <style>
-  
+  <style>	
+  		html {
+		    scroll-behavior: smooth;
+		}
+  		
         body{
             position: relative;
         }
@@ -295,6 +298,7 @@
             position: fixed;
             left: 80px;
             top: 150px;
+            z-index: 3;
         }
         .linkbar nav {
             display: flex;
@@ -313,6 +317,9 @@
             background-color: #318de4;
             height: 4px;
             transition: 0.5s;
+        }
+        #vertical-underline a {
+        	transition: 0.5s;
         }
 
         .linkbarmain {
