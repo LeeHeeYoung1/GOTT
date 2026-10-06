@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="/css/public.css">
     <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <title>GOTT 여행 일정 플래너</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
   <style>
 * {
@@ -29,26 +27,27 @@ body {
   line-height: 1.5;
 }
 
-a {
+/*  마이페이지 영역으로 스코프 한정 */
+.mypageContainer a {
   color: inherit;
   text-decoration: none;
 }
 
-/* 제목 */
-h2,
-h5 {
+/*  마이페이지 제목 영역만 적용 */
+.mypageTitle h2,
+.mypageTitle h5 {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* 버튼 */
-button {
+/*  마이페이지 버튼만 적용 */
+.mypageContainer button {
   border: 1px solid black;
   background-color: white;
 }
 
-button:hover {
+.mypageContainer button:hover {
   background-color: #222;
   color: white;
   border-color: #222;
@@ -69,62 +68,6 @@ button:hover {
 .sectionTitle>a {
   font-size: 12px;
   color: #777;
-}
-
-
-/* =========================================================
-   2. 헤더
-   ========================================================= */
-
-.headercontainer {
-  width: 1200px;
-  max-width: calc(100% - 40px);
-  margin: 0 auto;
-
-  display: flex;
-  align-items: center;
-
-  padding: 0 30px;
-}
-
-/* 로고 */
-.logoBox {
-  width: 100px;
-  height: 40px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  margin-right: 50px;
-}
-
-.logoBox img {
-  width: 100%;
-  height: 100%;
-}
-
-/* 메뉴 */
-.nav {
-  display: flex;
-  gap: 30px;
-}
-
-.nav a {
-  color: black;
-}
-
-/* 마이페이지 / 로그아웃 */
-.signBox {
-  margin-left: auto;
-  margin-right: 40px;
-
-  display: flex;
-  gap: 10px;
-}
-
-.signBox a {
-  color: black;
 }
 
 
@@ -291,7 +234,7 @@ button:hover {
 }
 
 
-/* 예약 리스트 */
+/* ---------- 5-3. 예약 리스트 ---------- */
 .reservationContainer{
 	margin-top: 80px;
 }
@@ -483,73 +426,264 @@ button:hover {
 
     font-weight: 600;
 }
+/* 카드 뒤집기 컨테이너 */
+.flipCard {
+    width: 100%;
+    min-height: 180px;
+    perspective: 1000px;  /* ← 3D 효과 깊이 */
+    margin-top: 12px;
+}
+
+/* 뒤집히는 내부 */
+.flipCardInner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    transition: transform 0.6s ease;  /* ← 뒤집기 속도 */
+    transform-style: preserve-3d;
+}
+
+/* 뒤집힌 상태 */
+.flipCard.flipped .flipCardInner {
+    transform: rotateY(180deg);
+}
+
+/* 앞면 (예약 내역) */
+.flipCardFront,
+.flipCardBack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    backface-visibility: hidden;  /* ← 뒷면 숨기기 */
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background-color: white;
+    padding: 18px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+/* 뒷면 (예약 상세) */
+.flipCardBack {
+    transform: rotateY(180deg);  /* ← 처음엔 뒤집혀 있음 */
+    background-color: #f8faff;
+}
+
+
 
 /* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
 
 .wishlistContainer {
   width: 100%;
   margin-top: 80px;
-  display: flow-root;   /* 안의 float 카드 높이까지 감싸서 아래 영역이 올라오지 않게 */
+  display: flow-root;
 }
 
-/* 카드 */
-.wishlistImg {
-  width: 250px;
-  float: left;
-  margin-right: 23px;
-  border: 1px solid #333;
-  background-color: white;
+/* =========================================================
+   예약 카드 플립
+   ========================================================= */
+
+/* 기존 reservationList와 동일한 크기/여백 */
+.flipCard {
+    width: 100%;
+    height: 200px;
+    margin-top: 12px;
+    perspective: 1000px;
 }
 
-/* 카드 이미지 */
-.wishlistImg>img {
-  display: block;
-
-  width: 100%;
-  height: 185px;
-
-  object-fit: cover;
+/* 실제로 뒤집히는 영역 */
+.flipCardInner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s ease;
+    transform-style: preserve-3d;
 }
 
-/* 카드 내용 */
-.wishlistInfo {
-  padding: 14px 15px 18px;
+/* 뒤집힌 상태 */
+.flipCard.flipped .flipCardInner {
+    transform: rotateY(180deg);
 }
 
-.wishlistInfo h3 {
-  margin: 0 0 6px;
 
-  font-size: 16px;
-  font-weight: 500;
+/* =========================================================
+   앞면 / 뒷면 공통
+   ========================================================= */
+
+.flipCardFront,
+.flipCardBack {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 18px;
+    box-sizing: border-box;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background-color: white;
+
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    backface-visibility: hidden;
 }
 
-.wishlistInfo p {
-  margin: 0 0 14px;
 
-  font-size: 13px;
-  color: #777;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* 카드 마우스 올렸을 때 */
+.flipCard:hover .flipCardFront,
+.flipCard:hover .flipCardBack {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* 자세히 보기 버튼 */
-.wishlistInfo button {
-  padding: 6px 12px;
 
-  border: 1px solid #333;
-  background-color: white;
+/* =========================================================
+   앞면
+   ========================================================= */
 
-  font-size: 12px;
-  cursor: pointer;
+.flipCardFront {
+    transform: rotateY(0deg);
 }
 
-.wishlistInfo button:hover {
-  background-color: #222;
-  color: white;
+
+/* =========================================================
+   뒷면
+   ========================================================= */
+
+.flipCardBack {
+    transform: rotateY(180deg);
+    background-color: #f8faff;
 }
 
+
+/* =========================================================
+   이미지
+   ========================================================= */
+
+.flipCard .img {
+    width: 210px;
+    height: 145px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    border-radius: 8px;
+    background-color: #f1f1f1;
+}
+
+.flipCard .img img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   예약 정보
+   ========================================================= */
+
+.flipCard .reservationInfo {
+    flex: 1;
+    min-width: 0;
+
+    padding: 5px 25px;
+}
+
+.flipCard .reservationInfo h3 {
+    margin: 0 0 12px;
+
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+}
+
+.flipCard .reservationInfo p {
+    margin: 6px 0;
+
+    font-size: 13px;
+    color: #666;
+}
+
+.flipCard .reservationInfo p:last-child {
+    margin-top: 4px;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+}
+
+
+/* =========================================================
+   오른쪽 버튼 영역
+   ========================================================= */
+
+.flipCard .reservationCondition {
+    width: 120px;
+
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding-left: 15px;
+
+    border-left: 1px solid #eee;
+
+    flex-shrink: 0;
+}
+
+.flipCard .reservationCondition button {
+    width: 100%;
+    height: 34px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+
+    background-color: white;
+
+    font-size: 12px;
+    color: #333;
+
+    cursor: pointer;
+}
+
+
+/* 예약 상태 버튼 */
+.flipCard .reservationCondition button:first-child {
+    border: none;
+
+    background-color: #eff6ff;
+    color: #2563eb;
+
+    font-weight: 600;
+
+    cursor: default;
+}
+
+.flipCard .reservationCondition button:disabled {
+    opacity: 1;
+}
+
+
+/* 버튼 hover */
+.flipCard .reservationCondition button:not(:disabled):hover {
+    background-color: #222;
+    color: white;
+    border-color: #222;
+}
 
 /* ---------- 5-5. 내가 쓴 리뷰 ---------- */
 
@@ -803,31 +937,7 @@ button:hover {
 
     <c:when test="${loginId != null}">
 
-      <div class="headercontainer">
-        <div class="logoBox">
-        <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
-        </div>
-
-        <nav class="nav">
-          <a href="#">이벤트</a>
-          <a href="#">지역</a>
-          <a href="#">추천여행지</a>
-          <a href="/reservation/list">숙박업소</a>
-          <a href="#">리뷰</a>
-          <a href="#">여행 플래너</a>
-          <a href="#">공지사항</a>
-        </nav>
-
-        <div class="signBox">
-          <a href="/members/mypage">마이페이지</a>
-          <a href="/members/logout">로그아웃</a>
-        </div>
-
-        <div class="menu-icon">☰</div>
-      </div>
-
-      <hr>
-
+      <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
       <h2>마이페이지</h2>
       <h5 style="font-size: 13px; color: #7c7c7c;">예약 내역과 찜한 여행지, 내가 남긴 기록을 한 곳에서 관리</h5>
@@ -936,47 +1046,70 @@ button:hover {
 
 
 			<c:forEach var="rs" items="${myRsList}">
-			    <div class="reservationList">
-			        <div class="img">
-			            <img src="${rs.image1}" alt="호텔 이미지">
-			        </div>
-			
-			        <div class="reservationInfo">
-			            <h3>${rs.roomName}</h3>			
-			            <p>
-			                · 체크인 ${rs.checkIn} / 체크아웃 ${rs.checkOut}
-			            </p>
-			
-			            <p>
-			                · 성인 ${rs.guestNum}명<br>
-			                · 예약번호 ${rs.paymentId}<br>
-			                <c:choose>
-						    	<c:when test="${rs.status ne '예약취소'}">
-						        	<strong>· 적립 마일리지 + ${rs.mileage}M </strong>
-						    	</c:when>
-						
-						    	<c:otherwise>
-						        	<strong>· 적립 마일리지 - ${rs.mileage}M </strong>
-						    	</c:otherwise>
-							</c:choose>
-			            </p>
-			
-			            <p>
-			                결제금액 ${rs.price}원
-			            </p>
-			        </div>
-			
-			        <div class="reservationCondition">
-			            <button disabled>${rs.status}</button>
-			            <button>예약 상세</button>
-						<c:if test="${rs.status ne '예약취소'}">
-        					<button type="button" id="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
-    					</c:if>
-			        </div>
-			
-			    </div>
-		
-			</c:forEach>
+
+    <div class="flipCard">
+        <div class="flipCardInner">
+
+            <!-- 앞면: 기존 예약 내역 -->
+            <div class="flipCardFront">
+                <div class="img">
+                    <img src="${rs.image1}" alt="호텔 이미지">
+                </div>
+
+                <div class="reservationInfo">
+                    <h3>${rs.roomName}</h3>
+                    <p>· 체크인 ${rs.checkIn} / 체크아웃 ${rs.checkOut}</p>
+                    <p>· 성인 ${rs.guestNum}명<br>
+                        · 예약번호 ${rs.paymentId}<br>
+                        
+                        <c:choose>
+                            <c:when test="${rs.status ne '예약취소'}">
+                                <strong>· 적립 마일리지 + ${rs.mileage}M</strong>
+                            </c:when>
+                            <c:otherwise>
+                                <strong>· 적립 마일리지 - ${rs.mileage}M</strong>
+                            </c:otherwise>
+                        </c:choose>
+                    </p>
+                    <p>결제금액 ${rs.price}원</p>
+
+                </div>
+
+                <div class="reservationCondition">
+                    <button disabled>${rs.status}</button>
+                    <button type="button" class="detailBtn">예약 상세</button>
+                    <c:if test="${rs.status ne '예약취소'}">
+                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
+                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
+                    </c:if>
+                </div>
+            </div>
+
+            <!-- 뒷면: 예약 상세 내역 -->
+            <div class="flipCardBack">
+                <div class="reservationInfo">
+                    <h3>${rs.roomName} 상세정보</h3>
+                    <p>· 체크인: ${rs.checkIn}</p>
+                    <p>· 체크아웃: ${rs.checkOut}</p>
+                    <p>· 성인: ${rs.guestNum}명</p>
+                    <p>· 예약번호: ${rs.paymentId}</p>
+                    <p>· 결제금액: ${rs.price}원</p>
+                    <p>· 예약일: ${rs.reserveDate}</p>
+                </div>
+
+                <div class="reservationCondition">
+                    <button type="button" class="backBtn">돌아가기</button>
+                    <c:if test="${rs.status ne '예약취소'}">
+                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
+                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
+                    </c:if>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</c:forEach>
 
 
 
@@ -1150,11 +1283,9 @@ button:hover {
        				</div>
        			</div>
        			
-       			
-       			
-       			
        		</div>
        		
+       		<jsp:include page="/WEB-INF/views/common/footer.jsp" />
         </div>
 
 
@@ -1170,35 +1301,68 @@ button:hover {
 
 <script>
 
-$("#cancelBtn").on("click", async function () {
+$(".cancelBtn").on("click", function() {
 
-    const paymentId = $(this).data("payment-id");
-    console.log("paymentId:", paymentId);
-    
-    if (!confirm("이 예약을 취소할까요?")) return;
+ let paymentId = $(this).data("payment-id");
 
-    try {
-        const res = await fetch("/reservation/cancelReservation", {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: "paymentId=" + encodeURIComponent(paymentId)
-        });
-        
-        const text = await res.text();
-        console.log("취소 응답:", text);
+ console.log("paymentId : " + paymentId);
 
-        if (text.trim() === "OK") {
-            alert("예약이 취소되었습니다.");
-            location.reload();
-        } else {
-            alert(text);
-        }
-    } catch (error) {
-        console.error("요청 실패:", error);
-        alert("취소 요청 중 오류가 발생했습니다.");
-    }
+ if (!confirm("이 예약을 취소할까요?")) {
+     return;
+ }
+
+ $.ajax({
+     url: "/reservation/cancelReservation",
+     type: "POST",
+     data: {
+         paymentId: paymentId
+     },
+     success: function(result) {
+
+         console.log("결과 : " + result);
+
+         if (result.trim() == "OK") {
+             alert("예약이 취소되었습니다.");
+             location.reload();
+         } else {
+             alert(result);
+         }
+     },
+     error: function() {
+         alert("취소 요청 중 오류가 발생했습니다.");
+     }
+ });
+});
+
+
+
+$(".updateBtn").on("click", function() {
+
+ let paymentId = $(this).data("payment-id");
+
+ console.log("paymentId : " + paymentId);
+
+ window.open(
+     "/reservation/reservationUpdate?paymentId=" + paymentId,
+     "reservationUpdate",
+     "width=800,height=600,left=100,top=100"
+ );
+});
+
+
+
+$(".detailBtn").on("click", function() {
+
+ $(this).closest(".flipCard").addClass("flipped");
+
+});
+
+
+
+$(".backBtn").on("click", function() {
+
+ $(this).closest(".flipCard").removeClass("flipped");
+
 });
 
 </script>
