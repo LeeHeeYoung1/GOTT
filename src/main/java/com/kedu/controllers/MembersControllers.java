@@ -1,17 +1,22 @@
 package com.kedu.controllers;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.commons.EncryptionUtils;
 import com.kedu.dao.MembersDAO;
+import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dto.MembersDTO;
+import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.Travel_TypeDTO;
 import com.kedu.services.EmailService;
 
@@ -23,6 +28,8 @@ public class MembersControllers {
 	private MembersDAO mdao;
 	@Autowired
 	private Travel_TypeDAO tdao;
+	@Autowired
+	private ReservationDAO rdao;
 	@Autowired
 	private EmailService emailService;
 	
@@ -90,8 +97,11 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/mypage")
-	public String mypage() {
-		return "members/mypage";
+	public String mypage(HttpSession session, Model model) {
+	    String memberId = (String) session.getAttribute("loginId");
+	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
+	    model.addAttribute("myRsList", myRsList);
+	    return "members/mypage";
 	}
 	
 	@RequestMapping("/update")

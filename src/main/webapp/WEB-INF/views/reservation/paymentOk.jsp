@@ -7,7 +7,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOTT 결제 완료</title>
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+	integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+	crossorigin="anonymous"></script>
+<script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
 <style>
     body {
         margin: 0;
@@ -109,7 +112,7 @@
     <!-- 이 값들은 주소창이 아니라 서버가 포트원에서 확인한 값이에요 -->
     <div class="info">
         <div><span>상품명</span><b>${orderName}</b></div>
-        <div><span>결제금액</span><b><fmt:formatNumber value="${totalAmount}" pattern="#,###"/>원</b></div>
+        <div><span>결제금액</span><b><fmt:formatNumber value="${total}" pattern="#,###"/>원</b></div>
         <div><span>결제번호</span><b>${paymentId}</b></div>
     </div>
 
@@ -124,25 +127,38 @@
 
 <script>
 
-    document.getElementById("cancelBtn").addEventListener("click", async function () {
+$("#cancelBtn").on("click", async function () {
 
-        if (!confirm("이 결제를 취소할까요?")) return;
+    if (!confirm("이 결제를 취소할까요?")) return;
 
-        const res = await fetch("/payment/cancel", {
+    try {
+        const res = await fetch("/reservation/cancel", {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            headers: { 
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
             body: "paymentId=" + encodeURIComponent("${paymentId}")
         });
+        
+        // ← charset 지정해서 읽기
         const text = await res.text();
+        
+        console.log("취소 응답:", text);
+        console.log("응답 길이:", text.length);
 
-        if (text === "OK") {
+        if (text.trim() === "OK") {
             alert("결제가 취소되었습니다.");
-            location.href = "/payment/test";
+            location.href = "/reservation/list";
         } else {
+            // 에러 메시지 표시
             document.getElementById("msg").textContent = text;
+            console.error("취소 실패:", text);
         }
-    });
-
+    } catch (error) {
+        console.error("요청 실패:", error);
+        alert("취소 요청 중 오류가 발생했습니다.");
+    }
+});
 </script>
 
 </body>
