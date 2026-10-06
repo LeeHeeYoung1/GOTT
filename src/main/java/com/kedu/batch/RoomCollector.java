@@ -18,23 +18,23 @@ public class RoomCollector {
 	private static final String DB_USER = "gott";
 	private static final String DB_PW   = "gott";
 
-	// ÆíÀÇ½Ã¼³ ÇÊµå ¡æ Ç¥½Ã¸í
+	// í¸ì˜ì‹œì„¤ í•„ë“œ â†’ í‘œì‹œëª…
 	private static final String[][] AMENITY = {
-		{ "roomaircondition", "¿¡¾îÄÁ" }, { "roomtv", "TV" },
-		{ "roomrefrigerator", "³ÃÀå°í" }, { "roomhairdryer", "µå¶óÀÌ±â" },
-		{ "roominternet", "ÀÎÅÍ³İ" },     { "roompc", "PC" },
-		{ "roomcook", "Ãë»ç" },           { "roomsofa", "¼ÒÆÄ" },
-		{ "roombathfacility", "¿å½Ç" },   { "roomtoiletries", "¼¼¸éµµ±¸" },
-		{ "roomcable", "ÄÉÀÌºíTV" },      { "roomhometheater", "È¨½Ã¾îÅÍ" }
+		{ "roomaircondition", "ì—ì–´ì»¨" }, { "roomtv", "TV" },
+		{ "roomrefrigerator", "ëƒ‰ì¥ê³ " }, { "roomhairdryer", "ë“œë¼ì´ê¸°" },
+		{ "roominternet", "ì¸í„°ë„·" },     { "roompc", "PC" },
+		{ "roomcook", "ì·¨ì‚¬" },           { "roomsofa", "ì†ŒíŒŒ" },
+		{ "roombathfacility", "ìš•ì‹¤" },   { "roomtoiletries", "ì„¸ë©´ë„êµ¬" },
+		{ "roomcable", "ì¼€ì´ë¸”TV" },      { "roomhometheater", "í™ˆì‹œì–´í„°" }
 	};
 
 	public void run() throws Exception {
 
-		List<Object[]> stays = loadStays();     // TourAPI ¼÷¹Ú ¸ñ·Ï
-		System.out.println("´ë»ó ¼÷¼Ò " + stays.size() + "°÷\n");
+		List<Object[]> stays = loadStays();     // TourAPI ìˆ™ë°• ëª©ë¡
+		System.out.println("ëŒ€ìƒ ìˆ™ì†Œ " + stays.size() + "ê³³\n");
 
 		int totalRoom = 0, withPrice = 0, noRoom = 0;
-		int[] imgCnt = new int[5];              // »çÁø 1~5Àå º¸À¯ ¼ö
+		int[] imgCnt = new int[5];              // ì‚¬ì§„ 1~5ì¥ ë³´ìœ  ìˆ˜
 
 		for (Object[] s : stays) {
 			int    placeId   = (Integer) s[0];
@@ -56,21 +56,21 @@ public class RoomCollector {
 			}
 
 			save(rooms);
-			System.out.printf("%-28s °´½Ç %d°³%n", cut(placeName, 26), rooms.size());
+			System.out.printf("%-28s ê°ì‹¤ %dê°œ%n", cut(placeName, 26), rooms.size());
 
 			Thread.sleep(120);
 		}
 
-		System.out.println("\n========== ¼öÁı °á°ú ==========");
-		System.out.println("¼÷¼Ò          : " + stays.size() + "°÷ (°´½ÇÁ¤º¸ ¾øÀ½ " + noRoom + ")");
-		System.out.println("°´½Ç          : " + totalRoom + "°³");
-		System.out.println("¿ä±İ ÀÖ´Â °´½Ç : " + withPrice + "°³");
-		System.out.println("»çÁø 1 / 2 / 3 / 4 / 5 : "
+		System.out.println("\n========== ìˆ˜ì§‘ ê²°ê³¼ ==========");
+		System.out.println("ìˆ™ì†Œ          : " + stays.size() + "ê³³ (ê°ì‹¤ì •ë³´ ì—†ìŒ " + noRoom + ")");
+		System.out.println("ê°ì‹¤          : " + totalRoom + "ê°œ");
+		System.out.println("ìš”ê¸ˆ ìˆëŠ” ê°ì‹¤ : " + withPrice + "ê°œ");
+		System.out.println("ì‚¬ì§„ 1 / 2 / 3 / 4 / 5 : "
 				+ imgCnt[0] + " / " + imgCnt[1] + " / " + imgCnt[2]
 				+ " / " + imgCnt[3] + " / " + imgCnt[4]);
 	}
 
-	/** Place¿¡¼­ TourAPI ¼÷¹Ú ¸ñ·Ï ÀĞ±â */
+	/** Placeì—ì„œ TourAPI ìˆ™ë°• ëª©ë¡ ì½ê¸° */
 	private List<Object[]> loadStays() throws Exception {
 
 		List<Object[]> list = new ArrayList<Object[]>();
@@ -91,7 +91,7 @@ public class RoomCollector {
 		return list;
 	}
 
-	/** detailInfo2 È£Ãâ ¡æ °´½Ç ¸ñ·Ï */
+	/** detailInfo2 í˜¸ì¶œ â†’ ê°ì‹¤ ëª©ë¡ */
 	private List<Object[]> fetchRooms(int placeId, String contentId) {
 
 		List<Object[]> rooms = new ArrayList<Object[]>();
@@ -124,8 +124,8 @@ public class RoomCollector {
 						Integer.valueOf(num(o, "roomcount", 1)),          // [2]
 						Integer.valueOf(num(o, "roombasecount", 2)),      // [3]
 						Integer.valueOf(num(o, "roommaxcount", 4)),       // [4]
-						numOrNull(o, "roomoffseasonminfee1"),             // [5] ÁÖÁß°¡
-						numOrNull(o, "roomoffseasonminfee2"),             // [6] ÁÖ¸»°¡
+						numOrNull(o, "roomoffseasonminfee1"),             // [5] ì£¼ì¤‘ê°€
+						numOrNull(o, "roomoffseasonminfee2"),             // [6] ì£¼ë§ê°€
 						nvl(cut(ApiUtil.str(o, "roomimg1"), 300)),        // [7]
 						cut(amenities(o), 300),                           // [8]
 						cut(ApiUtil.str(o, "roomintro").trim(), 2000),    // [9]
@@ -136,12 +136,12 @@ public class RoomCollector {
 				});
 			}
 		} catch (Exception e) {
-			System.out.println("   ½ÇÆĞ contentId=" + contentId + " : " + e.getMessage());
+			System.out.println("   ì‹¤íŒ¨ contentId=" + contentId + " : " + e.getMessage());
 		}
 		return rooms;
 	}
 
-	/** ¼ıÀÚ ÆÄ½Ì, 0ÀÌ°Å³ª ½ÇÆĞÇÏ¸é ±âº»°ª */
+	/** ìˆ«ì íŒŒì‹±, 0ì´ê±°ë‚˜ ì‹¤íŒ¨í•˜ë©´ ê¸°ë³¸ê°’ */
 	private int num(JsonObject o, String key, int def) {
 		try {
 			int v = Integer.parseInt(ApiUtil.str(o, key).replace(",", ""));
@@ -149,7 +149,7 @@ public class RoomCollector {
 		} catch (Exception e) { return def; }
 	}
 
-	/** ¼ıÀÚ ÆÄ½Ì, 0ÀÌ°Å³ª ½ÇÆĞÇÏ¸é null (¿ä±İ¿ë) */
+	/** ìˆ«ì íŒŒì‹±, 0ì´ê±°ë‚˜ ì‹¤íŒ¨í•˜ë©´ null (ìš”ê¸ˆìš©) */
 	private Integer numOrNull(JsonObject o, String key) {
 		try {
 			int v = Integer.parseInt(ApiUtil.str(o, key).replace(",", ""));
@@ -157,7 +157,7 @@ public class RoomCollector {
 		} catch (Exception e) { return null; }
 	}
 
-	/** YÀÎ ÆíÀÇ½Ã¼³À» ½°Ç¥·Î ÀÌ¾îºÙÀÌ±â */
+	/** Yì¸ í¸ì˜ì‹œì„¤ì„ ì‰¼í‘œë¡œ ì´ì–´ë¶™ì´ê¸° */
 	private String amenities(JsonObject o) {
 		StringBuilder sb = new StringBuilder();
 		for (String[] a : AMENITY) {

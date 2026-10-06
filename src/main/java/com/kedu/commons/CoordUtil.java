@@ -7,7 +7,7 @@ import org.locationtech.proj4j.CoordinateTransformFactory;
 import org.locationtech.proj4j.ProjCoordinate;
 
 /**
- * 怨듦났�뜲�씠�꽣 醫뚰몴(EPSG:5174) �넂 �쐞寃쎈룄(WGS84) 蹂��솚
+ * 공공데이터 좌표(EPSG:5174) → 위경도(WGS84) 변환
  */
 public class CoordUtil {
 
@@ -30,9 +30,9 @@ public class CoordUtil {
 	}
 
 	/**
-	 * @param xs 醫뚰몴X (CRD_INFO_X)
-	 * @param ys 醫뚰몴Y (CRD_INFO_Y)
-	 * @return double[]{�쐞�룄, 寃쎈룄} �� 媛믪씠 �뾾嫄곕굹 踰붿쐞瑜� 踰쀬뼱�굹硫� null
+	 * @param xs 좌표X (CRD_INFO_X)
+	 * @param ys 좌표Y (CRD_INFO_Y)
+	 * @return double[]{위도, 경도} - 값이 없거나 범위를 벗어나면 null
 	 */
 	public static double[] toWgs84(String xs, String ys) {
 
@@ -48,8 +48,8 @@ public class CoordUtil {
 			ProjCoordinate out = new ProjCoordinate();
 			TF.transform(new ProjCoordinate(x, y), out);
 
-			double lat = out.y; // �쐞�룄
-			double lng = out.x; // 寃쎈룄
+			double lat = out.y; // 위도
+			double lng = out.x; // 경도
 
 			if (!isValid(lat, lng))
 				return null;
@@ -61,7 +61,7 @@ public class CoordUtil {
 		}
 	}
 
-	/** ���븳誘쇨뎅 踰붿쐞 �븞�씤吏� (TourAPI 醫뚰몴 寃�利앹슜) */
+	/** 대한민국 범위 안인지 (TourAPI 좌표 검증용) */
 	public static boolean isValid(double lat, double lng) {
 		return lat >= 33 && lat <= 39 && lng >= 124 && lng <= 132;
 	}

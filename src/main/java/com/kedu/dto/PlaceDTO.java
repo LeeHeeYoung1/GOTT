@@ -19,7 +19,7 @@ public class PlaceDTO {
 	private Integer review_count;
 	private Timestamp reg_date;
 
-	// --- Á¶È¸ Àü¿ë (Room ¼­ºêÄõ¸® °á°ú) ---
+	// --- ì¡°íšŒ ì „ìš© (Room ì„œë¸Œì¿¼ë¦¬ ê²°ê³¼) ---
 	private Integer min_price;
 	private Integer room_count;
 	private String room_img;

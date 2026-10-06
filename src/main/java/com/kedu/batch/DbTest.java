@@ -13,24 +13,24 @@ public class DbTest {
 
 	public static void main(String[] args) {
 
-		System.out.println("[1] main ÁøÀÔ");
+		System.out.println("[1] main ì§„ì…");
 
 		Connection conn = null;
 
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
-			System.out.println("[2] µå¶óÀÌ¹ö ·Îµù ¿Ï·á");
+			System.out.println("[2] ë“œë¼ì´ë²„ ë¡œë”© ì™„ë£Œ");
 
-			// 10ÃÊ ¾È¿¡ ÀÀ´ä ¾øÀ¸¸é Æ÷±â
+			// 10ì´ˆ ì•ˆì— ì‘ë‹µ ì—†ìœ¼ë©´ í¬ê¸°
 			DriverManager.setLoginTimeout(10);
 
-			System.out.println("[3] Á¢¼Ó ½Ãµµ : " + URL);
+			System.out.println("[3] ì ‘ì† ì‹œë„ : " + URL);
 			conn = DriverManager.getConnection(URL, USER, PW);
-			System.out.println("[4] Á¢¼Ó ¼º°ø");
+			System.out.println("[4] ì ‘ì† ì„±ê³µ");
 
 			Statement st = conn.createStatement();
 
-			System.out.println("\n== Å×ÀÌºí ¸ñ·Ï ==");
+			System.out.println("\n== í…Œì´ë¸” ëª©ë¡ ==");
 			ResultSet rs = st.executeQuery(
 					"SELECT table_name FROM user_tables ORDER BY table_name");
 			boolean hasPlace = false, any = false;
@@ -40,11 +40,11 @@ public class DbTest {
 				any = true;
 				if ("PLACE".equals(t)) hasPlace = true;
 			}
-			if (!any) System.out.println("   (Å×ÀÌºí ¾øÀ½)");
+			if (!any) System.out.println("   (í…Œì´ë¸” ì—†ìŒ)");
 			rs.close();
 
 			if (hasPlace) {
-				System.out.println("\n== Place ÄÃ·³ ==");
+				System.out.println("\n== Place ì»¬ëŸ¼ ==");
 				rs = st.executeQuery(
 						"SELECT column_name, data_type, data_length, nullable" +
 						"  FROM user_tab_columns" +
@@ -56,13 +56,13 @@ public class DbTest {
 				rs.close();
 
 				rs = st.executeQuery("SELECT COUNT(*) FROM Place");
-				if (rs.next()) System.out.println("\n°Ç¼ö: " + rs.getInt(1));
+				if (rs.next()) System.out.println("\nê±´ìˆ˜: " + rs.getInt(1));
 				rs.close();
 			} else {
-				System.out.println("\n== Place Å×ÀÌºí ¾øÀ½ ¡æ »ı¼º ÇÊ¿ä ==");
+				System.out.println("\n== Place í…Œì´ë¸” ì—†ìŒ â†’ ìƒì„± í•„ìš” ==");
 			}
 
-			System.out.println("\n== ½ÃÄö½º ==");
+			System.out.println("\n== ì‹œí€€ìŠ¤ ==");
 			rs = st.executeQuery(
 					"SELECT sequence_name FROM user_sequences ORDER BY sequence_name");
 			boolean anySeq = false;
@@ -70,20 +70,20 @@ public class DbTest {
 				System.out.println("   - " + rs.getString(1));
 				anySeq = true;
 			}
-			if (!anySeq) System.out.println("   (½ÃÄö½º ¾øÀ½)");
+			if (!anySeq) System.out.println("   (ì‹œí€€ìŠ¤ ì—†ìŒ)");
 			rs.close();
 
 			st.close();
 
 		} catch (Throwable e) {
-			System.out.println("\n[¿¡·¯] " + e.getClass().getName());
+			System.out.println("\n[ì—ëŸ¬] " + e.getClass().getName());
 			System.out.println("       " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			if (conn != null) {
 				try { conn.close(); } catch (Exception ig) {}
 			}
-			System.out.println("\n[³¡]");
+			System.out.println("\n[ë]");
 		}
 	}
 }

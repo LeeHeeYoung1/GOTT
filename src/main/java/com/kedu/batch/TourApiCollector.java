@@ -19,8 +19,8 @@ public class TourApiCollector {
 	private PlaceBatchDao dao = new PlaceBatchDao();
 
 	/**
-	 * @param areaCode      5=愿묒＜, 38=�쟾�궓
-	 * @param contentTypeId 12=愿�愿묒�, 32=�닕諛�, 39=�쓬�떇�젏
+	 * @param areaCode      5=광주, 38=전남
+	 * @param contentTypeId 12=관광지, 32=숙박, 39=음식점
 	 */
 	public String collect(int areaCode, int contentTypeId) throws Exception {
 
@@ -46,7 +46,7 @@ public class TourApiCollector {
 				int total = root.getAsJsonObject("response").getAsJsonObject("body")
 								.get("totalCount").getAsInt();
 				System.out.println(">> area=" + areaCode + " type=" + contentTypeId
-						+ " ���긽 " + total + "嫄�");
+						+ " 대상 " + total + "건");
 			}
 
 			List<Object[]> batch = new ArrayList<Object[]>();
@@ -56,8 +56,8 @@ public class TourApiCollector {
 
 				String id   = ApiUtil.str(o, "contentid");
 				String name = ApiUtil.str(o, "title");
-				String lats = ApiUtil.str(o, "mapy");   // �쐞�룄
-				String lngs = ApiUtil.str(o, "mapx");   // 寃쎈룄
+				String lats = ApiUtil.str(o, "mapy");   // 위도
+				String lngs = ApiUtil.str(o, "mapx");   // 경도
 
 				if (id.isEmpty() || name.isEmpty()
 				 || lats.isEmpty() || lngs.isEmpty()) { skipped++; continue; }
@@ -75,7 +75,7 @@ public class TourApiCollector {
 				if (!addr2.isEmpty()) addr = addr + " " + addr2;
 				if (addr.isEmpty()) { skipped++; continue; }
 
-				addr = normalizeAddr(addr);          // �쁾 �뻾�젙援ъ뿭紐� �넻�씪
+				addr = normalizeAddr(addr);          // ★ 행정구역명 통일
 
 				String[] rs = splitRegion(addr);
 				String img  = ApiUtil.str(o, "firstimage");
@@ -91,13 +91,13 @@ public class TourApiCollector {
 						cut(ApiUtil.str(o, "tel"), 30),
 						Double.valueOf(lat),
 						Double.valueOf(lng),
-						cut(img, 300),               // image_name �넀 �궗吏�
+						cut(img, 300),               // image_name ← 사진
 						null                         // intro
 				});
 			}
 
 			saved += dao.saveBatch(batch);
-			System.out.println("   [" + page + "p] ���옣 " + saved + " / �젣�쇅 " + skipped);
+			System.out.println("   [" + page + "p] 저장 " + saved + " / 제외 " + skipped);
 
 			if (items.size() < 100) break;
 			page++;
@@ -105,16 +105,16 @@ public class TourApiCollector {
 		}
 
 		return "area=" + areaCode + " type=" + contentTypeId
-				+ " �넂 ���옣 " + saved + "嫄�, �젣�쇅 " + skipped + "嫄�";
+				+ " → 저장 " + saved + "건, 제외 " + skipped + "건";
 	}
 
-	/** TourAPI�쓽 �넻�빀 �씠�쟾 �뻾�젙援ъ뿭紐낆쓣 �넻�빀�떆 紐낆묶�쑝濡� 蹂��솚 */
+	/** TourAPI의 통합 이전 행정구역명을 통합시 명칭으로 변환 */
 	private String normalizeAddr(String addr) {
 		if (addr == null) return null;
-		if (addr.startsWith("愿묒＜愿묒뿭�떆"))
-			return "�쟾�궓愿묒＜�넻�빀�듅蹂꾩떆" + addr.substring("愿묒＜愿묒뿭�떆".length());
-		if (addr.startsWith("�쟾�씪�궓�룄"))
-			return "�쟾�궓愿묒＜�넻�빀�듅蹂꾩떆" + addr.substring("�쟾�씪�궓�룄".length());
+		if (addr.startsWith("광주광역시"))
+			return "전남광주통합특별시" + addr.substring("광주광역시".length());
+		if (addr.startsWith("전라남도"))
+			return "전남광주통합특별시" + addr.substring("전라남도".length());
 		return addr;
 	}
 
@@ -126,7 +126,7 @@ public class TourApiCollector {
 
 	private String[] splitRegion(String addr) {
 		String[] p = addr.trim().split("\\s+");
-		String region  = p.length > 0 ? p[0] : "湲고�";
+		String region  = p.length > 0 ? p[0] : "기타";
 		String sigungu = p.length > 1 ? p[1] : null;
 		return new String[] { region, sigungu };
 	}
@@ -136,7 +136,7 @@ public class TourApiCollector {
 		return s.length() <= len ? s : s.substring(0, len);
 	}
 
-	/** response.body.items.item �� 0嫄댁씠硫� items媛� 鍮� 臾몄옄�뿴濡� �샂 */
+	/** response.body.items.item 이 0건이면 items가 빈 문자열로 옴 */
 	private JsonArray items(JsonObject root) {
 		try {
 			JsonElement items = root.getAsJsonObject("response")
@@ -147,7 +147,7 @@ public class TourApiCollector {
 			return items.getAsJsonObject().getAsJsonArray("item");
 
 		} catch (Exception e) {
-			System.out.println("=== �쓳�떟 �솗�씤 �븘�슂 ===");
+			System.out.println("=== 응답 확인 필요 ===");
 			ApiUtil.print(root);
 			return null;
 		}
