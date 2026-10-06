@@ -86,7 +86,7 @@
 }
 </style>
 <c:choose>
-	<c:when test="${session.role=user}">
+	<c:when test="${sessionScope.role=user}">
 		<div>
 			<table class="notice">
 				<tr class="notice_header">

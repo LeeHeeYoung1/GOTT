@@ -2,6 +2,8 @@ package com.kedu.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +20,7 @@ public class NoticeController {
 	private NoticeDAO ndao;
 	
 	@RequestMapping("/notice_list")
-	public String noticeList(Model model) {
+	public String noticeList(Model model, HttpSession session) {
 		List<NoticeDTO> nlist = ndao.list();
 		model.addAttribute("nlist", nlist);
 		return "notice/notice_list";
@@ -32,4 +34,14 @@ public class NoticeController {
 		return "notice/notice";
 	}
 
+	@RequestMapping("/notice_register")
+	public String notice_register() {
+		return "notice/register";
+	}
+	
+	@RequestMapping("/register")
+	public String register(NoticeDTO ndto) {
+		ndao.insert(ndto);
+		return "notice/notice_list";
+	}
 }

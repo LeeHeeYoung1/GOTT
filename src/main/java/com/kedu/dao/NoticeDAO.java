@@ -29,4 +29,9 @@ public class NoticeDAO {
 		String sql = "update notice set view_count = view_count + 1 where notice_id = ?";
 		return jdbc.update(sql, notice_id);
 	}
+	
+	public int insert(NoticeDTO dto) {
+		String sql = "insert into notice values(notice_seq.nextval, ?, ?, ?, 0, systimestamp, ?)";
+		return jdbc.update(sql, dto.getTitle(), dto.getContents(), dto.getWriter(), dto.getImportant());
+	}
 }
