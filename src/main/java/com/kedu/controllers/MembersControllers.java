@@ -155,12 +155,12 @@ public class MembersControllers {
 	@RequestMapping("/idsearch")
 	public String idsearch(MembersDTO mdto) {
 		
-		System.out.println("ÀÌ¸§ : " + mdto.getName());
-		System.out.println("ÀÌ¸ÞÀÏ : " + mdto.getEmail());
+		System.out.println("ì´ë¦„ : " + mdto.getName());
+		System.out.println("ì´ë©”ì¼ : " + mdto.getEmail());
 		
 		String id = mdao.findId(mdto);
 		
-		System.out.println("Ã£Àº ID : " + id);
+		System.out.println("ì°¾ì€ ID : " + id);
 		 
 		if(id == null) {
 			return "";
@@ -216,22 +216,22 @@ public class MembersControllers {
 	@ResponseBody
 	@RequestMapping("/updatepw")
 	public String updatepw(String pw, HttpSession session) {
-		// ÀÌ¸ÞÀÏ ÀÎÁõ ¿©ºÎ È®ÀÎ
+		// ì´ë©”ì¼ ì¸ì¦ ì—¬ë¶€ í™•ì¸
 	    Boolean verified = (Boolean)session.getAttribute("pwVerified");
 	    if(verified == null || !verified) {
 	        return "notVerified";
 	    }
-	    // ºñ¹Ð¹øÈ£¸¦ º¯°æÇÒ ¾ÆÀÌµð °¡Á®¿À±â
+	    // ë¹„ë°€ë²ˆí˜¸ë¥¼ ë³€ê²½í•  ì•„ì´ë”” ê°€ì ¸ì˜¤ê¸°
 	    String id = (String)session.getAttribute("pwFindId");
 	    if(id == null) {
 	        return "fail";
 	    }
-	    // ºñ¹Ð¹øÈ£ ¾ÏÈ£È­
+	    // ë¹„ë°€ë²ˆí˜¸ ì•”í˜¸í™”
 	    String encryptedPw = EncryptionUtils.encryptSHA512(pw);
-	    // DB ºñ¹Ð¹øÈ£ º¯°æ
+	    // DB ë¹„ë°€ë²ˆí˜¸ ë³€ê²½
 	    int result = mdao.updatePassword(id, encryptedPw);
 	    if(result > 0) {
-	        // ºñ¹Ð¹øÈ£ Ã£±â °ü·Ã ¼¼¼Ç »èÁ¦
+	        // ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸° ê´€ë ¨ ì„¸ì…˜ ì‚­ì œ
 	        session.removeAttribute("pwEmailcode");
 	        session.removeAttribute("pwFindId");
 	        session.removeAttribute("pwFindEmail");
