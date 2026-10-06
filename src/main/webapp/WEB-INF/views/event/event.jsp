@@ -87,6 +87,39 @@
             width: 90%;
             border: 1px solid #2563eb;
             margin: auto;
+            height: auto;
+            position: relative;
+        }
+        .maineventbox img {
+            width: 100%;
+            z-index: 1;
+            position: absolute;
+        }
+        .eventText{
+            position: absolute;
+            z-index: 2;
+        }
+        .eventzone {
+            width: 90%;
+            border: 1px solid #2563eb;
+            margin: auto;
+            height: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .eventbox {
+            width: 100%;
+            height: auto;
+            border: 1px solid red;
+        }
+
+        .eventbox img {
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: block;
+            border-radius: 8px;
         }
 
         hr {
@@ -117,9 +150,7 @@
         }
 
     </style>
-</head>
 
-<body>
 
 <div class="container">
     <div class="header flex-between">
@@ -156,7 +187,7 @@
 
     <div class="eventcontainer">
         <div class="maineventbox">
-            <img src="" alt="mianbanner">
+            <img src="background.jpg" alt="mianbanner">
             <div class="eventText">
                 <h1>국내여행</h1>
                 <h3>특별한 순간을 만나보세요!</h3>
@@ -168,7 +199,7 @@
                 <div class="eventbox">
                     <img src="${i.imageName}" alt="${i.title}">
                     <div class="eventText">
-                        <h3>${i.titie}</h3>
+                        <h3>${i.title}</h3>
                         <p>${i.contents}</p>
                         <button>${i.title} 여행 바로가기</button>
                     </div>
@@ -193,5 +224,6 @@
 
 
 </script>
+
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
