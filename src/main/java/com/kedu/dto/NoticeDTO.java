@@ -10,6 +10,7 @@ public class NoticeDTO {
 	private int view_count;
 	private Timestamp write_date;
 	private String important;
+	private String nickname;
 	
 	public NoticeDTO () {}
 	
@@ -66,7 +67,11 @@ public class NoticeDTO {
 	public void setImportant(String important) {
 		this.important = important;
 	}
-	
-	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	
 }

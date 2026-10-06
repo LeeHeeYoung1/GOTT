@@ -20,9 +20,12 @@ public class NoticeController {
 	private NoticeDAO ndao;
 	
 	@RequestMapping("/notice_list")
-	public String noticeList(Model model, HttpSession session) {
+	public String noticeList(Model model) {
 		List<NoticeDTO> nlist = ndao.list();
 		model.addAttribute("nlist", nlist);
+		
+		List<NoticeDTO> ilist = ndao.important();
+		model.addAttribute("ilist", ilist);
 		return "notice/notice_list";
 	}
 	
@@ -40,8 +43,21 @@ public class NoticeController {
 	}
 	
 	@RequestMapping("/register")
-	public String register(NoticeDTO ndto) {
+	public String register(NoticeDTO ndto, HttpSession session) {
+		ndto.setWriter((String) session.getAttribute("loginId"));
 		ndao.insert(ndto);
-		return "notice/notice_list";
+		return "redirect:/notice/notice_list";
+	}
+	
+	@RequestMapping("/notice_delete")
+	public String delete(int notice_id) {
+		ndao.delete(notice_id);
+		return "redirect:/notice/notice_list";
+	}
+	
+	@RequestMapping("/notice_update")
+	public String update(NoticeDTO ndto) {
+		ndao.update(ndto);
+		return "redirect:/notice/detail?notice_id="+ndto.getNotice_id();
 	}
 }
