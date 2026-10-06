@@ -661,7 +661,7 @@ button:hover {
           <a href="#">이벤트</a>
           <a href="#">지역</a>
           <a href="#">추천여행지</a>
-          <a href="#">숙박업소</a>
+          <a href="/reservation/list">숙박업소</a>
           <a href="#">리뷰</a>
           <a href="#">여행 플래너</a>
           <a href="#">공지사항</a>

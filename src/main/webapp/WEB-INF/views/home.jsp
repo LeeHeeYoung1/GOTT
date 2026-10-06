@@ -15,8 +15,11 @@
   src="https://code.jquery.com/jquery-3.7.1.js"
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
-  <style>
-  
+  <style>	
+  		html {
+		    scroll-behavior: smooth;
+		}
+  		
         body{
             position: relative;
         }
@@ -216,8 +219,8 @@
         }
 
         .mapzone {
-            width: 800px;
-            height: 800px;
+            width: 700px;
+            height: 700px;
             border: 2px solid black;
             margin: auto;
         }
@@ -295,6 +298,7 @@
             position: fixed;
             left: 80px;
             top: 150px;
+            z-index: 3;
         }
         .linkbar nav {
             display: flex;
@@ -313,6 +317,9 @@
             background-color: #318de4;
             height: 4px;
             transition: 0.5s;
+        }
+        #vertical-underline a {
+        	transition: 0.5s;
         }
 
         .linkbarmain {
@@ -769,8 +776,8 @@
 
 	var container = document.getElementById('map');
 	var options = {
-		center: new kakao.maps.LatLng(33.450701, 126.570667),
-		level: 3
+		center: new kakao.maps.LatLng(36.35, 127.85),
+		level: 13
 	};
 	
 	var map = new kakao.maps.Map(container, options);

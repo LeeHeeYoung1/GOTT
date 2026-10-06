@@ -21,16 +21,12 @@ public class EmailService {
 	public void sendEmail(String receiverEmail, String code) throws Exception {
 		Properties props = new Properties();
 		
-		 // Gmail SMTP ¼­¹ö
         props.put("mail.smtp.host", "smtp.gmail.com");
 
-        // SMTP Æ÷Æ®
         props.put("mail.smtp.port", "587");
 
-        // Gmail ·Î±×ÀÎ ÇÊ¿ä
         props.put("mail.smtp.auth", "true");
 
-        // STARTTLS »ç¿ë
         props.put("mail.smtp.starttls.enable", "true");
 
 		Session session = Session.getInstance(props, new Authenticator() {
@@ -44,31 +40,26 @@ public class EmailService {
             }
 		});
 		
-//		¸ŞÀÏ ÀÛ¼º
         MimeMessage message = new MimeMessage(session);
 
-//      º¸³»´Â »ç¶÷
         message.setFrom(new InternetAddress(senderEmail));
 
-//      ¹Ş´Â »ç¶÷
         message.setRecipient(
                 Message.RecipientType.TO,
                 new InternetAddress(receiverEmail)
         );
 
-//      Á¦¸ñ
-        message.setSubject("[GOTT] ºñ¹Ğ¹øÈ£ Ã£±â ÀÎÁõ¹øÈ£");
+        message.setSubject("[GOTT] ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸° ì¸ì¦ë²ˆí˜¸");
 
-// 		³»¿ë
         message.setText(
-                "GOTT ºñ¹Ğ¹øÈ£ Ã£±â ÀÎÁõ¹øÈ£ÀÔ´Ï´Ù.\n\n"
-                + "ÀÎÁõ¹øÈ£ : " + code
+                "GOTT ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸° ì¸ì¦ë²ˆí˜¸ì…ë‹ˆë‹¤." 
                 + "\n\n"
-                + "º»ÀÎÀÌ ¿äÃ»ÇÏÁö ¾ÊÀº °æ¿ì ÀÌ ¸ŞÀÏÀ» ¹«½ÃÇØÁÖ¼¼¿ä."
+                + "ì¸ì¦ë²ˆí˜¸ : " + code
+                + "\n\n"
+                + "ë³¸ì¸ì´ ìš”ì²­í•˜ì§€ ì•Šì€ ê²½ìš° ì´ ë©”ì¼ì„ ë¬´ì‹œí•´ì£¼ì„¸ìš”.."
         );
 
 
-//      ¸ŞÀÏ ¹ß¼Û
         Transport.send(message);
 		
 		
