@@ -232,7 +232,7 @@ hr {
     font-size: 11px;
 }
 
-.writeBtn {
+#writeBtn {
     height: 32px;
     margin-left: 6px;
     padding: 0 15px;
@@ -251,6 +251,92 @@ hr {
     margin : auto;
     margin-top : 40px;
     overflow-y: auto;
+}
+
+/* 게시글 목록 */
+
+.freeBoardContentsBox {
+    width: 900px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    overflow: hidden;
+    background: white;
+}
+
+.freeBoardTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.freeBoardTable th {
+    height: 45px;
+    background: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+    color: #555;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.freeBoardTable td {
+    height: 48px;
+    padding: 0 10px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    font-size: 12px;
+    text-align: center;
+}
+
+.freeBoardTable tr:last-child td {
+    border-bottom: 0;
+}
+
+/* 각 열 크기 */
+
+.number {
+    width: 70px;
+}
+
+.title {
+    width: auto;
+    text-align: left !important;
+}
+
+.file {
+    width: 90px;
+}
+
+.writer {
+    width: 100px;
+}
+
+.view {
+    width: 70px;
+}
+
+.date {
+    width: 100px;
+}
+
+/* 제목 */
+
+.title a {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #333;
+}
+
+.title a:hover {
+    text-decoration: underline;
+}
+
+/* 게시글 마우스 올렸을 때 */
+
+.freeBoardTable tr:hover {
+    background: #fafafa;
 }
 
 </style>
@@ -305,7 +391,6 @@ hr {
         <a href="/board/freeBoard">자유게시판</a>
         <a href="/board/reviewBoard" class="on">리뷰게시판</a>
     </nav>
-
     <!-- 검색 -->
 
     <div class="searchArea">
@@ -334,14 +419,53 @@ hr {
             <option>댓글순</option>
         </select>
 
-        <button class="writeBtn">글쓰기</button>
-
+        <button id="writeBtn">글쓰기</button>
+		<script>
+		 let writeBtn = document.getElementById("writeBtn");
+		 writeBtn.onclick = function() {
+			 location.href = "/board/boardWrite";
+		 };
+		</script>
     </div>
-        <div class="freeBoardContentsBox">
-            <div class="freeBoardContents"></div>
+      <div class="freeBoardContentsBox">
 
-        
-    	</div>
+    <table class="freeBoardTable">
+
+        <tr>
+            <th class="number">번호</th>
+            <th class="title">제목</th>
+            <th class="file">첨부파일</th>
+            <th class="writer">작성자</th>
+            <th class="view">조회수</th>
+            <th class="date">작성일</th>
+        </tr>
+
+        <c:forEach var="i" items="${boardList}">
+
+            <tr>
+                <td class="number">${i.seq}</td>
+
+                <td class="title">
+                    <a href="/board/boardContent?seq=${i.seq}">
+                        ${i.title}
+                    </a>
+                </td>
+
+                <td class="file">📎</td>
+
+                <td class="writer">${i.writer}</td>
+
+                <td class="view">${i.view_count}</td>
+
+                <td class="date">
+                    ${i.write_date.toString().substring(0, 10)}
+                </td>
+            </tr>
+
+        </c:forEach>
+
+    </table>
+
 </div>
 
 
