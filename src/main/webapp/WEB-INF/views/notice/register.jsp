@@ -164,8 +164,6 @@
 <div class="register_container">
 	<form action="/notice/register" method="post">
 		<div class="register_header">
-			<input type="hidden" id="writer" name="writer"
-				value="${sessionScope.id}">
 			<input type="text" id="title" name="title"
 				placeholder="공지 제목을 입력하세요.">
 		</div>
