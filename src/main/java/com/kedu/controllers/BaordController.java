@@ -62,7 +62,7 @@ public class BaordController {
 		dto.setSeq(seqValue);
 		bdao.insert(dto);
 		
-		String path = "resources/uploads/";
+		String path = "\\\\10.5.4.10\\gott_uploads\\";
 		
 		for (MultipartFile file : files) {
 			if (file.isEmpty()) {
@@ -94,7 +94,17 @@ public class BaordController {
 	
 	@RequestMapping("/download")
 	public void download(String oriname, String sysname, HttpServletResponse resp, Model model) throws Exception {
-		File target = new File("resources/uploads/" + sysname);
+		
+		System.out.println("원본파일명 : " + oriname);
+	    System.out.println("시스템파일명 : " + sysname);
+		
+	    String path = "\\\\10.5.4.10\\gott_uploads\\";
+		File target = new File(path + sysname);
+		
+
+	    System.out.println("파일경로 : " + target.getAbsolutePath());
+	    System.out.println("파일존재 : " + target.exists());
+
 		
 		oriname = new String(oriname.getBytes(), "ISO-8859-1");
 		
