@@ -1092,48 +1092,22 @@ body {
           <!--여기부터 찜 리스트-->
 
           <div class="wishlistContainer">
+          
             <div class="sectionTitle">
-              <span>찜한 여행지 숙소</span>
+              <span>찜한 관광지 맛집 숙소</span>
               <a href="#">더 보기 &gt;</a>
             </div>
+            
             <c:forEach var="wishlist" items="${wishlist}">
-
               <div class="wishlistImg">
-
                 <img src="${i.image}" alt="${i.title}">
 
                 <div class="wishlistInfo">
                   <h3>${i.title}</h3>
                   <p>${i.description}</p>
                   <button>자세히 보기</button>
-                </div>
-
-              </div>
-              
-              <div class="wishlistImg">
-
-                <img src="${i.image}" alt="${i.title}">
-
-                <div class="wishlistInfo">
-                  <h3>${i.title}</h3>
-                  <p>${i.description}</p>
-                  <button>자세히 보기</button>
-                </div>
-
-              </div>
-              
-              <div class="wishlistImg">
-
-                <img src="${i.image}" alt="${i.title}">
-
-                <div class="wishlistInfo">
-                  <h3>${i.title}</h3>
-                  <p>${i.description}</p>
-                  <button>자세히 보기</button>
-                </div>
-
-              </div>
-
+               	</div>
+              </div>                           
             </c:forEach>
 
           </div>
