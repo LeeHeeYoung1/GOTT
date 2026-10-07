@@ -13,17 +13,44 @@
 <style>
   
         .eventcontainer {
-            margin-top: 150px;
+            margin-top: 80px;
             width: 100%;
             height: auto;
+            padding-top: 30px;
             padding-bottom: 60px;
             border: 1px solid black;
         }
+        .title {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            padding-top: 40px;
+        }
+        .subtitle {
+            width: 100%;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+        }
+
+        .title h2 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .subtitle h5 {
+            color: #6B7280;
+        }
+        
         .maineventbox {
             width: 90%;
             max-width: 1200px;
             border: 1px solid blue;
-            margin: auto;
+            margin: 0 auto;
             height: 450px;
             position: relative;
             overflow: hidden;
@@ -80,7 +107,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            border: 1px solid blue;
         }
         .eventbox {
             height: 280px;
@@ -154,10 +180,18 @@
 
 
 <div class="container">
+
+	<div class="title">
+        <h2>GOTT 특별 이벤트</h2>
+    </div>
+    <br>
+    <div class="subtitle">
+        <h5>여행의 즐거움을 더해줄 GOTT만의 특별한 혜택을 만나보세요.</h5>
+    </div>
     
     <div class="eventcontainer">
         <div class="maineventbox">
-            <img src="/images/background.jpg" alt="mianbanner">
+            <img src="/images/mainbackground1.png" alt="mianbanner">
             <div class="eventText">
                 <h1>국내여행</h1>
                 <h3>특별한 순간을 만나보세요!</h3>
@@ -166,15 +200,26 @@
         </div>
         <div class="eventzone">
             <c:forEach var="i" items="${banner}">
-                <div class="eventbox">
+               	<div class="eventbox">
                     <img src="$/images/{i.imageName}" alt="${i.title}">
                     <div class="eventText">
                         <h3>${i.title}</h3>
                         <p>${i.contents}</p>
                         <button>${i.title} 여행 바로가기</button>
-                    </div>
+                	</div>
                 </div>
             </c:forEach>
+            
+            <!-- db에 값 넣으면 삭제 할 코드 -->
+            	<div class="eventbox">
+                    <img src="$/images/{i.imageName}" alt="경주">
+                    <div class="eventText">
+                        <h3>경주</h3>
+                        <p>천년의 고도 경주로 떠나보세요</p>
+                        <button>경주 여행 바로가기</button>
+                    </div>
+            	</div>
+            	
         </div>
     </div>
     
