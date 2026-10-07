@@ -216,6 +216,41 @@ hr {
     border-color: #222;
 }
 
+.fileBox {
+    padding: 15px 30px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+}
+
+.fileTitle {
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #777;
+}
+
+.fileList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.fileList a {
+    display: inline-block;
+    padding: 7px 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    background: white;
+    color: #555;
+    font-size: 11px;
+}
+
+.fileList a:hover {
+    background: #f1f1f1;
+    color: #222;
+}
+
 </style>
 
 </head>
@@ -295,15 +330,40 @@ hr {
                 <span>조회수 ${boardContent.view_count}</span>
 
                 <span>
-                    ${boardContent.write_date.toString().substring(0, 10)}
+                    ${boardContent.write_date.toString().substring(0, 10)}<br>
                 </span>
-
+              
             </div>
 
         </div>
+        
+        <!-- 첨부파일 -->
 
+<c:if test="${not empty flist}">
 
-        <!-- 내용 -->
+    <div class="fileBox">
+
+        <div class="fileTitle">
+            첨부파일
+        </div>
+
+        <div class="fileList">
+
+            <c:forEach var="i" items="${flist}">
+
+                <a href="/board/download?oriname=${i.oriname}&sysname=${i.sysname}">
+                    ${i.oriname}
+                </a>
+
+            </c:forEach>
+
+        </div>
+
+    </div>
+
+</c:if>
+
+       <!-- 내용 -->
 
         <div class="contents">
 
