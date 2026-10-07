@@ -13,6 +13,7 @@ public class RoomDTO {
 	private Integer priceWeekday;
 	private Integer priceWeekend;
 	private String image1;
+	private Integer remainCount;
 	
 	public RoomDTO(int roomId, int placeId, String roomName, Integer roomCount, Integer baseCount, Integer maxCount,
 			Integer priceWeekday, Integer priceWeekend, String image1, String image2, String image3, String image4,
@@ -173,5 +174,11 @@ public class RoomDTO {
 
 	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
+	}
+	public Integer getRemainCount() {
+		return remainCount;
+	}
+	public void setRemainCount(Integer remainCount) {
+		this.remainCount = remainCount;
 	}
 }
