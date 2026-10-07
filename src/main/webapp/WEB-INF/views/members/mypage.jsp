@@ -1041,7 +1041,7 @@ body {
 			                            </c:when>
 			                            
 			                            <c:otherwise>
-			                                <strong>· 적립 마일리지 - ${rs.mileage}M</strong>
+			                                <strong>· 회수 마일리지 - ${rs.mileage}M</strong>
 			                            </c:otherwise>                           
 			                        </c:choose>                     
 			                    </p>
@@ -1053,8 +1053,8 @@ body {
 			                    <button disabled>${rs.status}</button>
 			                    <button type="button" class="detailBtn">예약 상세</button>
 			                    <c:if test="${rs.status ne '예약취소'}">
-			                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
-			                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
+			                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 변경</button>
+			                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: wheat;">예약 취소</button>
 			                    </c:if>
 			                </div>
 			            </div>
@@ -1075,7 +1075,7 @@ body {
 			                    <button type="button" class="backBtn">돌아가기</button>
 			                    <c:if test="${rs.status ne '예약취소'}">
 			                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
-			                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
+			                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: rgb(153, 44, 44);">예약 취소</button>
 			                    </c:if>
 			                </div>
 			            </div>
@@ -1319,19 +1319,14 @@ $(".updateBtn").on("click", function() {
 });
 
 
-
 $(".detailBtn").on("click", function() {
-
  $(this).closest(".flipCard").addClass("flipped");
-
 });
 
 
 
 $(".backBtn").on("click", function() {
-
  $(this).closest(".flipCard").removeClass("flipped");
-
 });
 
 </script>
