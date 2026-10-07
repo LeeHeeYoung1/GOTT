@@ -12,182 +12,152 @@
 
 <style>
   
-        body{
-            position: relative;
-        }
-        .header {
-            width: 80%;
-            height: 70px;
-            padding: 0 30px;
-            position : fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            margin-bottom: 70px;
-        }
-        
-        .logobox {
-            width: 120px;
-            height: 70px;
-            margin-left: 50px;
-        }
-
-        .logobox img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .navi {
-            width: 50%;
-            margin: 0 auto;
-        }
-
-        .textzone {
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .textzone:hover {
-            color: #2563eb;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .textbox {
-            padding: 7px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .textbox:hover {
-            background-color: #f3f4f6;
-        }
-
-        .icon {
-            margin-left: 10px;
-            font-size: 20px;
-        }
-        .icon:hover {
-            cursor: pointer;
-        }
-
         .eventcontainer {
             margin-top: 150px;
             width: 100%;
             height: auto;
+            padding-bottom: 60px;
             border: 1px solid black;
         }
         .maineventbox {
             width: 90%;
-            border: 1px solid #2563eb;
+            max-width: 1200px;
+            border: 1px solid blue;
             margin: auto;
-            height: auto;
+            height: 450px;
             position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
         .maineventbox img {
             width: 100%;
-            z-index: 1;
-            position: absolute;
+    		height: 100%;
+    		display: block;
+    		object-fit: cover;
         }
-        .eventText{
-            position: absolute;
-            z-index: 2;
-        }
+        .maineventbox::after {
+		    content: "";
+		    position: absolute;
+		    inset: 0;
+		    background: linear-gradient(
+		        to top,
+		        rgba(0, 0, 0, 0.7),
+		        rgba(0, 0, 0, 0.1)
+		    );
+		}	
+		.maineventbox .eventText {
+		    position: absolute;
+		    left: 50px;
+		    bottom: 45px;
+		    z-index: 2;
+		    color: white;
+		}
+		.maineventbox .eventText h1 {
+		    margin: 0 0 12px;
+		    font-size: 42px;
+		    font-weight: 700;
+		}
+		
+		.maineventbox .eventText h3 {
+		    margin: 0 0 8px;
+		    font-size: 22px;
+		    font-weight: 500;
+		}
+		
+		.maineventbox .eventText h5 {
+		    margin: 0;
+		    font-size: 14px;
+		    font-weight: 400;
+		    opacity: 0.7;
+		}
+		
         .eventzone {
             width: 90%;
-            border: 1px solid #2563eb;
-            margin: auto;
+            max-width: 1200px;
+            margin: 25px auto 0;
             height: auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 10px;
+            border: 1px solid blue;
         }
         .eventbox {
-            width: 100%;
-            height: auto;
+            height: 280px;
+            position: relative;
+    		overflow: hidden;
+    		border-radius: 14px;
+    		background-color: #eee;
+    		cursor: pointer;
+    		box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);	
             border: 1px solid red;
         }
 
         .eventbox img {
             width: 100%;
-            height: 100%;
-            z-index: 0;
-            display: block;
-            border-radius: 8px;
+		    height: 100%;
+		    display: block;
+		    object-fit: cover;
+		    transition: transform 0.4s ease;
         }
-
-        hr {
-            margin: 25px 0px;
-            border: none;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .footer {
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #777;
-            background-color: #f8fafc;
-            font-size: 13px;
-        }
-
-        .footer p {
-            margin: 0;
-        }
-        .footer .textbox {
-            margin-top: 10px;
-            color: #6B7280;
-            background-color: #F8FAFA;
-        }
-
+		.eventbox::after {
+		    content: "";
+		    position: absolute;
+		    inset: 0;
+		    background: linear-gradient
+		    ( to top,
+		    rgba(0, 0, 0, 0.75),
+		    rgba(0, 0, 0, 0.05)
+		    );
+		}
+		.eventbox:hover img {
+		    transform: scale(1.05);
+		}
+		.eventbox .eventText {
+		    position: absolute;
+		    left: 20px;
+		    right: 20px;
+		    bottom: 20px;
+		    z-index: 2;
+		    color: white;
+		}
+		
+		.eventbox .eventText h3 {
+		    margin: 0 0 6px;
+		    font-size: 20px;
+		    font-weight: 600;
+		}
+		
+		.eventbox .eventText p {
+		    margin: 0 0 12px;
+		    font-size: 12px;
+		    opacity: 0.8;
+		}
+		.eventbox button {
+		    padding: 8px 14px;
+		    border: none;
+		    border-radius: 6px;
+		    background-color: white;
+		    color: black;
+		    font-size: 12px;
+		    font-weight: 600;
+		    cursor: pointer;
+		    transition: 0.2s;
+		}
+		
+		.eventbox button:hover {
+		    background-color: #2563eb;
+		    color: white;
+		}
+		
     </style>
 
 
 <div class="container">
-    <div class="header flex-between">
-        <div class="logobox">
-            <a href="/"><img src="images/logo.png" alt="GOTT 로고"></a>
-        </div>
-        <div class="navi flex-between">
-            <div class="textzone"><a href="">이벤트</a></div>
-            <div class="textzone"><a href="">지역</a></div>
-            <div class="textzone"><a href="">추천여행지</a></div>
-            <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
-            <div class="textzone"><a href="">리뷰</a></div>
-            <div class="textzone"><a href="">여행플래너</a></div>
-            <div class="textzone"><a href="/board/freeBoard">게시판</a></div>
-        </div>
-        <c:choose>
-	        <c:when test="${loginId != null}">
-		        <div class="user-menu">
-		       	 	<div class="textbox">${nickname}님</div>
-		            <div class="textbox"><a href="/members/logout">로그아웃</a></div>
-		            <div class="textbox"><a href="members/mypage">마이페이지</a></div>
-		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
-		        </div>
-	        </c:when>
-	        <c:otherwise>
-	        	<div class="user-menu">
-	        		<div class="textbox"><a href="/members/loginpage">로그인</a></div>
-		            <div class="textbox"><a href="/members/signuppage">회원가입</a></div>
-		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
-		        </div>
-	        </c:otherwise>
-		</c:choose>
-    </div>
-
+    
     <div class="eventcontainer">
         <div class="maineventbox">
-            <img src="background.jpg" alt="mianbanner">
+            <img src="/images/background.jpg" alt="mianbanner">
             <div class="eventText">
                 <h1>국내여행</h1>
                 <h3>특별한 순간을 만나보세요!</h3>
@@ -197,7 +167,7 @@
         <div class="eventzone">
             <c:forEach var="i" items="${banner}">
                 <div class="eventbox">
-                    <img src="${i.imageName}" alt="${i.title}">
+                    <img src="$/images/{i.imageName}" alt="${i.title}">
                     <div class="eventText">
                         <h3>${i.title}</h3>
                         <p>${i.contents}</p>
@@ -208,19 +178,9 @@
         </div>
     </div>
     
-
-    <hr>
-    <div class="footer">
-        <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-        <p>회사명 : GOTT | 대표 : ??? | 사업자등록번호 : 123-45-67890</p>
-        <p>이용약관 | 개인정보처리방침 | 고객센터</p>
-        <div class="textbox">사이트로고</div>
-    </div>
 </div>
 
 <script>
-
-    
 
 
 </script>
