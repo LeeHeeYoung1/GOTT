@@ -16,9 +16,6 @@ public class BoardDAO {
 	private JdbcTemplate jdbc;
 	
 	public int insert(BoardDTO dto) {
-		  System.out.println("title = " + dto.getTitle());
-		    System.out.println("contents = " + dto.getContents());
-		    System.out.println("writer = " + dto.getWriter());
 		String sql = "insert into board values(?,?,?,0,systimestamp,?)";
 		 return jdbc.update(sql,
 				 	dto.getSeq(),
