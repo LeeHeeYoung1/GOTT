@@ -12,7 +12,7 @@
     <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <title>GOTT 여행 일정 플래너</title>
 
-  <style>
+   <style>
 * {
   box-sizing: border-box;
 }
@@ -31,14 +31,6 @@ body {
 .mypageContainer a {
   color: inherit;
   text-decoration: none;
-}
-
-/*  마이페이지 제목 영역만 적용 */
-.mypageTitle h2,
-.mypageTitle h5 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /*  마이페이지 버튼만 적용 */
@@ -177,12 +169,17 @@ body {
 }
 
 
-/* ---------- 5-1. 상단 요약 바 ---------- */
+/* ---------- 5-1. 상단 요약 바 (수정) ---------- */
 
 .mybarBox {
   width: 100%;
 
   display: flex;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
 }
 
 .a1,
@@ -193,180 +190,239 @@ body {
   width: 20%;
   height: 80px;
 
-  border: 1px solid black;
-
   display: flex;
   flex-direction: column;
-
   justify-content: center;
   align-items: center;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.a1 p,
-.a2 p,
-.a3 p,
-.a4 p, 
-.a5 p {
+/* 구분선: 테두리 대신 요소 사이에만 선을 넣음 */
+.a2,
+.a3,
+.a4,
+.a5 {
+  border-left: 1px solid #e5e7eb;
+}
+
+.a1 strong,
+.a2 strong,
+.a3 strong,
+.a4 strong,
+.a5 strong {
   margin: 0;
-  font-size: 24px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
 }
 
 .a1 span,
 .a2 span,
 .a3 span,
-.a4 span, 
+.a4 span,
 .a5 span {
-  margin: 0;
-  font-size: 13px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #797472;
 }
 
-
-/* ---------- 5-2. 여행 일정 플래너 ---------- */
+.a1:hover,
+.a2:hover,
+.a3:hover,
+.a4:hover,
+.a5:hover {
+  background-color: #f8fafa;
+}
+/* ---------- 5-2. 여행 일정 플래너 (수정) ---------- */
 
 .plannerContainer {
   margin-top: 80px;
 }
 
 .plannerBox {
-  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
   width: 100%;
-  padding: 20px;
+  padding: 20px 24px;
+  box-sizing: border-box;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background-color: white;
 }
 
+.plannerBox .plannerText strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+}
+
+.plannerBox .plannerText p {
+  margin: 0;
+  font-size: 13px;
+  color: #777;
+  line-height: 1.5;
+}
+
+.plannerBox .plannerBtns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.plannerBox .plannerBtns button {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.plannerBox .plannerBtns .newScheduleBtn {
+  border: none;
+  background-color: #222;
+  color: white;
+  font-weight: 600;
+}
+
+.plannerBox .plannerBtns .newScheduleBtn:hover {
+  background-color: #000;
+}
+
+.plannerBox .plannerBtns .viewShareBtn {
+  border: 1px solid #d9d9d9;
+  background-color: white;
+  color: #333;
+}
+
+.plannerBox .plannerBtns .viewShareBtn:hover {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+}
+
+
+/* ---------- 5-2-1. 내가 공유한 여행 일정 (신규) ---------- */
+
+.sharedPlanContainer {
+  margin-top: 80px;
+}
+
+.sharedPlanCard {
+  display: flex;
+  align-items: stretch;
+
+  width: 100%;
+  min-height: 140px;
+  margin-top: 12px;
+  padding: 18px;
+  box-sizing: border-box;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background-color: white;
+
+  transition: box-shadow 0.2s ease;
+}
+
+.sharedPlanCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.sharedPlanCard .img {
+  width: 150px;
+  height: 100px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+}
+
+.sharedPlanCard .img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sharedPlanInfo {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 25px;
+}
+
+.sharedPlanInfo h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+}
+
+.sharedPlanInfo p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.sharedPlanCondition {
+  width: 130px;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.sharedPlanCondition .shareBadge {
+  padding: 4px 10px;
+  border-radius: 5px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sharedPlanCondition .shareBadge.linkShare {
+  background-color: #fff7ed;
+  color: #c2410c;
+}
+
+.sharedPlanCondition .btnGroup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sharedPlanCondition .btnGroup button {
+  width: 100%;
+  height: 32px;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+}
+
+.sharedPlanCondition .btnGroup button:hover {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+}
 
 /* ---------- 5-3. 예약 리스트 ---------- */
 .reservationContainer{
 	margin-top: 80px;
-}
-
-
-.reservationList {	
-    display: flex !important;
-    flex-direction: row;
-    align-items: stretch;
-
-    width: 100%;
-    min-height: 180px;
-    margin-top: 12px;
-    padding: 18px;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    background-color: white;
-    box-sizing: border-box;
-
-    transition: box-shadow 0.2s ease;
-}
-
-.reservationList:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-
-/* 이미지 */
-.reservationList .img {
-    width: 210px;
-    height: 145px;
-
-    flex-shrink: 0;
-    overflow: hidden;
-
-    border-radius: 8px;
-    background-color: #f1f1f1;
-}
-
-.reservationList .img img {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-}
-
-
-/* 예약 정보 */
-.reservationInfo {
-    flex: 1;
-
-    min-width: 0;
-    padding: 5px 25px;
-}
-
-.reservationInfo h3 {
-    margin: 0 0 12px;
-
-    font-size: 18px;
-    font-weight: 600;
-    color: #222;
-}
-
-.reservationInfo p {
-    margin: 6px 0;
-
-    font-size: 13px;
-    color: #666;
-}
-
-.reservationInfo p:last-child {
-    margin-top: 14px;
-
-    font-size: 15px;
-    font-weight: 600;
-    color: #222;
-}
-
-
-/* 오른쪽 버튼 영역 */
-.reservationCondition {
-    width: 120px;
-
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-
-    gap: 8px;
-
-    padding-left: 15px;
-    border-left: 1px solid #eee;
-
-    flex-shrink: 0;
-}
-
-.reservationCondition button {
-    width: 100%;
-    height: 34px;
-
-    border: 1px solid #d9d9d9;
-    border-radius: 5px;
-
-    background-color: white;
-
-    font-size: 12px;
-    color: #333;
-
-    cursor: pointer;
-}
-
-.reservationCondition button:first-child {
-    border: none;
-
-    background-color: #eff6ff;
-    color: #2563eb;
-
-    font-weight: 600;
-
-    cursor: default;
-}
-
-.reservationCondition button:disabled {
-    opacity: 1;
-}
-
-.reservationCondition button:not(:disabled):hover {
-    background-color: #222;
-    color: white;
-    border-color: #222;
 }
 
 /* 예약 상태 탭 */
@@ -426,55 +482,6 @@ body {
 
     font-weight: 600;
 }
-/* 카드 뒤집기 컨테이너 */
-.flipCard {
-    width: 100%;
-    min-height: 180px;
-    perspective: 1000px;  /* ← 3D 효과 깊이 */
-    margin-top: 12px;
-}
-
-/* 뒤집히는 내부 */
-.flipCardInner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 180px;
-    transition: transform 0.6s ease;  /* ← 뒤집기 속도 */
-    transform-style: preserve-3d;
-}
-
-/* 뒤집힌 상태 */
-.flipCard.flipped .flipCardInner {
-    transform: rotateY(180deg);
-}
-
-/* 앞면 (예약 내역) */
-.flipCardFront,
-.flipCardBack {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    min-height: 180px;
-    backface-visibility: hidden;  /* ← 뒷면 숨기기 */
-
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    background-color: white;
-    padding: 18px;
-    box-sizing: border-box;
-
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-}
-
-/* 뒷면 (예약 상세) */
-.flipCardBack {
-    transform: rotateY(180deg);  /* ← 처음엔 뒤집혀 있음 */
-    background-color: #f8faff;
-}
-
 
 
 /* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
@@ -482,7 +489,98 @@ body {
 .wishlistContainer {
   width: 100%;
   margin-top: 80px;
-  display: flow-root;
+}
+
+/* 탭 (전체 / 여행지 / 숙박업소) */
+.wishlistTab {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 16px;
+}
+
+.wishlistTab button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+}
+
+.wishlistTab button.active {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+  font-weight: 600;
+}
+
+.wishlistTab button:not(.active):hover {
+  background-color: #f2f2f2;
+}
+
+/* 카드 그리드 */
+.wishlistGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* 카드 한 장 */
+.wishlistCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.wishlistCard .img {
+  width: 100%;
+  height: 200px;
+  background-color: #f1f1f1;
+  overflow: hidden;
+}
+
+.wishlistCard .img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wishlistInfo {
+  padding: 14px 16px;
+}
+
+.wishlistInfo h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+}
+
+.wishlistInfo p {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: #777;
+  line-height: 1.4;
+}
+
+.wishlistInfo button {
+  width: 100%;
+  height: 34px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+}
+
+.wishlistInfo button:hover {
+  background-color: #222;
+  color: white;
+  border-color: #222;
 }
 
 /* =========================================================
@@ -916,12 +1014,13 @@ body {
 
       <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
-      <h2>마이페이지</h2>
-      <h5 style="font-size: 13px; color: #7c7c7c;">예약 내역과 찜한 여행지, 내가 남긴 기록을 한 곳에서 관리</h5>
-      <hr style="border: 1px solid rgb(248, 246, 246);">
+      
 
 
       <div class="mypageContainer">
+      <h2 style="margin: 24px 0 4px;">마이페이지</h2>
+        <h5 style="font-size: 13px; color: #7c7c7c; margin: 0 0 16px;">예약 내역과 찜한 여행지, 내가 남긴 기록을 한 곳에서 관리</h5>
+        <hr style="border: 1px solid rgb(248, 246, 246); margin: 0 0 20px;">
 
         <div class="breadcrumb" style="font-size: 12px; margin: 20px;">홈 > 마이페이지 > 대시보드</div>
 
@@ -986,17 +1085,66 @@ body {
 		<!--여기부터 일정 플래너-->
 		
           <div class="plannerContainer">
-	            <div class="sectionTitle">
-	              <span>여행 일정 플래너</span>
-	              <a href="#" style="float: right;">플래너 열기</a>
-	            </div>
-	            
-	            <div class="plannerBox">
-	              <p>찜해둔 장소를 일차별 일정으로 정리해보세요.</p>
-	              <p>관광지·맛집·숙소를 드래그해 일정에 추가하고 완성한 여행을 게시판에 공유할 수 있습니다.</p>
-	              <button>새 일정 만들기</button>
-	            </div>
-          </div>
+		    <div class="sectionTitle">
+		      <span>여행 일정 플래너</span>
+		      <a href="#" style="float: right;">플래너 열기</a>
+		    </div>
+		
+		    <div class="plannerBox">
+		      <div class="plannerText">
+		        <strong>찜해둔 장소를 일차별 일정으로 정리해보세요.</strong>
+		        <p>관광지·맛집·숙소를 드래그해 일정에 추가하고 완성한 여행을 게시판에 공유할 수 있습니다.</p>
+		      </div>
+		
+		      <div class="plannerBtns">
+		        <button type="button" class="newScheduleBtn" onclick="location.href='/members/planner'">새 일정 만들기</button>
+		        <button type="button" class="viewShareBtn" onclick="location.href='#'">공유한 일정 보기</button>
+		      </div>
+		    </div>
+		</div>
+
+
+		<!-- 여기부터 내가 공유한 여행 일정 -->
+		<div class="sharedPlanContainer">
+		
+		    <div class="sectionTitle">
+		      <span>내가 공유한 여행 일정</span>
+		      <a href="#" style="float: right;">게시판에서 전체 보기</a>
+		    </div>
+		
+		    <c:forEach var="plan" items="${myPlannerList}">
+		      <div class="sharedPlanCard">
+		
+		        <div class="img">
+		          <img src="${plan.image}" alt="${plan.title}">
+		        </div>
+		
+		        <div class="sharedPlanInfo">
+		          <h3>${plan.title}</h3>
+		          <p>${plan.startDate} ~ ${plan.endDate} · 방문지 ${plan.spotCount}곳</p>
+		          <p>공유일 ${plan.shareDate} · 조회 ${plan.viewCount} · 공감 ${plan.likeCount}</p>
+		        </div>
+		
+		        <div class="sharedPlanCondition">
+		          <c:choose>
+		            <c:when test="${plan.shareType == '전체공개'}">
+		              <span class="shareBadge">전체 공개</span>
+		            </c:when>
+		            <c:otherwise>
+		              <span class="shareBadge linkShare">링크 공유</span>
+		            </c:otherwise>
+		          </c:choose>
+		
+		          <div class="btnGroup">
+		            <button type="button" class="boardViewBtn" data-planner-id="${plan.plannerId}">게시글 보기</button>
+		            <button type="button" class="planEditBtn" data-planner-id="${plan.plannerId}">일정 수정</button>
+		          </div>
+		        </div>
+		
+		      </div>
+		    </c:forEach>
+		
+		</div>
 
 
 
@@ -1092,25 +1240,35 @@ body {
           <!--여기부터 찜 리스트-->
 
           <div class="wishlistContainer">
-          
-            <div class="sectionTitle">
-              <span>찜한 관광지 맛집 숙소</span>
-              <a href="#">더 보기 &gt;</a>
-            </div>
-            
-            <c:forEach var="wishlist" items="${wishlist}">
-              <div class="wishlistImg">
-                <img src="${i.image}" alt="${i.title}">
 
-                <div class="wishlistInfo">
-                  <h3>${i.title}</h3>
-                  <p>${i.description}</p>
-                  <button>자세히 보기</button>
-               	</div>
-              </div>                           
-            </c:forEach>
-
-          </div>
+			  <div class="sectionTitle">
+			    <span>찜한 관광지 맛집 숙소</span>
+			    <a href="#">더 보기 &gt;</a>
+			  </div>
+			
+			  <div class="wishlistTab">
+			    <button type="button" class="active" data-type="all">전체</button>
+			    <button type="button" data-type="spot">관광지</button>
+			    <button type="button" data-type="stay">맛집</button>
+			    <button type="button" data-type="stay">숙박</button>
+			  </div>
+			
+			  <div class="wishlistGrid">
+			    <c:forEach var="wishList" items="${wishList}">
+			      <div class="wishlistCard">
+			        <div class="img">
+			          <img src="${wishList.image_name}" alt="${wishList.name}">
+			        </div>
+			        <div class="wishlistInfo">
+			          <h3>${wishList.name}</h3>
+			          <p>${wishList.region}</p>
+			          <button type="button">자세히 보기</button>
+			        </div>
+			      </div>
+			    </c:forEach>
+			  </div>
+			
+			</div>
 
           <!-- 여기부터 내가 쓴 리뷰 -->
 
