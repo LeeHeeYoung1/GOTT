@@ -19,11 +19,17 @@ public class BoardDAO {
 		  System.out.println("title = " + dto.getTitle());
 		    System.out.println("contents = " + dto.getContents());
 		    System.out.println("writer = " + dto.getWriter());
-		String sql = "insert into board values(board_seq.nextval, ?, ?, ?, 0, systimestamp)";
+		String sql = "insert into board values(?,?,?,0,systimestamp,?)";
 		 return jdbc.update(sql,
+				 	dto.getSeq(),
 		            dto.getTitle(),
-		            dto.getContents(),
-		            dto.getWriter());
+		            dto.getWriter(),
+		            dto.getContents());
+	}
+	
+	public int getNextVal() {
+		String sql = "select board_seq.nextval from dual";
+		return jdbc.queryForObject(sql, Integer.class);
 	}
 	
 	public List<BoardDTO> selectAll() {
@@ -34,5 +40,9 @@ public class BoardDAO {
 	public BoardDTO boardContent(int seq) {
 		String sql = "select * from board where seq = ?";
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(BoardDTO.class), seq);
+	}
+	public int count(int seq) {
+		String sql = "update board set view_count = view_count + 1 where seq = ?";
+		return jdbc.update(sql, seq);
 	}
 }
