@@ -10,6 +10,8 @@ public class ReviewDTO {
 	private String contents;
 	private int rating;
 	private Timestamp reg_date;
+	private String tag;
+	private String image1;
 	
 	public ReviewDTO () {}
 	
@@ -65,5 +67,16 @@ public class ReviewDTO {
 	public void setReg_date(Timestamp reg_date) {
 		this.reg_date = reg_date;
 	}
-	
+	public String getTag(){
+		return tag; 
+	}
+	public void setTag(String tag){
+		this.tag = tag; 
+	}
+	public String getImage1(){
+		return image1; 
+	}
+	public void setImage1(String image1){
+		this.image1 = image1; 
+	}
 }
