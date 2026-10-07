@@ -30,7 +30,7 @@ body {
 	padding: 0 24px;
 }
 
-/* ===== 상단 — 작성자 + 장소 선택 ===== */
+/* ===== 상단 — 작성자 + 장소 + 별점 ===== */
 .review_header {
 	padding: 22px 24px;
 	background: #fff;
@@ -111,11 +111,150 @@ body {
 	min-width: 0;
 }
 
-/* ===== 본문 — summernote ===== */
-.note-editor.note-frame {
-	margin: 0;
+/* ===== 별점 ===== */
+.rating {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 18px;
+}
+
+.rating_label {
+	font-size: 13px;
+	font-weight: 700;
+	color: #333;
+}
+
+#stars {
+	display: flex;
+	gap: 2px;
+}
+
+.star {
+	font-size: 26px;
+	line-height: 1;
+	color: #e0e0e0;
+	cursor: pointer;
+	transition: color .1s;
+	user-select: none;
+}
+
+.star.on {
+	color: #FFB400;
+}
+
+#ratingText {
+	min-width: 20px;
+	font-size: 14px;
+	font-weight: 700;
+	color: #FFB400;
+}
+
+/* ===== 본문 — 사진 | 글, 아래 태그 ===== */
+.review_body {
+	display: flex;
+	flex-wrap: wrap;
+	background: #fff;
 	border: 1px solid #e5e7eb;
 	border-top: 0;
+	border-radius: 0 0 8px 8px;
+	overflow: hidden;
+}
+
+/* --- 왼쪽: 사진 --- */
+.photo_box {
+	width: 250px;
+	flex-shrink: 0;
+	padding: 16px;
+	border-right: 1px solid #eceef1;
+	background: #fafbfc;
+}
+
+.photo_head {
+	margin: 0 0 10px;
+	font-size: 13px;
+	font-weight: 700;
+	color: #333;
+}
+
+.upload_box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	height: 200px;
+	border: 2px dashed #d5d9de;
+	border-radius: 8px;
+	background: #fff;
+	cursor: pointer;
+	transition: border-color .15s, background .15s;
+}
+
+.upload_box:hover {
+	border-color: #FF6B35;
+	background: #fff8f5;
+}
+
+.upload_box .plus {
+	font-size: 30px;
+	line-height: 1;
+	color: #b0b5bc;
+}
+
+.upload_box .add_photo {
+	font-size: 12px;
+	color: #9a9aa0;
+}
+
+/* 미리보기 */
+#preview:empty {
+	display: none;
+}
+
+.thumb {
+	position: relative;
+	width: 100%;
+	height: 200px;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #eef1f5;
+}
+
+.thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.thumb .del {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, .6);
+	color: #fff;
+	font-size: 15px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.thumb .del:hover {
+	background: #c0392b;
+}
+
+/* --- 오른쪽: summernote --- */
+.review_body>.note-editor.note-frame {
+	flex: 1 1 300px;
+	min-width: 0;
+	margin: 0;
+	border: 0;
 	border-radius: 0;
 }
 
@@ -127,7 +266,6 @@ body {
 .note-statusbar {
 	background: #fafbfc;
 	border-top: 1px solid #eceef1;
-	border-radius: 0 0 8px 8px;
 }
 
 .note-editable {
@@ -141,6 +279,58 @@ body {
 	max-width: 100%;
 	height: auto;
 	border-radius: 6px;
+}
+
+/* --- 아래: 태그 (한 줄 전체) --- */
+.tag_box {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 16px 20px;
+	border-top: 1px solid #eceef1;
+	background: #fafbfc;
+}
+
+.tag_label {
+	padding-top: 7px;
+	font-size: 13px;
+	font-weight: 700;
+	color: #333;
+	white-space: nowrap;
+}
+
+.tag_list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.tag_list label {
+	padding: 6px 14px;
+	border: 1px solid #ddd;
+	border-radius: 18px;
+	background: #fff;
+	font-size: 12px;
+	color: #666;
+	cursor: pointer;
+	user-select: none;
+	transition: border-color .15s, background .15s, color .15s;
+}
+
+.tag_list label:hover {
+	border-color: #999;
+}
+
+.tag_list label:has(input:checked) {
+	border-color: #FF6B35;
+	background: #fff5f0;
+	color: #FF6B35;
+	font-weight: 700;
+}
+
+.tag_list input {
+	display: none;
 }
 
 /* ===== 버튼 ===== */
@@ -190,46 +380,85 @@ body {
 </head>
 <body>
 	<div class="review_container">
-		<div class="review_header">
-			<p id="writer">작성자</p>
-			<input type="text" id="member_id" name="member_id"
-				value="${sessionScope.loginId}" readonly>
-			<div class="place_select">
-				<select id="placeType">
-					<option value="">유형</option>
-					<option value="STAY">숙소</option>
-					<option value="FOOD">맛집</option>
-					<option value="SPOT">관광지</option>
-				</select> <select id="region" name="region">
-					<option value="">전체</option>
-					<option value="서울특별시">서울특별시</option>
-					<option value="부산광역시">부산광역시</option>
-					<option value="대구광역시">대구광역시</option>
-					<option value="인천광역시">인천광역시</option>
-					<option value="대전광역시">대전광역시</option>
-					<option value="울산광역시">울산광역시</option>
-					<option value="세종특별자치시">세종특별자치시</option>
-					<option value="경기도">경기도</option>
-					<option value="강원특별자치도">강원특별자치도</option>
-					<option value="충청북도">충청북도</option>
-					<option value="충청남도">충청남도</option>
-					<option value="전북특별자치도">전북특별자치도</option>
-					<option value="전남광주통합특별시">전남광주통합특별시</option>
-					<option value="경상북도">경상북도</option>
-					<option value="경상남도">경상남도</option>
-					<option value="제주특별자치도">제주특별자치도</option>
-				</select> <select id="target_id" name="target_id">
-					<option value="">장소</option>
-				</select>
-			</div>
-		</div>
+		<form action="/review/write" method="post">
+			<div class="review_header">
+				<p id="writer">작성자</p>
+				<input type="text" id="member_id" name="member_id"
+					value="${sessionScope.loginId}" readonly>
+				<div class="place_select">
+					<select id="placeType" name="target_type">
+						<option value="">유형</option>
+						<option value="STAY">숙소</option>
+						<option value="FOOD">맛집</option>
+						<option value="SPOT">관광지</option>
+					</select> <select id="region">
+						<option value="">전체</option>
+						<option value="서울특별시">서울특별시</option>
+						<option value="부산광역시">부산광역시</option>
+						<option value="대구광역시">대구광역시</option>
+						<option value="인천광역시">인천광역시</option>
+						<option value="대전광역시">대전광역시</option>
+						<option value="울산광역시">울산광역시</option>
+						<option value="세종특별자치시">세종특별자치시</option>
+						<option value="경기도">경기도</option>
+						<option value="강원특별자치도">강원특별자치도</option>
+						<option value="충청북도">충청북도</option>
+						<option value="충청남도">충청남도</option>
+						<option value="전북특별자치도">전북특별자치도</option>
+						<option value="전남광주통합특별시">전남광주통합특별시</option>
+						<option value="경상북도">경상북도</option>
+						<option value="경상남도">경상남도</option>
+						<option value="제주특별자치도">제주특별자치도</option>
+					</select> <select id="target_id" name="target_id">
+						<option value="">장소</option>
+					</select>
 
-		<div class="review_body"></div>
-		<textarea id="contents" name="contents"></textarea>
-		<div class="review_bottom">
-			<button id="submit">작성 완료</button>
-			<button type="button" id="backBtn">취소</button>
-		</div>
+				</div>
+				<div class="rating">
+					<span class="rating_label">별점</span>
+					<div id="stars">
+						<span class="star" data-val="1">★</span> <span class="star"
+							data-val="2">★</span> <span class="star" data-val="3">★</span> <span
+							class="star" data-val="4">★</span> <span class="star"
+							data-val="5">★</span>
+					</div>
+					<span id="ratingText">0</span> <input type="hidden" name="rating"
+						id="rating" value="0">
+				</div>
+			</div>
+
+			<div class="review_body">
+				<div class="photo_box">
+					<p class="photo_head">사진 필수</p>
+					<label for="photo" class="upload_box"> <span class="plus">+</span>
+						<span class="add_photo">사진 추가</span>
+					</label> <input type="file" id="photo" accept="image/*" hidden>
+
+					<div id="preview"></div>
+					<input type="hidden" name="image1" id="image1">
+				</div>
+				<textarea id="contents" name="contents"></textarea>
+				<div class="tag_box">
+					<span class="tag_label">태그</span>
+					<div class="tag_list">
+						<label><input type="checkbox" name="tag" value="청결">청결</label>
+						<label><input type="checkbox" name="tag" value="가성비">가성비</label>
+						<label><input type="checkbox" name="tag" value="뷰맛집">뷰맛집</label>
+						<label><input type="checkbox" name="tag" value="조용함">조용함</label>
+						<label><input type="checkbox" name="tag" value="친절">친절</label>
+						<label><input type="checkbox" name="tag" value="주차편함">주차편함</label>
+						<label><input type="checkbox" name="tag" value="재방문의사">재방문의사</label>
+						<label><input type="checkbox" name="tag" value="사진맛집">사진맛집</label>
+						<label><input type="checkbox" name="tag" value="교통편리">교통편리</label>
+						<label><input type="checkbox" name="tag" value="아이동반">아이동반</label>
+					</div>
+				</div>
+			</div>
+			<div class="review_bottom">
+				<button id="submit">작성 완료</button>
+				<button type="button" id="backBtn">취소</button>
+			</div>
+		</form>
 	</div>
 </body>
 
@@ -263,10 +492,50 @@ body {
 		$("#region").trigger("change");
 	})
 
-	$("#backBtn").on("click", function(){
+	$(".star").on("click", function() {
+		let val = $(this).data("val");
+		$("#rating").val(val);
+		$("#ratingText").text(val);
+		paintStars(val);
+	})
+
+	function paintStars(val) {
+		$(".star").each(function() {
+			if ($(this).data("val") <= val) {
+				$(this).addClass("on");
+			} else {
+				$(this).removeClass("on");
+			}
+		});
+	}
+
+	$("#photo").on(
+			"change",
+			function() {
+				let form = new FormData();
+				form.append("file", this.files[0]);
+
+				$.ajax({
+					url : "/file/uploadImageFile",
+					type : "post",
+					data : form,
+					contentType : false,
+					processData : false,
+					dataType : "json",
+					success : function(data) {
+						$("#image1").val(data.url);
+
+						$("#preview").append(
+								$("<div class='thumb'>").append(
+										$("<img>").attr("src", data.url)));
+					}
+				})
+			})
+
+	$("#backBtn").on("click", function() {
 		history.back();
 	})
-	
+
 	$("#contents")
 			.summernote(
 					{

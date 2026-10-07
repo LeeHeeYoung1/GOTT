@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kedu.dao.PlaceDAO;
 import com.kedu.dao.ReviewDAO;
 import com.kedu.dto.PlaceDTO;
+import com.kedu.dto.ReviewDTO;
 
 @Controller
 @RequestMapping("/review")
@@ -30,6 +31,12 @@ public class ReviewController {
 	@RequestMapping("/placeList")
 	public List<PlaceDTO> placeList(String placeType, String region) {
 		return pdao.placeList(placeType, region);
+	}
+	
+	@RequestMapping("/write")
+	public String write(ReviewDTO dto) {
+		rdao.insert(dto);
+		return "/board/reviewBoard";
 	}
 	
 }
