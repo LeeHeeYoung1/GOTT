@@ -37,63 +37,6 @@ hr {
 
 
 /* =========================================================
-   2. 헤더
-   ========================================================= */
-
-.header {
-    width: 100%;
-    height: 70px;
-    padding: 0 30px;
-}
-
-.logobox {
-    width: 120px;
-    height: 70px;
-    margin-left: 50px;
-}
-
-.logobox:hover {
-    cursor: pointer;
-}
-
-.logobox img {
-    width: 80%;
-    height: 100%;
-}
-
-.nav {
-    width: 50%;
-    margin: 0 auto;
-}
-
-.textzone {
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    margin: 0 10px;
-}
-
-.textzone:hover {
-    color: #2563eb;
-}
-
-.user-menu {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.icon {
-    margin-left: 10px;
-    font-size: 20px;
-}
-
-.icon:hover {
-    cursor: pointer;
-}
-
-
-/* =========================================================
    3. 제목 영역
    ========================================================= */
 
@@ -447,25 +390,7 @@ hr {
 <body>
 
     <div class="container">
-        <div class="header flex-between">
-            <div class="logobox">
-                <img src="/images/logo.png" alt="GOTT 로고">
-            </div>
-            <div class="nav flex-between">
-                <div class="textzone">이벤트</div>
-                <div class="textzone">지역</div>
-                <div class="textzone">추천 여행지</div>
-                <div class="textzone">숙박업소</div>
-                <div class="textzone">리뷰</div>
-                <div class="textzone">여행 플래너</div>
-                <div class="textzone">공지사항</div>
-            </div>
-            <div class="user-menu">
-                <button onclick="location.href='/members/logout'">로그아웃</button>
-                <button onclick="location.href='/members/mypage'">마이페이지</button>
-                <div class="icon"><i class="fa-solid fa-bars"></i></div>
-            </div>
-        </div>
+        <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
         <div class="title">
             <h1>나만의 여행일정 만들기</h1>
@@ -519,7 +444,7 @@ hr {
                     </div>
 
                     <div>
-                        <button>일정 생성</button>
+                        <button type="button" id="createPlaner">일정 생성</button>
                     </div>
 
                 </form>
@@ -577,13 +502,7 @@ hr {
                 <!-- 가운데: 일정표 -->
                 <div class="addContainer">
 
-                    <div class="dayTabs">
-                        <div class="dayTab active">Day 1</div>
-                        <div class="dayTab">Day 2</div>
-                        <div class="dayTab">Day 3</div>
-                        <div class="dayTab">Day 4</div>
-                        <div class="dayTab">＋ 일자 추가</div>
-                    </div>
+                    <div class="dayTabs"></div>
 
                     <div class="dayBody">
                         <p class="dayDate">2026.10.10 (토) · 1일차</p>
@@ -650,13 +569,58 @@ hr {
         </div>
 
         <hr>
-        <div class="footer">
-            <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-            <p>회사명 : GOTT | 대표 : ??? | 사업자등록번호 : 123-45-67890</p>
-            <p>이용약관 | 개인정보처리방침 | 고객센터</p>
-            <div class="textbox">사이트로고</div>
-        </div>
+        <jsp:include page="/WEB-INF/views/common/footer.jsp" />
     </div>
+    
+<script>
+	$("#createPlaner").on("click",function(){
+		let title = $("input[name='title']").val();
+		let startDate = $("input[name='startDate']").val();
+		let endDate = $("input[name='endDate']").val();
+		
+		if(title == ""){
+			alert("일정 제목을 입력해주세요");
+			return;
+		}
+		
+		if(startDate == "" || endDate == ""){
+			alert("여행 시작일과 종료일을 입력해주세요.");
+			return;
+		}
+		
+		let start = new Date(startDate);
+		let end = new Date(endDate);
+		
+		if(start > end){
+			alert("종료일은 시작일보다 빠를 수 없습니다");
+			return;
+		}
+		
+		let dayTabs = $("#dayTabs");
+		dayTabs.empty();
+		
+		let day = 1;
+		let currentDate = new Date(start);
+		
+		while(currentDate <= end){
+			let year = currentDate.getFullYear();
+			let month = String(currentDate.getMonth() + 1).padStart(2,"0");
+			let date = String(currentDate.getDate()).padStart(2, "0");
+			
+			let dayTab = $("<div>").addClass("dayTab").text("Day"+day);
+			
+			if (day == 1){
+				dayTab.addClass("active");
+			}
+			
+			dayTabs.append(dayTab);
+			
+			currentDate.setDate(currentDate.getDate() + 1);
+			day++;			
+		}
+		
+	});
+</script>
 
 </body>
 
