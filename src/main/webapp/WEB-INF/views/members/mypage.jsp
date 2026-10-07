@@ -648,15 +648,11 @@ body {
 .flipCard .reservationCondition button {
     width: 100%;
     height: 34px;
-
     border: 1px solid #d9d9d9;
     border-radius: 5px;
-
     background-color: white;
-
     font-size: 12px;
     color: #333;
-
     cursor: pointer;
 }
 
@@ -664,19 +660,15 @@ body {
 /* 예약 상태 버튼 */
 .flipCard .reservationCondition button:first-child {
     border: none;
-
     background-color: #eff6ff;
     color: #2563eb;
-
     font-weight: 600;
-
     cursor: default;
 }
 
 .flipCard .reservationCondition button:disabled {
     opacity: 1;
 }
-
 
 /* 버튼 hover */
 .flipCard .reservationCondition button:not(:disabled):hover {
@@ -700,7 +692,6 @@ body {
 /* 리뷰 카드 */
 .reviewCard {
   width: 250px;
-
   border: 1px solid #333;
   background-color: white;
 }
@@ -708,12 +699,9 @@ body {
 /* 작성자 */
 .reviewUser {
   height: 48px;
-
   display: flex;
   align-items: center;
-
   padding: 0 12px;
-
   border-bottom: 1px solid #333;
 }
 
@@ -730,9 +718,7 @@ body {
 .reviewImage img {
   width: 100%;
   height: 100%;
-
   display: block;
-
   object-fit: cover;
 }
 
@@ -745,7 +731,6 @@ body {
 .reviewIcons {
   display: flex;
   gap: 15px;
-
   margin-bottom: 7px;
 }
 
@@ -765,10 +750,8 @@ body {
 /* 여행지 제목 */
 .reviewTitleText {
   margin: 0 0 2px;
-
   font-size: 12px;
   font-weight: bold;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -777,10 +760,8 @@ body {
 /* 리뷰 내용 */
 .reviewDescription {
   margin: 0;
-
   font-size: 12px;
   line-height: 1.5;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -789,7 +770,6 @@ body {
 /* 날짜 */
 .reviewDate {
   margin: 7px 0 0;
-
   font-size: 10px;
   color: #777;
 }
@@ -912,7 +892,6 @@ body {
 /* 쿠폰 설명 */
 .couponBox p {
   margin: 0 0 12px;
-
   font-size: 12px;
   color: #777;
 }
@@ -921,10 +900,8 @@ body {
 .couponBox button {
   width: 65px;
   height: 30px;
-
   background: white;
   border: 1px solid #777;
-
   font-size: 12px;
   cursor: pointer;
 }
@@ -944,15 +921,13 @@ body {
       <hr style="border: 1px solid rgb(248, 246, 246);">
 
 
-
-
       <div class="mypageContainer">
 
         <div class="breadcrumb" style="font-size: 12px; margin: 20px;">홈 > 마이페이지 > 대시보드</div>
 
 
         <!--여기부터 사이드박스 끼미히끼잉~~~~-->
-                <div class="sideBox">
+       <div class="sideBox">
 
           <div class="loginId">
             <strong>${nickname}</strong><span>님</span>
@@ -993,7 +968,7 @@ body {
 
           </div>
 
-        </div>
+       </div>
 
 
         <!--여기부터 메인 끼미히끼잉~~~~-->
@@ -1011,16 +986,16 @@ body {
 		<!--여기부터 일정 플래너-->
 		
           <div class="plannerContainer">
-            <div class="sectionTitle">
-              <span>여행 일정 플래너</span>
-              <a href="#" style="float: right;">플래너 열기</a>
-            </div>
-            
-            <div class="plannerBox">
-              <p>찜해둔 장소를 일차별 일정으로 정리해보세요.</p>
-              <p>관광지·맛집·숙소를 드래그해 일정에 추가하고 완성한 여행을 게시판에 공유할 수 있습니다.</p>
-              <button>새 일정 만들기</button>
-            </div>
+	            <div class="sectionTitle">
+	              <span>여행 일정 플래너</span>
+	              <a href="#" style="float: right;">플래너 열기</a>
+	            </div>
+	            
+	            <div class="plannerBox">
+	              <p>찜해둔 장소를 일차별 일정으로 정리해보세요.</p>
+	              <p>관광지·맛집·숙소를 드래그해 일정에 추가하고 완성한 여행을 게시판에 공유할 수 있습니다.</p>
+	              <button>새 일정 만들기</button>
+	            </div>
           </div>
 
 
@@ -1046,70 +1021,68 @@ body {
 
 
 			<c:forEach var="rs" items="${myRsList}">
-
-    <div class="flipCard">
-        <div class="flipCardInner">
-
-            <!-- 앞면: 기존 예약 내역 -->
-            <div class="flipCardFront">
-                <div class="img">
-                    <img src="${rs.image1}" alt="호텔 이미지">
-                </div>
-
-                <div class="reservationInfo">
-                    <h3>${rs.roomName}</h3>
-                    <p>· 체크인 ${rs.checkIn} / 체크아웃 ${rs.checkOut}</p>
-                    <p>· 성인 ${rs.guestNum}명<br>
-                        · 예약번호 ${rs.paymentId}<br>
-                        
-                        <c:choose>
-                            <c:when test="${rs.status ne '예약취소'}">
-                                <strong>· 적립 마일리지 + ${rs.mileage}M</strong>
-                            </c:when>
-                            <c:otherwise>
-                                <strong>· 적립 마일리지 - ${rs.mileage}M</strong>
-                            </c:otherwise>
-                        </c:choose>
-                    </p>
-                    <p>결제금액 ${rs.price}원</p>
-
-                </div>
-
-                <div class="reservationCondition">
-                    <button disabled>${rs.status}</button>
-                    <button type="button" class="detailBtn">예약 상세</button>
-                    <c:if test="${rs.status ne '예약취소'}">
-                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
-                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
-                    </c:if>
-                </div>
-            </div>
-
-            <!-- 뒷면: 예약 상세 내역 -->
-            <div class="flipCardBack">
-                <div class="reservationInfo">
-                    <h3>${rs.roomName} 상세정보</h3>
-                    <p>· 체크인: ${rs.checkIn}</p>
-                    <p>· 체크아웃: ${rs.checkOut}</p>
-                    <p>· 성인: ${rs.guestNum}명</p>
-                    <p>· 예약번호: ${rs.paymentId}</p>
-                    <p>· 결제금액: ${rs.price}원</p>
-                    <p>· 예약일: ${rs.reserveDate}</p>
-                </div>
-
-                <div class="reservationCondition">
-                    <button type="button" class="backBtn">돌아가기</button>
-                    <c:if test="${rs.status ne '예약취소'}">
-                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
-                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
-                    </c:if>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</c:forEach>
+			    <div class="flipCard">
+			        <div class="flipCardInner">
+			
+			            <!-- 앞면: 기존 예약 내역 -->
+			            <div class="flipCardFront">
+			                <div class="img">
+			                    <img src="${rs.image1}" alt="호텔 이미지">
+			                </div>
+			
+			                <div class="reservationInfo">
+			                    <h3>${rs.roomName}</h3>
+			                    <p>· 체크인 ${rs.checkIn} / 체크아웃 ${rs.checkOut}</p>
+			                    <p>· 성인 ${rs.guestNum}명<br>
+			                        · 예약번호 ${rs.paymentId}<br>                        
+			                        <c:choose>                        
+			                            <c:when test="${rs.status ne '예약취소'}">
+			                                <strong>· 적립 마일리지 + ${rs.mileage}M</strong>
+			                            </c:when>
+			                            
+			                            <c:otherwise>
+			                                <strong>· 적립 마일리지 - ${rs.mileage}M</strong>
+			                            </c:otherwise>                           
+			                        </c:choose>                     
+			                    </p>
+			                    
+			                    <p>결제금액 ${rs.price}원</p>
+			                </div>
+			
+			                <div class="reservationCondition">
+			                    <button disabled>${rs.status}</button>
+			                    <button type="button" class="detailBtn">예약 상세</button>
+			                    <c:if test="${rs.status ne '예약취소'}">
+			                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
+			                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
+			                    </c:if>
+			                </div>
+			            </div>
+			
+			            <!-- 뒷면: 예약 상세 내역 -->
+			            <div class="flipCardBack">
+			                <div class="reservationInfo">
+			                    <h3>${rs.roomName} 상세정보</h3>
+			                    <p>· 체크인: ${rs.checkIn}</p>
+			                    <p>· 체크아웃: ${rs.checkOut}</p>
+			                    <p>· 성인: ${rs.guestNum}명</p>
+			                    <p>· 예약번호: ${rs.paymentId}</p>
+			                    <p>· 결제금액: ${rs.price}원</p>
+			                    <p>· 예약일: ${rs.reserveDate}</p>
+			                </div>
+			
+			                <div class="reservationCondition">
+			                    <button type="button" class="backBtn">돌아가기</button>
+			                    <c:if test="${rs.status ne '예약취소'}">
+			                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
+			                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: red;">예약 취소</button>
+			                    </c:if>
+			                </div>
+			            </div>
+			
+			        </div>
+			    </div>
+			</c:forEach>
 
 
 
@@ -1176,7 +1149,7 @@ body {
 
             <div class="reviewList">
 
-              <c:forEach var="review" items="${review}">
+            <c:forEach var="review" items="${review}">
 
                 <div class="reviewCard">
 
@@ -1220,7 +1193,7 @@ body {
 
                 </div>
 
-              </c:forEach>
+            </c:forEach>
 
             </div>
 
@@ -1235,38 +1208,37 @@ body {
     			<a href="#">더 보기 &gt;</a>
 			</div>
        		
-       		<div class="coupon_point" style="padding:20px 20px 12px">
-       		
+       		<div class="coupon_point" style="padding:20px 20px 12px">      		
        			<table align="center">
-       			<thead>
-       				<tr>
-                		<th>날짜</th>
-                		<th>내용</th>
-                		<th>구분</th>
-                		<th>포인트</th>
-              		</tr>
-              	</thead>
+	       			<thead>
+	       				<tr>
+	                		<th>날짜</th>
+	                		<th>내용</th>
+	                		<th>구분</th>
+	                		<th>포인트</th>
+	              		</tr>
+	              	</thead>
               	
-              	<tbody>
-              		<tr>
-                		<td>2026-09-02</td>
-                		<td>리뷰 작성 적립</td>
-                		<td>적립</td>
-                		<td>+???M</td>
-                	</tr>
-              		<tr>
-                		<td>2026-08-14</td>
-                		<td>제주 오션뷰 호텔 결제 사용</td>
-                		<td>사용</td>
-                		<td>-????M</td>
-                	</tr>
-                	<tr>
-                		<td>2026-08-03</td>
-                		<td>첫 예약 이벤트 적립</td>
-                		<td>적립</td>
-                		<td>+????0M</td>
-              		</tr>
-              	</tbody>
+	              	<tbody>
+	              		<tr>
+	                		<td>2026-09-02</td>
+	                		<td>리뷰 작성 적립</td>
+	                		<td>적립</td>
+	                		<td>+???M</td>
+	                	</tr>
+	              		<tr>
+	                		<td>2026-08-14</td>
+	                		<td>제주 오션뷰 호텔 결제 사용</td>
+	                		<td>사용</td>
+	                		<td>-????M</td>
+	                	</tr>
+	                	<tr>
+	                		<td>2026-08-03</td>
+	                		<td>첫 예약 이벤트 적립</td>
+	                		<td>적립</td>
+	                		<td>+????0M</td>
+	              		</tr>
+	              	</tbody>
        			</table>
        			
        			<div class="couponList">
@@ -1287,9 +1259,6 @@ body {
        		
        		<jsp:include page="/WEB-INF/views/common/footer.jsp" />
         </div>
-
-
-
 
       </div>
 
