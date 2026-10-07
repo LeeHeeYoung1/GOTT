@@ -25,12 +25,14 @@ public class PlaceDTO {
 	private String room_img;
 	private String amenities;
 	
+	private boolean wish;
+	
 	public PlaceDTO () {};
 	
 	public PlaceDTO(int place_id, String name, String region, String address, String place_type, String intro,
 			String image_name, Double latitude, Double longitude, String sigungu, Integer price, Double avg_rating,
 			Integer review_count, Timestamp reg_date, Integer min_price, Integer room_count, String room_img,
-			String amenities) {
+			String amenities,boolean wish) {
 		super();
 		this.place_id = place_id;
 		this.name = name;
@@ -50,6 +52,7 @@ public class PlaceDTO {
 		this.room_count = room_count;
 		this.room_img = room_img;
 		this.amenities = amenities;
+		this.wish = wish;
 	}
 	
 	public int getPlace_id() {
@@ -194,5 +197,13 @@ public class PlaceDTO {
 
 	public void setAmenities(String amenities) {
 		this.amenities = amenities;
+	}
+	
+	public boolean isWish() {
+		return wish;
+	}
+
+	public void setWish(boolean wish) {
+		this.wish = wish;
 	}
 }

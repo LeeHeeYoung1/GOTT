@@ -1,27 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ include file="/WEB-INF/views/common/header.jsp"%>
 <!DOCTYPE html>
-<html>
 
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/public.css">
-    <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <title>GOTT 여행 일정 플래너</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
+	<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea87fc26ee3f75472cb75c454c18b302"></script>
+	
     <style>
-* {
-    box-sizing: border-box;
-}
-
-hr {
-    margin: 0;
-    border: none;
-    border-top: 1px solid #e5e7eb;
-}
 
 .textbox {
     padding: 7px 12px;
@@ -34,7 +25,6 @@ hr {
 .textbox:hover {
     background-color: #f3f4f6;
 }
-
 
 /* =========================================================
    3. 제목 영역
@@ -348,53 +338,11 @@ hr {
 }
 
 
-/* =========================================================
-   5. 푸터
-   ========================================================= */
-
-.footer {
-    min-height: 180px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: #777;
-    background-color: #f8fafc;
-    font-size: 13px;
-}
-
-.footer p {
-    margin: 0;
-}
-
-.footer .textbox {
-    margin-top: 10px;
-    color: #6B7280;
-    background-color: #F8FAFA;
-}
-
-
-/* =========================================================
-   6. 좁은 화면
-   ========================================================= */
-
-@media (max-width: 1024px) {
-    .plannerLayout {
-        grid-template-columns: 1fr;
-    }
-
-    .mapContainer {
-        position: static;
-    }
-}
     </style>
-</head>
 
-<body>
 
     <div class="container">
-        <jsp:include page="/WEB-INF/views/common/header.jsp" />
+ 
 
         <div class="title">
             <h1>나만의 여행일정 만들기</h1>
@@ -518,15 +466,20 @@ hr {
                             <div class="wishThumb">
                                 <img src="/images/logo.png" style="width: 50px; height: 50px;">
                             </div>
-
+						<c:forEach var="place" items="${places}">
                             <div class="wishText">
-                                <p>제주특별자치도</p>
-                                <span>협재 해수욕장</span>
+                                <p>${place.region}</p>
+                                <span>${place.name}</span>
                             </div>
 
-                            <button type="button" class="addBtn">+</button>
+                            <button type="button" class="addBtn" onclick="addPlace(
+							            ${place.placeId},
+							            ${place.latitude},
+							            ${place.longitude},
+							            '${place.name}')">+</button>
+						</c:forEach>            
+						
                         </div>
-
                     </div>
                 </div>
 
@@ -550,10 +503,11 @@ hr {
                                 <input type="text" class="timeInput" value="09:30">
                                 <button type="button">✕</button>
                             </div>
+                         
                         </div>
 
-                        <p class="transport">🚗 차량 이동 · 약 35분 · 22.4km</p>
-
+                        <p class="transport flex-between">🚗 차량 이동 · 약 35분 · 22.4km</p>
+                        
                         <div class="timelineItem">
                             <span class="orderMark">2</span>
                             <div class="timelineCard">
@@ -578,7 +532,9 @@ hr {
                 <!-- 오른쪽: 지도 + 요약 -->
                 <div class="mapContainer">
                     <div class="mapTitle">동선 미리보기</div>
-                    <div class="mapSlot" id="map"></div>
+                    <div class="mapSlot" id="map">
+                    	
+                    </div>
                     <div class="mapSummary">
                         <div><span>총 일정 기간</span><b>3박 4일</b></div>
                         <div><span>총 방문지 수</span><b>14곳</b></div>
@@ -599,8 +555,6 @@ hr {
             </div>
         </div>
 
-        <hr>
-        <jsp:include page="/WEB-INF/views/common/footer.jsp" />
     </div>
     
 <script>
@@ -666,7 +620,6 @@ hr {
 		
 	});
 	
-	
 	$(document).on("click", ".dayTab", function(){
 		$(".dayTab").removeClass("active");
 		$(this).addClass("active");
@@ -680,8 +633,31 @@ hr {
 		$("#dayDate").text(year+"."+month+"."+date+"("+dayOfWeek+")."+day+"일차");
 	});
 	
+	// 카카오 맵 
+	var container = document.getElementById('map');
+	var options = {
+		center: new kakao.maps.LatLng(33.450701, 126.570667),
+		level: 3
+	};
+
+	var map = new kakao.maps.Map(container, options);
+	
+	var marker = new kakao.maps.Marker({
+	    map: map
+	});
+	
+	function moveToPlace(lat, lng) {
+
+	    var position = new kakao.maps.LatLng(lat, lng);
+
+	    // 지도 중심을 해당 장소로 이동
+	    map.setCenter(position);
+
+	    // 마커도 해당 장소로 이동
+	    marker.setPosition(position);
+	}
+	
+
 </script>
 
-</body>
-
-</html>
+<%@ include file="/WEB-INF/views/common/footer.jsp"%>
