@@ -1,6 +1,7 @@
 package com.kedu.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,9 +16,11 @@ import com.kedu.commons.EncryptionUtils;
 import com.kedu.dao.MembersDAO;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.Travel_TypeDAO;
+import com.kedu.dao.WishlistDAO;
 import com.kedu.dto.MembersDTO;
 import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.Travel_TypeDTO;
+import com.kedu.dto.WishlistDTO;
 import com.kedu.services.EmailService;
 
 @Controller
@@ -32,6 +35,8 @@ public class MembersControllers {
 	private ReservationDAO rdao;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private WishlistDAO wdao;
 	
 	@RequestMapping("/loginpage")
 	public String loginPage() {
@@ -101,6 +106,7 @@ public class MembersControllers {
 	public String mypage(HttpSession session, Model model) {
 	    String memberId = (String) session.getAttribute("loginId");
 	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
+	    
 	    model.addAttribute("myRsList", myRsList);
 	    return "members/mypage";
 	}

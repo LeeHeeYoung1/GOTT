@@ -115,20 +115,19 @@ button {
 
 .wishBtn {
 	position: absolute;
-	top: 12px;
-	right: 12px;
+	top: 10px;
+	right: 10px;
 
 	border: none;
-	background: transparent;
-
-	color: white;
-	font-size: 30px;
-	line-height: 1;
+	background: none;
 
 	padding: 0;
 
-	cursor: pointer;
+	color: white;
+	font-size: 25px;
+	line-height: 1;
 
+	cursor: pointer;
 	z-index: 2;
 
 	-webkit-text-stroke: 1.5px #333;
@@ -137,13 +136,13 @@ button {
 }
 
 .wishBtn:hover {
-	transform: scale(1.1);
+	transform: scale(1.08);
 }
 
 .wishBtn.active {
 	color: #ed4956;
 	-webkit-text-stroke: 0;
-	transform: scale(1.15);
+	transform: scale(1.1);
 }
 
 .likeBtn.active {
@@ -294,8 +293,8 @@ button {
 					<c:if test="${not empty place.image_name}">
 					<img src="${place.image_name}" alt="${place.name}">
 					</c:if>
-					<button type="button" class="wishBtn" data-place-id="${place.place_id}">♡</button>
-		<span class="tag">
+						<button type="button" class="wishBtn ${place.wish ? 'active' : ''}" data-place-id="${place.place_id}">${place.wish ? '♥' : '♡'}</button>
+						<span class="tag">
    			 <c:choose>
         		<c:when test="${place.place_type == 'SPOT'}">관광지</c:when>
         		<c:when test="${place.place_type == 'FOOD'}">맛집</c:when>
@@ -414,14 +413,30 @@ button {
 		}
 		
 		$(document).on("click", ".wishBtn", function() {
-			let placeId = $(this).data("place-id");
-			console.log(placeId);
-			$(this).toggleClass("active");
-			if($(this).hasClass("active")) {
-				$(this).text("♥");
-			} else {
-				$(this).text("♡");
-			}
+			let btn = $(this);
+			let placeId = btn.data("place-id");
+			
+			$.ajax({
+				url: "/wishlist/add",
+				type: "POST",
+				data: {
+					placeId: placeId
+				},
+				success: function(result) {
+					console.log(result);
+					
+					if(result == "add") {
+						btn.addClass("active");
+						btn.text("♥");
+					} else if(result == "delete") {
+						btn.removeClass("active");
+						btn.text("♡");
+					}
+				},
+				error: function() {
+					alert("찜 처리 중 오류가 발생했습니다.");
+				}
+			});
 		});
 			
 	</script>
