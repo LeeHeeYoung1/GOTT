@@ -16,12 +16,7 @@
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
   <style>	
-  		
-        .header {
-            border: 1px solid black;
-            background-color: #F8FAFC;
-        }
-        
+  		        
         .searchBox {
 			width: 750px;
 			height: 60px;
@@ -109,7 +104,7 @@
             background-color: #f8fafc;
         }
 
-        .title h1 {
+        .title h2 {
             font-size: 32px;
             font-weight: 700;
         }
@@ -275,133 +270,133 @@
         }
 
         .searchBox {
-    width: 750px;
-    height: 60px;
-    margin: 40px auto;
-    position: relative;
-}
-
-.searchBox input {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 0 70px 0 28px;
-    border: 1px solid #e2ded9;
-    border-radius: 30px;
-    background-color: white;
-    font-size: 17px;
-    color: #444;
-    outline: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-}
-
-.searchBox input::placeholder {
-    color: #aaa;
-}
-
-.searchBox input:focus {
-    border-color: #c8b9aa;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
-}
-
-.searchBtn {
-    width: 46px;
-    height: 46px;
-    position: absolute;
-    right: 7px;
-    top: 7px;
-    border: none;
-    border-radius: 50%;
-    background-color: #f0ebe5;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.searchBtn:hover {
-    background-color: #e5ddd5;
-}
-
-.searchIcon {
-    width: 14px;
-    height: 14px;
-    border: 2px solid #6f665f;
-    border-radius: 50%;
-    position: relative;
-}
-
-.searchIcon::after {
-    content: "";
-    width: 7px;
-    height: 2px;
-    background-color: #6f665f;
-    position: absolute;
-    right: -6px;
-    bottom: -3px;
-    transform: rotate(45deg);
-    border-radius: 2px;
-}
-
-#searchResult {
-    position: absolute;
-    top: 68px;
-    left: 0;
-    width: 100%;
-    background-color: white;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(60, 50, 40, 0.12);
-    overflow: hidden;
-    z-index: 1000;
-    max-height: 480px;
-    overflow-y: auto;
-}
-
-.searchItem {
-    height: 48px;
-    padding: 0 25px;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    font-size: 15px;
-    color: #555;
-    background-color: white;
-    cursor: pointer;
-    transition: background-color 0.15s;
-}
-
-.searchItem + .searchItem {
-    border-top: 1px solid #f1ede8;
-}
-
-.searchItem:hover {
-    background-color: #faf7f3;
-    color: #333;
-}
-
-.searchItem::before {
-    content: "⌕";
-    margin-right: 12px;
-    font-size: 18px;
-    color: #a69a8e;
-}
-
-#searchResult::-webkit-scrollbar {
-    width: 6px;
-}
-
-#searchResult::-webkit-scrollbar-track {
-    background: #faf8f5;
-}
-
-#searchResult::-webkit-scrollbar-thumb {
-    background: #d8cec4;
-    border-radius: 10px;
-}
-
-#searchResult::-webkit-scrollbar-thumb:hover {
-    background: #bdb0a4;
-}	
+		    width: 750px;
+		    height: 60px;
+		    margin: 40px auto;
+		    position: relative;
+		}
+		
+		.searchBox input {
+		    width: 100%;
+		    height: 100%;
+		    box-sizing: border-box;
+		    padding: 0 70px 0 28px;
+		    border: 1px solid #e2ded9;
+		    border-radius: 30px;
+		    background-color: white;
+		    font-size: 17px;
+		    color: #444;
+		    outline: none;
+		    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+		}
+		
+		.searchBox input::placeholder {
+		    color: #aaa;
+		}
+		
+		.searchBox input:focus {
+		    border-color: #c8b9aa;
+		    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+		}
+		
+		.searchBtn {
+		    width: 46px;
+		    height: 46px;
+		    position: absolute;
+		    right: 7px;
+		    top: 7px;
+		    border: none;
+		    border-radius: 50%;
+		    background-color: #f0ebe5;
+		    cursor: pointer;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		}
+		
+		.searchBtn:hover {
+		    background-color: #e5ddd5;
+		}
+		
+		.searchIcon {
+		    width: 14px;
+		    height: 14px;
+		    border: 2px solid #6f665f;
+		    border-radius: 50%;
+		    position: relative;
+		}
+		
+		.searchIcon::after {
+		    content: "";
+		    width: 7px;
+		    height: 2px;
+		    background-color: #6f665f;
+		    position: absolute;
+		    right: -6px;
+		    bottom: -3px;
+		    transform: rotate(45deg);
+		    border-radius: 2px;
+		}
+		
+		#searchResult {
+		    position: absolute;
+		    top: 68px;
+		    left: 0;
+		    width: 100%;
+		    background-color: white;
+		    border-radius: 18px;
+		    box-shadow: 0 8px 25px rgba(60, 50, 40, 0.12);
+		    overflow: hidden;
+		    z-index: 1000;
+		    max-height: 480px;
+		    overflow-y: auto;
+		}
+		
+		.searchItem {
+		    height: 48px;
+		    padding: 0 25px;
+		    display: flex;
+		    align-items: center;
+		    box-sizing: border-box;
+		    font-size: 15px;
+		    color: #555;
+		    background-color: white;
+		    cursor: pointer;
+		    transition: background-color 0.15s;
+		}
+		
+		.searchItem + .searchItem {
+		    border-top: 1px solid #f1ede8;
+		}
+		
+		.searchItem:hover {
+		    background-color: #faf7f3;
+		    color: #333;
+		}
+		
+		.searchItem::before {
+		    content: "⌕";
+		    margin-right: 12px;
+		    font-size: 18px;
+		    color: #a69a8e;
+		}
+		
+		#searchResult::-webkit-scrollbar {
+		    width: 6px;
+		}
+		
+		#searchResult::-webkit-scrollbar-track {
+		    background: #faf8f5;
+		}
+		
+		#searchResult::-webkit-scrollbar-thumb {
+		    background: #d8cec4;
+		    border-radius: 10px;
+		}
+		
+		#searchResult::-webkit-scrollbar-thumb:hover {
+		    background: #bdb0a4;
+		}	
 
     </style>
 
@@ -425,7 +420,7 @@
         <h2>진행 중인 이벤트</h2>
     </div>
     <div class="eventbannerzone">
-        <div class="moreview"><a href="">더 보기</a></div>
+        <div class="moreview"><a href="/event/eventpage">더 보기</a></div>
         <div class="eventbannerbox">
             <img src="https://picsum.photos/270/200?random=1">
             <div class="eventtext"></div>
@@ -438,10 +433,11 @@
             <img src="https://picsum.photos/270/200?random=3">
             <div class="eventtext"></div>
         </div>
+        <div id="ourpromise"></div>
     </div>
 
     <hr>
-    <div id="ourpromise" class="title">
+    <div class="title">
         <h2>우리의 약속</h2>
     </div>
     <div class="subtitle">
@@ -475,10 +471,10 @@
             </div>
         </div>
     </div>
-
+	<div id="mapzone"></div>
     <hr>
     
-	<div id="mapzone" class="title">
+	<div class="title">
         <h2>여행지도</h2>
     </div>
     <div class="subtitle">
@@ -487,12 +483,12 @@
     <br>
     <div class="mapzone">
         <div id="map" style="width:100%; height:100%;"></div>
-        
     </div>
-
+    
+	<div id="placesuggest"></div>
     <hr>
 
-    <div id="placesuggest" class="title">
+    <div class="title">
         <h2>추천 여행지</h2>
     </div>
     <div class="subtitle">
@@ -533,10 +529,10 @@
         </div>
         <i class="fa-solid fa-circle-chevron-right"></i>
     </div>
-
+	<div id="hotelsuggest"></div>
     <hr>
     
-    <div id="hotelsuggest" class="title">
+    <div class="title">
         <h2>숙박업소 추천</h2>
     </div>
     <div class="subtitle">
@@ -574,10 +570,10 @@
         </div>
         <i class="fa-solid fa-circle-chevron-right"></i>
     </div>
-
+	<div id="popularboard"></div>
     <hr>
 
-    <div id="popularboard" class="title">
+    <div class="title">
         <h2>인기 게시글</h2>
     </div>
     <div class="subtitle">
@@ -611,10 +607,10 @@
             </div>
         </div>
     </div>
-
+	<div id="notice"></div>
     <hr>
 
-    <div id="notice" class="title">
+    <div class="title">
         <h2>공지사항</h2>
     </div>
     

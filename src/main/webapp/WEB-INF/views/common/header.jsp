@@ -24,21 +24,22 @@
             padding-top: 70px;
         }
         .header {
-            width: 100%;
+            width: 1200px;
             height: 70px;
-            padding: 0 30px;
+            background-color: rgba(255, 255, 255, 0.95);
             position : fixed;
             top: 0;
-            right: 0;
-            left: 0;
+		    left: 50%;
+		    transform: translateX(-50%);
+   			box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+		    backdrop-filter: blur(8px);	
             z-index: 100;
-            border: 1px solid black; 
         }
         
         .logobox {
             width: 120px;
             height: 70px;
-            margin-left: 50px;
+            margin-left: 0px;
         }
 
         .logobox img {
@@ -65,6 +66,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            padding-right: 10px;
         }
 
         .textbox {
@@ -127,7 +129,7 @@
             <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
         </div>
         <div class="navi flex-between">
-            <div class="textzone"><a href="/event/eventpage">이벤트</a></div>
+            <div class="textzone"><a href=""></a>뭐 넣지?</div>
             <div class="textzone"><a href="">지역</a></div>
             <div class="textzone"><a href="">추천여행지</a></div>
             <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
@@ -149,7 +151,6 @@
 	        <c:otherwise>
 	        	<div class="user-menu">
 	        		<div class="textbox"><a href="/members/loginpage">로그인</a></div>
-		            <div class="textbox"><a href="/members/signuppage">회원가입</a></div>
 		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
 		        </div>
 	        </c:otherwise>
