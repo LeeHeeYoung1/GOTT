@@ -136,4 +136,9 @@ public class PlaceDAO {
 	        startSearch
 	    );
 	}
+	
+	public List<PlaceDTO> placeList(String placeType, String region){
+		String sql = "select * from place where place_type = ? and region = ?";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeType, region);
+	}
 }
