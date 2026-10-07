@@ -294,7 +294,7 @@ button {
 					<c:if test="${not empty place.image_name}">
 					<img src="${place.image_name}" alt="${place.name}">
 					</c:if>
-					<button type="button" class="wishBtn">♡</button>
+					<button type="button" class="wishBtn" data-place-id="${place.place_id}">♡</button>
 		<span class="tag">
    			 <c:choose>
         		<c:when test="${place.place_type == 'SPOT'}">관광지</c:when>
@@ -414,6 +414,8 @@ button {
 		}
 		
 		$(document).on("click", ".wishBtn", function() {
+			let placeId = $(this).data("place-id");
+			console.log(placeId);
 			$(this).toggleClass("active");
 			if($(this).hasClass("active")) {
 				$(this).text("♥");
@@ -421,6 +423,7 @@ button {
 				$(this).text("♡");
 			}
 		});
+			
 	</script>
 </body>
 </html>
