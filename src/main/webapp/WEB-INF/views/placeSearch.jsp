@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <title>추천 여행지</title>
 <style>
 * {
@@ -110,6 +111,43 @@ button {
 	height: 100%;
 	object-fit: cover;
 	display: block;
+}
+
+.wishBtn {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+
+	border: none;
+	background: transparent;
+
+	color: white;
+	font-size: 30px;
+	line-height: 1;
+
+	padding: 0;
+
+	cursor: pointer;
+
+	z-index: 2;
+
+	-webkit-text-stroke: 1.5px #333;
+
+	transition: transform 0.15s ease;
+}
+
+.wishBtn:hover {
+	transform: scale(1.1);
+}
+
+.wishBtn.active {
+	color: #ed4956;
+	-webkit-text-stroke: 0;
+	transform: scale(1.15);
+}
+
+.likeBtn.active {
+	color: red;
 }
 
 .thumb.empty {
@@ -256,6 +294,7 @@ button {
 					<c:if test="${not empty place.image_name}">
 					<img src="${place.image_name}" alt="${place.name}">
 					</c:if>
+					<button type="button" class="wishBtn">♡</button>
 		<span class="tag">
    			 <c:choose>
         		<c:when test="${place.place_type == 'SPOT'}">관광지</c:when>
@@ -373,6 +412,15 @@ button {
 			
 			navigation.append(next);
 		}
+		
+		$(document).on("click", ".wishBtn", function() {
+			$(this).toggleClass("active");
+			if($(this).hasClass("active")) {
+				$(this).text("♥");
+			} else {
+				$(this).text("♡");
+			}
+		});
 	</script>
 </body>
 </html>

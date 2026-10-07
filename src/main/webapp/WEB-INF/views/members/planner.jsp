@@ -191,16 +191,20 @@ hr {
 .addContainer {
     border: 1px solid #333;
     background-color: white;
+    max-height: 700px;
+    overflow-y: auto;
 }
 
 /* Day 탭 */
 .dayTabs {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     border-bottom: 1px solid #333;
 }
 
 .dayTab {
+    flex-shrink: 0;
     padding: 12px 20px;
     font-size: 13px;
     border-right: 1px solid #333;
@@ -450,7 +454,6 @@ hr {
                 </form>
             </div>
 
-            <!-- 아래: 3단 (찜 목록 | 일정표 | 지도) -->
             <div class="plannerLayout">
 
                 <!-- 왼쪽: 찜 목록 -->
@@ -495,6 +498,34 @@ hr {
 
                             <button type="button" class="addBtn">+</button>
                         </div>
+                        
+                        <div class="wishItem" draggable="true">
+                            <span class="dragHandle">⋮⋮</span>
+                            <div class="wishThumb">
+                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
+                            </div>
+
+                            <div class="wishText">
+                                <p>제주특별자치도</p>
+                                <span>협재 해수욕장</span>
+                            </div>
+
+                            <button type="button" class="addBtn">+</button>
+                        </div>
+                        
+                        <div class="wishItem" draggable="true">
+                            <span class="dragHandle">⋮⋮</span>
+                            <div class="wishThumb">
+                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
+                            </div>
+
+                            <div class="wishText">
+                                <p>제주특별자치도</p>
+                                <span>협재 해수욕장</span>
+                            </div>
+
+                            <button type="button" class="addBtn">+</button>
+                        </div>
 
                     </div>
                 </div>
@@ -502,10 +533,10 @@ hr {
                 <!-- 가운데: 일정표 -->
                 <div class="addContainer">
 
-                    <div class="dayTabs"></div>
+                    <div class="dayTabs" id="dayTabs"></div>
 
                     <div class="dayBody">
-                        <p class="dayDate">2026.10.10 (토) · 1일차</p>
+                        <p class="dayDate" id="dayDate"></p>
 
                         <div class="timelineItem">
                             <span class="orderMark">1</span>
@@ -564,7 +595,7 @@ hr {
             <div class="finishBtns">
                 <button type="button">임시저장</button>
                 <button type="button">미리보기</button>
-                <button type="button">완성하고 게시판에 공유하기</button>
+                <button type="button">완성하고 링크 공유하기</button>
             </div>
         </div>
 
@@ -573,18 +604,19 @@ hr {
     </div>
     
 <script>
+
 	$("#createPlaner").on("click",function(){
 		let title = $("input[name='title']").val();
 		let startDate = $("input[name='startDate']").val();
 		let endDate = $("input[name='endDate']").val();
 		
 		if(title == ""){
-			alert("일정 제목을 입력해주세요");
+			alert("히히 바보 다잉~");
 			return;
 		}
 		
 		if(startDate == "" || endDate == ""){
-			alert("여행 시작일과 종료일을 입력해주세요.");
+			alert("히히 너 바보다잉~");
 			return;
 		}
 		
@@ -592,7 +624,7 @@ hr {
 		let end = new Date(endDate);
 		
 		if(start > end){
-			alert("종료일은 시작일보다 빠를 수 없습니다");
+			alert("히히 나 바보 아니다~");
 			return;
 		}
 		
@@ -601,25 +633,53 @@ hr {
 		
 		let day = 1;
 		let currentDate = new Date(start);
-		
+		let week = ["일", "월", "화", "수", "목", "금", "토"];
+
 		while(currentDate <= end){
-			let year = currentDate.getFullYear();
-			let month = String(currentDate.getMonth() + 1).padStart(2,"0");
-			let date = String(currentDate.getDate()).padStart(2, "0");
-			
-			let dayTab = $("<div>").addClass("dayTab").text("Day"+day);
-			
-			if (day == 1){
-				dayTab.addClass("active");
-			}
-			
-			dayTabs.append(dayTab);
-			
-			currentDate.setDate(currentDate.getDate() + 1);
-			day++;			
+		    let year = currentDate.getFullYear();
+		    let month = String(currentDate.getMonth() + 1).padStart(2, "0");
+		    let date = String(currentDate.getDate()).padStart(2, "0");
+		    let dayOfWeek = week[currentDate.getDay()];
+
+		    let dayTab = $("<div>")
+		        .addClass("dayTab")
+		        .text("Day " + day);
+		    
+		    dayTab.data("year", year);
+		    dayTab.data("month", month);
+		    dayTab.data("date", date);
+		    dayTab.data("dayOfWeek", dayOfWeek);
+		    dayTab.data("day", day);
+
+		    if(day == 1){
+		        dayTab.addClass("active");
+
+		        $("#dayDate").text(
+		            year + "." + month + "." + date +
+		            " (" + dayOfWeek + ") · " + day + "일차"
+		        );
+		    }
+		    dayTabs.append(dayTab);
+		    currentDate.setDate(currentDate.getDate() + 1);
+		    day++;
 		}
 		
 	});
+	
+	
+	$(document).on("click", ".dayTab", function(){
+		$(".dayTab").removeClass("active");
+		$(this).addClass("active");
+		
+		let year = $(this).data("year");
+		let month = $(this).data("month");
+		let date = $(this).data("date");
+		let dayOfWeek = $(this).data("dayOfWeek");
+		let day = $(this).data("day");
+		
+		$("#dayDate").text(year+"."+month+"."+date+"("+dayOfWeek+")."+day+"일차");
+	});
+	
 </script>
 
 </body>
