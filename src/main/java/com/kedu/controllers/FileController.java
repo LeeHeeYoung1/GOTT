@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class FileController {
         JsonObject jsonObject = new JsonObject();
 
         // 프로젝트의 resources/uploads 폴더
-        String fileRoot = servletContext.getRealPath("/resources/uploads/");
+        String fileRoot = "\\\\10.5.4.10\\gott_uploads\\";
 
         File uploadFolder = new File(fileRoot);
 
@@ -58,7 +59,7 @@ public class FileController {
             // DB에는 이 주소가 저장됨
             jsonObject.addProperty(
                 "url",
-                "/uploads/" + savedFileName
+                "/file/image?fileName=" + savedFileName
             );
 
             jsonObject.addProperty("responseCode", "success");
@@ -73,5 +74,17 @@ public class FileController {
         }
 
         return jsonObject.toString();
+    }
+    
+    @RequestMapping("/image")
+    public void image(String fileName, HttpServletResponse response) throws Exception {
+
+        String path = "\\\\10.5.4.10\\gott_uploads\\";
+
+        File file = new File(path + fileName);
+
+        response.setContentType("image/*");
+
+        FileUtils.copyFile(file, response.getOutputStream());
     }
 }
