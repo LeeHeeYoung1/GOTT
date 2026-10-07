@@ -15,6 +15,9 @@
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
   <style>
+  		html {
+		    scroll-behavior: smooth;
+		}
   
         body{
             position: relative;
@@ -29,7 +32,7 @@
             right: 0;
             left: 0;
             z-index: 100;
-            
+            border: 1px solid black; 
         }
         
         .logobox {
@@ -85,46 +88,6 @@
         .icon:active {
             
         }
-                
-        .linkbar {
-            width: auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: white;
-            position: fixed;
-            left: 80px;
-            top: 150px;
-        }
-        .linkbar nav {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .linkbar nav a {
-            margin: 2em;
-            color: #263238;
-        }
-
-        #vertical-underline {
-            position: absolute;
-            width: 0px;
-            background-color: #318de4;
-            height: 4px;
-            transition: 0.5s;
-        }
-
-        .linkbarmain {
-            width: 100%;
-            min-height: 180px;
-            padding: 15px;
-            line-height: 2;
-        }
-        .linkbarmain a:hover {
-            cursor: pointer;
-            color: #2563eb;
-        }
 
         hr {
             margin: 25px 0px;
@@ -164,19 +127,19 @@
             <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
         </div>
         <div class="navi flex-between">
-            <div class="textzone"><a href="">이벤트</a></div>
+            <div class="textzone"><a href="/event/eventpage">이벤트</a></div>
             <div class="textzone"><a href="">지역</a></div>
             <div class="textzone"><a href="">추천여행지</a></div>
             <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
-            <div class="textzone"><a href="">리뷰</a></div>
-            <div class="textzone"><a href="">여행플래너</a></div>
+            <div class="textzone"><a href="/members/planner">여행플래너</a></div>
             <div class="textzone"><a href="/board/freeBoard">게시판</a></div>
+            <div class="textzone"><a href="">문의사항</a></div>
         </div>
         <c:choose>
 	        <c:when test="${loginId != null}">
 		        <div class="user-menu">
 
-		       	 	<div class="textbox">${nickname}님${nickname}님</div>
+		       	 	<div class="textbox">${nickname}님</div>
 
 		            <div class="textbox"><a href="/members/logout">로그아웃</a></div>
 		            <div class="textbox"><a href="members/mypage">마이페이지</a></div>
@@ -193,17 +156,4 @@
 		</c:choose>
     </div>
 
-    <div class="linkbar">
-        <nav>
-            <div id="vertical-underline"></div>
-            <h2 style="margin-top: 10px;">MENU</h2>
-            <a href="#eventbannerzone">이벤트</a>
-            <a href="#ourpromise">우리의 약속</a>
-            <a href="#mapzone">여행지도</a>
-            <a href="#placesuggest">여행지 추천</a>
-            <a href="#hotelsuggest">숙박업소 추천</a>
-            <a href="#popularboard">인기 게시글</a>
-            <a href="#notice">공지사항</a>
-        </nav>
-    </div>
 </div>

@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>    
 <!DOCTYPE html>
-<html>
-<head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/css/public.css">
@@ -16,23 +16,8 @@
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
   <style>	
-  		html {
-		    scroll-behavior: smooth;
-		}
   		
-        body{
-            position: relative;
-            padding-top: 70px;
-        }
         .header {
-            width: 100%;
-            height: 70px;
-            padding: 0 30px;
-            position : fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: 100;
             border: 1px solid black;
             background-color: #F8FAFC;
         }
@@ -105,59 +90,7 @@
 			border-radius: 2px;
 		}
 
-        .logobox {
-            width: 120px;
-            height: 70px;
-            margin-left: 50px;
-        }
-
-        .logobox img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .navi {
-            width: 50%;
-            margin: 0 auto;
-        }
-
-        .textzone {
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .textzone:hover {
-            color: #2563eb;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .textbox {
-            padding: 7px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .textbox:hover {
-            background-color: #f3f4f6;
-        }
-
-        .icon {
-            margin-left: 10px;
-            font-size: 20px;
-        }
-        .icon:hover {
-            cursor: pointer;
-        }
-        .icon:active {
-            
-        }
+        
         .title {
             width: 100%;
             height: 80px;
@@ -341,32 +274,6 @@
             color: #2563eb;
         }
 
-        hr {
-            margin: 25px 0px;
-            border: none;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .footer {
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #777;
-            background-color: #f8fafc;
-            font-size: 13px;
-        }
-
-        .footer p {
-            margin: 0;
-        }
-        .footer .textbox {
-            margin-top: 10px;
-            color: #6B7280;
-            background-color: #F8FAFA;
-        }
         .searchBox {
     width: 750px;
     height: 60px;
@@ -497,42 +404,9 @@
 }	
 
     </style>
-</head>
 
-<body>
 
 <div class="container">
-    <div class="header flex-between">
-        <div class="logobox">
-            <a href="/"><img src="images/logo.png" alt="GOTT 로고"></a>
-        </div>
-        <div class="navi flex-between">
-            <div class="textzone"><a href="/event/eventpage">이벤트</a></div>
-            <div class="textzone"><a href="">지역</a></div>
-            <div class="textzone"><a href="">추천여행지</a></div>
-            <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
-            <div class="textzone"><a href="/members/planner">여행플래너</a></div>
-            <div class="textzone"><a href="/board/freeBoard">게시판</a></div>
-            <div class="textzone"><a href="">문의사항</a></div>
-        </div>
-        <c:choose>
-	        <c:when test="${loginId != null}">
-		        <div class="user-menu">
-		       	 	<div class="textbox">${nickname}님</div>
-		            <div class="textbox"><a href="/members/logout">로그아웃</a></div>
-		            <div class="textbox"><a href="/members/mypage">마이페이지</a></div>
-		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
-		        </div>
-	        </c:when>
-	        <c:otherwise>
-	        	<div class="user-menu">
-	        		<div class="textbox"><a href="/members/loginpage">로그인</a></div>
-		            <div class="textbox"><a href="/members/signuppage">회원가입</a></div>
-		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
-		        </div>
-	        </c:otherwise>
-		</c:choose>
-    </div>
 
     <div id="eventbannerzone" class="title">
         <h1>대한민국 구석구석, 당신의 여행을 찾아보세요</h1>
@@ -546,7 +420,6 @@
 		<div id="searchResult"></div>
 		</div>
 	</form>
-	
     
     <div class="title">
         <h2>진행 중인 이벤트</h2>
@@ -636,24 +509,24 @@
             <div class="placebox">
                 <div class="placephoto"><img src="https://picsum.photos/240/240?random=4"></div>
                 <div class="placetext" style="padding: 5px;">
-                    <p style="font-weight: bold;">ex 제주도</p>
-                    <p>ex 에메랄드 빛 바다</p>
+                    <p style="font-weight: bold;">제주도</p>
+                    <p>에메랄드 빛 바다</p>
                     <button>자세히 보기</button>
                 </div>
             </div>
             <div class="placebox">
                 <div class="placephoto"><img src="https://picsum.photos/240/240?random=5"></div>
                 <div class="placetext" style="padding: 5px;">
-                    <p style="font-weight: bold;">ex 부산</p>
-                    <p>ex 도시와 바다</p>
+                    <p style="font-weight: bold;">부산</p>
+                    <p>도시와 바다</p>
                     <button>자세히 보기</button>
                 </div>
             </div>
             <div class="placebox">
                 <div class="placephoto"><img src="https://picsum.photos/240/240?random=6"></div>
                 <div class="placetext" style="padding: 5px;">
-                    <p style="font-weight: bold;">ex 경주</p>
-                    <p>ex 천년 고도의 역사</p>
+                    <p style="font-weight: bold;">경주</p>
+                    <p>천년 고도의 역사</p>
                     <button>자세히 보기</button>
                 </div>
             </div>
@@ -677,24 +550,24 @@
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="https://picsum.photos/240/240?random=7"></div>
                 <div class="hoteltext" style="padding: 5px;">
-                    <p style="font-weight: bold;">ex 호텔</p>
-                    <p>ex 편안한 호텔</p>
+                    <p style="font-weight: bold;">호텔</p>
+                    <p>편안한 호텔</p>
                     <button>자세히 보기</button>
                 </div>
             </div>
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="https://picsum.photos/240/240?random=8"></div>
                 <div class="hoteltext" style="padding: 5px;">
-                    <p style="font-weight: bold;">ex 모텔</p>
-                    <p>ex 가성비 모텔</p>
+                    <p style="font-weight: bold;">모텔</p>
+                    <p>가성비 모텔</p>
                     <button>자세히 보기</button>
                 </div>
             </div>
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="https://picsum.photos/240/240?random=9"></div>
                 <div class="hoteltext" style="padding: 5px;">
-                    <p style="font-weight: bold;">ex 민박</p>
-                    <p>ex 감성의 민박</p>
+                    <p style="font-weight: bold;">민박</p>
+                    <p>감성의 민박</p>
                     <button>자세히 보기</button>
                 </div>
             </div>
@@ -752,7 +625,7 @@
                     <div class="noticetitle" style="float: left;">사이트 점검 안내</div>
                     <div class="noticewritedate" style="float: left;">날짜</div>
                 </div>
- --%>
+ 		--%>
     </div>
 
 
@@ -770,14 +643,6 @@
         </nav>
     </div>
     
-
-    <hr>
-    <div class="footer">
-        <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-        <p>회사명 : GOTT | 대표 : ??? | 사업자등록번호 : 123-45-67890</p>
-        <p>이용약관 | 개인정보처리방침 | 고객센터</p>
-        <div class="textbox">사이트로고</div>
-    </div>
 </div>
 
 <script>
@@ -852,5 +717,4 @@ $("#searchInput").on("keyup", function () {
 
 </script>
 
-</body>
-</html>
+<%@ include file="/WEB-INF/views/common/footer.jsp"%>
