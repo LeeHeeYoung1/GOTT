@@ -18,9 +18,9 @@ import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dao.WishlistDAO;
 import com.kedu.dto.MembersDTO;
+import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.Travel_TypeDTO;
-import com.kedu.dto.WishlistDTO;
 import com.kedu.services.EmailService;
 
 @Controller
@@ -106,7 +106,9 @@ public class MembersControllers {
 	public String mypage(HttpSession session, Model model) {
 	    String memberId = (String) session.getAttribute("loginId");
 	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
+	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
 	    
+	    model.addAttribute("wishList",wishList);
 	    model.addAttribute("myRsList", myRsList);
 	    return "members/mypage";
 	}
