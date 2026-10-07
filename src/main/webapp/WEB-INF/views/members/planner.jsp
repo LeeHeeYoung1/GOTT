@@ -1,30 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <%@ include file="/WEB-INF/views/common/header.jsp"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>    
+    
 <!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/public.css">
+    <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <title>GOTT 여행 일정 플래너</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea87fc26ee3f75472cb75c454c18b302"></script>
 	
     <style>
-
-.textbox {
-    padding: 7px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-.textbox:hover {
-    background-color: #f3f4f6;
-}
 
 /* =========================================================
    3. 제목 영역
@@ -89,7 +79,7 @@
 /* ---------- 4-3. 왼쪽: 찜 목록 패널 ---------- */
 
 /* 패널 전체 박스 (탭 + 검색창 + 카드 목록) */
-.trableContainer {
+.tableContainer {
     border: 1px solid #333;
     background-color: white;
 }
@@ -99,7 +89,7 @@
     display: flex;
 }
 
-.trableTitle {
+.tableTitle {
     flex: 1;
     padding: 12px 0;
     text-align: center;
@@ -107,12 +97,12 @@
     cursor: pointer;
 }
 
-.trableTitle + .trableTitle {
+.tableTitle + .tableTitle {
     border-left: 1px solid #333;
 }
 
 /* 선택된 탭 */
-.trableTitle.active {
+.tableTitle.active {
     background-color: #222;
     color: white;
 }
@@ -337,12 +327,9 @@
     cursor: pointer;
 }
 
-
     </style>
 
-
     <div class="container">
- 
 
         <div class="title">
             <h1>나만의 여행일정 만들기</h1>
@@ -405,12 +392,12 @@
             <div class="plannerLayout">
 
                 <!-- 왼쪽: 찜 목록 -->
-                <div class="trableContainer">
+                <div class="tableContainer">
 
                     <div class="wishList">
-                        <div class="trableTitle active"><span>관광지</span></div>
-                        <div class="trableTitle"><span>맛집</span></div>
-                        <div class="trableTitle"><span>숙소</span></div>
+                        <div class="tableTitle active"><span>관광지</span></div>
+                        <div class="tableTitle"><span>맛집</span></div>
+                        <div class="tableTitle"><span>숙소</span></div>
                     </div>
 
                     <div class="wishSearch">
@@ -418,68 +405,24 @@
                     </div>
 
                     <div class="tablewishContainer">
-
-                        <div class="wishItem" draggable="true">
-                            <span class="dragHandle">⋮⋮</span>
-                            <div class="wishThumb">
-                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
-                            </div>
-
-                            <div class="wishText">
-                                <p>제주특별자치도</p>
-                                <span>한라산 국립공원</span>
-                            </div>
-
-                            <button type="button" class="addBtn">+</button>
-                        </div>
-
-                        <div class="wishItem" draggable="true">
-                            <span class="dragHandle">⋮⋮</span>
-                            <div class="wishThumb">
-                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
-                            </div>
-
-                            <div class="wishText">
-                                <p>제주특별자치도</p>
-                                <span>협재 해수욕장</span>
-                            </div>
-
-                            <button type="button" class="addBtn">+</button>
-                        </div>
-                        
-                        <div class="wishItem" draggable="true">
-                            <span class="dragHandle">⋮⋮</span>
-                            <div class="wishThumb">
-                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
-                            </div>
-
-                            <div class="wishText">
-                                <p>제주특별자치도</p>
-                                <span>협재 해수욕장</span>
-                            </div>
-
-                            <button type="button" class="addBtn">+</button>
-                        </div>
-                        
-                        <div class="wishItem" draggable="true">
-                            <span class="dragHandle">⋮⋮</span>
-                            <div class="wishThumb">
-                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
-                            </div>
-						<c:forEach var="place" items="${places}">
-                            <div class="wishText">
-                                <p>${place.region}</p>
-                                <span>${place.name}</span>
-                            </div>
-
-                            <button type="button" class="addBtn" onclick="addPlace(
-							            ${place.placeId},
-							            ${place.latitude},
-							            ${place.longitude},
-							            '${place.name}')">+</button>
-						</c:forEach>            
-						
-                        </div>
+						<c:forEach var="place" items="${wishList}">
+	                        <div class="wishItem" draggable="true">
+	                            <span class="dragHandle">⋮⋮</span>
+	                            <div class="wishThumb">
+	                                <img src="/images/logo.png" style="width: 50px; height: 50px;">
+	                            </div>
+	
+	                            <div class="wishText">
+	                                <p>${place.region}</p>
+                					<span>${place.name}</span>
+	                            </div>
+	
+	                            <button type="button" class="addBtn"
+							        onclick="addPlace(${place.place_id}, ${place.latitude}, 
+							        				${place.longitude}, '${place.name}')">
+							    +</button>
+	                        </div>
+						</c:forEach>
                     </div>
                 </div>
 
@@ -503,11 +446,10 @@
                                 <input type="text" class="timeInput" value="09:30">
                                 <button type="button">✕</button>
                             </div>
-                         
                         </div>
 
-                        <p class="transport flex-between">🚗 차량 이동 · 약 35분 · 22.4km</p>
-                        
+                        <p class="transport">🚗 차량 이동 · 약 35분 · 22.4km</p>
+
                         <div class="timelineItem">
                             <span class="orderMark">2</span>
                             <div class="timelineCard">
@@ -518,7 +460,7 @@
                                     <span>협재 흑돼지 맛집</span>
                                 </div>
                                 <input type="text" class="timeInput" value="12:00">
-                                <button type="button">✕</button>
+                                <button type="button" id="delbtn">✕</button>
                             </div>
                         </div>
 
@@ -532,9 +474,7 @@
                 <!-- 오른쪽: 지도 + 요약 -->
                 <div class="mapContainer">
                     <div class="mapTitle">동선 미리보기</div>
-                    <div class="mapSlot" id="map">
-                    	
-                    </div>
+                    <div class="mapSlot" id="map"></div>
                     <div class="mapSummary">
                         <div><span>총 일정 기간</span><b>3박 4일</b></div>
                         <div><span>총 방문지 수</span><b>14곳</b></div>
@@ -559,105 +499,190 @@
     
 <script>
 
-	$("#createPlaner").on("click",function(){
-		let title = $("input[name='title']").val();
-		let startDate = $("input[name='startDate']").val();
-		let endDate = $("input[name='endDate']").val();
-		
-		if(title == ""){
-			alert("히히 바보 다잉~");
-			return;
-		}
-		
-		if(startDate == "" || endDate == ""){
-			alert("히히 너 바보다잉~");
-			return;
-		}
-		
-		let start = new Date(startDate);
-		let end = new Date(endDate);
-		
-		if(start > end){
-			alert("히히 나 바보 아니다~");
-			return;
-		}
-		
-		let dayTabs = $("#dayTabs");
-		dayTabs.empty();
-		
-		let day = 1;
-		let currentDate = new Date(start);
-		let week = ["일", "월", "화", "수", "목", "금", "토"];
+   $("#createPlaner").on("click",function(){
+      let title = $("input[name='title']").val();
+      let startDate = $("input[name='startDate']").val();
+      let endDate = $("input[name='endDate']").val();
+      
+      if(title == ""){
+         alert("히히 바보 다잉~");
+         return;
+      }
+      
+      if(startDate == "" || endDate == ""){
+         alert("히히 너 바보다잉~");
+         return;
+      }
+      
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      
+      if(start > end){
+         alert("히히 나 바보 아니다~");
+         return;
+      }
+      
+      let dayTabs = $("#dayTabs");
+      dayTabs.empty();
+      
+      let day = 1;
+      let currentDate = new Date(start);
+      let week = ["일", "월", "화", "수", "목", "금", "토"];
 
-		while(currentDate <= end){
-		    let year = currentDate.getFullYear();
-		    let month = String(currentDate.getMonth() + 1).padStart(2, "0");
-		    let date = String(currentDate.getDate()).padStart(2, "0");
-		    let dayOfWeek = week[currentDate.getDay()];
+      while(currentDate <= end){
+          let year = currentDate.getFullYear();
+          let month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          let date = String(currentDate.getDate()).padStart(2, "0");
+          let dayOfWeek = week[currentDate.getDay()];
 
-		    let dayTab = $("<div>")
-		        .addClass("dayTab")
-		        .text("Day " + day);
-		    
-		    dayTab.data("year", year);
-		    dayTab.data("month", month);
-		    dayTab.data("date", date);
-		    dayTab.data("dayOfWeek", dayOfWeek);
-		    dayTab.data("day", day);
+          let dayTab = $("<div>")
+              .addClass("dayTab")
+              .text("Day " + day);
+          
+          dayTab.data("year", year);
+          dayTab.data("month", month);
+          dayTab.data("date", date);
+          dayTab.data("dayOfWeek", dayOfWeek);
+          dayTab.data("day", day);
 
-		    if(day == 1){
-		        dayTab.addClass("active");
+          if(day == 1){
+              dayTab.addClass("active");
 
-		        $("#dayDate").text(
-		            year + "." + month + "." + date +
-		            " (" + dayOfWeek + ") · " + day + "일차"
-		        );
-		    }
-		    dayTabs.append(dayTab);
-		    currentDate.setDate(currentDate.getDate() + 1);
-		    day++;
-		}
-		
-	});
-	
-	$(document).on("click", ".dayTab", function(){
-		$(".dayTab").removeClass("active");
-		$(this).addClass("active");
-		
-		let year = $(this).data("year");
-		let month = $(this).data("month");
-		let date = $(this).data("date");
-		let dayOfWeek = $(this).data("dayOfWeek");
-		let day = $(this).data("day");
-		
-		$("#dayDate").text(year+"."+month+"."+date+"("+dayOfWeek+")."+day+"일차");
-	});
-	
-	// 카카오 맵 
+              $("#dayDate").text(
+                  year + "." + month + "." + date +
+                  " (" + dayOfWeek + ") · " + day + "일차"
+              );
+          }
+          dayTabs.append(dayTab);
+          currentDate.setDate(currentDate.getDate() + 1);
+          day++;
+      }
+      
+   });
+   
+   
+   $(document).on("click", ".dayTab", function(){
+      $(".dayTab").removeClass("active");
+      $(this).addClass("active");
+      
+      let year = $(this).data("year");
+      let month = $(this).data("month");
+      let date = $(this).data("date");
+      let dayOfWeek = $(this).data("dayOfWeek");
+      let day = $(this).data("day");
+      
+      $("#dayDate").text(year+"."+month+"."+date+"("+dayOfWeek+")."+day+"일차");
+   });
+   
+	// 카카오 맵 API요~
 	var container = document.getElementById('map');
 	var options = {
 		center: new kakao.maps.LatLng(33.450701, 126.570667),
-		level: 3
+		level: 8
 	};
 
 	var map = new kakao.maps.Map(container, options);
 	
-	var marker = new kakao.maps.Marker({
-	    map: map
-	});
+	var markers = [];
 	
-	function moveToPlace(lat, lng) {
+	// + 버튼 기능이요~
+	function addPlace(placeId, lat, lng, name) {
 
+	    // 1. 일정표에 장소 추가
+	    addTimelineItem(placeId, name);
+	    // 2. 지도에 마커 추가
+	    addMarker(placeId, lat, lng, name);
+	    // 3. 안내 문구 제거
+	    $(".dropEmpty").remove();
+	}
+	// 마커 생성이요~
+	function addMarker(placeId, lat, lng, name) {
+		
 	    var position = new kakao.maps.LatLng(lat, lng);
 
-	    // 지도 중심을 해당 장소로 이동
+	    // 새로운 마커 생성
+	    var marker = new kakao.maps.Marker({
+	        position: position,
+	        map: map
+	    });
+	    // 생성된 마커 정보를 배열에 저장
+	    markers.push({
+	        placeId: placeId,
+	        name: name,
+	        marker: marker
+	    });
+	    // 지도 중심을 새 장소로 이동
 	    map.setCenter(position);
-
-	    // 마커도 해당 장소로 이동
-	    marker.setPosition(position);
+	    
 	}
 	
+	function addTimelineItem(placeId, name) {
 
+	    // 현재 일정표에 있는 장소 개수
+	    var count = $(".timelineItem").length + 1;
+	    // timelineItem
+	    var timelineItem = $("<div>").addClass("timelineItem");
+	    // 순서 번호
+	    var orderMark = $("<span>").addClass("orderMark").text(count);
+	    // 카드
+	    var timelineCard = $("<div>").addClass("timelineCard");
+	    // 드래그 아이콘
+	    var dragHandle = $("<span>").addClass("dragHandle").text("⋮⋮");
+	    // 이미지
+	    var thumb = $("<div>").addClass("wishThumb").append(
+	           $("<img>").attr("src", "/images/logo.png").css({width: "50px", height: "50px"}));
+	 	// 장소 이름
+	    var wishText = $("<div>").addClass("wishText").append($("<p>").text("관광지"))
+	    				.append($("<span>").text(name));
+	    // 시간 입력
+	    var timeInput = $("<input>").attr("type", "text").addClass("timeInput").attr("placeholder", "시간");
+	    // 삭제 버튼
+	    var deleteButton = $("<button>").attr("type", "button").text("✕");
+	    // 카드 안에 요소 넣기
+	    timelineCard.append(dragHandle).append(thumb).append(wishText)
+	        			.append(timeInput).append(deleteButton);
+	    // timelineItem에 번호와 카드 넣기
+	    timelineItem.append(orderMark).append(timelineCard);
+	    // 안내 문구가 있으면 그 위에 추가
+	    $(".dropEmpty").before(timelineItem);
+	    
+	    // 삭제 버튼
+	    deleteButton.on("click", function() {
+
+	        timelineItem.remove();
+	        removeMarker(placeId);
+	        
+	        function removeMarker(placeId) {
+	    	    // markers 배열에서 해당 placeId를 가진 마커 찾기
+	    	    for (var i = 0; i < markers.length; i++) {
+	    	        if (markers[i].placeId == placeId) {
+	    	            // 카카오 지도에서 마커 제거
+	    	            markers[i].marker.setMap(null);
+	    	            // 배열에서도 제거
+	    	            markers.splice(i, 1);
+	    	            break;
+	    	        }
+	    	    }
+	    	}
+	        
+	        updateOrder();
+
+	    });
+	}
+	
+	
+	
+	function updateOrder() {
+
+	    $(".timelineItem").each(function(index) {
+	        $(this).find(".orderMark").text(index + 1);
+	    });
+
+	}
+	
+	
+	
+   
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
