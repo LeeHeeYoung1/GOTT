@@ -61,7 +61,7 @@ public class ReservationDAO {
 
 		int a = (adult == null) ? 0 : adult;
 		int c = (child == null) ? 0 : child;
-		int guest = (a + c > 0) ? (a + c) : null;
+		Integer guest = (a + c > 0) ? Integer.valueOf(a + c) : null;
 
 		String sql = "select * from ("
 				+ "select t.place_id, t.name, t.region, t.address, t.place_type, t.image_name, t.latitude, t.longitude, t.avg_rating, "
@@ -83,7 +83,7 @@ public class ReservationDAO {
 
 				// 날짜 겹침
 				+ "and (? is null or ? is null or not exists (" + "      select 1 from reservation v "
-				+ "       where v.room_id = r.room_id " + "         and nvl(v.status, '예약완료') <> '취소' "
+				+ "       where v.room_id = r.room_id " + "         and nvl(v.status, '예약완료') <> '예약취소' "
 				+ "         and v.check_in  < to_date(?, 'YYYY-MM-DD') "
 				+ "         and v.check_out > to_date(?, 'YYYY-MM-DD'))) "
 
