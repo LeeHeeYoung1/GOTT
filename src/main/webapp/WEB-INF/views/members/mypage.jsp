@@ -55,11 +55,14 @@ body {
 .sectionTitle>span {
   font-size: 16px;
   font-weight: bold;
+  line-height: 1;
 }
 
 .sectionTitle>a {
   font-size: 12px;
   color: #777;
+  line-height: 1;
+  align-self: center;
 }
 
 
@@ -1043,7 +1046,7 @@ body {
             <ul>
               <li class="active"><a href="/members/mypage">마이페이지 홈</a></li>
               <li><a href="#">예약 내역</a></li>
-              <li><a href="#">찜한 여행지 · 숙소</a></li>
+              <li><a href="/members/wishlist">찜한 여행지 · 숙소</a></li>
               <li><a href="/members/planner">여행 일정 플래너</a></li>
               <li><a href="#">내가 쓴 리뷰</a></li>
               <li><a href="#">내가 쓴 게시글</a></li>
@@ -1087,7 +1090,7 @@ body {
           <div class="plannerContainer">
 		    <div class="sectionTitle">
 		      <span>여행 일정 플래너</span>
-		      <a href="#" style="float: right;">플래너 열기</a>
+		      <a href="/members/planner" style="float: right;">플래너 열기</a>
 		    </div>
 		
 		    <div class="plannerBox">

@@ -271,4 +271,9 @@ public class MembersControllers {
 		return "members/planner";
 	}
 	
+	@RequestMapping("/wishlist")
+	public String wishlist() {
+		return "members/wishlist";
+	}
+	
 }
