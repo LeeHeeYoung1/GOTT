@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kedu.commons.PriceUtil;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.RoomDAO;
+import com.kedu.dto.BoardDTO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.PlaceRoomDTO;
 import com.kedu.dto.ReservationDTO;
@@ -37,21 +38,36 @@ public class ReservationController {
 	private RoomDAO roomDao;
 
 	@RequestMapping("/list")
-	public String list(Model model) {
-		List<PlaceRoomDTO> roomList = rdao.roomList();
+	public String list(int cpage, Model model) {
+		List<PlaceRoomDTO> roomList = roomDao.selectFromTo(cpage * 10 - 9, cpage * 10);
 		model.addAttribute("roomList", roomList);
+
+		model.addAttribute("recordTotalCount", rdao.selectCount());
+		model.addAttribute("recordCountPerPage", 10);
+		model.addAttribute("naviCountPerPage", 10);
+		model.addAttribute("cpage", cpage);
+
 		return "reservation/room_search";
 	}
 
 	@RequestMapping("/search")
 	public String search(PlaceDTO pdto, String[] amenity, Integer maxPrice, String checkIn, String checkOut,
-			Integer adult, Integer child, Model model) {
-		List<PlaceRoomDTO> searchList = rdao.searchList(pdto, amenity, maxPrice, checkIn, checkOut, adult, child);
+			Integer adult, Integer child, Integer cpage, Model model) {
+		if (cpage == null) cpage = 1;
+		
+		List<PlaceRoomDTO> searchList = rdao.searchFromTo(pdto, amenity, maxPrice, checkIn, checkOut, adult, child,
+				cpage * 10 - 9, cpage * 10);
 		model.addAttribute("roomList", searchList);
 		model.addAttribute("checkIn", checkIn);
 		model.addAttribute("checkOut", checkOut);
 		model.addAttribute("adult", adult);
 		model.addAttribute("child", child);
+		
+		model.addAttribute("recordTotalCount", rdao.searchCount(pdto, amenity, maxPrice, checkIn, checkOut, adult, child));
+		model.addAttribute("recordCountPerPage", 10);
+		model.addAttribute("naviCountPerPage", 10);
+		model.addAttribute("cpage", cpage);
+
 		return "reservation/room_search";
 	}
 
@@ -96,7 +112,7 @@ public class ReservationController {
 		RoomDTO roomDto = roomDao.roomOne(roomId);
 		int price = roomDto.getPriceWeekday();
 		rdao.insert(roomDto, checkIn, checkOut, price, guest, paymentId, session);
-		return "reservation/room_search";
+		return "redirect:reservation/list?cpage=1";
 	}
 
 	@RequestMapping("/paymentComplete")
