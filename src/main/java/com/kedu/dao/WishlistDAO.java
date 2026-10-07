@@ -36,9 +36,7 @@ public class WishlistDAO {
 	}
 	
 	public List<PlaceDTO> selectByWish(String memberId) {
-	    String sql = "select p.* from Wishlist w join Place p on w.target_id = p.place_id where w.member_id = ? order by w.reg_date desc";
-	    return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), memberId);
+		String sql = "select p.* from Wishlist w join Place p on w.target_id = p.place_id where w.member_id = ? order by w.reg_date desc";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), memberId);
 	}
-	
-	
 }
