@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html>
@@ -14,377 +14,504 @@
 <title>GOTT 게시글</title>
 
 <style>
-
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
+	margin: 0;
+	padding: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 /* 상단바 */
-
 .headercontainer {
-    width: 1200px;
-    max-width: calc(100% - 40px);
-    height: 70px;
-    margin: 0 auto;
-    padding: 0 30px;
-    display: flex;
-    align-items: center;
+	width: 1200px;
+	max-width: calc(100% - 40px);
+	height: 70px;
+	margin: 0 auto;
+	padding: 0 30px;
+	display: flex;
+	align-items: center;
 }
 
 .logoBox {
-    width: 100px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 45px;
+	width: 100px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 45px;
 }
 
 .logoBox img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 
 .nav {
-    display: flex;
-    gap: 25px;
+	display: flex;
+	gap: 25px;
 }
 
 .nav a {
-    color: #333;
-    font-size: 13px;
-    white-space: nowrap;
+	color: #333;
+	font-size: 13px;
+	white-space: nowrap;
 }
 
 .signBox {
-    margin-left: auto;
-    display: flex;
-    gap: 10px;
+	margin-left: auto;
+	display: flex;
+	gap: 10px;
 }
 
 .signBox a {
-    color: #555;
-    font-size: 11px;
+	color: #555;
+	font-size: 11px;
 }
 
 .menu-icon {
-    margin-left: 18px;
-    font-size: 20px;
-    cursor: pointer;
+	margin-left: 18px;
+	font-size: 20px;
+	cursor: pointer;
 }
 
 hr {
-    border: 0;
-    border-top: 1px solid #e5e5e5;
-    margin: 0;
+	border: 0;
+	border-top: 1px solid #e5e5e5;
+	margin: 0;
 }
 
 /* 메인 */
-
 .main {
-    width: 1200px;
-    max-width: calc(100% - 40px);
-    margin: 0 auto;
-    padding-bottom: 80px;
+	width: 1200px;
+	max-width: calc(100% - 40px);
+	margin: 0 auto;
+	padding-bottom: 80px;
 }
 
 /* 제목 */
-
 .titleBox {
-    text-align: center;
-    padding: 35px 0 20px;
+	text-align: center;
+	padding: 35px 0 20px;
 }
 
 .titleBox h2 {
-    margin: 0 0 5px;
-    font-size: 25px;
-    color: #222;
+	margin: 0 0 5px;
+	font-size: 25px;
+	color: #222;
 }
 
 .titleBox h5 {
-    margin: 0;
-    font-size: 12px;
-    font-weight: 400;
-    color: #888;
+	margin: 0;
+	font-size: 12px;
+	font-weight: 400;
+	color: #888;
 }
 
 /* 경로 */
-
 .breadcrumb {
-    margin: 0 100px;
-    padding: 10px 0;
-    font-size: 10px;
-    color: #999;
-    border-top: 1px solid #eee;
+	margin: 0 100px;
+	padding: 10px 0;
+	font-size: 10px;
+	color: #999;
+	border-top: 1px solid #eee;
 }
 
 .breadcrumb span {
-    color: #333;
-    font-weight: 600;
+	color: #333;
+	font-weight: 600;
 }
 
 /* 게시글 */
-
 .contentsBox {
-    width: 900px;
-    margin: 35px auto 0;
-    border: 1px solid #ddd;
-    border-radius: 7px;
-    background: white;
-    overflow: hidden;
+	width: 900px;
+	margin: 35px auto 0;
+	border: 1px solid #ddd;
+	border-radius: 7px;
+	background: white;
+	overflow: hidden;
 }
 
 /* 게시글 제목 */
-
 .contentsTitle {
-    padding: 25px 30px 18px;
-    border-bottom: 1px solid #eee;
+	padding: 25px 30px 18px;
+	border-bottom: 1px solid #eee;
 }
 
 .contentsTitle h3 {
-    margin: 0 0 10px;
-    font-size: 20px;
-    color: #222;
+	margin: 0 0 10px;
+	font-size: 20px;
+	color: #222;
 }
 
 /* 작성자 정보 */
-
 .contentsInfo {
-    display: flex;
-    gap: 15px;
-    color: #888;
-    font-size: 11px;
+	display: flex;
+	gap: 15px;
+	color: #888;
+	font-size: 11px;
 }
 
 .contentsInfo span {
-    padding-right: 15px;
-    border-right: 1px solid #ddd;
+	padding-right: 15px;
+	border-right: 1px solid #ddd;
 }
 
 .contentsInfo span:last-child {
-    border-right: 0;
+	border-right: 0;
 }
 
 /* 내용 */
-
 .contents {
-    min-height: 300px;
-    padding: 30px;
-    color: #444;
-    font-size: 13px;
-    white-space: pre-wrap;
+	min-height: 300px;
+	padding: 30px;
+	color: #444;
+	font-size: 13px;
+	white-space: pre-wrap;
 }
 
 /* 버튼 */
-
 .buttonBox {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 20px 30px;
-    border-top: 1px solid #eee;
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	padding: 20px 30px;
+	border-top: 1px solid #eee;
 }
 
 .buttonBox button {
-    height: 35px;
-    padding: 0 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: white;
-    color: #555;
-    font-size: 11px;
-    cursor: pointer;
+	height: 35px;
+	padding: 0 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background: white;
+	color: #555;
+	font-size: 11px;
+	cursor: pointer;
 }
 
 .buttonBox button:hover {
-    background: #222;
-    color: white;
-    border-color: #222;
+	background: #222;
+	color: white;
+	border-color: #222;
 }
 
 .fileBox {
-    padding: 15px 30px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    background: #fafafa;
+	padding: 15px 30px;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	background: #fafafa;
 }
 
 .fileTitle {
-    margin-bottom: 8px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #777;
+	margin-bottom: 8px;
+	font-size: 11px;
+	font-weight: 600;
+	color: #777;
 }
 
 .fileList {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
 }
 
 .fileList a {
-    display: inline-block;
-    padding: 7px 10px;
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
-    background: white;
-    color: #555;
-    font-size: 11px;
+	display: inline-block;
+	padding: 7px 10px;
+	border: 1px solid #e5e5e5;
+	border-radius: 4px;
+	background: white;
+	color: #555;
+	font-size: 11px;
 }
 
 .fileList a:hover {
-    background: #f1f1f1;
-    color: #222;
+	background: #f1f1f1;
+	color: #222;
 }
 
+.replyBox {
+	width: 900px;
+	margin: 30px auto 80px;
+}
+
+.replyHeader {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	margin-bottom: 15px;
+}
+
+.replyHeader h3 {
+	margin: 0;
+	font-size: 17px;
+	color: #222;
+}
+
+.replyHeader span {
+	font-size: 12px;
+	color: #888;
+}
+/* 댓글 작성 */
+.replyWrite {
+	padding: 18px;
+	border: 1px solid #ddd;
+	border-radius: 7px;
+	background: #fafafa;
+}
+
+.replyWriter {
+	margin-bottom: 10px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #555;
+}
+
+.replyWrite textarea {
+	width: 100%;
+	height: 90px;
+	padding: 12px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background: white;
+	resize: none;
+	outline: none;
+	font-family: inherit;
+	font-size: 12px;
+}
+
+.replyWrite textarea:focus {
+	border-color: #999;
+}
+
+.replyWriteBottom {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 10px;
+}
+
+.replyWriteBottom span {
+	font-size: 10px;
+	color: #999;
+}
+
+.replyWriteBottom button {
+	height: 32px;
+	padding: 0 15px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background: white;
+	color: #555;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+.replyWriteBottom button:hover {
+	background: #222;
+	color: white;
+	border-color: #222;
+} /* 댓글 목록 */
+.replyList {
+	margin-top: 10px;
+}
+
+.reply {
+	position: relative;
+	padding: 18px 5px;
+	border-bottom: 1px solid #eee;
+}
+
+.replyInfo {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 8px;
+}
+
+.replyInfo strong {
+	font-size: 12px;
+	color: #333;
+}
+
+.replyInfo span {
+	font-size: 10px;
+	color: #aaa;
+}
+
+.replyContents {
+	padding-right: 80px;
+	color: #555;
+	font-size: 12px;
+	line-height: 1.6;
+}
+
+.replyButton {
+	position: absolute;
+	top: 17px;
+	right: 5px;
+}
+
+.replyButton button {
+	padding: 0;
+	margin-left: 8px;
+	border: 0;
+	background: none;
+	color: #aaa;
+	font-size: 10px;
+	cursor: pointer;
+}
+
+.replyButton button:hover {
+	color: #333;
+}
 </style>
 
 </head>
 
 <body>
 
-<!-- 상단바 -->
+	<!-- 상단바 -->
 
-<div class="headercontainer">
+	<div class="headercontainer">
 
-    <div class="logoBox">
-        <a href="/">
-            <img src="/images/logo.png" alt="GOTT 로고">
-        </a>
-    </div>
+		<div class="logoBox">
+			<a href="/"> <img src="/images/logo.png" alt="GOTT 로고">
+			</a>
+		</div>
 
-    <nav class="nav">
-        <a href="#">이벤트</a>
-        <a href="#">지역</a>
-        <a href="#">추천여행지</a>
-        <a href="#">숙박업소</a>
-        <a href="#">리뷰</a>
-        <a href="#">여행 플래너</a>
-        <a href="#">공지사항</a>
-    </nav>
+		<nav class="nav">
+			<a href="#">이벤트</a> <a href="#">지역</a> <a href="#">추천여행지</a> <a
+				href="#">숙박업소</a> <a href="#">리뷰</a> <a href="#">여행 플래너</a> <a
+				href="#">공지사항</a>
+		</nav>
 
-    <div class="signBox">
-        <a href="/members/mypage">마이페이지</a>
-        <a href="/members/logout">로그아웃</a>
-    </div>
+		<div class="signBox">
+			<a href="/members/mypage">마이페이지</a> <a href="/members/logout">로그아웃</a>
+		</div>
 
-    <div class="menu-icon">☰</div>
+		<div class="menu-icon">☰</div>
 
-</div>
+	</div>
 
-<hr>
+	<hr>
 
 
-<!-- 메인 -->
+	<!-- 메인 -->
 
-<div class="main">
+	<div class="main">
 
-    <div class="titleBox">
+		<div class="titleBox">
 
-        <h2>게시판</h2>
+			<h2>게시판</h2>
 
-        <h5>
-            여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.
-        </h5>
+			<h5>여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.</h5>
 
-    </div>
+		</div>
 
 
-    <div class="breadcrumb">
+		<div class="breadcrumb">
 
-        홈 &nbsp;>&nbsp; 자유게시판 &nbsp;>&nbsp;
+			홈 &nbsp;>&nbsp; 자유게시판 &nbsp;>&nbsp; <span>게시글</span>
 
-        <span>게시글</span>
-
-    </div>
+		</div>
 
 
-    <!-- 게시글 -->
+		<!-- 게시글 -->
 
-    <div class="contentsBox">
+		<div class="contentsBox">
 
-        <!-- 제목 -->
+			<!-- 제목 -->
 
-        <div class="contentsTitle">
+			<div class="contentsTitle">
 
-            <h3>${boardContent.title}</h3>
+				<h3>${boardContent.title}</h3>
 
-            <div class="contentsInfo">
+				<div class="contentsInfo">
 
-                <span>작성자 ${boardContent.writer}</span>
+					<span>작성자 ${boardContent.writer}</span> <span>조회수
+						${boardContent.view_count}</span> <span>
+						${boardContent.write_date.toString().substring(0, 10)}<br>
+					</span>
 
-                <span>조회수 ${boardContent.view_count}</span>
+				</div>
 
-                <span>
-                    ${boardContent.write_date.toString().substring(0, 10)}<br>
-                </span>
-              
-            </div>
+			</div>
 
-        </div>
-        
-        <!-- 첨부파일 -->
+			<!-- 첨부파일 -->
 
-<c:if test="${not empty flist}">
+			<c:if test="${not empty flist}">
 
-    <div class="fileBox">
+				<div class="fileBox">
 
-        <div class="fileTitle">
-            첨부파일
-        </div>
+					<div class="fileTitle">첨부파일</div>
 
-        <div class="fileList">
+					<div class="fileList">
 
-            <c:forEach var="i" items="${flist}">
+						<c:forEach var="i" items="${flist}">
 
-                <a href="/board/download?oriname=${i.oriname}&sysname=${i.sysname}">
-                    ${i.oriname}
-                </a>
+							<a
+								href="/board/download?oriname=${i.oriname}&sysname=${i.sysname}">
+								${i.oriname} </a>
 
-            </c:forEach>
+						</c:forEach>
 
-        </div>
+					</div>
 
-    </div>
+				</div>
 
-</c:if>
+			</c:if>
 
-       <!-- 내용 -->
+			<!-- 내용 -->
 
-        <div class="contents">
-
-            ${boardContent.contents}
-
-        </div>
+			<div class="contents">${boardContent.contents}</div>
 
 
-        <!-- 버튼 -->
+			<!-- 버튼 -->
 
-        <div class="buttonBox">
+			<div class="buttonBox">
 
-            <button onclick="location.href='/board/freeBoard'">
-                목록
-            </button>
+				<button id="goBack">목록</button>
 
-        </div>
+			</div>
 
-    </div>
+		</div>
 
-</div>
+	</div>
+	<hr>
 
+	<div class="replyBox">
+		<div class="replyHeader">
+			<h3>댓글</h3>
+			<span>3</span>
+		</div>
+		<div class="replyWrite">
+			<div class="replyWriter">${sessionScope.nickname}</div>
+			<textarea id="replyContents" placeholder="댓글을 입력해주세요."></textarea>
+			<div class="replyWriteBottom">
+				<span>댓글을 남겨 여행 이야기를 함께 나눠보세요.</span>
+				<button type="button" id="replyBtn">댓글 작성</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		let goBack = document.getElementById("goBack");
+
+		goBack.onclick = function() {
+			history.back();
+		}
+		
+	</script>
 </body>
 </html>

@@ -322,7 +322,7 @@ hr {
 		</div>
 
 		<nav class="tabs">
-			<a href="/board/freeBoard">자유게시판</a> <a href="/board/reviewBoard"
+			<a href="/board/freeBoard?cpage=1">자유게시판</a> <a href="/board/reviewBoard"
 				class="on">리뷰게시판</a>
 		</nav>
 

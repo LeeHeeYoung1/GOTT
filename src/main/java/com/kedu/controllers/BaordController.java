@@ -2,10 +2,10 @@ package com.kedu.controllers;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -36,9 +36,27 @@ public class BaordController {
 	private FilesDAO fdao;
 	
 	@RequestMapping("/freeBoard")
-	public String freeBoard(Model model) {
-		List<BoardDTO> boardList = bdao.selectAll();
-		model.addAttribute("boardList", boardList);
+	public String freeBoard(int cpage, Model model) {
+
+		List<BoardDTO> list = bdao.selectFromTo(cpage * 10 - 9, cpage * 10);
+		model.addAttribute("boardList", list);
+		
+		List<Integer> fileList = new ArrayList<>();
+		for(BoardDTO board : list) {
+			if(fdao.hasFile(board.getSeq())) {
+				fileList.add(board.getSeq());
+			}
+		}
+		model.addAttribute("fileList",fileList);
+		
+		int boardCount = bdao.boardCount();
+		
+		model.addAttribute("boardCount", boardCount);
+		model.addAttribute("recordTotalCount", bdao.boardCount());
+		model.addAttribute("recordCountPerPage", 10);
+		model.addAttribute("naviCountPerpage", 10);
+		model.addAttribute("cpage",cpage);
+		
 		return "board/freeBoard";
 	}
 	
@@ -53,7 +71,7 @@ public class BaordController {
 	}
 	
 	@RequestMapping("/writeRegi")
-	public String writeRegi(MultipartFile[] files, Model model,HttpSession session,BoardDTO dto) throws Exception {
+	public String writeRegi(MultipartFile[] attachFiles, Model model,HttpSession session,BoardDTO dto) throws Exception {
 		
 		String nickname = (String)session.getAttribute("nickname");
 		dto.setWriter(nickname);
@@ -64,7 +82,8 @@ public class BaordController {
 		
 		String path = "\\\\10.5.4.10\\gott_uploads\\";
 		
-		for (MultipartFile file : files) {
+		for (MultipartFile file : attachFiles) {
+			 System.out.println("첨부파일 : " + file.getOriginalFilename());
 			if (file.isEmpty()) {
 				continue;
 			}
@@ -78,12 +97,12 @@ public class BaordController {
 			fdao.fileRegi(fdto);
 		}
 		
-		return "redirect:/board/freeBoard";
+		return "redirect:/board/freeBoard?cpage=1";
 	}
 	
 	@RequestMapping("/boardContent")
 	public String boardContent(BoardDTO dto, Model model, int seq) {
-		bdao.count(seq);
+		bdao.viewCount(seq);
 		BoardDTO boardContent = bdao.boardContent(seq);
 		List<FilesDTO> flist = fdao.getFile(seq);
 		model.addAttribute("boardContent", boardContent);

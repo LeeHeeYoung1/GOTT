@@ -24,4 +24,10 @@ public class FilesDAO {
 		String sql = "select * from files where parent_seq = ?";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(FilesDTO.class), seq);
 	}
+	
+	public boolean hasFile(int seq) {
+		String sql = "select count(*) from files where parent_seq = ?";
+		int count = jdbc.queryForObject(sql, Integer.class, seq);
+		return count > 0;
+	}
 }

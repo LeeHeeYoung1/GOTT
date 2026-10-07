@@ -17,6 +17,11 @@ public class BoardDAO {
 	
 	public int insert(BoardDTO dto) {
 		String sql = "insert into board values(?,?,?,0,systimestamp,?)";
+		System.out.println("seq : " + dto.getSeq());
+	    System.out.println("title : " + dto.getTitle());
+	    System.out.println("writer : " + dto.getWriter());
+	    System.out.println("contents : " + dto.getContents());
+
 		 return jdbc.update(sql,
 				 	dto.getSeq(),
 		            dto.getTitle(),
@@ -38,8 +43,18 @@ public class BoardDAO {
 		String sql = "select * from board where seq = ?";
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(BoardDTO.class), seq);
 	}
-	public int count(int seq) {
+	public int viewCount(int seq) {
 		String sql = "update board set view_count = view_count + 1 where seq = ?";
 		return jdbc.update(sql, seq);
+	}
+	public int boardCount() {
+		String sql = "select count(*) from board";
+		return jdbc.queryForObject(sql, Integer.class);
+	}
+	
+	
+	public List<BoardDTO> selectFromTo(int start, int end) {
+		String sql = "select * from (select board.*, row_number() over(order by seq desc) rn from board) where rn between ? and ?";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(BoardDTO.class),start, end);
 	}
 }

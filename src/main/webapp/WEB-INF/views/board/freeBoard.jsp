@@ -7,12 +7,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/css/public.css">
+
 <title>GOTT 자유게시판</title>
+
 <script
   src="https://code.jquery.com/jquery-3.7.1.js"
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -41,6 +46,7 @@ button:hover {
     color: white;
     border-color: #222;
 }
+
 
 /* 상단바 */
 
@@ -103,6 +109,7 @@ hr {
     margin: 0;
 }
 
+
 /* 메인 */
 
 .main {
@@ -111,6 +118,7 @@ hr {
     margin: 0 auto;
     padding-bottom: 80px;
 }
+
 
 /* 제목 */
 
@@ -132,6 +140,7 @@ hr {
     color: #888;
 }
 
+
 /* 경로 */
 
 .breadcrumb {
@@ -146,6 +155,7 @@ hr {
     color: #333;
     font-weight: 600;
 }
+
 
 /* 탭 */
 
@@ -171,6 +181,7 @@ hr {
     border-color: #222;
     color: white;
 }
+
 
 /* 검색 */
 
@@ -206,6 +217,7 @@ hr {
     background: #222;
     color: white;
 }
+
 
 /* 게시판 정보 */
 
@@ -243,15 +255,6 @@ hr {
     font-size: 11px;
 }
 
-.freeBoardContentsBox {
-    border-radius: 7px;
-    border : 1px solid black;
-    width : 750px;
-    height : 600px;
-    margin : auto;
-    margin-top : 40px;
-    overflow-y: auto;
-}
 
 /* 게시글 목록 */
 
@@ -260,8 +263,9 @@ hr {
     margin: 0 auto;
     border: 1px solid #ddd;
     border-radius: 7px;
-    overflow: hidden;
     background: white;
+    position : relative;
+    padding-bottom: 50px;
 }
 
 .freeBoardTable {
@@ -292,6 +296,7 @@ hr {
     border-bottom: 0;
 }
 
+
 /* 각 열 크기 */
 
 .number {
@@ -319,6 +324,7 @@ hr {
     width: 100px;
 }
 
+
 /* 제목 */
 
 .title a {
@@ -333,10 +339,86 @@ hr {
     text-decoration: underline;
 }
 
+
 /* 게시글 마우스 올렸을 때 */
 
 .freeBoardTable tr:hover {
     background: #fafafa;
+}
+
+
+/* 페이지네이션 */
+
+#navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    padding-bottom: 5px;
+}
+
+#navigation a {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #ddd;
+    border-radius: 5px;
+
+    background: white;
+    color: #555;
+
+    font-size: 12px;
+
+    transition: 0.2s;
+}
+
+#navigation a:hover {
+    background: #222;
+    border-color: #222;
+    color: white;
+}
+
+
+/* 현재 페이지 */
+
+#navigation a.current {
+    background: #222;
+    border-color: #222;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* HOME 버튼 */
+
+.btnbox {
+    margin-top: 25px;
+    padding-bottom: 30px;
+    position : absolute;
+    right : 20px;
+    bottom : -10px;
+}
+
+#home {
+    height: 34px;
+    padding: 0 18px;
+	
+    border: 1px solid #222;
+    border-radius: 5px;
+
+    background: #222;
+    color: white;
+
+    font-size: 12px;
+}
+
+#home:hover {
+    background: #444;
 }
 
 </style>
@@ -345,12 +427,15 @@ hr {
 
 <body>
 
+
 <!-- 상단바 -->
 
 <div class="headercontainer">
 
     <div class="logoBox">
-        <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
+        <a href="/">
+            <img src="/images/logo.png" alt="GOTT 로고">
+        </a>
     </div>
 
     <nav class="nav">
@@ -372,7 +457,9 @@ hr {
 
 </div>
 
+
 <hr>
+
 
 <!-- 메인 -->
 
@@ -380,17 +467,28 @@ hr {
 
     <div class="titleBox">
         <h2>게시판</h2>
-        <h5>여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.</h5>
+        <h5>
+            여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.
+        </h5>
     </div>
+
 
     <div class="breadcrumb">
         홈 &nbsp;>&nbsp; <span>자유게시판</span>
     </div>
 
+
     <nav class="tabs">
-        <a href="/board/freeBoard">자유게시판</a>
-        <a href="/board/reviewBoard" class="on">리뷰게시판</a>
+        <a href="/board/freeBoard?cpage=1" class="on">
+            자유게시판
+        </a>
+
+        <a href="/board/reviewBoard">
+            리뷰게시판
+        </a>
     </nav>
+
+
     <!-- 검색 -->
 
     <div class="searchArea">
@@ -404,12 +502,13 @@ hr {
 
     </div>
 
+
     <!-- 게시판 정보 -->
 
     <div class="searchOption">
 
         <div class="totalCount">
-            총 <strong>120</strong>건
+            총 <strong>${boardCount}</strong>건
         </div>
 
         <select class="sort">
@@ -420,55 +519,148 @@ hr {
         </select>
 
         <button id="writeBtn">글쓰기</button>
-		<script>
-		 let writeBtn = document.getElementById("writeBtn");
-		 writeBtn.onclick = function() {
-			 location.href = "/board/boardWrite";
-		 };
-		</script>
+
+        <script>
+            let writeBtn = document.getElementById("writeBtn");
+
+            writeBtn.onclick = function() {
+                location.href = "/board/boardWrite";
+            };
+        </script>
+
     </div>
-      <div class="freeBoardContentsBox">
 
-    <table class="freeBoardTable">
 
-        <tr>
-            <th class="number">번호</th>
-            <th class="title">제목</th>
-            <th class="file">첨부파일</th>
-            <th class="writer">작성자</th>
-            <th class="view">조회수</th>
-            <th class="date">작성일</th>
-        </tr>
+    <!-- 게시글 목록 -->
 
-        <c:forEach var="i" items="${boardList}">
+    <div class="freeBoardContentsBox">
+
+        <table class="freeBoardTable">
 
             <tr>
-                <td class="number">${i.seq}</td>
-
-                <td class="title">
-                    <a href="/board/boardContent?seq=${i.seq}">
-                        ${i.title}
-                    </a>
-                </td>
-
-                <td class="file">📎</td>
-
-                <td class="writer">${i.writer}</td>
-
-                <td class="view">${i.view_count}</td>
-
-                <td class="date">
-                    ${i.write_date.toString().substring(0, 10)}
-                </td>
+                <th class="number">번호</th>
+                <th class="title">제목</th>
+                <th class="file">첨부파일</th>
+                <th class="writer">작성자</th>
+                <th class="view">조회수</th>
+                <th class="date">작성일</th>
             </tr>
 
-        </c:forEach>
 
-    </table>
+            <c:forEach var="i" items="${boardList}">
+
+                <tr>
+
+                    <td class="number">
+                        ${i.seq}
+                    </td>
+
+                    <td class="title">
+                        <a href="/board/boardContent?seq=${i.seq}">
+                            ${i.title}
+                        </a>
+                    </td>
+
+                    <td class="file">
+					<c:if test="${fileList.contains(i.seq)}"><i class="fa-solid fa-paperclip"></i></c:if>                       
+                    </td>
+
+                    <td class="writer">
+                        ${i.writer}
+                    </td>
+
+                    <td class="view">
+                        ${i.view_count}
+                    </td>
+
+                    <td class="date">
+                        ${i.write_date.toString().substring(0, 10)}
+                    </td>
+
+                </tr>
+
+            </c:forEach>
+
+        </table>
+
+
+        <!-- 페이지네이션 -->
+
+        <div id="navigation"></div>
+
+
+        <!-- HOME 버튼 -->
+
+        <div class="btnbox">
+            <button id="home">HOME</button>
+        </div>
+
+    </div>
 
 </div>
 
 
+<script>
+
+document.getElementById("home").onclick = function() {
+    location.href = "/";
+};
+
+let recordTotalCount = ${recordTotalCount};
+let recordCountPerpage = ${recordCountPerPage};
+let naviCountPerpage = ${naviCountPerpage};
+let currentPage = ${cpage};
+
+
+let pageTotalCount =
+    Math.ceil(recordTotalCount / recordCountPerpage);
+
+let startNavi =
+    Math.floor((currentPage - 1) / naviCountPerpage)
+    * naviCountPerpage + 1;
+
+let endNavi =
+    startNavi + naviCountPerpage - 1;
+
+if(endNavi > pageTotalCount) {
+    endNavi = pageTotalCount;
+}
+
+let needPrev = startNavi > 1;
+let needNext = endNavi < pageTotalCount;
+let navi = document.getElementById("navigation");
+
+if(needPrev) {
+
+    let prev = document.createElement("a");
+	prev.setAttribute("href", "/board/freeBoard?cpage=" + (startNavi - 1));
+	prev.innerHTML = "<";
+	 navi.append(prev);
+}
+
+for(let i = startNavi; i <= endNavi; i++) {
+
+    let num = document.createElement("a");
+	num.setAttribute(
+    "href", "/board/freeBoard?cpage=" + i);
+	num.innerHTML = i;
+
+    if(i == currentPage) {
+        num.className = "current";
+    }
+	navi.append(num);
+}
+
+if(needNext) {
+
+    let next = document.createElement("a");
+	next.setAttribute("href", "/board/freeBoard?cpage=" + (endNavi + 1));
+	next.innerHTML = ">";
+	navi.append(next);
+}
+
+</script>
+
+
 </body>
 </html>
-
