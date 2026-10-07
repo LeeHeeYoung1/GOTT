@@ -133,9 +133,9 @@
             <div class="textzone"><a href=""></a>뭐 넣지?</div>
             <div class="textzone"><a href="">지역</a></div>
             <div class="textzone"><a href="">추천여행지</a></div>
-            <div class="textzone"><a href="/reservation/list">숙박업소</a></div>
+            <div class="textzone"><a href="/reservation/list?cpage=1">숙박업소</a></div>
             <div class="textzone"><a href="/members/planner">여행플래너</a></div>
-            <div class="textzone"><a href="/board/freeBoard">게시판</a></div>
+            <div class="textzone"><a href="/board/freeBoard?cpage=1">게시판</a></div>
             <div class="textzone"><a href="">문의사항</a></div>
         </div>
         <c:choose>

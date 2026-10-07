@@ -15,17 +15,18 @@
 
 /* ===== 페이지 영역 ===== */
 .main {
-	padding: 0 24px 0 280px;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 24px;
 }
 
-/* 전체를 감싼 form — 상자를 없애 레이아웃에 끼어들지 않게 */
 .search_bar {
 	display: contents;
 }
 
 /* ===== 상단 안내 ===== */
 .body1 {
-	padding: 48px 24px 32px;
+	padding: 40px 0 28px;
 	text-align: center;
 }
 
@@ -46,6 +47,7 @@
 	font-size: 13px;
 	font-weight: 600;
 	color: #2563eb;
+	text-decoration: none;
 }
 
 .body_contents a:hover {
@@ -59,20 +61,18 @@
 	display: flex;
 	align-items: stretch;
 	min-height: 68px;
-	border: 1px solid #1a1a1f;
-	border-radius: 10px;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
 	background: #fff;
 	overflow: hidden;
 	text-align: left;
-	box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+	box-shadow: 0 2px 12px rgba(15, 23, 42, .08);
 }
 
-/* 빈 칸 숨김 */
 .body_select>div:empty {
 	display: none;
 }
 
-/* 여행지 · 체크인 · 체크아웃 */
 .body_select>.sb_1, .body_select>.sb_2, .body_select>.sb_3 {
 	flex: 1;
 	min-width: 0;
@@ -81,7 +81,7 @@
 	flex-direction: column;
 	justify-content: center;
 	gap: 4px;
-	border-right: 1px solid #e3e6ea;
+	border-right: 1px solid #eceef1;
 }
 
 .body_select>.sb_1:hover, .body_select>.sb_2:hover, .body_select>.sb_3:hover
@@ -108,7 +108,7 @@
 	cursor: pointer;
 }
 
-/* 인원 — 칸 밖에 흩어진 요소들 */
+/* 인원 */
 .body_select>label {
 	align-self: center;
 	padding-left: 18px;
@@ -126,8 +126,8 @@
 	width: 48px;
 	margin-left: 5px;
 	padding: 5px 4px;
-	border: 1px solid #e3e6ea;
-	border-radius: 4px;
+	border: 1px solid #e5e7eb;
+	border-radius: 5px;
 	font-family: inherit;
 	font-size: 13px;
 	font-weight: 600;
@@ -136,7 +136,11 @@
 
 .body_select>input[type=number]:focus {
 	outline: 0;
-	border-color: #1a1a1f;
+	border-color: #2563eb;
+}
+
+.body_select>input[type=number]:last-of-type {
+	margin-right: 24px;
 }
 
 /* 검색 버튼 */
@@ -144,6 +148,7 @@
 	margin-left: auto;
 	display: flex;
 	align-items: stretch;
+	border-left: 1px solid #eceef1;
 }
 
 .body_select>.sb_5 button {
@@ -159,23 +164,22 @@
 }
 
 .body_select>.sb_5 button:hover {
-	background: #FF6B35;
+	background: #2563eb;
 }
 
 /* ===== 본문 2단 ===== */
 .body2 {
-	max-width: 1100px;
-	margin: 0 auto;
-	padding: 32px 0 60px;
 	display: flex;
+	flex-wrap: wrap;
 	align-items: flex-start;
 	gap: 24px;
+	padding: 32px 0 60px;
 }
 
 /* --- 왼쪽 필터 --- */
 .filter {
 	position: sticky;
-	top: 20px;
+	top: 90px;
 	width: 240px;
 	flex-shrink: 0;
 	padding: 22px 20px;
@@ -212,7 +216,7 @@
 	width: 15px;
 	height: 15px;
 	margin: 0;
-	accent-color: #1a1a1f;
+	accent-color: #2563eb;
 	cursor: pointer;
 }
 
@@ -223,7 +227,7 @@
 .price-range input[type=range] {
 	width: 100%;
 	margin: 0;
-	accent-color: #1a1a1f;
+	accent-color: #2563eb;
 	cursor: pointer;
 }
 
@@ -238,7 +242,7 @@
 .reset {
 	width: 100%;
 	height: 40px;
-	border: 1px solid #ddd;
+	border: 1px solid #d1d5db;
 	border-radius: 6px;
 	background: #fff;
 	font-family: inherit;
@@ -249,8 +253,8 @@
 }
 
 .reset:hover {
-	background: #f6f7f8;
-	border-color: #b9bec5;
+	background: #f3f4f6;
+	border-color: #9ca3af;
 }
 
 .filter .reset[type=submit] {
@@ -262,8 +266,8 @@
 }
 
 .filter .reset[type=submit]:hover {
-	background: #FF6B35;
-	border-color: #FF6B35;
+	background: #2563eb;
+	border-color: #2563eb;
 }
 
 /* --- 오른쪽 목록 --- */
@@ -273,6 +277,17 @@
 	display: flex;
 	flex-direction: column;
 	gap: 14px;
+}
+
+.room_list:empty::before {
+	content: "조건에 맞는 숙소가 없습니다.";
+	display: block;
+	padding: 70px 0;
+	border: 1px dashed #e5e7eb;
+	border-radius: 12px;
+	font-size: 14px;
+	color: #9a9aa0;
+	text-align: center;
 }
 
 .room_card {
@@ -288,14 +303,14 @@
 }
 
 .room_card:hover {
-	border-color: #d4d8dd;
-	box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
+	border-color: #d1d5db;
+	box-shadow: 0 6px 20px rgba(15, 23, 42, .10);
 	transform: translateY(-2px);
 }
 
 .room_img {
-	width: 200px;
-	min-height: 160px;
+	width: 210px;
+	min-height: 165px;
 	flex-shrink: 0;
 	position: relative;
 	background: linear-gradient(135deg, #eef1f5, #e2e7ee);
@@ -385,59 +400,49 @@
 	letter-spacing: -0.02em;
 }
 
-/* 가격 없는 숙소는 작게 */
-.room_price:not(:has(*)) {
-	font-size: 12px;
-	font-weight: 400;
-	color: #9a9aa0;
+/* ===== 페이지네이션 ===== */
+/* 헤더의 .navi 와 클래스명이 겹쳐서 id 로 덮어씀 */
+#navi {
+	width: 100%;
+	margin: 10px 0 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
 }
 
-/* 결과 없음 */
-.room_empty {
-	padding: 80px 20px;
-	border: 1px dashed #dfe3e8;
-	border-radius: 12px;
-	font-size: 14px;
-	color: #9a9aa0;
-	text-align: center;
+#navi:empty {
+	display: none;
 }
 
-/* ===== 좁은 화면 ===== */
-@media ( max-width : 1400px) {
-	.main {
-		padding-left: 24px;
-	}
-	.linkbar {
-		display: none;
-	}
+#navi a {
+	min-width: 36px;
+	height: 36px;
+	padding: 0 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	background: #fff;
+	font-size: 13px;
+	font-weight: 600;
+	color: #45484f;
+	text-decoration: none;
+	transition: background .15s, border-color .15s, color .15s;
 }
 
-@media ( max-width : 860px) {
-	.body2 {
-		flex-direction: column;
-	}
-	.filter {
-		position: static;
-		width: 100%;
-	}
-	.body_select {
-		flex-wrap: wrap;
-		min-height: 0;
-	}
-	.room_card {
-		flex-direction: column;
-	}
-	.room_img {
-		width: 100%;
-		height: 180px;
-	}
-	.room_price {
-		width: 100%;
-		align-items: flex-start;
-		border-left: 0;
-		border-top: 1px solid #f0f2f4;
-		text-align: left;
-	}
+#navi a:hover {
+	border-color: #2563eb;
+	background: #f5f8ff;
+	color: #2563eb;
+}
+
+#navi a.on {
+	border-color: #1a1a1f;
+	background: #1a1a1f;
+	color: #fff;
 }
 </style>
 
@@ -497,10 +502,10 @@
 		<div class="body2">
 			<div class="filter">
 				<div class="filter-group">
-					<h4>1박 가격</h4>
+					<h4>1박 최대 가격</h4>
 					<div class="price-range">
 						<input type="range" id="maxPrice" name="maxPrice" min="50000"
-							max="300000" step="10000" value="180000">
+							max="500000" step="10000" value="250000">
 						<p id="maxPriceText"></p>
 					</div>
 				</div>
@@ -555,7 +560,7 @@
 					</a>
 				</c:forEach>
 			</div>
-
+			<div class="navi" id="navi">${navi}</div>
 
 		</div>
 	</form>
@@ -567,9 +572,9 @@
 
 	maxPrice.on("input", function() {
 		let price = Number(maxPrice.val());
-		maxPriceText.text(price);
-	});
-
+		maxPriceText.text(price.toLocaleString() + "원");
+	}); 
+	
 	$("#region").val("${param.region}");
 	$("#checkIn").val("${param.checkIn}");
 	$("#checkOut").val("${param.checkOut}");
@@ -577,10 +582,65 @@
 		$("#adult").val("${param.adult}");
 	if ("${param.child}" !== "")
 		$("#child").val("${param.child}");
+	if ("${param.maxPrice}" !== "")
+		maxPrice.val("${param.maxPrice}");
 
+	maxPrice.trigger("input");
+	
 	<c:forEach var="i" items="${paramValues.amenity}">
 	$(".amenity[value='${i}']").prop("checked", true);
 	</c:forEach>
+
+	let recordTotalCount = ${recordTotalCount};
+	let recordCountPerPage = ${recordCountPerPage};
+	let naviCountPerPage = ${naviCountPerPage};
+	let currentPage = ${cpage};
+
+	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
+	// javaScript 는 나눴을 때 소숫점까지 계산, ceil은 올림함수
+
+	let startNavi = Math.floor((currentPage - 1) / naviCountPerPage)
+			* naviCountPerPage + 1;
+	// 마찬가지로 javaScript 는 나눴을 때 소숫점까지 계산, floor은 내림함수
+
+	let endNavi = startNavi + naviCountPerPage - 1;
+
+	if (endNavi > pageTotalCount) {
+		endNavi = pageTotalCount;
+	}
+
+	let needPrev = startNavi > 1;
+	let needNext = endNavi < pageTotalCount;
+
+	let navi = document.getElementById("navi");
+
+	let query = "/reservation/search" + "?region=${param.region}"
+			+ "&checkIn=${param.checkIn}" + "&checkOut=${param.checkOut}"
+			+ "&adult=${param.adult}" + "&child=${param.child}"
+			+ "&maxPrice=${param.maxPrice}";
+
+	<c:forEach var="a" items="${paramValues.amenity}">
+	query += "&amenity=${a}";
+	</c:forEach>
+
+	if (needPrev) {
+		let prev = document.createElement("a");
+		prev.setAttribute("href", query + "&cpage=" + (startNavi - 1));
+		prev.innerHTML = "<";
+		navi.append(prev);
+	}
+	for (let i = startNavi; i <= endNavi; i++) {
+		let num = document.createElement("a");
+		num.setAttribute("href", query + "&cpage=" + i);
+		num.innerHTML = i;
+		navi.append(num);
+	}
+	if (needNext) {
+		let next = document.createElement("a");
+		next.setAttribute("href", query + "&cpage=" + (endNavi + 1));
+		next.innerHTML = ">";
+		navi.append(next);
+	}
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
