@@ -50,7 +50,7 @@ public class BaordController {
 		List<BoardDTO> list = bdao.selectFromTo(cpage * 10 - 9, cpage * 10);
 		for(BoardDTO board : list) {
 		    board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
-		    System.out.println(board.getSeq() + "번 추천수 : " + board.getRecommendCount());
+		    
 		}
 		
 		model.addAttribute("boardList", list);
@@ -134,16 +134,8 @@ public class BaordController {
 	@RequestMapping("/download")
 	public void download(String oriname, String sysname, HttpServletResponse resp, Model model) throws Exception {
 		
-		System.out.println("원본파일명 : " + oriname);
-	    System.out.println("시스템파일명 : " + sysname);
-		
 	    String path = "\\\\10.5.4.10\\gott_uploads\\";
 		File target = new File(path + sysname);
-		
-
-	    System.out.println("파일경로 : " + target.getAbsolutePath());
-	    System.out.println("파일존재 : " + target.exists());
-
 		
 		oriname = new String(oriname.getBytes(), "ISO-8859-1");
 		
