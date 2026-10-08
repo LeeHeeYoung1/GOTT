@@ -24,9 +24,31 @@ body {
 	color: #1a1a1f;
 }
 
+/* ===== 페이지 제목 ===== */
+.review_title {
+	max-width: 900px;
+	margin: 48px auto 0;
+	padding: 0 24px;
+}
+
+.review_title h1 {
+	margin: 0 0 8px;
+	font-size: 26px;
+	font-weight: 800;
+	letter-spacing: -0.03em;
+	color: #1a1a1f;
+}
+
+.review_title p {
+	margin: 0;
+	font-size: 13px;
+	color: #8b8f96;
+	letter-spacing: -0.01em;
+}
+
 .review_container {
 	max-width: 900px;
-	margin: 40px auto 80px;
+	margin: 22px auto 80px;
 	padding: 0 24px;
 }
 
@@ -165,47 +187,90 @@ body {
 .photo_box {
 	width: 250px;
 	flex-shrink: 0;
-	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	padding: 18px 16px;
 	border-right: 1px solid #eceef1;
 	background: #fafbfc;
 }
 
 .photo_head {
-	margin: 0 0 10px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin: 0 0 12px;
 	font-size: 13px;
 	font-weight: 700;
 	color: #333;
 }
 
+/* 필수 표시 점 */
+.photo_head::after {
+	content: "";
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: #FF6B35;
+}
+
+/* 사진 올리는 칸 */
 .upload_box {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 8px;
+	gap: 10px;
 	width: 100%;
-	height: 200px;
+	height: 210px;
 	border: 2px dashed #d5d9de;
-	border-radius: 8px;
+	border-radius: 10px;
 	background: #fff;
 	cursor: pointer;
-	transition: border-color .15s, background .15s;
+	transition: border-color .15s, background .15s, transform .15s;
 }
 
 .upload_box:hover {
 	border-color: #FF6B35;
 	background: #fff8f5;
+	transform: translateY(-1px);
+}
+
+.upload_box:active {
+	transform: translateY(0);
 }
 
 .upload_box .plus {
-	font-size: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	background: #f1f3f5;
+	font-size: 24px;
 	line-height: 1;
-	color: #b0b5bc;
+	color: #9aa0a6;
+	transition: background .15s, color .15s;
+}
+
+.upload_box:hover .plus {
+	background: #ffe8df;
+	color: #FF6B35;
 }
 
 .upload_box .add_photo {
 	font-size: 12px;
+	font-weight: 600;
 	color: #9a9aa0;
+}
+
+.upload_box:hover .add_photo {
+	color: #FF6B35;
+}
+
+/* 사진이 올라오면 "사진 추가" 칸 숨김 */
+.photo_box:has(#preview:not(:empty)) .upload_box {
+	display: none;
 }
 
 /* 미리보기 */
@@ -216,10 +281,11 @@ body {
 .thumb {
 	position: relative;
 	width: 100%;
-	height: 200px;
-	border-radius: 8px;
+	height: 210px;
+	border-radius: 10px;
 	overflow: hidden;
 	background: #eef1f5;
+	box-shadow: 0 2px 10px rgba(15, 23, 42, .10);
 }
 
 .thumb img {
@@ -229,24 +295,30 @@ body {
 	display: block;
 }
 
-.thumb .del {
-	position: absolute;
-	top: 6px;
-	right: 6px;
-	width: 24px;
-	height: 24px;
-	padding: 0;
-	border: 0;
-	border-radius: 50%;
-	background: rgba(0, 0, 0, .6);
-	color: #fff;
-	font-size: 15px;
-	line-height: 1;
-	cursor: pointer;
+/* 사진 삭제 버튼 — 항상 맨 아래 고정 */
+.deletePhoto {
+	margin-top: auto;
+	padding-top: 14px;
 }
 
-.thumb .del:hover {
-	background: #c0392b;
+#deleteBtn {
+	width: 100%;
+	height: 36px;
+	border: 1px solid #e0e3e7;
+	border-radius: 7px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 600;
+	color: #8b8f96;
+	cursor: pointer;
+	transition: border-color .15s, background .15s, color .15s;
+}
+
+#deleteBtn:hover {
+	border-color: #c0392b;
+	background: #fdecea;
+	color: #c0392b;
 }
 
 /* --- 오른쪽: summernote --- */
@@ -379,12 +451,16 @@ body {
 </style>
 </head>
 <body>
+	<div class="review_title">
+		<h1>리뷰 작성</h1>
+		<p>방문한 숙소, 맛집, 관광지의 리뷰를 사진과 함께 남겨주세요</p>
+	</div>
 	<div class="review_container">
 		<form action="/review/write" method="post">
 			<div class="review_header">
 				<p id="writer">작성자</p>
 				<input type="text" id="member_id" name="member_id"
-					value="${sessionScope.loginId}" readonly>
+					value="${sessionScope.nickname}" readonly>
 				<div class="place_select">
 					<select id="placeType" name="target_type">
 						<option value="">유형</option>
@@ -436,6 +512,9 @@ body {
 
 					<div id="preview"></div>
 					<input type="hidden" name="image1" id="image1">
+					<div class="deletePhoto">
+						<button type="button" id="deleteBtn">사진 삭제</button>
+					</div>
 				</div>
 				<textarea id="contents" name="contents"></textarea>
 				<div class="tag_box">
@@ -532,6 +611,11 @@ body {
 				})
 			})
 
+	$("#deleteBtn").on("click", function(){
+		$("#preview").empty();
+		$("photo").val("");
+		$("#image1").val("");
+	})
 	$("#backBtn").on("click", function() {
 		history.back();
 	})
