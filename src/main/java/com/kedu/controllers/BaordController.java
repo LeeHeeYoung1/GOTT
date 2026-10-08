@@ -42,11 +42,6 @@ public class BaordController {
 		return "board/freeBoard";
 	}
 	
-	@RequestMapping("/reviewBoard")
-	public String reviewBoard() {
-		return "board/reviewBoard";
-	}
-	
 	@RequestMapping("/boardWrite")
 	public String boardWrite() {
 		return "board/boardWrite";
