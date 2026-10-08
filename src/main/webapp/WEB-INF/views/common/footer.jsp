@@ -10,7 +10,9 @@
     </div>
 
 <script>
-
+		$(".menubtn").on("click", function(){
+		    $("#sidemenu").toggleClass("open");
+		});
 </script>
 
 </body>

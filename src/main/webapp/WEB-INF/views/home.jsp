@@ -495,7 +495,7 @@
         <h5>지금 가장인기 있는 국내 여행지를 만나보세요</h5>
     </div>
     <div class="title-link" style="font-size: 10px; color:#2563eb">
-        <a href="">찜한 장소로 나만의 여행 일정 만들기</a>
+        <a href="/members/planner">찜한 장소로 나만의 여행 일정 만들기</a>
     </div>
    
     <div class="placesuggest">
