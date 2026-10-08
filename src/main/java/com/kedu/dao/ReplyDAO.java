@@ -38,4 +38,8 @@ public class ReplyDAO {
 		 return jdbc.update(sql, seq, writer);
 	 }
 	 
+	 public int replyCount(int board_seq) {
+		    String sql = "select count(*) from reply where board_seq = ?";
+		    return jdbc.queryForObject(sql, Integer.class, board_seq);
+		}
 }

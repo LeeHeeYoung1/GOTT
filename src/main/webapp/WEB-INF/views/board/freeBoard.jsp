@@ -320,6 +320,10 @@ hr {
     width: 70px;
 }
 
+.recommend {
+    width: 70px;
+}
+
 .date {
     width: 100px;
 }
@@ -540,6 +544,7 @@ hr {
             <tr>
                 <th class="number">번호</th>
                 <th class="title">제목</th>
+                <th class="recommend">추천</th>
                 <th class="file">첨부파일</th>
                 <th class="writer">작성자</th>
                 <th class="view">조회수</th>
@@ -556,11 +561,15 @@ hr {
                     </td>
 
                     <td class="title">
-                        <a href="/board/boardContent?seq=${i.seq}">
+                        <a href="/board/boardContent?seq=${i.seq}&cpage=${cpage}">
                             ${i.title}
                         </a>
                     </td>
-
+					
+					<td class="recommend">
+					${i.recommendCount}
+					</td>
+					
                     <td class="file">
 					<c:if test="${fileList.contains(i.seq)}"><i class="fa-solid fa-paperclip"></i></c:if>                       
                     </td>

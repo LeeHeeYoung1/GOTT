@@ -8,7 +8,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="/css/public.css">
 
 <title>GOTT 게시글</title>
@@ -376,6 +376,24 @@ hr {
 .replyButton button:hover {
 	color: #333;
 }
+
+.recommendBtn {
+	color: #888;
+}
+
+.recommendBtn .heart {
+	color: #aaa;
+}
+
+.recommendBtn .heart.active {
+	color: #e53935;
+}
+
+.recommendBtn:hover {
+	background: #fff5f5 !important;
+	color: #e53935 !important;
+	border-color: #e57373 !important;
+}
 </style>
 
 </head>
@@ -481,7 +499,10 @@ hr {
 			<!-- 버튼 -->
 
 			<div class="buttonBox">
-
+				<button class="recommendBtn" type="button">
+					<span class="heart ${checkRecommend > 0 ? 'active' : ''}">
+						${checkRecommend > 0 ? '♥' : '♡'} </span> <span class="recommendCount">${recommendCount}</span>
+				</button>
 				<button id="goBack">목록</button>
 
 			</div>
@@ -494,65 +515,183 @@ hr {
 	<div class="replyBox">
 		<div class="replyHeader">
 			<h3>댓글</h3>
-			<span>3</span>
+			<span>${replyCount}</span>
 		</div>
-		<form action="/reply/writeReply?board_seq=${boardContent.seq}" method="post">
-		<div class="replyWrite">
-			<div class="replyWriter">${nickname}</div>
-			<textarea id="replyContents" name="contents" placeholder="댓글을 입력해주세요."></textarea>
-			<div class="replyWriteBottom">
-				<span>댓글을 남겨 여행 이야기를 함께 나눠보세요.</span>
-				<button id="replyBtn">댓글 작성</button>
+		<form action="/reply/writeReply?board_seq=${boardContent.seq}"
+			method="post">
+			<div class="replyWrite">
+				<div class="replyWriter">${nickname}</div>
+				<textarea id="replyContents" name="contents"
+					placeholder="댓글을 입력해주세요."></textarea>
+				<div class="replyWriteBottom">
+					<span>댓글을 남겨 여행 이야기를 함께 나눠보세요.</span>
+					<button id="replyBtn">댓글 작성</button>
+				</div>
 			</div>
-		</div>
-		 </form>
+		</form>
 
-    <div class="replyList">
+		<div class="replyList">
 
-        <c:forEach var="reply" items="${replyList}">
+    <c:forEach var="reply" items="${replyList}">
 
-            <div class="reply">
+        <div class="reply">
+		<input type="hidden" class="replySeq" value="${reply.seq}">
+    <div class="replyInfo">
+        <strong>${reply.writer}</strong>
+        <span>${reply.write_date.toString().substring(0, 10)}</span>
+    </div>
 
-                <div class="replyInfo">
-                    <strong>${reply.writer}</strong>
-                    <span>${reply.write_date.toString().substring(0, 10)}</span>
-                </div>
+    <div class="replyContents">${reply.contents}</div>
 
-                <div class="replyContents">
-                    ${reply.contents}
-                </div>
+    <c:if test="${nickname == reply.writer}">
 
-                <c:if test="${nickname == reply.writer}">
+        <div class="replyButton">
 
-                    <div class="replyButton">
+            <button class="update" type="button">수정</button>
 
-                        <button type="button">
-                            수정
-                        </button>
+            <button class="delete" type="button"
+                onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}'">
+                삭제
+            </button>
 
-                        <button type="button"
-                                onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}'">
-                            삭제
-                        </button>
+            <button class="updateCom" type="button" style="display: none;">
+                수정완료
+            </button>
 
-                    </div>
+            <button class="back" type="button" style="display: none;">
+                취소
+            </button>
 
-                </c:if>
+        </div>
 
-            </div>
+    </c:if>
 
-        </c:forEach>
-	</div>
 </div>
 
-	
-	<script>
-		let goBack = document.getElementById("goBack");
+    </c:forEach>
 
-		goBack.onclick = function() {
-			history.back();
-		}
-		
-	</script>
+			<script>
+
+let text;
+
+$(".update").on("click", function() {
+
+    let reply = $(this).closest(".reply");
+
+    let replyContents = reply.find(".replyContents");
+
+    text = replyContents.html();
+
+    replyContents.attr("contenteditable", "true");
+
+    reply.find(".update").css("display", "none");
+    reply.find(".delete").css("display", "none");
+
+    reply.find(".updateCom").css("display", "inline");
+    reply.find(".back").css("display", "inline");
+
+});
+
+
+$(".back").on("click", function() {
+
+    let reply = $(this).closest(".reply");
+
+    let replyContents = reply.find(".replyContents");
+
+    replyContents.html(text);
+
+    replyContents.attr("contenteditable", "false");
+
+    reply.find(".update").css("display", "inline");
+    reply.find(".delete").css("display", "inline");
+
+    reply.find(".updateCom").css("display", "none");
+    reply.find(".back").css("display", "none");
+
+});
+
+
+$(".updateCom").on("click", function() {
+
+    let reply = $(this).closest(".reply");
+
+    let replyContents = reply.find(".replyContents");
+
+    let contents = replyContents.text();
+
+    let seq = reply.find(".replySeq").val();
+
+    $.ajax({
+        url: "/reply/update",
+        type: "post",
+        data: {
+            seq: seq,
+            board_seq: ${boardContent.seq},
+            contents: contents
+        },
+        success: function() {
+
+            replyContents.attr("contenteditable", "false");
+
+            reply.find(".update").css("display", "inline");
+            reply.find(".delete").css("display", "inline");
+
+            reply.find(".updateCom").css("display", "none");
+            reply.find(".back").css("display", "none");
+
+        }
+    });
+
+});
+
+
+$(".recommendBtn").on("click", function() {
+
+    $.ajax({
+        url: "/board/recommend",
+        type: "post",
+        data: {
+            board_seq: ${boardContent.seq}
+        },
+        success: function(result) {
+
+            if(result == "recommend") {
+
+                $(".heart").text("♥");
+                $(".heart").addClass("active");
+
+                $(".recommendCount").text(
+                    Number($(".recommendCount").text()) + 1
+                );
+
+            } else if(result == "cancel") {
+
+                $(".heart").text("♡");
+                $(".heart").removeClass("active");
+
+                $(".recommendCount").text(
+                    Number($(".recommendCount").text()) - 1
+                );
+
+            }
+
+        }
+    });
+
+});
+
+</script>
+		</div>
+	</div>
+
+
+	<script>
+    let goBack = document.getElementById("goBack");
+
+    goBack.onclick = function() {
+        location.href = "/board/freeBoard?cpage=${cpage}";
+    }
+</script>
 </body>
 </html>
