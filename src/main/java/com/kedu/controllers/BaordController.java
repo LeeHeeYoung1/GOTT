@@ -50,7 +50,7 @@ public class BaordController {
 		List<BoardDTO> list = bdao.selectFromTo(cpage * 10 - 9, cpage * 10);
 		for(BoardDTO board : list) {
 		    board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
-		    
+		    System.out.println(board.getSeq() + "번 추천수 : " + board.getRecommendCount());
 		}
 		
 		model.addAttribute("boardList", list);
@@ -70,21 +70,91 @@ public class BaordController {
 		model.addAttribute("recordCountPerPage", 10);
 		model.addAttribute("naviCountPerpage", 10);
 		model.addAttribute("cpage",cpage);
+		model.addAttribute("latest", true);
+		model.addAttribute("boardUrl", "/board/freeBoard");
 		
 		return "board/freeBoard";
 	}
 	
+	@RequestMapping("/viewBoard")
+	public String viewBoard(int cpage, Model model) {
+
+	    List<BoardDTO> list = bdao.selectView(cpage * 10 - 9, cpage * 10);
+
+	    for(BoardDTO board : list) {
+	        board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
+	    }
+
+	    model.addAttribute("boardList", list);
+
+	    List<Integer> fileList = new ArrayList<>();
+	    for(BoardDTO board : list) {
+	        if(fdao.hasFile(board.getSeq())) {
+	            fileList.add(board.getSeq());
+	        }
+	    }
+
+	    model.addAttribute("fileList", fileList);
+
+	    int boardCount = bdao.boardCount();
+
+	    model.addAttribute("boardCount", boardCount);
+	    model.addAttribute("recordTotalCount", boardCount);
+	    model.addAttribute("recordCountPerPage", 10);
+	    model.addAttribute("naviCountPerpage", 10);
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("view", true);
+	    model.addAttribute("boardUrl", "/board/viewBoard");
+
+	    return "board/freeBoard";
+	}
+	
+	@RequestMapping("/recommendBoard")
+	public String recommendBoard(int cpage, Model model) {
+
+	    List<BoardDTO> list = bdao.selectRecommend(cpage * 10 - 9, cpage * 10);
+
+	    for(BoardDTO board : list) {
+	        board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
+	    }
+
+	    model.addAttribute("boardList", list);
+
+	    List<Integer> fileList = new ArrayList<>();
+	    for(BoardDTO board : list) {
+	        if(fdao.hasFile(board.getSeq())) {
+	            fileList.add(board.getSeq());
+	        }
+	    }
+
+	    model.addAttribute("fileList", fileList);
+
+	    int boardCount = bdao.boardCount();
+
+	    model.addAttribute("boardCount", boardCount);
+	    model.addAttribute("recordTotalCount", boardCount);
+	    model.addAttribute("recordCountPerPage", 10);
+	    model.addAttribute("naviCountPerpage", 10);
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("recommend", true);
+	    model.addAttribute("boardUrl", "/board/recommendBoard");
+
+	    return "board/freeBoard";
+	}
+	
 	@RequestMapping("/boardWrite")
-	public String boardWrite() {
-		return "board/boardWrite";
+	public String boardWrite(int cpage, Model model) {
+	    model.addAttribute("cpage", cpage);
+	    return "board/boardWrite";
 	}
 	
 	@RequestMapping("/writeRegi")
-	public String writeRegi(MultipartFile[] attachFiles, Model model,HttpSession session,BoardDTO dto) throws Exception {
+	public String writeRegi(MultipartFile[] attachFiles, Model model,HttpSession session,BoardDTO dto, int cpage) throws Exception {
 		
 		String nickname = (String)session.getAttribute("nickname");
 		dto.setWriter(nickname);
 		model.addAttribute("nickname",nickname);
+		model.addAttribute("cpage",cpage);
 		int seqValue = bdao.getNextVal();
 		dto.setSeq(seqValue);
 		bdao.insert(dto);
@@ -106,7 +176,7 @@ public class BaordController {
 			fdao.fileRegi(fdto);
 		}
 		
-		return "redirect:/board/freeBoard?cpage=1";
+		return "redirect:/board/freeBoard?cpage=" + cpage;
 	}
 	
 	@RequestMapping("/boardContent")
@@ -131,11 +201,38 @@ public class BaordController {
 		
 	}
 	
+	@RequestMapping("/update")
+	@ResponseBody
+	public void update(BoardDTO dto, HttpSession session) {
+
+	    String nickname = (String) session.getAttribute("nickname");
+
+	    bdao.update(dto, nickname);
+	}
+	
+	@RequestMapping("/boardDelete")
+	public String delete(int seq, int cpage, HttpSession session) {
+
+	    String nickname = (String) session.getAttribute("nickname");
+
+	    bdao.delete(seq, nickname);
+
+	    return "redirect:/board/freeBoard?cpage=" + cpage;
+	}
+	
 	@RequestMapping("/download")
 	public void download(String oriname, String sysname, HttpServletResponse resp, Model model) throws Exception {
 		
+		System.out.println("원본파일명 : " + oriname);
+	    System.out.println("시스템파일명 : " + sysname);
+		
 	    String path = "\\\\10.5.4.10\\gott_uploads\\";
 		File target = new File(path + sysname);
+		
+
+	    System.out.println("파일경로 : " + target.getAbsolutePath());
+	    System.out.println("파일존재 : " + target.exists());
+
 		
 		oriname = new String(oriname.getBytes(), "ISO-8859-1");
 		

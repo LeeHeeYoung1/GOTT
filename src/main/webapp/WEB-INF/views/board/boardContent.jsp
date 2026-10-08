@@ -454,7 +454,7 @@ hr {
 
 			<div class="contentsTitle">
 
-				<h3>${boardContent.title}</h3>
+				<h3 class="boardTitle">${boardContent.title}</h3>
 
 				<div class="contentsInfo">
 
@@ -493,19 +493,43 @@ hr {
 
 			<!-- 내용 -->
 
-			<div class="contents">${boardContent.contents}</div>
+		<div class="contents boardContents">${boardContent.contents}</div>
 
 
 			<!-- 버튼 -->
 
 			<div class="buttonBox">
-				<button class="recommendBtn" type="button">
-					<span class="heart ${checkRecommend > 0 ? 'active' : ''}">
-						${checkRecommend > 0 ? '♥' : '♡'} </span> <span class="recommendCount">${recommendCount}</span>
-				</button>
-				<button id="goBack">목록</button>
 
-			</div>
+    <button class="recommendBtn" type="button">
+        <span class="heart ${checkRecommend > 0 ? 'active' : ''}">
+            ${checkRecommend > 0 ? '♥' : '♡'}
+        </span>
+        <span class="recommendCount">${recommendCount}</span>
+    </button>
+
+    <c:if test="${nickname == boardContent.writer}">
+
+        <button class="boardUpdate" type="button">
+            수정
+        </button>
+
+        <button class="boardDelete" type="button">
+            삭제
+        </button>
+
+        <button class="boardUpdateCom" type="button" style="display: none;">
+            수정완료
+        </button>
+
+        <button class="boardBack" type="button" style="display: none;">
+            취소
+        </button>
+
+    </c:if>
+
+    <button id="goBack">목록</button>
+
+</div>
 
 		</div>
 
@@ -517,8 +541,7 @@ hr {
 			<h3>댓글</h3>
 			<span>${replyCount}</span>
 		</div>
-		<form action="/reply/writeReply?board_seq=${boardContent.seq}"
-			method="post">
+		<form action="/reply/writeReply?board_seq=${boardContent.seq}&cpage=${cpage}" method="post">
 			<div class="replyWrite">
 				<div class="replyWriter">${nickname}</div>
 				<textarea id="replyContents" name="contents"
@@ -550,7 +573,7 @@ hr {
             <button class="update" type="button">수정</button>
 
             <button class="delete" type="button"
-                onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}'">
+                onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}&cpage=${cpage}'">
                 삭제
             </button>
 
@@ -572,15 +595,102 @@ hr {
 
 			<script>
 
-let text;
+let boardTitle;
+let boardContents;
+let replyText;
+
+
+/* 게시글 수정 */
+
+$(".boardUpdate").on("click", function() {
+
+    boardTitle = $(".boardTitle").html();
+    boardContents = $(".boardContents").html();
+
+    $(".boardTitle").attr("contenteditable", "true");
+    $(".boardContents").attr("contenteditable", "true");
+
+    $(".boardUpdate").css("display", "none");
+    $(".boardDelete").css("display", "none");
+
+    $(".boardUpdateCom").css("display", "inline");
+    $(".boardBack").css("display", "inline");
+
+});
+
+
+/* 게시글 수정 취소 */
+
+$(".boardBack").on("click", function() {
+
+    $(".boardTitle").html(boardTitle);
+    $(".boardContents").html(boardContents);
+
+    $(".boardTitle").attr("contenteditable", "false");
+    $(".boardContents").attr("contenteditable", "false");
+
+    $(".boardUpdate").css("display", "inline");
+    $(".boardDelete").css("display", "inline");
+
+    $(".boardUpdateCom").css("display", "none");
+    $(".boardBack").css("display", "none");
+
+});
+
+
+/* 게시글 수정 완료 */
+
+$(".boardUpdateCom").on("click", function() {
+
+    let title = $(".boardTitle").text();
+    let contents = $(".boardContents").html();
+
+    $.ajax({
+        url: "/board/update",
+        type: "post",
+        data: {
+            seq: ${boardContent.seq},
+            title: title,
+            contents: contents
+        },
+        success: function() {
+
+            $(".boardTitle").attr("contenteditable", "false");
+            $(".boardContents").attr("contenteditable", "false");
+
+            $(".boardUpdate").css("display", "inline");
+            $(".boardDelete").css("display", "inline");
+
+            $(".boardUpdateCom").css("display", "none");
+            $(".boardBack").css("display", "none");
+
+        }
+    });
+
+});
+
+
+/* 게시글 삭제 */
+
+$(".boardDelete").on("click", function() {
+
+    if(confirm("게시글을 삭제하시겠습니까?")) {
+
+        location.href = "/board/boardDelete?seq=${boardContent.seq}&cpage=${cpage}";
+
+    }
+
+});
+
+
+/* 댓글 수정 */
 
 $(".update").on("click", function() {
 
     let reply = $(this).closest(".reply");
-
     let replyContents = reply.find(".replyContents");
 
-    text = replyContents.html();
+    replyText = replyContents.html();
 
     replyContents.attr("contenteditable", "true");
 
@@ -593,13 +703,14 @@ $(".update").on("click", function() {
 });
 
 
+/* 댓글 수정 취소 */
+
 $(".back").on("click", function() {
 
     let reply = $(this).closest(".reply");
-
     let replyContents = reply.find(".replyContents");
 
-    replyContents.html(text);
+    replyContents.html(replyText);
 
     replyContents.attr("contenteditable", "false");
 
@@ -612,14 +723,14 @@ $(".back").on("click", function() {
 });
 
 
+/* 댓글 수정 완료 */
+
 $(".updateCom").on("click", function() {
 
     let reply = $(this).closest(".reply");
-
     let replyContents = reply.find(".replyContents");
 
     let contents = replyContents.text();
-
     let seq = reply.find(".replySeq").val();
 
     $.ajax({
@@ -628,7 +739,8 @@ $(".updateCom").on("click", function() {
         data: {
             seq: seq,
             board_seq: ${boardContent.seq},
-            contents: contents
+            contents: contents,
+            cpage: ${cpage}
         },
         success: function() {
 
@@ -645,6 +757,8 @@ $(".updateCom").on("click", function() {
 
 });
 
+
+/* 추천 */
 
 $(".recommendBtn").on("click", function() {
 
@@ -681,17 +795,15 @@ $(".recommendBtn").on("click", function() {
 
 });
 
-</script>
-		</div>
-	</div>
 
+/* 목록 */
 
-	<script>
-    let goBack = document.getElementById("goBack");
+let goBack = document.getElementById("goBack");
 
-    goBack.onclick = function() {
-        location.href = "/board/freeBoard?cpage=${cpage}";
-    }
+goBack.onclick = function() {
+    location.href = "/board/freeBoard?cpage=${cpage}";
+};
+
 </script>
 </body>
 </html>

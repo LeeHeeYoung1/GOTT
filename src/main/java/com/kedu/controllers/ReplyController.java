@@ -19,7 +19,7 @@ public class ReplyController {
 	private ReplyDAO rdao;
 	
 	@RequestMapping("/writeReply")
-	public String write(ReplyDTO dto, HttpSession session,Model model) {
+	public String write(ReplyDTO dto, HttpSession session,Model model, int cpage) {
 
         String writer = (String)session.getAttribute("nickname");
 
@@ -28,26 +28,26 @@ public class ReplyController {
         
         rdao.insert(dto);
 
-        return "redirect:/board/boardContent?seq=" + dto.getBoard_seq();
+        return "redirect:/board/boardContent?seq=" + dto.getBoard_seq() + "&cpage=" + cpage;
     }
 	
 	@RequestMapping("/delete")
-	public String delete(ReplyDTO dto, HttpSession session) {
+	public String delete(ReplyDTO dto, HttpSession session, int cpage) {
 
 	    String writer = (String)session.getAttribute("nickname");
 
 	    rdao.delete(dto.getSeq(), writer);
 
-	    return "redirect:/board/boardContent?seq=" + dto.getBoard_seq();
+	    return "redirect:/board/boardContent?seq=" + dto.getBoard_seq() + "&cpage=" + cpage;
 	}
 	
 	@RequestMapping("/update")
-	public String update(ReplyDTO dto, HttpSession session) {
+	public String update(ReplyDTO dto, HttpSession session, int cpage) {
 
 	    String writer = (String)session.getAttribute("nickname");
 
 	    rdao.update(dto.getContents(), dto.getSeq(), writer);
 
-	    return "redirect:/board/boardContent?seq=" + dto.getBoard_seq();
+	    return "redirect:/board/boardContent?seq=" + dto.getBoard_seq() + "&cpage=" + cpage;
 	}
 }

@@ -187,7 +187,7 @@
 		홈 &nbsp;>&nbsp; 게시판 &nbsp;>&nbsp; <span>글쓰기</span>
 	</div>
 
-	<form class="writeBox" action="/board/writeRegi" method="post"  enctype="multipart/form-data">
+	<form class="writeBox" action="/board/writeRegi?cpage=${cpage}" method="post"  enctype="multipart/form-data">
 
 		<div class="writeRow">
 			<label>제목</label> <input type="text" name="title" class="writeInput"

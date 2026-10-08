@@ -43,6 +43,28 @@ public class BoardDAO {
 		String sql = "select * from board where seq = ?";
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(BoardDTO.class), seq);
 	}
+	
+	public void update(BoardDTO dto, String nickname) {
+
+	    String sql = "update board set title = ?, contents = ? " +
+	                 "where seq = ? and writer = ?";
+
+	    jdbc.update(
+	        sql,
+	        dto.getTitle(),
+	        dto.getContents(),
+	        dto.getSeq(),
+	        nickname
+	    );
+	}
+	
+	public void delete(int seq, String nickname) {
+
+	    String sql = "delete from board where seq = ? and writer = ?";
+
+	    jdbc.update(sql, seq, nickname);
+	}
+	
 	public int viewCount(int seq) {
 		String sql = "update board set view_count = view_count + 1 where seq = ?";
 		return jdbc.update(sql, seq);
@@ -56,5 +78,29 @@ public class BoardDAO {
 	public List<BoardDTO> selectFromTo(int start, int end) {
 		String sql = "select * from (select board.*, row_number() over(order by seq desc) rn from board) where rn between ? and ?";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(BoardDTO.class),start, end);
+	}
+	
+	public List<BoardDTO> selectView(int start, int end) {
+
+	    String sql = "select * from (select board.*, row_number() over(order by view_count desc) rn from board) where rn between ? and ?";
+
+	    return jdbc.query(sql,
+	            new BeanPropertyRowMapper<>(BoardDTO.class),
+	            start, end);
+	}
+	
+	public List<BoardDTO> selectRecommend(int start, int end) {
+
+	    String sql = "select * from (select board.*, " +
+                "row_number() over(order by nvl(recommend_count, 0) desc) rn " +
+                "from board " +
+                "left join (select board_seq, count(*) recommend_count " +
+                "from board_recommend group by board_seq) r " +
+                "on board.seq = r.board_seq) " +
+                "where rn between ? and ?";
+
+	    return jdbc.query(sql,
+	            new BeanPropertyRowMapper<>(BoardDTO.class),
+	            start, end);
 	}
 }
