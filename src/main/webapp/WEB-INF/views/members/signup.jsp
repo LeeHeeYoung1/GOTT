@@ -249,18 +249,7 @@
         <div class="logobox">
             <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
         </div>
-        <div class="nav flex-between">
-            <div class="textzone">이벤트</div>
-            <div class="textzone">지역</div>
-            <div class="textzone">추천 여행지</div>
-            <div class="textzone">숙박업소</div>
-            <div class="textzone">리뷰</div>
-            <div class="textzone">여행 플래너</div>
-            <div class="textzone">공지사항</div>
-        </div>
-        <div class="user-menu">
-            <div class="icon"><i class="fa-solid fa-bars"></i></div>
-        </div>
+        <div>회원가입에 대한 감사의 말 같은거</div>
     </div>
 
     <div class="title">
