@@ -274,6 +274,44 @@ button:hover {
 .reviewDate p {
 	margin: 0;
 }
+#navi {
+	width: 900px;
+	max-width: 100%;
+	margin: 28px auto 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+}
+
+#navi a {
+	min-width: 34px;
+	height: 34px;
+	padding: 0 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background: white;
+	font-size: 12px;
+	font-weight: 600;
+	color: #777;
+	text-decoration: none;
+	transition: background .15s, border-color .15s, color .15s;
+}
+
+#navi a:hover {
+	border-color: #222;
+	color: #222;
+}
+
+#navi a.on {
+	background: #222;
+	border-color: #222;
+	color: white;
+}
 </style>
 
 <!-- 메인 -->
@@ -291,7 +329,7 @@ button:hover {
 
 	<nav class="tabs">
 		<a href="/board/freeBoard?cpage=1">자유게시판</a> <a
-			href="/board/reviewBoard" class="on">리뷰게시판</a>
+			href="/review/reviewBoard?cpage=1" class="on">리뷰게시판</a>
 	</nav>
 
 	<!-- 검색 -->
@@ -327,7 +365,7 @@ button:hover {
 	<div class="searchOption">
 
 		<div class="totalCount">
-			총 <strong>120</strong>건
+			총 <strong>${recordTotalCount}</strong>건
 		</div>
 
 		<select class="sort">
@@ -358,6 +396,8 @@ button:hover {
 			</div>
 		</c:forEach>
 	</div>
+	
+	<div class="reviewNavi" id="navi">${navi}</div>
 </div>
 
 
@@ -366,5 +406,47 @@ button:hover {
 	$("#writeBtn").on("click", function() {
 		location.href = "/review/review_write";
 	})
+	
+	let recordTotalCount = ${recordTotalCount};
+	let recordCountPerPage = ${recordCountPerPage};
+	let naviCountPerPage = ${naviCountPerPage};
+	let currentPage = ${cpage};
+	
+	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
+	
+	let startNavi = Math.floor((currentPage-1) / naviCountPerPage) * naviCountPerPage + 1;
+	let endNavi = startNavi + naviCountPerPage -1;
+	
+	if(endNavi > pageTotalCount){
+		endNavi = pageTotalCount;
+	}
+	
+	let needPrev = startNavi > 1;
+	let needNext = endNavi < pageTotalCount;
+	
+	let navi = document.getElementById("navi");
+	
+	if(needPrev){
+		let prev = document.createElement("a");
+		prev.setAttribute("href", "/review/reviewBoard?cpage=" + (startNavi -1));
+		prev.innerHTML = "<";
+		navi.append(prev);	
+	}
+	for(let i = startNavi; i<= endNavi; i++){
+		let num = document.createElement("a");
+		num.setAttribute("href", "/review/reviewBoard?cpage=" + i);
+		if(i == currentPage){
+			num.setAttribute("class", "on");
+		}
+		num.innerHTML = i;
+		navi.append(num);
+	}
+	if(needNext){
+		let next = document.createElement("a");
+		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi +1));
+		next.innerHTML = ">";
+		navi.append(next);
+	}
+	
 </script>
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
