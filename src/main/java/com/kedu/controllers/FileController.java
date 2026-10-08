@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
@@ -21,9 +20,6 @@ import com.google.gson.JsonObject;
 @Controller
 @RequestMapping("/file")
 public class FileController {
-
-    @Autowired
-    private ServletContext servletContext;
 
     @RequestMapping(value="/uploadImageFile", produces="application/json; charset=utf8")
     @ResponseBody

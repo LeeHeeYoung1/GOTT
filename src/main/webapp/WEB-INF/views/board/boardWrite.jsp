@@ -208,14 +208,13 @@
 
 
 		<div class="fileRow">
-			<label>첨부파일</label> <input type="file" name="files" multiple>
+			<label>첨부파일</label> <input type="file" name="attachFiles" multiple>
 		</div>
 
 
 		<div class="buttonBox">
 
-			<button type="button" onclick="location.href='/board/freeBoard'">
-				취소</button>
+			<button type="button" onclick="history.back()">취소</button>
 
 			<button type="submit" class="submitBtn">등록</button>
 
