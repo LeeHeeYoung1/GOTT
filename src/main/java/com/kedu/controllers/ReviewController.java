@@ -24,9 +24,13 @@ public class ReviewController {
 	private PlaceDAO pdao;
 	
 	@RequestMapping("/reviewBoard")
-	public String reviewBoard(Model model) {
-		List<ReviewDTO> rList = rdao.selectAll();
+	public String reviewBoard(int cpage, Model model) {
+		List<ReviewDTO> rList = rdao.selectFromTo(cpage * 9 - 8, cpage * 9);
 		model.addAttribute("rList", rList);
+		model.addAttribute("recordTotalCount", rdao.selectCount());
+		model.addAttribute("recordCountPerPage", 9);
+		model.addAttribute("naviCountPerPage", 10);
+		model.addAttribute("cpage", cpage);
 		return "board/reviewBoard";
 	}
 	
@@ -44,7 +48,7 @@ public class ReviewController {
 	@RequestMapping("/write")
 	public String write(ReviewDTO dto) {
 		rdao.insert(dto);
-		return "/board/reviewBoard";
+		return "redirect:/review/reviewBoard";
 	}
 	
 }

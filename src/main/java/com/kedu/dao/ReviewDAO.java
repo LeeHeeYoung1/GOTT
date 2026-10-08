@@ -21,8 +21,13 @@ public class ReviewDAO {
 		return jdbc.update(sql, dto.getMember_id(), dto.getTarget_type(), dto.getTarget_id(), dto.getRating(), dto.getTag(), dto.getContents(), dto.getImage1());
 	}
 	
-	public List<ReviewDTO> selectAll(){
-		String sql = "select * from review order by seq desc";
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class));
+	public List<ReviewDTO> selectFromTo(int start, int end){
+		String sql = "select * from (select review.*, ROW_NUMBER() OVER(order by seq desc)rn from review) where rn between ? and ?";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), start, end);
+	}
+	
+	public int selectCount() {
+		String sql = "select count(*) from review";
+		return jdbc.queryForObject(sql, Integer.class);
 	}
 }
