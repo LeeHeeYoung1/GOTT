@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +21,7 @@ body {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-size: 16px;
 	line-height: 1.5;
+	color: #222;
 }
 
 a {
@@ -167,6 +169,7 @@ hr {
 /* 검색 */
 .searchArea {
 	width: 650px;
+	max-width: 100%;
 	margin: 25px auto 18px;
 	position: relative;
 }
@@ -224,6 +227,7 @@ hr {
 /* 게시판 정보 */
 .searchOption {
 	width: 900px;
+	max-width: 100%;
 	margin: 0 auto 12px;
 	display: flex;
 	align-items: center;
@@ -256,27 +260,86 @@ hr {
 	font-size: 11px;
 }
 
-/* 카드 */
-.boardList {
+/* ===== 리뷰 카드 ===== */
+.reviewList {
 	width: 900px;
+	max-width: 100%;
 	margin: 0 auto;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 18px;
 }
 
-.boardCard {
-	height: 200px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	background: white;
-	transition: 0.2s;
+.reviewCard {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #e8e8e8;
+	border-radius: 12px;
+	background: rgba(0, 0, 0, 0.78);
+	overflow: hidden;
+	cursor: pointer;
+	transition: transform .18s, box-shadow .18s, border-color .18s;
 }
 
-.boardCard:hover {
-	transform: translateY(-2px);
-	border-color: #aaa;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+.reviewCard:hover {
+	transform: translateY(-3px);
+	border-color: #ccc;
+	box-shadow: 0 8px 22px rgba(0, 0, 0, .09);
+}
+
+/* --- 사진 --- */
+.reviewCard>img {
+	width: 100%;
+	height: 230px;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+	flex-shrink: 0;
+	background: #f0f0f0;
+	border-bottom: 1px solid #f0f0f0;
+	transition: transform .35s ease;
+}
+
+.reviewCard:hover>img {
+	transform: scale(1.04);
+}
+
+/* --- 본문 — 3줄까지만 --- */
+.reviewContents {
+	position: relative;
+	padding: 14px 16px 0;
+	max-height: calc(1.65em * 3 + 14px);
+	overflow: hidden;
+	font-size: 13px;
+	line-height: 1.65;
+	color: white;
+	word-break: break-all;
+}
+
+/* summernote 가 넣은 태그 정리 */
+.reviewContents p {
+	margin: 0;
+}
+
+.reviewContents * {
+	font-size: 13px !important;
+	line-height: 1.65 !important;
+	color: white !important;
+	background: transparent !important;
+}
+
+/* --- 날짜 --- */
+.reviewDate {
+	margin-top: auto;
+	padding: 10px 16px 14px;
+	font-size: 11px;
+	color: #aaa;
+	text-align: right;
+	letter-spacing: .02em;
+}
+
+.reviewDate p {
+	margin: 0;
 }
 </style>
 
@@ -375,32 +438,28 @@ hr {
 
 		<!-- 카드 -->
 
-		<div class="boardList">
+		<div class="reviewList">
 
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
+			<c:forEach var="i" items="${rList}">
 
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-
+				<div class="reviewCard">
+					<img src="${i.image1}">
+					<div class="reviewContents">
+						${i.contents}
+					</div>
+					<div class="reviewDate">
+						<p><fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd"/></p>
+					</div>
+				</div>
+			</c:forEach>
 		</div>
 	</div>
 
 </body>
 
 <script>
-	$("#writeBtn").on("click", function(){
-		location.href="/review/review_write";
+	$("#writeBtn").on("click", function() {
+		location.href = "/review/review_write";
 	})
 </script>
 </html>
