@@ -5,14 +5,14 @@ import java.sql.Timestamp;
 public class ReplyDTO {
 	private int seq;
 	private int board_seq;
-	private int parent_seq;
+	private Integer parent_seq;
 	private String writer;
 	private String contents;
 	private Timestamp write_date;
 	
 	public ReplyDTO () {}
 	
-	public ReplyDTO(int seq, int board_seq, int parent_seq, String writer, String contents, Timestamp write_date) {
+	public ReplyDTO(int seq, int board_seq, Integer parent_seq, String writer, String contents, Timestamp write_date) {
 		this.seq = seq;
 		this.board_seq = board_seq;
 		this.parent_seq = parent_seq;
@@ -32,10 +32,10 @@ public class ReplyDTO {
 	public void setBoard_seq(int board_seq) {
 		this.board_seq = board_seq;
 	}
-	public int getParent_seq() {
+	public Integer getParent_seq() {
 		return parent_seq;
 	}
-	public void setParent_seq(int parent_seq) {
+	public void setParent_seq(Integer parent_seq) {
 		this.parent_seq = parent_seq;
 	}
 	public String getWriter() {

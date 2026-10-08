@@ -496,15 +496,56 @@ hr {
 			<h3>댓글</h3>
 			<span>3</span>
 		</div>
+		<form action="/reply/writeReply?board_seq=${boardContent.seq}" method="post">
 		<div class="replyWrite">
-			<div class="replyWriter">${sessionScope.nickname}</div>
-			<textarea id="replyContents" placeholder="댓글을 입력해주세요."></textarea>
+			<div class="replyWriter">${nickname}</div>
+			<textarea id="replyContents" name="contents" placeholder="댓글을 입력해주세요."></textarea>
 			<div class="replyWriteBottom">
 				<span>댓글을 남겨 여행 이야기를 함께 나눠보세요.</span>
-				<button type="button" id="replyBtn">댓글 작성</button>
+				<button id="replyBtn">댓글 작성</button>
 			</div>
 		</div>
+		 </form>
+
+    <div class="replyList">
+
+        <c:forEach var="reply" items="${replyList}">
+
+            <div class="reply">
+
+                <div class="replyInfo">
+                    <strong>${reply.writer}</strong>
+                    <span>${reply.write_date.toString().substring(0, 10)}</span>
+                </div>
+
+                <div class="replyContents">
+                    ${reply.contents}
+                </div>
+
+                <c:if test="${nickname == reply.writer}">
+
+                    <div class="replyButton">
+
+                        <button type="button">
+                            수정
+                        </button>
+
+                        <button type="button"
+                                onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}'">
+                            삭제
+                        </button>
+
+                    </div>
+
+                </c:if>
+
+            </div>
+
+        </c:forEach>
 	</div>
+</div>
+
+	
 	<script>
 		let goBack = document.getElementById("goBack");
 

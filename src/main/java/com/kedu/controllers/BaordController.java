@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kedu.dao.BoardDAO;
 import com.kedu.dao.FilesDAO;
+import com.kedu.dao.ReplyDAO;
 import com.kedu.dao.ReviewDAO;
 import com.kedu.dto.BoardDTO;
 import com.kedu.dto.FilesDTO;
@@ -34,6 +35,9 @@ public class BaordController {
 	
 	@Autowired
 	private FilesDAO fdao;
+	
+	@Autowired
+	private ReplyDAO redao;
 	
 	@RequestMapping("/freeBoard")
 	public String freeBoard(int cpage, Model model) {
@@ -96,12 +100,15 @@ public class BaordController {
 	}
 	
 	@RequestMapping("/boardContent")
-	public String boardContent(BoardDTO dto, Model model, int seq) {
+	public String boardContent(BoardDTO dto, Model model, int seq, HttpSession session) {
+		String nickname = (String)session.getAttribute("nickname");
 		bdao.viewCount(seq);
 		BoardDTO boardContent = bdao.boardContent(seq);
 		List<FilesDTO> flist = fdao.getFile(seq);
+		model.addAttribute("nickname", nickname);
 		model.addAttribute("boardContent", boardContent);
 		model.addAttribute("flist", flist);
+		model.addAttribute("replyList", redao.selectByBoard(seq));
 		return "board/boardContent";
 		
 	}

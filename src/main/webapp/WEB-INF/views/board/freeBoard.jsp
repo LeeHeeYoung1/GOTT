@@ -483,7 +483,7 @@ hr {
             자유게시판
         </a>
 
-        <a href="/board/reviewBoard">
+        <a href="/review/reviewBoard">
             리뷰게시판
         </a>
     </nav>
