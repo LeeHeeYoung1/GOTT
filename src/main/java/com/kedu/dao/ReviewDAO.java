@@ -30,4 +30,24 @@ public class ReviewDAO {
 		String sql = "select count(*) from review";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
+	
+	public ReviewDTO selectOne(int seq) {
+		String sql = "select * from review where seq = ?";
+		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), seq);
+	}
+	
+	public String nicknameSearch(int seq) {
+		String sql = "select (select m.nickname from members m where m.id = r.member_id) from review r where r.seq = ?"; 
+		return jdbc.queryForObject(sql, String.class, seq);
+	}
+	
+	public String targetSearch(int target_id) {
+		String sql = "select name from place where place_id = ?";
+		return jdbc.queryForObject(sql, String.class, target_id);
+	}
+	
+	public int delete(int seq) {
+		String sql = "delete from review where seq = ?";
+		return jdbc.update(sql, seq);
+	}
 }

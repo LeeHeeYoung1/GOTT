@@ -2,12 +2,15 @@ package com.kedu.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kedu.commons.TagSplitUtil;
 import com.kedu.dao.PlaceDAO;
 import com.kedu.dao.ReviewDAO;
 import com.kedu.dto.PlaceDTO;
@@ -48,7 +51,25 @@ public class ReviewController {
 	@RequestMapping("/write")
 	public String write(ReviewDTO dto) {
 		rdao.insert(dto);
-		return "redirect:/review/reviewBoard";
+		return "redirect:/review/reviewBoard?cpage=1";
 	}
 	
+	@RequestMapping("/detail")
+	public String datail(int seq, Model model) {
+		ReviewDTO rdto = rdao.selectOne(seq);
+		String[] myTags = TagSplitUtil.tagSplit(rdto.getTag());
+		String nickname = rdao.nicknameSearch(seq);
+		String placeName = rdao.targetSearch(rdto.getTarget_id());
+		model.addAttribute("rdto", rdto);
+		model.addAttribute("myTags", myTags);
+		model.addAttribute("nickname", nickname);
+		model.addAttribute("placeName", placeName);
+		return "/board/reviewContent";
+	}
+
+	@RequestMapping("/delete")
+	public String delete(int seq) {
+		rdao.delete(seq);
+		return "redirect:/review/reviewBoard?cpage=1";
+	}
 }

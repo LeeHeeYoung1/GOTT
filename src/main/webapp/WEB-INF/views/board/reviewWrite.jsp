@@ -459,8 +459,8 @@ body {
 		<form action="/review/write" method="post">
 			<div class="review_header">
 				<p id="writer">작성자</p>
-				<input type="text" id="member_id" name="member_id"
-					value="${sessionScope.nickname}" readonly>
+				<input type="text" id="nickname" value="${sessionScope.nickname}" readonly>
+				<input type="hidden" name="member_id" value="${sessionScope.loginId}">
 				<div class="place_select">
 					<select id="placeType" name="target_type">
 						<option value="">유형</option>
