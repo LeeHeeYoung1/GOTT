@@ -200,7 +200,15 @@ button:hover {
 	gap: 18px;
 }
 
+/* 카드를 감싼 a — grid 칸을 꽉 채우게 */
+.reviewList>a {
+	display: flex;
+	min-width: 0;
+}
+
 .reviewCard {
+	flex: 1;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
 	border: 1px solid rgba(255, 255, 255, 0.15);
@@ -233,11 +241,12 @@ button:hover {
 	transform: scale(1.04);
 }
 
-/* --- 본문 — 3줄까지만 --- */
+/* --- 본문 — 항상 3줄 높이 --- */
 .reviewContents {
 	position: relative;
+	flex-shrink: 0;
 	padding: 14px 16px 0;
-	max-height: calc(1.65em * 3 + 14px);
+	height: calc(1.65em * 3 + 14px);
 	overflow: hidden;
 	font-size: 13px;
 	line-height: 1.65;
@@ -274,6 +283,8 @@ button:hover {
 .reviewDate p {
 	margin: 0;
 }
+
+/* ===== 페이지네이션 ===== */
 #navi {
 	width: 900px;
 	max-width: 100%;
@@ -385,18 +396,20 @@ button:hover {
 
 		<c:forEach var="i" items="${rList}">
 
-			<div class="reviewCard">
-				<img src="${i.image1}">
-				<div class="reviewContents">${i.contents}</div>
-				<div class="reviewDate">
-					<p>
-						<fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" />
-					</p>
+			<a href="/review/detail?seq=${i.seq}">
+				<div class="reviewCard">
+					<img src="${i.image1}">
+					<div class="reviewContents">${i.contents}</div>
+					<div class="reviewDate">
+						<p>
+							<fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" />
+						</p>
+					</div>
 				</div>
-			</div>
+			</a>
 		</c:forEach>
 	</div>
-	
+
 	<div class="reviewNavi" id="navi">${navi}</div>
 </div>
 
@@ -406,47 +419,48 @@ button:hover {
 	$("#writeBtn").on("click", function() {
 		location.href = "/review/review_write";
 	})
-	
+
 	let recordTotalCount = ${recordTotalCount};
 	let recordCountPerPage = ${recordCountPerPage};
 	let naviCountPerPage = ${naviCountPerPage};
 	let currentPage = ${cpage};
-	
+
 	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
-	
-	let startNavi = Math.floor((currentPage-1) / naviCountPerPage) * naviCountPerPage + 1;
-	let endNavi = startNavi + naviCountPerPage -1;
-	
-	if(endNavi > pageTotalCount){
+
+	let startNavi = Math.floor((currentPage - 1) / naviCountPerPage)
+			* naviCountPerPage + 1;
+	let endNavi = startNavi + naviCountPerPage - 1;
+
+	if (endNavi > pageTotalCount) {
 		endNavi = pageTotalCount;
 	}
-	
+
 	let needPrev = startNavi > 1;
 	let needNext = endNavi < pageTotalCount;
-	
+
 	let navi = document.getElementById("navi");
-	
-	if(needPrev){
+
+	if (needPrev) {
 		let prev = document.createElement("a");
-		prev.setAttribute("href", "/review/reviewBoard?cpage=" + (startNavi -1));
+		prev.setAttribute("href", "/review/reviewBoard?cpage="
+				+ (startNavi - 1));
 		prev.innerHTML = "<";
-		navi.append(prev);	
+		navi.append(prev);
 	}
-	for(let i = startNavi; i<= endNavi; i++){
+	for (let i = startNavi; i <= endNavi; i++) {
 		let num = document.createElement("a");
 		num.setAttribute("href", "/review/reviewBoard?cpage=" + i);
-		if(i == currentPage){
+		if (i == currentPage) {
 			num.setAttribute("class", "on");
 		}
 		num.innerHTML = i;
 		navi.append(num);
 	}
-	if(needNext){
+	if (needNext) {
 		let next = document.createElement("a");
-		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi +1));
+		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi + 1));
 		next.innerHTML = ">";
 		navi.append(next);
 	}
-	
 </script>
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
