@@ -98,7 +98,7 @@
             position: fixed;
             right: -200px;
             top: 0;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255, 255, 255, 0.7);
             
             box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
             z-index: 50;
