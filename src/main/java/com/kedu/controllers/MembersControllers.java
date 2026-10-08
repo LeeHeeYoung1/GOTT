@@ -261,8 +261,19 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/planner")
-	public String planner() {
+	public String planner(HttpSession session, Model model) {
+		String memberId = (String) session.getAttribute("loginId");
+		
+		List<PlaceDTO> wishList = wdao.selectByWish(memberId);
+
+	    model.addAttribute("wishList", wishList);
+		
 		return "members/planner";
+	}
+	
+	@RequestMapping("/wishlist")
+	public String wishlist() {
+		return "members/wishlist";
 	}
 	
 }
