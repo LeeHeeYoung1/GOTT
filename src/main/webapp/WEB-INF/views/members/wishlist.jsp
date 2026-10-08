@@ -22,6 +22,11 @@ body {
     background-color: #f8fafa;
     line-height: 1.5;
 }
+.mypageContainer > h2,
+.mypageContainer > h5 {
+    text-align: center;
+}
+
 .mypageContainer a {
     color: inherit;
     text-decoration: none;
@@ -415,7 +420,7 @@ body {
                 </div>
                 <div class="wishCategorySection">
                     <div class="sectionTitle">
-                        <span>관광지 ${wishSpotCount}곳</span>
+                        <span>관광지</span>
                         <a href="#">관광지 전체 보기 &gt;</a>
                     </div>
                     <div class="regionChips">
@@ -448,7 +453,7 @@ body {
                 </div>
                 <div class="wishCategorySection">
                     <div class="sectionTitle">
-                        <span>맛집 ${wishFoodCount}곳</span>
+                        <span>맛집</span>
                         <a href="#">맛집 전체 보기 &gt;</a>
                     </div>
                     <div class="regionChips">
@@ -458,30 +463,32 @@ body {
                         <button type="button">강릉</button>
                         <button type="button">경주</button>
                     </div>
+                    
                     <div class="wishGrid">
-                        <c:forEach var="wishList" items="${wishList}">
-                            <c:if test="${wishList.place_type == 'FOOD'}">
-                                <div class="wishCard">
-                                    <div class="img">
-                                        <img src="${wishList.image_name}" alt="${wishList.name}">
-                                        <span class="wishHeart">♥</span>
-                                    </div>
-                                    <div class="wishInfo">
-                                        <h3>${wishList.name}</h3>
-                                        <p class="wishSub">${wishList.region}</p>
-                                        <div class="wishBtnRow">
-                                            <button type="button" class="detailBtn" data-place-id="${wishList.place_id}">상세 보기</button>
-                                            <button type="button" class="unwishBtn" data-place-id="${wishList.place_id}">찜 해제</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:if>
-                        </c:forEach>
-                    </div>
-                </div>
+
+					    <c:forEach var="wish" items="${wishList}">
+						    <c:if test="${wish.place_type == 'FOOD'}">
+						        <div class="wishCard">
+						            <div class="img">
+						                <img src="${wish.image_name}" alt="${wish.name}">
+						                <span class="wishHeart">♥</span>
+						            </div>
+						            <div class="wishInfo">
+						                <h3>${wish.name}</h3>
+						                <p class="wishSub">${wish.region}</p>
+						                <div class="wishBtnRow">
+						                    <button type="button" class="detailBtn" data-place-id="${wish.place_id}">상세 보기</button>
+						                    <button type="button" class="unwishBtn" data-place-id="${wish.place_id}">찜 해제</button>
+						                </div>
+						            </div>
+						        </div>
+						    </c:if>
+					</c:forEach>
+					</div>
+				
                 <div class="wishCategorySection">
                     <div class="sectionTitle">
-                        <span>숙소 ${wishStayCount}곳</span>
+                        <span>숙소</span>
                         <a href="#">숙소 전체 보기 &gt;</a>
                     </div>
                     <div class="regionChips">

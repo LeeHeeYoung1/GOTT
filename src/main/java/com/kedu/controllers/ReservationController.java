@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kedu.commons.PriceUtil;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.RoomDAO;
-import com.kedu.dto.BoardDTO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.PlaceRoomDTO;
 import com.kedu.dto.ReservationDTO;

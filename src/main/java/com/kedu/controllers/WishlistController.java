@@ -24,8 +24,15 @@ public class WishlistController {
 	@RequestMapping("/")
 	public String wishlist(HttpSession session, Model model) {
 	    String memberId = (String) session.getAttribute("loginId");
+
+	    System.out.println("로그인 아이디 : " + memberId);
+
 	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
+
+	    System.out.println("찜 목록 개수 : " + wishList.size());
+
 	    model.addAttribute("wishList", wishList);
+
 	    return "members/wishlist";
 	}
 	

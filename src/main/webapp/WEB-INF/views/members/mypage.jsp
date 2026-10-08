@@ -26,6 +26,11 @@ body {
   background-color: #f8fafa;
   line-height: 1.5;
 }
+.mypageContainer > h2,
+.mypageContainer > h5 {
+    text-align: center;
+}
+
 
 /*  마이페이지 영역으로 스코프 한정 */
 .mypageContainer a {
@@ -486,6 +491,30 @@ body {
     font-weight: 600;
 }
 
+.reservationPaging {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px 0;
+}
+
+.reservationPaging a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+}
+
+.reservationPaging a.active {
+    background-color: #333;
+    color: white;
+    border-color: #333;
+}
 
 /* ---------- 5-4. 찜한 여행지 · 숙소 ---------- */
 
@@ -1046,7 +1075,7 @@ body {
             <ul>
               <li class="active"><a href="/members/mypage">마이페이지 홈</a></li>
               <li><a href="#">예약 내역</a></li>
-              <li><a href="/members/wishlist">찜한 여행지 · 숙소</a></li>
+              <li><a href="/wishlist/">찜한 여행지 · 숙소</a></li>
               <li><a href="/members/planner">여행 일정 플래너</a></li>
               <li><a href="#">내가 쓴 리뷰</a></li>
               <li><a href="#">내가 쓴 게시글</a></li>
@@ -1234,7 +1263,12 @@ body {
 			        </div>
 			    </div>
 			</c:forEach>
-
+			
+			<div class="reservationPaging">
+			    <c:forEach var="i" begin="1" end="${totalPage}">
+			        <a href="/members/mypage?cpage=${i}" class="${cpage == i ? 'active' : ''}">${i}</a>
+			    </c:forEach>
+			</div>
 
 
           </div>

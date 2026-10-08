@@ -42,8 +42,13 @@ public class ReservationDAO {
 		String sql = "SELECT reservation.*, room.room_name, room.image1 " + "FROM reservation " + "JOIN room "
 				+ "ON reservation.room_id = room.room_id " + "WHERE reservation.member_id = ? "
 				+ "ORDER BY reservation.reserve_date DESC";
-		ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(sql,new BeanPropertyRowMapper<>(ReservationDTO.class), memberId);
-	    return list;
+		ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId);
+		return list;
+	}
+	
+	public int reservationCount(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 	
 	public int updateReservation(String paymentId, String status) {
@@ -51,12 +56,34 @@ public class ReservationDAO {
 	    return jdbc.update(sql, status, paymentId);
 	}
 	
-	public ReservationDTO reservationOne(String paymentId) {
-	    String sql = "SELECT reservation.*, room.room_name, room.image1, room.place_id " + "FROM reservation " + "JOIN room " + 
-	    				"ON reservation.room_id = room.room_id " + "WHERE reservation.payment_id = ?";
+	public ArrayList<ReservationDTO> myRsList(String memberId, int cpage, int pagesize) {
+	    int start = (cpage - 1) * pagesize + 1;
+	    int end = cpage * pagesize;
 
+	    String sql = "SELECT * FROM ( "
+	            + "SELECT reservation.*, room.room_name, room.image1, "
+	            + "ROW_NUMBER() OVER (ORDER BY reservation.reserve_date DESC) AS rn "
+	            + "FROM reservation "
+	            + "JOIN room ON reservation.room_id = room.room_id "
+	            + "WHERE reservation.member_id = ? "
+	            + ") WHERE rn BETWEEN ? AND ?";
+
+	    ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(
+	            sql,
+	            new BeanPropertyRowMapper<>(ReservationDTO.class),
+	            memberId, start, end
+	    );
+
+	    return list;
+	}
+	public ReservationDTO reservationOne(String paymentId) {
+	    String sql = "SELECT r.*, rm.room_name, rm.image1, rm.place_id "
+	            + "FROM reservation r "
+	            + "JOIN room rm ON r.room_id = rm.room_id "
+	            + "WHERE r.payment_id = ?";
 	    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
 	}
+	
 	
 	public int selectCount() {
 		String sql = "select count(*) from place p " + " where p.place_type = 'STAY' "
