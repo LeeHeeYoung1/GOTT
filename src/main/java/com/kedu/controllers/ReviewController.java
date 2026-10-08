@@ -22,6 +22,11 @@ public class ReviewController {
 	@Autowired
 	private PlaceDAO pdao;
 	
+	@RequestMapping("/reviewBoard")
+	public String reviewBoard() {
+		return "board/reviewBoard";
+	}
+	
 	@RequestMapping("/review_write")
 	public String review_write() {
 		return "board/reviewWrite";
