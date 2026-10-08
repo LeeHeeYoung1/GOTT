@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
+
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"
@@ -12,14 +12,6 @@
 <style>
 * {
 	box-sizing: border-box;
-}
-
-body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	font-size: 16px;
-	line-height: 1.5;
 }
 
 a {
@@ -37,66 +29,6 @@ button:hover {
 	background-color: #222;
 	color: white;
 	border-color: #222;
-}
-
-/* 상단바 */
-.headercontainer {
-	width: 1200px;
-	max-width: calc(100% - 40px);
-	height: 70px;
-	margin: 0 auto;
-	padding: 0 30px;
-	display: flex;
-	align-items: center;
-}
-
-.logoBox {
-	width: 100px;
-	height: 40px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-right: 45px;
-}
-
-.logoBox img {
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-}
-
-.nav {
-	display: flex;
-	gap: 25px;
-}
-
-.nav a {
-	color: #333;
-	font-size: 13px;
-	white-space: nowrap;
-}
-
-.signBox {
-	margin-left: auto;
-	display: flex;
-	gap: 10px;
-}
-
-.signBox a {
-	color: #555;
-	font-size: 11px;
-}
-
-.menu-icon {
-	margin-left: 18px;
-	font-size: 20px;
-	cursor: pointer;
-}
-
-hr {
-	border: 0;
-	border-top: 1px solid #e5e5e5;
-	margin: 0;
 }
 
 /* 메인 */
@@ -167,6 +99,7 @@ hr {
 /* 검색 */
 .searchArea {
 	width: 650px;
+	max-width: 100%;
 	margin: 25px auto 18px;
 	position: relative;
 }
@@ -224,6 +157,7 @@ hr {
 /* 게시판 정보 */
 .searchOption {
 	width: 900px;
+	max-width: 100%;
 	margin: 0 auto 12px;
 	display: flex;
 	align-items: center;
@@ -256,151 +190,263 @@ hr {
 	font-size: 11px;
 }
 
-/* 카드 */
-.boardList {
+/* ===== 리뷰 카드 ===== */
+.reviewList {
 	width: 900px;
+	max-width: 100%;
 	margin: 0 auto;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 18px;
 }
 
-.boardCard {
-	height: 200px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	background: white;
-	transition: 0.2s;
+.reviewCard {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 12px;
+	background: rgba(0, 0, 0, 0.78);
+	overflow: hidden;
+	cursor: pointer;
+	transition: transform .18s, box-shadow .18s, border-color .18s;
 }
 
-.boardCard:hover {
-	transform: translateY(-2px);
-	border-color: #aaa;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+.reviewCard:hover {
+	transform: translateY(-3px);
+	border-color: rgba(255, 255, 255, 0.35);
+	box-shadow: 0 8px 22px rgba(0, 0, 0, .18);
+}
+
+/* --- 사진 --- */
+.reviewCard>img {
+	width: 100%;
+	height: 230px;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+	flex-shrink: 0;
+	background: #2a2a2a;
+	transition: transform .35s ease;
+}
+
+.reviewCard:hover>img {
+	transform: scale(1.04);
+}
+
+/* --- 본문 — 3줄까지만 --- */
+.reviewContents {
+	position: relative;
+	padding: 14px 16px 0;
+	max-height: calc(1.65em * 3 + 14px);
+	overflow: hidden;
+	font-size: 13px;
+	line-height: 1.65;
+	color: #f0f0f0;
+	word-break: break-all;
+}
+
+/* summernote 가 넣은 태그 정리 */
+.reviewContents p {
+	margin: 0;
+}
+
+.reviewContents img, .reviewContents video, .reviewContents iframe {
+	display: none;
+}
+
+.reviewContents * {
+	font-size: 13px !important;
+	line-height: 1.65 !important;
+	color: #f0f0f0 !important;
+	background: transparent !important;
+}
+
+/* --- 날짜 --- */
+.reviewDate {
+	margin-top: auto;
+	padding: 10px 16px 14px;
+	font-size: 11px;
+	color: rgba(255, 255, 255, 0.5);
+	text-align: right;
+	letter-spacing: .02em;
+}
+
+.reviewDate p {
+	margin: 0;
+}
+#navi {
+	width: 900px;
+	max-width: 100%;
+	margin: 28px auto 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+}
+
+#navi a {
+	min-width: 34px;
+	height: 34px;
+	padding: 0 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background: white;
+	font-size: 12px;
+	font-weight: 600;
+	color: #777;
+	text-decoration: none;
+	transition: background .15s, border-color .15s, color .15s;
+}
+
+#navi a:hover {
+	border-color: #222;
+	color: #222;
+}
+
+#navi a.on {
+	background: #222;
+	border-color: #222;
+	color: white;
 }
 </style>
 
-</head>
+<!-- 메인 -->
 
-<body>
+<div class="main">
 
-	<!-- 상단바 -->
+	<div class="titleBox">
+		<h2>게시판</h2>
+		<h5>여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.</h5>
+	</div>
 
-	<div class="headercontainer">
+	<div class="breadcrumb">
+		홈 &nbsp;>&nbsp; <span>리뷰게시판</span>
+	</div>
 
-		<div class="logoBox">
-			<a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
-		</div>
+	<nav class="tabs">
+		<a href="/board/freeBoard?cpage=1">자유게시판</a> <a
+			href="/review/reviewBoard?cpage=1" class="on">리뷰게시판</a>
+	</nav>
 
-		<nav class="nav">
-			<a href="#">이벤트</a> <a href="#">지역</a> <a href="#">추천여행지</a> <a
-				href="#">숙박업소</a> <a href="#">리뷰</a> <a href="#">여행 플래너</a> <a
-				href="#">공지사항</a>
-		</nav>
+	<!-- 검색 -->
 
-		<div class="signBox">
-			<a href="/members/mypage">마이페이지</a> <a href="/members/logout">로그아웃</a>
-		</div>
+	<div class="searchArea">
 
-		<div class="menu-icon">☰</div>
+		<input class="searchInput" type="text" placeholder="리뷰 제목 + 내용 검색">
+
+		<button class="searchBtn">🔍</button>
 
 	</div>
 
-	<hr>
+	<!-- 카테고리 -->
 
-	<!-- 메인 -->
+	<div class="categoryArea">
 
-	<div class="main">
+		<button class="reviewType on">전체</button>
+		<button class="reviewType">여행지 정보</button>
+		<button class="reviewType">관광지</button>
+		<button class="reviewType">맛집</button>
+		<button class="reviewType">카페</button>
+		<button class="reviewType">액티비티</button>
+		<button class="reviewType">숙소</button>
+		<button class="reviewType">여행후기</button>
+		<button class="reviewType">여행 일정 공유</button>
+		<button class="reviewType">여행 꿀팁</button>
+		<button class="reviewType">기타</button>
 
-		<div class="titleBox">
-			<h2>게시판</h2>
-			<h5>여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.</h5>
+	</div>
+
+	<!-- 게시판 정보 -->
+
+	<div class="searchOption">
+
+		<div class="totalCount">
+			총 <strong>${recordTotalCount}</strong>건
 		</div>
 
-		<div class="breadcrumb">
-			홈 &nbsp;>&nbsp; <span>리뷰게시판</span>
-		</div>
+		<select class="sort">
+			<option>최신순</option>
+			<option>조회순</option>
+			<option>추천순</option>
+			<option>댓글순</option>
+		</select>
 
-		<nav class="tabs">
-			<a href="/board/freeBoard?cpage=1">자유게시판</a> <a href="/board/reviewBoard"
-				class="on">리뷰게시판</a>
-		</nav>
+		<button class="writeBtn" id="writeBtn">글쓰기</button>
 
-		<!-- 검색 -->
+	</div>
 
-		<div class="searchArea">
+	<!-- 카드 -->
 
-			<input class="searchInput" type="text" placeholder="리뷰 제목 + 내용 검색">
+	<div class="reviewList">
 
-			<button class="searchBtn">🔍</button>
+		<c:forEach var="i" items="${rList}">
 
-		</div>
-
-		<!-- 카테고리 -->
-
-		<div class="categoryArea">
-
-			<button class="reviewType on">전체</button>
-			<button class="reviewType">여행지 정보</button>
-			<button class="reviewType">관광지</button>
-			<button class="reviewType">맛집</button>
-			<button class="reviewType">카페</button>
-			<button class="reviewType">액티비티</button>
-			<button class="reviewType">숙소</button>
-			<button class="reviewType">여행후기</button>
-			<button class="reviewType">여행 일정 공유</button>
-			<button class="reviewType">여행 꿀팁</button>
-			<button class="reviewType">기타</button>
-
-		</div>
-
-		<!-- 게시판 정보 -->
-
-		<div class="searchOption">
-
-			<div class="totalCount">
-				총 <strong>120</strong>건
+			<div class="reviewCard">
+				<img src="${i.image1}">
+				<div class="reviewContents">${i.contents}</div>
+				<div class="reviewDate">
+					<p>
+						<fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" />
+					</p>
+				</div>
 			</div>
-
-			<select class="sort">
-				<option>최신순</option>
-				<option>조회순</option>
-				<option>추천순</option>
-				<option>댓글순</option>
-			</select>
-
-			<button class="writeBtn" id="writeBtn">글쓰기</button>
-
-		</div>
-
-		<!-- 카드 -->
-
-		<div class="boardList">
-
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-			<div class="boardCard"></div>
-
-		</div>
+		</c:forEach>
 	</div>
+	
+	<div class="reviewNavi" id="navi">${navi}</div>
+</div>
 
-</body>
+
 
 <script>
-	$("#writeBtn").on("click", function(){
-		location.href="/review/review_write";
+	$("#writeBtn").on("click", function() {
+		location.href = "/review/review_write";
 	})
+	
+	let recordTotalCount = ${recordTotalCount};
+	let recordCountPerPage = ${recordCountPerPage};
+	let naviCountPerPage = ${naviCountPerPage};
+	let currentPage = ${cpage};
+	
+	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
+	
+	let startNavi = Math.floor((currentPage-1) / naviCountPerPage) * naviCountPerPage + 1;
+	let endNavi = startNavi + naviCountPerPage -1;
+	
+	if(endNavi > pageTotalCount){
+		endNavi = pageTotalCount;
+	}
+	
+	let needPrev = startNavi > 1;
+	let needNext = endNavi < pageTotalCount;
+	
+	let navi = document.getElementById("navi");
+	
+	if(needPrev){
+		let prev = document.createElement("a");
+		prev.setAttribute("href", "/review/reviewBoard?cpage=" + (startNavi -1));
+		prev.innerHTML = "<";
+		navi.append(prev);	
+	}
+	for(let i = startNavi; i<= endNavi; i++){
+		let num = document.createElement("a");
+		num.setAttribute("href", "/review/reviewBoard?cpage=" + i);
+		if(i == currentPage){
+			num.setAttribute("class", "on");
+		}
+		num.innerHTML = i;
+		navi.append(num);
+	}
+	if(needNext){
+		let next = document.createElement("a");
+		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi +1));
+		next.innerHTML = ">";
+		navi.append(next);
+	}
+	
 </script>
-</html>
+<%@ include file="/WEB-INF/views/common/footer.jsp"%>

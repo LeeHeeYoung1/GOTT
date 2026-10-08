@@ -81,17 +81,67 @@
             background-color: #f3f4f6;
         }
 
-        .icon {
+        i {
             margin-left: 10px;
             font-size: 20px;
         }
-        .icon:hover {
+        i:hover {
             cursor: pointer;
         }
-        .icon:active {
-            
+        i:active {
+        	transform: scale(0.9);
         }
-
+        
+        .sidemenu {
+            width: 200px;
+            height: 500px;
+            position: fixed;
+            right: -200px;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+    		transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .sidemenu.open {
+		    opacity: 1;
+    		visibility: visible;
+		}
+        
+        .sidemenu-title {
+            width: 100%;
+            height: 15%;
+        }
+        .sidemenu-main {
+            width: 100%;
+            height: 75%;
+            justify-content: center;
+            align-content: center;
+        }
+        .sidemenu-footer {
+            width: 100%;
+            height: 10%;
+        }
+        .sidemenu-main p a{
+            display: flex;
+		    justify-content: center;
+		    align-items: center;
+        }
+        .sidemenu-main p a:hover {
+            background-color: #f1f5f9;
+            color: #2563eb;
+        }
+        .sidemenu-footer span a:hover {
+            color: #2563eb;
+        }
+        .sidemenu-footer {
+            padding: 0 10px;
+        }
+        
+        
         hr {
             margin: 25px 0px;
             border: none;
@@ -143,19 +193,52 @@
 		        <div class="user-menu">
 
 		       	 	<div class="textbox">${nickname}님</div>
-
-		            <div class="textbox"><a href="/members/logout">로그아웃</a></div>
-		            <div class="textbox"><a href="members/mypage">마이페이지</a></div>
-		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
+		            <div class="menubtn"><i class="fa-solid fa-bars"></i></div>
+		        </div>
+		        <div class="sidemenu" id="sidemenu">
+		            <div class="sidemenu-title flex-center">
+		                <h2>메뉴</h2>
+		            </div>
+		            <div class="sidemenu-main">
+		            	<p><a href="/">메인</a></p>
+		                <p><a href="/members/mypage">마이페이지</a></p>
+		                <p><a href="/members/wishlist">찜목록</a></p>
+		                <p><a href="/">북마크</a></p>
+		                <p><a href="/">뭐넣지</a></p>
+		                
+		            </div>
+		            <div class="sidemenu-footer flex-between">
+		                <span><a href="/members/logout">로그아웃</a></span>
+		                <span><a href="/members/deleted">회원탈퇴</a></span>
+		            </div>
 		        </div>
 	        </c:when>
 	        <c:otherwise>
 	        	<div class="user-menu">
 	        		<div class="textbox"><a href="/members/loginpage">로그인</a></div>
-		            <div class="icon"><i class="fa-solid fa-bars"></i></div>
+		            <div class="menubtn"><i class="fa-solid fa-bars"></i></div>
+		        </div>
+		        <div class="sidemenu" id="sidemenu">
+		            <div class="sidemenu-title flex-center">
+		                <h2>메뉴</h2>
+		            </div>
+		            <div class="sidemenu-main">
+		                <p><a href="/">메인</a></p>
+		                <p><a href="/members/mypage">마이페이지</a></p>
+		                <p><a href="/members/wishlist">찜목록</a></p>
+		                <p><a href="/">북마크</a></p>
+		                <p><a href="/">뭐넣지</a></p>
+		            </div>
+		            <div class="sidemenu-footer flex-between">
+		                <span><a href="/members/loginpage">로그인</a></span>
+		                <span><a href="/members/signuppage">회원가입</a></span>
+		            </div>
 		        </div>
 	        </c:otherwise>
 		</c:choose>
+		
+		
+        
     </div>
-
+    	
 </div>

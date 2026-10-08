@@ -419,7 +419,7 @@
 	
 	                            <button type="button" class="addBtn"
 							        onclick="addPlace(${place.place_id}, ${place.latitude}, 
-							        				${place.longitude}, '${place.name}')">
+							        ${place.longitude},'${place.name}','${place.place_type}')">
 							    +</button>
 	                        </div>
 						</c:forEach>
@@ -434,37 +434,7 @@
                     <div class="dayBody">
                         <p class="dayDate" id="dayDate"></p>
 
-                        <div class="timelineItem">
-                            <span class="orderMark">1</span>
-                            <div class="timelineCard">
-                                <span class="dragHandle">⋮⋮</span>
-                                <div class="wishThumb"><img src="/images/logo.png" style="width: 50px; height: 50px;"></div>
-                                <div class="wishText">
-                                    <p>관광지</p>
-                                    <span>제주국제공항 도착</span>
-                                </div>
-                                <input type="text" class="timeInput" value="09:30">
-                                <button type="button">✕</button>
-                            </div>
-                        </div>
-
-                        <p class="transport">🚗 차량 이동 · 약 35분 · 22.4km</p>
-
-                        <div class="timelineItem">
-                            <span class="orderMark">2</span>
-                            <div class="timelineCard">
-                                <span class="dragHandle">⋮⋮</span>
-                                <div class="wishThumb"><img src="/images/logo.png" style="width: 50px; height: 50px;"></div>
-                                <div class="wishText">
-                                    <p>맛집</p>
-                                    <span>협재 흑돼지 맛집</span>
-                                </div>
-                                <input type="text" class="timeInput" value="12:00">
-                                <button type="button" id="delbtn">✕</button>
-                            </div>
-                        </div>
-
-                        <div class="dropEmpty">＋ 왼쪽 목록에서 장소를 끌어다 놓거나 ＋ 버튼으로 추가하세요</div>
+                        <div class="dropEmpty">＋ 버튼으로 나의 일정에 장소를 추가하세요</div>
                     </div>
 
                     <div class="dayFooter">Day 1 · 방문지 2곳 · 이동거리 약 22.4km</div>
@@ -584,17 +554,26 @@
 	var map = new kakao.maps.Map(container, options);
 	
 	var markers = [];
+	var polyline = new kakao.maps.Polyline({
+		path: [],
+		strokeWeight: 5,
+		strokeColor: '#FF0000',
+		strokeOpacity: 0.7,
+		strokeStyle: 'solid'
+	});
+	
+	polyline.setMap(map);
 	
 	// + 버튼 기능이요~
-	function addPlace(placeId, lat, lng, name) {
+	function addPlace(placeId, lat, lng, name, placeType) {
 
 	    // 1. 일정표에 장소 추가
-	    addTimelineItem(placeId, name);
+	    addTimelineItem(placeId, name, placeType);
 	    // 2. 지도에 마커 추가
 	    addMarker(placeId, lat, lng, name);
-	    // 3. 안내 문구 제거
-	    $(".dropEmpty").remove();
+
 	}
+	
 	// 마커 생성이요~
 	function addMarker(placeId, lat, lng, name) {
 		
@@ -609,14 +588,30 @@
 	    markers.push({
 	        placeId: placeId,
 	        name: name,
-	        marker: marker
+	        marker: marker,
+	        position: position
 	    });
+	    // 경로 업데이트
+	    updatePolyline();
+	    
 	    // 지도 중심을 새 장소로 이동
 	    map.setCenter(position);
 	    
 	}
 	
-	function addTimelineItem(placeId, name) {
+	function updatePolyline() {
+		
+		linePath = [];
+		
+		for (var i=0; i<markers.length; i++) {
+			linePath.push(markers[i].position);
+		}
+		
+		polyline.setPath(linePath);
+		
+	}
+	
+	function addTimelineItem(placeId, name, placeType) {
 
 	    // 현재 일정표에 있는 장소 개수
 	    var count = $(".timelineItem").length + 1;
@@ -631,8 +626,21 @@
 	    // 이미지
 	    var thumb = $("<div>").addClass("wishThumb").append(
 	           $("<img>").attr("src", "/images/logo.png").css({width: "50px", height: "50px"}));
-	 	// 장소 이름
-	    var wishText = $("<div>").addClass("wishText").append($("<p>").text("관광지"))
+	 	
+	    var typeText;
+	    
+	    if(placeType == "SPOT") {
+	    	typeText = "관광지";
+	    } else if (placeType == "FOOD") {
+	    	typeText = "맛집";
+	    } else if (placeType == "STAY") {
+	    	typeText = "숙박업소";
+	    } else {
+	    	typeText = placeType;
+	    }
+	    
+	    // 장소 이름
+	    var wishText = $("<div>").addClass("wishText").append($("<p>").text(typeText))
 	    				.append($("<span>").text(name));
 	    // 시간 입력
 	    var timeInput = $("<input>").attr("type", "text").addClass("timeInput").attr("placeholder", "시간");
@@ -651,26 +659,24 @@
 
 	        timelineItem.remove();
 	        removeMarker(placeId);
-	        
-	        function removeMarker(placeId) {
-	    	    // markers 배열에서 해당 placeId를 가진 마커 찾기
-	    	    for (var i = 0; i < markers.length; i++) {
-	    	        if (markers[i].placeId == placeId) {
-	    	            // 카카오 지도에서 마커 제거
-	    	            markers[i].marker.setMap(null);
-	    	            // 배열에서도 제거
-	    	            markers.splice(i, 1);
-	    	            break;
-	    	        }
-	    	    }
-	    	}
-	        
 	        updateOrder();
 
 	    });
 	}
 	
-	
+	function removeMarker(placeId) {
+	    // markers 배열에서 해당 placeId를 가진 마커 찾기
+	    for (var i = 0; i < markers.length; i++) {
+	        if (markers[i].placeId == placeId) {
+	            // 카카오 지도에서 마커 제거
+	            markers[i].marker.setMap(null);
+	            // 배열에서도 제거
+	            markers.splice(i, 1);
+	            break;
+	        }
+	    }
+	    updatePolyline();
+	}
 	
 	function updateOrder() {
 
@@ -679,6 +685,7 @@
 	    });
 
 	}
+	
 	
 	
 	

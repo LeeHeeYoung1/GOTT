@@ -487,7 +487,7 @@ hr {
             자유게시판
         </a>
 
-        <a href="/review/reviewBoard">
+        <a href="/review/reviewBoard?cpage=1">
             리뷰게시판
         </a>
     </nav>
