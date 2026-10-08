@@ -21,22 +21,6 @@ public class WishlistController {
 	@Autowired
 	private WishlistDAO wdao;
 	
-	@RequestMapping("/")
-	public String wishlist(HttpSession session, Model model) {
-	    String memberId = (String) session.getAttribute("loginId");
-
-	    System.out.println("로그인 아이디 : " + memberId);
-
-	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
-
-	    System.out.println("찜 목록 개수 : " + wishList.size());
-
-	    model.addAttribute("wishList", wishList);
-
-	    return "members/wishlist";
-	}
-	
-	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public String wishlist(int placeId, HttpSession session) {
