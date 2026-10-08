@@ -1075,7 +1075,7 @@ body {
             <ul>
               <li class="active"><a href="/members/mypage">마이페이지 홈</a></li>
               <li><a href="#">예약 내역</a></li>
-              <li><a href="/wishlist/">찜한 여행지 · 숙소</a></li>
+              <li><a href="/members/wishlist">찜한 목록</a></li>
               <li><a href="/members/planner">여행 일정 플래너</a></li>
               <li><a href="#">내가 쓴 리뷰</a></li>
               <li><a href="#">내가 쓴 게시글</a></li>
@@ -1280,7 +1280,7 @@ body {
 
 			  <div class="sectionTitle">
 			    <span>찜한 관광지 맛집 숙소</span>
-			    <a href="#">더 보기 &gt;</a>
+			    <a href="/wishlist/">더 보기 &gt;</a>
 			  </div>
 			
 			  <div class="wishlistTab">
@@ -1439,40 +1439,34 @@ body {
 
 <script>
 
-$(".cancelBtn").on("click", function() {
+$(".cancelBtn").on("click", async function () {
+    if (!confirm("이 결제를 취소할까요?")) return;
 
- let paymentId = $(this).data("payment-id");
+    let paymentId = $(this).data("payment-id");
 
- console.log("paymentId : " + paymentId);
+    try {
+        const res = await fetch("/reservation/cancel", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+            body: "paymentId=" + encodeURIComponent(paymentId)
+        });
 
- if (!confirm("이 예약을 취소할까요?")) {
-     return;
- }
+        const text = await res.text();
+        console.log("취소 응답:", text);
 
- $.ajax({
-     url: "/reservation/cancelReservation",
-     type: "POST",
-     data: {
-         paymentId: paymentId
-     },
-     success: function(result) {
-
-         console.log("결과 : " + result);
-
-         if (result.trim() == "OK") {
-             alert("예약이 취소되었습니다.");
-             location.reload();
-         } else {
-             alert(result);
-         }
-     },
-     error: function() {
-         alert("취소 요청 중 오류가 발생했습니다.");
-     }
- });
+        if (res.ok && text.trim() === "OK") {
+            alert("결제가 취소되었습니다.");
+            location.reload();
+        } else {
+            alert("취소 실패: " + text);
+        }
+    } catch (error) {
+        console.error("요청 실패:", error);
+        alert("취소 요청 중 오류가 발생했습니다.");
+    }
 });
-
-
 
 $(".updateBtn").on("click", function() {
 

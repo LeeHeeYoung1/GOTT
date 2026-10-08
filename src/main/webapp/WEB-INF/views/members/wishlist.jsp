@@ -391,12 +391,7 @@ body {
                         <span>숙소</span>
                     </div>
                 </div>
-                <div class="wishFilterTabs">
-                    <button type="button" class="active" data-type="all">전체 <span class="count">${wishTotalCount}</span></button>
-                    <button type="button" data-type="spot">관광지 <span class="count">${wishSpotCount}</span></button>
-                    <button type="button" data-type="food">맛집 <span class="count">${wishFoodCount}</span></button>
-                    <button type="button" data-type="stay">숙소 <span class="count">${wishStayCount}</span></button>
-                </div>
+                
                 <div class="wishToolbar">
                     <div class="leftGroup">
                         <label><input type="checkbox" id="selectAll">전체 선택</label>
@@ -421,7 +416,7 @@ body {
                 <div class="wishCategorySection">
                     <div class="sectionTitle">
                         <span>관광지</span>
-                        <a href="#">관광지 전체 보기 &gt;</a>
+                        
                     </div>
                     <div class="regionChips">
                         <button type="button" class="active">전체</button>
@@ -454,7 +449,7 @@ body {
                 <div class="wishCategorySection">
                     <div class="sectionTitle">
                         <span>맛집</span>
-                        <a href="#">맛집 전체 보기 &gt;</a>
+                        
                     </div>
                     <div class="regionChips">
                         <button type="button" class="active">전체</button>
@@ -489,7 +484,7 @@ body {
                 <div class="wishCategorySection">
                     <div class="sectionTitle">
                         <span>숙소</span>
-                        <a href="#">숙소 전체 보기 &gt;</a>
+                        
                     </div>
                     <div class="regionChips">
                         <button type="button" class="active">전체</button>
