@@ -103,13 +103,26 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/mypage")
-	public String mypage(HttpSession session, Model model) {
+	public String mypage(Integer cpage, HttpSession session, Model model) {
 	    String memberId = (String) session.getAttribute("loginId");
-	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
+
+	    if(cpage == null) {
+	        cpage = 1;
+	    }
+
+	    int pagesize = 3;
+
+	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize);
 	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
-	    
-	    model.addAttribute("wishList",wishList);
+
+	    int totalCount = rdao.reservationCount(memberId);
+	    int totalPage = (int)Math.ceil((double)totalCount / pagesize);
+
+	    model.addAttribute("wishList", wishList);
 	    model.addAttribute("myRsList", myRsList);
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("totalPage", totalPage);
+
 	    return "members/mypage";
 	}
 	
