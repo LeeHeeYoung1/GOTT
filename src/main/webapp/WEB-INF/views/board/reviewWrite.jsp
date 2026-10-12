@@ -70,7 +70,7 @@ body {
 	color: #333;
 }
 
-#member_id {
+#nickname {
 	display: inline-block;
 	vertical-align: middle;
 	width: 180px;
@@ -613,7 +613,7 @@ body {
 
 	$("#deleteBtn").on("click", function(){
 		$("#preview").empty();
-		$("photo").val("");
+		$("#photo").val("");
 		$("#image1").val("");
 	})
 	$("#backBtn").on("click", function() {

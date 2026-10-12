@@ -12,91 +12,31 @@
 	crossorigin="anonymous"></script>
 <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
 <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
-        background-color: #f8fafa;
-    }
-
-    .box {
-        width: 460px;
-        margin: 80px auto;
-        padding: 36px 32px;
-        border: 1px solid #333;
-        background-color: white;
-        text-align: center;
-    }
-
-    .check {
-        width: 56px;
-        height: 56px;
-        margin: 0 auto 16px;
-        border-radius: 50%;
-        background-color: #16a34a;
-        color: white;
-        font-size: 30px;
-        line-height: 56px;
-    }
-
-    .box h2 {
-        margin: 0 0 6px;
-    }
-
-    .box .sub {
-        margin: 0 0 24px;
-        font-size: 13px;
-        color: #777;
-    }
-
-    /* 결제 정보 표 */
-    .info {
-        margin-bottom: 24px;
-        border-top: 1px solid #333;
-        text-align: left;
-    }
-
-    .info div {
-        display: flex;
-        justify-content: space-between;
-        padding: 12px 4px;
-        border-bottom: 1px solid #eee;
-        font-size: 14px;
-    }
-
-    .info span {
-        color: #777;
-    }
-
-    .info b {
-        max-width: 260px;
-        text-align: right;
-        word-break: break-all;
-    }
-
-    .btns {
-        display: flex;
-        gap: 8px;
-    }
-
-    .btns button {
-        flex: 1;
-        height: 44px;
-        border: 1px solid #333;
-        background-color: white;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .btns .main {
-        background-color: #222;
-        color: white;
-    }
-
-    #msg {
-        margin-top: 14px;
-        min-height: 18px;
-        font-size: 13px;
-        color: red;
+* { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; color: #1f2937; background: #f5f7fa; }
+    .box { width: min(520px, calc(100% - 32px)); margin: 64px auto; padding: 40px 36px 32px; border: 1px solid #e5eaf0; border-radius: 20px; background: #fff; box-shadow: 0 12px 36px rgba(15, 23, 42, 0.07); text-align: center; }
+    .check { display: flex; align-items: center; justify-content: center; width: 68px; height: 68px; margin: 0 auto 22px; border-radius: 50%; background: #e8f7ef; color: #16a34a; font-size: 36px; font-weight: 700; }
+    .box h2 { margin: 0 0 10px; color: #111827; font-size: 25px; font-weight: 750; letter-spacing: -0.8px; }
+    .box .sub { margin: 0 0 30px; color: #6b7280; font-size: 14px; line-height: 1.6; }
+    .info { margin-bottom: 28px; padding: 8px 18px; border: 1px solid #e8edf3; border-radius: 14px; background: #f9fafb; text-align: left; }
+    .info div { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 15px 0; border-bottom: 1px solid #e8edf3; font-size: 14px; line-height: 1.5; }
+    .info div:last-child { border-bottom: 0; }
+    .info span { flex-shrink: 0; color: #6b7280; }
+    .info b { max-width: 68%; color: #1f2937; font-weight: 650; text-align: right; overflow-wrap: anywhere; }
+    .info div:nth-child(2) b { color: #2563eb; font-size: 17px; font-weight: 750; }
+    .btns { display: flex; gap: 10px; }
+    .btns button { flex: 1; min-width: 0; min-height: 48px; padding: 12px 10px; border: 1px solid #d8dee8; border-radius: 10px; background: #fff; color: #374151; font-family: inherit; font-size: 14px; font-weight: 650; cursor: pointer; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .btns button:hover { background: #f3f6fa; border-color: #aeb9c9; }
+    .btns button:active { transform: translateY(1px); }
+    .btns .main { border-color: #2563eb; background: #2563eb; color: #fff; }
+    .btns .main:hover { border-color: #1d4ed8; background: #1d4ed8; }
+    #msg { margin-top: 14px; min-height: 18px; color: #dc2626; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+    @media (max-width: 480px) {
+        .box { margin: 24px auto; padding: 30px 20px 24px; border-radius: 16px; }
+        .box h2 { font-size: 22px; }
+        .info { padding: 6px 14px; }
+        .btns { flex-direction: column; }
+        .btns button { width: 100%; }
     }
 </style>
 </head>

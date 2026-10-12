@@ -394,6 +394,76 @@ hr {
 	color: #e53935 !important;
 	border-color: #e57373 !important;
 }
+
+/* 답글 버튼 */
+.replyAdd {
+    padding: 0;
+    margin-top: 8px;
+    border: none;
+    background: none;
+    color: #aaa;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.replyAdd:hover {
+    color: #333;
+}
+
+/* 대댓글 작성 폼 */
+.replyFormArea {
+    margin: 12px 0 0 15px;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background: #fafafa;
+}
+
+/* 대댓글 입력창 */
+.replyFormArea textarea {
+    display: block;
+    width: 100%;
+    height: 65px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    resize: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.replyFormArea textarea:focus {
+    border-color: #999;
+}
+
+/* 대댓글 작성 및 취소 버튼 */
+.replyFormArea button {
+    height: 28px;
+    margin-top: 8px;
+    padding: 0 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    color: #777;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.replyFormArea button:hover {
+    border-color: #222;
+    background: #222;
+    color: white;
+}
+
+/* 대댓글 들여쓰기 */
+.replyChild {
+    margin-left: 30px;
+    padding-left: 15px;
+    border-left: 2px solid #eee;
+}
+
 </style>
 
 </head>
@@ -553,47 +623,111 @@ hr {
 			</div>
 		</form>
 
-		<div class="replyList">
+<div class="replyList">
 
     <c:forEach var="reply" items="${replyList}">
 
-        <div class="reply">
-		<input type="hidden" class="replySeq" value="${reply.seq}">
-    <div class="replyInfo">
-        <strong>${reply.writer}</strong>
-        <span>${reply.write_date.toString().substring(0, 10)}</span>
-    </div>
+        <div class="reply ${not empty reply.parent_seq ? 'replyChild' : ''}">
 
-    <div class="replyContents">${reply.contents}</div>
+            <input type="hidden" class="replySeq" value="${reply.seq}">
 
-    <c:if test="${nickname == reply.writer}">
+            <div class="replyInfo">
+                <strong>${reply.writer}</strong>
+                <span>${reply.write_date.toString().substring(0, 10)}</span>
+            </div>
 
-        <div class="replyButton">
+            <div class="replyContents">${reply.contents}</div>
 
-            <button class="update" type="button">수정</button>
+            <!-- 원댓글에만 답글 버튼 표시 -->
+            <c:if test="${empty reply.parent_seq}">
+                <button type="button" class="replyAdd"
+                    onclick="showReplyForm(this)">
+                    답글
+                </button>
+            </c:if>
 
-            <button class="delete" type="button"
-                onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}&cpage=${cpage}'">
-                삭제
-            </button>
+            <!-- 대댓글 작성 폼 -->
+            <div class="replyFormArea" style="display: none;">
 
-            <button class="updateCom" type="button" style="display: none;">
-                수정완료
-            </button>
+                <form action="/reply/writeReply" method="post">
 
-            <button class="back" type="button" style="display: none;">
-                취소
-            </button>
+                    <input type="hidden" name="board_seq"
+                        value="${boardContent.seq}">
+
+                    <input type="hidden" name="parent_seq"
+                        value="${reply.seq}">
+
+                    <input type="hidden" name="cpage"
+                        value="${cpage}">
+
+                    <textarea name="contents"
+                        placeholder="답글을 입력해주세요." required></textarea>
+
+                    <button type="submit">답글 작성</button>
+
+                    <button type="button"
+                        onclick="this.closest('.replyFormArea').style.display='none'">
+                        취소
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- 기존 댓글 수정 및 삭제 -->
+            <c:if test="${nickname == reply.writer}">
+
+                <div class="replyButton">
+
+                    <button class="update" type="button">수정</button>
+
+                    <button class="delete" type="button"
+                        onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}&cpage=${cpage}'">
+                        삭제
+                    </button>
+
+                    <button class="updateCom" type="button"
+                        style="display: none;">
+                        수정완료
+                    </button>
+
+                    <button class="back" type="button"
+                        style="display: none;">
+                        취소
+                    </button>
+
+                </div>
+
+            </c:if>
 
         </div>
 
-    </c:if>
+    </c:forEach>
 
 </div>
 
-    </c:forEach>
+<script>
 
-			<script>
+
+
+$("#replyBtn").on("click", function() {
+	if($("#replyContents").val().trim() == "") {
+		alert("댓글을 입력해주세요.");
+		return false;
+	}
+});
+
+function showReplyForm(button) {
+    let reply = $(button).closest(".reply");
+    let form = reply.find(".replyFormArea");
+
+    if (form.css("display") == "none") {
+        $(".replyFormArea").css("display", "none");
+        form.css("display", "block");
+    } else {
+        form.css("display", "none");
+    }
+}
 
 let boardTitle;
 let boardContents;

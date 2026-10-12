@@ -50,4 +50,14 @@ public class ReviewDAO {
 		String sql = "delete from review where seq = ?";
 		return jdbc.update(sql, seq);
 	}
+	
+	public int update(ReviewDTO rdto) {
+		String sql = "update review set target_type = ?, target_id = ?, rating = ?, tag = ?, contents = ?, image1 = ? where seq = ?";
+		return jdbc.update(sql, rdto.getTarget_type(), rdto.getTarget_id(), rdto.getRating(), rdto.getTag(), rdto.getContents(), rdto.getImage1(), rdto.getSeq());
+	}
+	
+	public void viewCountUp(int seq) {
+		String sql = "update review set view_count = view_count + 1 where seq = ?";
+		jdbc.update(sql, seq);
+	}
 }

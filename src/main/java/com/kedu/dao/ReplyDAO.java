@@ -16,16 +16,19 @@ public class ReplyDAO {
 	private JdbcTemplate jdbc;
 	
 	public int insert(ReplyDTO dto) {
-		String sql = "insert into reply values(reply_seq.nextval, ?, null, ?, ?, systimestamp)";
-		return jdbc.update(sql, dto.getBoard_seq(), dto.getWriter(), dto.getContents());
+		String sql = "insert into reply values(reply_seq.nextval, ?, ?, ?, ?, systimestamp)";
+		return jdbc.update(sql, dto.getBoard_seq(), dto.getParent_seq(), dto.getWriter(), dto.getContents());
 	}
 	
-	 public List<ReplyDTO> selectByBoard(int board_seq) {
+	public List<ReplyDTO> selectByBoard(int board_seq) {
+	    String sql = "select * from reply where board_seq = ? "
+	            + "order by nvl(parent_seq, seq), "
+	            + "case when parent_seq is null then 0 else 1 end, seq";
 
-	        String sql = "select * from reply where board_seq = ? order by seq";
-
-	        return jdbc.query(sql, new BeanPropertyRowMapper<>(ReplyDTO.class), board_seq);
-	    }
+	    return jdbc.query(sql,
+	            new BeanPropertyRowMapper<>(ReplyDTO.class),
+	            board_seq);
+	}
 	 
 	 public int update(String contents, int seq, String writer) {
 		 	

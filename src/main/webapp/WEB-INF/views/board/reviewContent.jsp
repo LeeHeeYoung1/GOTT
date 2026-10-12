@@ -32,27 +32,32 @@ form {
 /* ===== 상단 ===== */
 .review_header {
 	max-width: 900px;
-	margin: 48px auto 18px;
+	margin: 48px auto 10px;
 	padding: 0 24px;
 	font-size: 24px;
 	font-weight: 800;
 	letter-spacing: -0.03em;
 }
 
+.writer_box {
+	max-width: 900px;
+	margin: 0 auto 10px;
+	padding: 0 24px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
 #writer {
-	display: inline-block;
-	margin: 0 10px 0 0;
-	vertical-align: middle;
+	margin: 0;
 	font-size: 13px;
 	font-weight: 700;
-	color: #333;
+	color: #8b8f96;
+	white-space: nowrap;
 }
 
 #nickname {
-	display: inline-block;
-	vertical-align: middle;
 	width: 180px;
-	height: 30px;
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -61,7 +66,283 @@ form {
 	font-family: inherit;
 	font-size: 14px;
 	font-weight: 600;
-	color: #1a1a1f;
+	color: #45484f;
+}
+
+/* ===== 조회수 / 추천수 ===== */
+.view_count_box, .recommend_box {
+	max-width: 900px;
+	margin: 0 auto 3px;
+	padding: 0 24px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 12px;
+	color: #a0a4ab;
+}
+
+.view_count_box p, .recommend_box p {
+	margin: 0;
+	font-weight: 700;
+	color: #45484f;
+}
+
+.recommend_box {
+	margin-bottom: 16px;
+}
+
+/* ===== 본문 — 사진 | 글, 아래 태그 ===== */
+.review_body {
+	max-width: 900px;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-top: 2px solid #222;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+/* --- 왼쪽: 사진 --- */
+.photo_box {
+	width: 320px;
+	flex-shrink: 0;
+	padding: 20px;
+	border-right: 1px solid #eceef1;
+	background: #fafbfc;
+}
+
+#photo {
+	width: 100%;
+	height: 280px;
+	border-radius: 10px;
+	overflow: hidden;
+	background: #eef1f5;
+	box-shadow: 0 2px 10px rgba(15, 23, 42, .10);
+}
+
+#photo img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* --- 오른쪽: 글 --- */
+#contents {
+	flex: 1 1 320px;
+	min-width: 0;
+	min-height: 320px;
+	margin: 0;
+	padding: 20px 24px;
+	border: 0;
+	outline: 0;
+	resize: none;
+	background: #fff;
+	font-family: inherit;
+	font-size: 15px;
+	line-height: 1.8;
+	color: #33363c;
+	cursor: default;
+}
+
+/* --- 아래: 태그 --- */
+.tag_box {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 16px 20px;
+	border-top: 1px solid #eceef1;
+	background: #fafbfc;
+}
+
+.tag_label {
+	padding-top: 5px;
+	font-size: 13px;
+	font-weight: 700;
+	color: #333;
+	white-space: nowrap;
+}
+
+.tag_list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.tag {
+	padding: 6px 14px;
+	border: 1px solid #FF6B35;
+	border-radius: 18px;
+	background: #fff5f0;
+	font-size: 12px;
+	font-weight: 700;
+	color: #FF6B35;
+}
+
+.tag_list:empty::before {
+	content: "등록된 태그가 없습니다.";
+	padding-top: 5px;
+	font-size: 12px;
+	color: #b0b5bc;
+}
+
+/* ===== 추천 버튼 ===== */
+.recommend {
+	max-width: 900px;
+	margin: 20px auto 0;
+	padding: 0 24px;
+	display: flex;
+	justify-content: center;
+}
+
+.heartBtn {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	height: 44px;
+	padding: 0 28px;
+	border: 1px solid #e0e3e7;
+	border-radius: 22px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 700;
+	color: #8b8f96;
+	cursor: pointer;
+	transition: background .15s, border-color .15s, color .15s, transform .12s;
+}
+
+.heartBtn:hover {
+	border-color: #ffb3bb;
+	background: #fff8f9;
+	color: #FF4757;
+	transform: translateY(-1px);
+}
+
+.heartBtn:active {
+	transform: translateY(0) scale(0.97);
+}
+
+.heartBtn.on {
+	border-color: #FF4757;
+	background: #fff0f2;
+	color: #FF4757;
+}
+
+.heartIcon {
+	display: inline-block;
+	font-size: 18px;
+	line-height: 1;
+}
+
+.heartBtn.on .heartIcon {
+	animation: pop .3s ease;
+}
+
+@keyframes pop {
+	0% {
+		transform: scale(1);
+	}
+	40% {
+		transform: scale(1.4);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+/* ===== 하단 버튼 ===== */
+.review_bottom {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	max-width: 900px;
+	margin: 20px auto 80px;
+	padding: 0 24px;
+}
+
+.review_bottom button {
+	min-width: 140px;
+	height: 46px;
+	border-radius: 7px;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background .15s, border-color .15s, color .15s;
+}
+
+#updateBtn {
+	border: 1px solid #222;
+	background: #222;
+	color: #fff;
+}
+
+#updateBtn:hover {
+	background: #FF6B35;
+	border-color: #FF6B35;
+}
+
+#deleteBtn {
+	border: 1px solid #ddd;
+	background: #fff;
+	color: #666;
+}
+
+#deleteBtn:hover {
+	border-color: #c0392b;
+	background: #fdecea;
+	color: #c0392b;
+}
+
+#backBtn {
+	border: 1px solid #ddd;
+	background: #fff;
+	color: #666;
+	font-weight: 500;
+}
+
+#backBtn:hover {
+	background: #f6f6f6;
+	border-color: #bbb;
+	color: #222;
+}
+
+/* ===== 수정 모드 ===== */
+.edit_mode {
+	display: none;
+}
+
+.edit_head {
+	padding: 22px 24px !important;
+	margin-bottom: 0 !important;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-top: 2px solid #222;
+	border-radius: 8px 8px 0 0;
+	font-size: 16px !important;
+	font-weight: 400 !important;
+	letter-spacing: 0 !important;
+}
+
+.edit_head+.review_body {
+	border-top: 0;
+	border-radius: 0 0 8px 8px;
+}
+
+/* 수정 모드 안에서는 가운데 정렬·여백을 부모가 맡으므로 해제 */
+.edit_head .writer_box, .edit_head .view_count_box, .edit_head .recommend_box
+	{
+	max-width: none;
+	margin: 0 0 3px;
+	padding: 0;
+}
+
+.edit_head .recommend_box {
+	margin-bottom: 0;
 }
 
 /* --- 장소 선택 --- */
@@ -91,12 +372,6 @@ form {
 .place_select select:focus {
 	outline: 0;
 	border-color: #555;
-}
-
-.place_select select:disabled {
-	background: #f6f6f6;
-	color: #bbb;
-	cursor: not-allowed;
 }
 
 #placeType {
@@ -151,30 +426,7 @@ form {
 	color: #FFB400;
 }
 
-/* ===== 본문 — 사진 | 글, 아래 태그 ===== */
-.review_body {
-	max-width: 900px;
-	margin: 0 auto;
-	display: flex;
-	flex-wrap: wrap;
-	background: #fff;
-	border: 1px solid #e5e7eb;
-	border-top: 2px solid #222;
-	border-radius: 8px;
-	overflow: hidden;
-}
-
-/* --- 왼쪽: 사진 --- */
-.photo_box {
-	width: 320px;
-	flex-shrink: 0;
-	display: flex;
-	flex-direction: column;
-	padding: 20px;
-	border-right: 1px solid #eceef1;
-	background: #fafbfc;
-}
-
+/* --- 사진 올리는 칸 --- */
 .photo_head {
 	display: flex;
 	align-items: center;
@@ -185,7 +437,11 @@ form {
 	color: #333;
 }
 
-/* 사진 올리는 칸 */
+.edit_mode .photo_box {
+	display: flex;
+	flex-direction: column;
+}
+
 .upload_box {
 	display: flex;
 	flex-direction: column;
@@ -235,6 +491,10 @@ form {
 	color: #FF6B35;
 }
 
+.photo_box:has(#preview:not(:empty)) .upload_box {
+	display: none;
+}
+
 #preview {
 	width: 100%;
 	height: 280px;
@@ -244,6 +504,10 @@ form {
 	box-shadow: 0 2px 10px rgba(15, 23, 42, .10);
 }
 
+#preview:empty {
+	display: none;
+}
+
 #preview img {
 	width: 100%;
 	height: 100%;
@@ -251,14 +515,6 @@ form {
 	display: block;
 }
 
-#photo img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
-}
-
-/* 사진 삭제 버튼 */
 .deletePhoto {
 	margin-top: auto;
 	padding-top: 14px;
@@ -284,33 +540,7 @@ form {
 	color: #c0392b;
 }
 
-/* --- 오른쪽 글 --- */
-#contents {
-	flex: 1 1 320px;
-	min-width: 0;
-	min-height: 320px;
-	margin: 0;
-	padding: 20px 24px;
-	border: 0;
-	outline: 0;
-	resize: none;
-	background: #fff;
-	font-family: inherit;
-	font-size: 15px;
-	line-height: 1.8;
-	color: #33363c;
-}
-
-#contents[readonly] {
-	cursor: default;
-}
-
-#contents:not([readonly]) {
-	background: #fffdf9;
-	box-shadow: inset 0 0 0 2px #FF6B35;
-}
-
-/* summernote 가 켜지면 오른쪽 칸 차지 */
+/* --- summernote --- */
 .review_body>.note-editor.note-frame {
 	flex: 1 1 320px;
 	min-width: 0;
@@ -341,121 +571,154 @@ form {
 	border-radius: 6px;
 }
 
-/* --- 아래: 태그 --- */
-.tag_box {
-	width: 100%;
-	display: flex;
-	align-items: flex-start;
-	gap: 12px;
-	padding: 16px 20px;
-	border-top: 1px solid #eceef1;
-	background: #fafbfc;
-}
-
-.tag_label {
-	padding-top: 5px;
-	font-size: 13px;
-	font-weight: 700;
-	color: #333;
-	white-space: nowrap;
-}
-
-.tag_list {
+/* --- 수정 모드 태그 — 체크박스 칩 --- */
+.tag_list_edit {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 6px;
 }
 
-.tag {
+.tag_list_edit label {
 	padding: 6px 14px;
-	border: 1px solid #FF6B35;
+	border: 1px solid #ddd;
 	border-radius: 18px;
-	background: #fff5f0;
-	font-size: 12px;
-	font-weight: 700;
-	color: #FF6B35;
-}
-
-/* ===== 하단 버튼 ===== */
-.review_bottom {
-	display: flex;
-	justify-content: center;
-	gap: 10px;
-	max-width: 900px;
-	margin: 24px auto 80px;
-	padding: 0 24px;
-}
-
-/* 내 글 — 카드 안에 들어있어서 한 줄 전체 차지 */
-.review_body>.review_bottom {
-	width: 100%;
-	max-width: none;
-	margin: 0;
-	padding: 18px 20px;
-	border-top: 1px solid #eceef1;
 	background: #fff;
-}
-
-.review_bottom button {
-	min-width: 140px;
-	height: 46px;
-	border-radius: 7px;
-	font-family: inherit;
-	font-size: 14px;
-	font-weight: 700;
+	font-size: 12px;
+	color: #666;
 	cursor: pointer;
-	transition: background .15s, border-color .15s, color .15s;
+	user-select: none;
+	transition: border-color .15s, background .15s, color .15s;
 }
 
-#updateBtn {
+.tag_list_edit label:hover {
+	border-color: #999;
+}
+
+.tag_list_edit label:has(input:checked) {
+	border-color: #FF6B35;
+	background: #fff5f0;
+	color: #FF6B35;
+	font-weight: 700;
+}
+
+.tag_list_edit input {
+	display: none;
+}
+
+/* --- 수정 모드 버튼 --- */
+#saveBtn {
 	border: 1px solid #222;
 	background: #222;
 	color: #fff;
 }
 
-#updateBtn:hover {
+#saveBtn:hover {
 	background: #FF6B35;
 	border-color: #FF6B35;
 }
 
-#deleteBtn {
-	border: 1px solid #ddd;
-	background: #fff;
-	color: #666;
-}
-
-#deleteBtn:hover {
-	border-color: #c0392b;
-	background: #fdecea;
-	color: #c0392b;
-}
-
-#backBtn {
+#cancelBtn {
 	border: 1px solid #ddd;
 	background: #fff;
 	color: #666;
 	font-weight: 500;
 }
 
-#backBtn:hover {
+#cancelBtn:hover {
 	background: #f6f6f6;
 	border-color: #bbb;
 	color: #222;
 }
 
+/* ===== 보기 모드 본문 ===== */
+#viewContents {
+	flex: 1 1 320px;
+	min-width: 0;
+	min-height: 320px;
+	padding: 20px 24px;
+	background: #fff;
+	font-size: 15px;
+	line-height: 1.8;
+	color: #33363c;
+	word-break: break-all;
+}
+
+#viewContents p {
+	margin: 0 0 8px;
+}
+
+#viewContents img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
 </style>
 </head>
 <body>
 
 	<c:choose>
 		<c:when test="${sessionScope.loginId == rdto.member_id}">
-
-			<form action="/review_update" method="post">
-				<div class="review_header">
+			<!-- 보기 모드 -->
+			<div class="view_mode">
+				<div class="review_header">${placeName}</div>
+				<div class="writer_box">
 					<p id="writer">작성자</p>
-					<input type="text" id="nickname" value="${sessionScope.nickname}"
-						readonly> <input type="hidden" name="member_id"
-						value="${sessionScope.loginId}">
+					<input type="text" id="nickname" value="${nickname}" readonly>
+				</div>
+				<div class="view_count_box">
+					조회수 :
+					<p>${rdto.view_count}</p>
+				</div>
+				<div class="recommend_box">
+					추천수 :
+					<p>${recommend_count}</p>
+				</div>
+				<div class="review_body">
+					<div class="photo_box">
+						<div id="photo">
+							<img src="${rdto.image1}">
+						</div>
+					</div>
+					<div id="viewContents">${rdto.contents}</div>
+					<div class="tag_box">
+						<span class="tag_label">태그</span>
+						<div class="tag_list">
+							<c:forEach var="i" items="${myTags}">
+								<div class="tag">${i}</div>
+							</c:forEach>
+						</div>
+					</div>
+				</div>
+				<div class="recommend">
+					<button type="button" class="heartBtn">
+						<span class="heartIcon">♡</span>
+					</button>
+				</div>
+				<div class="review_bottom">
+					<button type="button" id="updateBtn">수정하기</button>
+					<button type="button" id="deleteBtn">삭제하기</button>
+					<button type="button" id="backBtn">뒤로가기</button>
+				</div>
+			</div>
+
+			<!-- 수정모드 -->
+			<form class="edit_mode" action="/review/update" method="post">
+				<input type="hidden" name="seq" value="${rdto.seq}"> <input
+					type="hidden" name="member_id" value="${rdto.member_id}">
+
+				<div class="review_header edit_head">
+					<div class="writer_box">
+						<p id="writer">작성자</p>
+						<input type="text" id="nickname" value="${nickname}" readonly>
+					</div>
+					<div class="view_count_box">
+						조회수 :
+						<p>${rdto.view_count}</p>
+					</div>
+					<div class="recommend_box">
+						추천수 :
+						<p>${recommend_count}</p>
+					</div>
 					<div class="place_select">
 						<select id="placeType" name="target_type">
 							<option value="">유형</option>
@@ -464,26 +727,25 @@ form {
 							<option value="SPOT">관광지</option>
 						</select> <select id="region">
 							<option value="">전체</option>
-							<option value="서울특별시">서울특별시</option>
-							<option value="부산광역시">부산광역시</option>
-							<option value="대구광역시">대구광역시</option>
-							<option value="인천광역시">인천광역시</option>
-							<option value="대전광역시">대전광역시</option>
-							<option value="울산광역시">울산광역시</option>
-							<option value="세종특별자치시">세종특별자치시</option>
-							<option value="경기도">경기도</option>
-							<option value="강원특별자치도">강원특별자치도</option>
-							<option value="충청북도">충청북도</option>
-							<option value="충청남도">충청남도</option>
-							<option value="전북특별자치도">전북특별자치도</option>
-							<option value="전남광주통합특별시">전남광주통합특별시</option>
-							<option value="경상북도">경상북도</option>
-							<option value="경상남도">경상남도</option>
-							<option value="제주특별자치도">제주특별자치도</option>
+							<option>서울특별시</option>
+							<option>부산광역시</option>
+							<option>대구광역시</option>
+							<option>인천광역시</option>
+							<option>대전광역시</option>
+							<option>울산광역시</option>
+							<option>세종특별자치시</option>
+							<option>경기도</option>
+							<option>강원특별자치도</option>
+							<option>충청북도</option>
+							<option>충청남도</option>
+							<option>전북특별자치도</option>
+							<option>전남광주통합특별시</option>
+							<option>경상북도</option>
+							<option>경상남도</option>
+							<option>제주특별자치도</option>
 						</select> <select id="target_id" name="target_id">
-							<option value="">장소</option>
+							<option value="${pdto.place_id}">${pdto.name}</option>
 						</select>
-
 					</div>
 					<div class="rating">
 						<span class="rating_label">별점</span>
@@ -493,49 +755,73 @@ form {
 								class="star" data-val="4">★</span> <span class="star"
 								data-val="5">★</span>
 						</div>
-						<span id="ratingText">0</span> <input type="hidden" name="rating"
-							id="rating" value="0">
+						<span id="ratingText">${rdto.rating}</span> <input type="hidden"
+							name="rating" id="rating" value="${rdto.rating}">
 					</div>
 				</div>
+
 				<div class="review_body">
 					<div class="photo_box">
-						<p class="photo_head">사진 필수</p>
-						<label for="photo" class="upload_box"> <span class="plus">+</span>
-							<span class="add_photo">사진 추가</span>
-						</label> <input type="file" id="photo" accept="image/*" hidden>
-
-						<div id="preview"><img src="${rdto.image1}"></div>
-						<input type="hidden" name="image1" id="image1">
+						<p class="photo_head">사진</p>
+						<label for="photoFile" class="upload_box"> <span
+							class="plus">+</span> <span class="add_photo">사진 추가</span>
+						</label> <input type="file" id="photoFile" accept="image/*" hidden>
+						<div id="preview">
+							<img src="${rdto.image1}">
+						</div>
+						<input type="hidden" name="image1" id="image1"
+							value="${rdto.image1}">
 						<div class="deletePhoto">
 							<button type="button" id="photoDelete">사진 삭제</button>
 						</div>
 					</div>
-					<textarea id="contents" name="contents" readonly>${rdto.contents}</textarea>
+
+					<textarea id="contents" name="contents">${rdto.contents}</textarea>
+
 					<div class="tag_box">
 						<span class="tag_label">태그</span>
-						<div class="tag_list">
-							<c:forEach var="i" items="${myTags}">
-								<div class="tag">${i}</div>
-							</c:forEach>
+						<div class="tag_list_edit">
+							<label><input type="checkbox" name="tag" value="청결">청결</label>
+							<label><input type="checkbox" name="tag" value="가성비">가성비</label>
+							<label><input type="checkbox" name="tag" value="뷰맛집">뷰맛집</label>
+							<label><input type="checkbox" name="tag" value="조용함">조용함</label>
+							<label><input type="checkbox" name="tag" value="친절">친절</label>
+							<label><input type="checkbox" name="tag" value="주차편함">주차편함</label>
+							<label><input type="checkbox" name="tag" value="재방문의사">재방문의사</label>
+							<label><input type="checkbox" name="tag" value="사진맛집">사진맛집</label>
+							<label><input type="checkbox" name="tag" value="교통편리">교통편리</label>
+							<label><input type="checkbox" name="tag" value="아이동반">아이동반</label>
 						</div>
 					</div>
+				</div>
 
-					<div class="review_bottom">
-						<button type="button" id="updateBtn">수정</button>
-						<button type="button" id="deleteBtn"">삭제</button>
-						<button type="button" id="backBtn">뒤로가기</button>
-					</div>
+				<div class="review_bottom">
+					<button type="submit" id="saveBtn">수정 완료</button>
+					<button type="button" id="cancelBtn">취소</button>
+				</div>
 			</form>
 		</c:when>
 		<c:otherwise>
 			<div class="review_header">${placeName}</div>
+			<div class="writer_box">
+				<p id="writer">작성자</p>
+				<input type="text" id="nickname" value="${nickname}" readonly>
+			</div>
+			<div class="view_count_box">
+				조회수 :
+				<p>${rdto.view_count}</p>
+			</div>
+			<div class="recommend_box">
+				추천수 :
+				<p>${recommend_count}</p>
+			</div>
 			<div class="review_body">
 				<div class="photo_box">
 					<div id="photo">
 						<img src="${rdto.image1}">
 					</div>
 				</div>
-				<textarea id="contents" name="contents" readonly>${rdto.contents}</textarea>
+				<div id="viewContents">${rdto.contents}</div>
 				<div class="tag_box">
 					<span class="tag_label">태그</span>
 					<div class="tag_list">
@@ -545,7 +831,11 @@ form {
 					</div>
 				</div>
 			</div>
-
+			<div class="recommend">
+				<button type="button" class="heartBtn">
+					<span class="heartIcon">♡</span>
+				</button>
+			</div>
 			<div class="review_bottom">
 				<button type="button" id="backBtn">뒤로가기</button>
 			</div>
@@ -553,10 +843,85 @@ form {
 	</c:choose>
 </body>
 <script>
-	$("#contents").val($("<div>").html($("#contents").val()).text());
+	$("#placeType").val("${pdto.place_type}");
 
+	$("#region").val("${pdto.region}");
+
+	function paintStars(val) {
+		$(".star").each(function() {
+			if ($(this).data("val") <= val) {
+				$(this).addClass("on");
+			} else {
+				$(this).removeClass("on");
+			}
+		});
+	}
+	
+	paintStars(${rdto.rating});
+	
+	$(".star").on("click", function() {
+		let val = $(this).data("val");
+		$("#rating").val(val);
+		$("#ratingText").text(val);
+		paintStars(val);
+	})
+	
+	$("#region").on(
+			"change",
+			function() {
+				let region = $(this).val();
+				let placeType = $("#placeType").val();
+
+				$("#target_id").empty().append("<option value=''>장소</option>");
+
+				$.ajax({
+					url : "/review/placeList",
+					type : "get",
+					data : {
+						placeType : placeType,
+						region : region
+					},
+					dataType : "json",
+					success : function(list) {
+						for (let i = 0; i < list.length; i++) {
+							$("<option>").val(list[i].place_id).text(
+									list[i].name).appendTo($("#target_id"));
+						}
+					}
+				})
+			})
+
+	$("#photoFile").on(
+		"change",
+		function() {
+			let form = new FormData();
+			form.append("file", this.files[0]);
+
+			$.ajax({
+				url : "/file/uploadImageFile",
+				type : "post",
+				data : form,
+				contentType : false,
+				processData : false,
+				dataType : "json",
+				success : function(data) {
+					$("#image1").val(data.url);
+
+					$("#preview").append(
+						$("<div class='thumb'>").append(
+								$("<img>").attr("src", data.url)));
+			}
+		})
+	})
+	
+	$("#photoDelete").on("click", function(){
+		$("#preview").empty();
+		$("#photoFile").val("");
+		$("#image1").val("");
+	})
+	
 	$("#backBtn").on("click", function() {
-		history.back();
+		location.href = "/review/reviewBoard?cpage=1";
 	})
 
 	$("#deleteBtn").on("click", function() {
@@ -566,13 +931,24 @@ form {
 	$("#updateBtn")
 			.on(
 					"click",
-					function(e) {
+					function() {
+						$(".view_mode").hide();
+						$(".edit_mode").show();
+						
+						let myTags = [];
+						<c:forEach var="i" items="${myTags}">
+						myTags.push("${i}");
+						</c:forEach>
+						
+						for (let i = 0; i < myTags.length; i++) {
+							$(".tag_list_edit input[value=" + myTags[i] + "]").prop("checked", true);
+						}
+						
 						$("#contents")
 								.summernote(
 										{
 											height : 400,
 											lang : 'ko-KR',
-											placeholder : '다녀오신 곳은 어떠셨나요? 사진과 함께 남겨 주세요.',
 											toolbar : [
 													[ 'fontname',
 															[ 'fontname' ] ],
@@ -615,6 +991,30 @@ form {
 													'30', '36', '50', '72' ]
 
 										})
+										
+										
 					})
+					
+	$("#cancelBtn").on("click", function() {
+		$(".view_mode").show();
+		$(".edit_mode").hide();
+	})
+	
+	let isRecommend = ${isRecommend};
+	
+	if (isRecommend) {
+		$(".heartIcon").css("color", "#FF4757").text("♥");
+	} else {
+		$(".heartIcon").css("color", "#ccc").text("♡");
+	}
+
+	$(".heartBtn").on("click", function() {
+		if (isRecommend) {
+			location.href = "/review/recommendDown?seq=${rdto.seq}";
+		} else {
+			location.href = "/review/recommendUp?seq=${rdto.seq}";
+		}
+	})
+	
 </script>
 </html>

@@ -396,7 +396,7 @@ button:hover {
 
 		<c:forEach var="i" items="${rList}">
 
-			<a href="/review/detail?seq=${i.seq}">
+			<a href="/review/detail?seq=${i.seq}&place_id=${i.target_id}">
 				<div class="reviewCard">
 					<img src="${i.image1}">
 					<div class="reviewContents">${i.contents}</div>

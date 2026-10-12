@@ -117,7 +117,9 @@ public class MembersControllers {
 
 	    int totalCount = rdao.reservationCount(memberId);
 	    int totalPage = (int)Math.ceil((double)totalCount / pagesize);
-
+	    int mileage = mdao.getMileage(memberId);
+	    
+	    model.addAttribute("mileage",mileage);
 	    model.addAttribute("wishList", wishList);
 	    model.addAttribute("myRsList", myRsList);
 	    model.addAttribute("cpage", cpage);
