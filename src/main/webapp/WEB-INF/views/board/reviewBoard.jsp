@@ -379,11 +379,11 @@ button:hover {
 			총 <strong>${recordTotalCount}</strong>건
 		</div>
 
-		<select class="sort">
-			<option>최신순</option>
-			<option>조회순</option>
-			<option>추천순</option>
-			<option>댓글순</option>
+		<select class="sort" id="sort">
+			<option value="new">최신순</option>
+			<option value="view">조회순</option>
+			<option value="recommend">추천순</option>
+			<option value="reply">댓글순</option>
 		</select>
 
 		<button class="writeBtn" id="writeBtn">글쓰기</button>
@@ -416,6 +416,13 @@ button:hover {
 
 
 <script>
+	$("#sort").on("change", function() {
+		location.href = "/review/reviewBoard?cpage=1&sort=" + $(this).val();
+	})
+	
+	let sort = "${sort}";
+	$("#sort").val(sort);
+
 	$("#writeBtn").on("click", function() {
 		location.href = "/review/review_write";
 	})
@@ -443,13 +450,13 @@ button:hover {
 	if (needPrev) {
 		let prev = document.createElement("a");
 		prev.setAttribute("href", "/review/reviewBoard?cpage="
-				+ (startNavi - 1));
+				+ (startNavi - 1) + "&sort=" + sort);
 		prev.innerHTML = "<";
 		navi.append(prev);
 	}
 	for (let i = startNavi; i <= endNavi; i++) {
 		let num = document.createElement("a");
-		num.setAttribute("href", "/review/reviewBoard?cpage=" + i);
+		num.setAttribute("href", "/review/reviewBoard?cpage=" + i + "&sort=" + sort);
 		if (i == currentPage) {
 			num.setAttribute("class", "on");
 		}
@@ -458,7 +465,7 @@ button:hover {
 	}
 	if (needNext) {
 		let next = document.createElement("a");
-		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi + 1));
+		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi + 1) + "&sort=" + sort);
 		next.innerHTML = ">";
 		navi.append(next);
 	}

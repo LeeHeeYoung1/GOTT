@@ -115,25 +115,22 @@ public class ReservationController {
 	}
 	
 	@RequestMapping("/finalPayment")
-	public String finalPayment(int placeId,int roomId,String checkIn,String checkOut,Integer adult,Integer child,
-			HttpSession session, Model model) {
-		RoomDTO roomDto = roomDao.roomOne(roomId);
-		PlaceDTO placeOne = rdao.placeOne(placeId);
-		
-		int total_price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
-		String id = (String) session.getAttribute("loginId");
-		int mileage = mdao.getMileage(id);
-		
-		model.addAttribute("mileage", mileage);
-		model.addAttribute("placeOne", placeOne);
-		model.addAttribute("placeId", placeId);
-		model.addAttribute("roomDto", roomDto);
-		model.addAttribute("checkIn", checkIn);
-		model.addAttribute("checkOut", checkOut);
-		model.addAttribute("adult", adult);
-		model.addAttribute("child", child);
-		model.addAttribute("total_price", total_price);
-		return "reservation/finalPayment";
+	public String finalPayment(int placeId, int roomId, String checkIn, String checkOut, Integer guest,
+	        HttpSession session, Model model) {
+	    RoomDTO roomDto = roomDao.roomOne(roomId);
+	    PlaceDTO placeOne = rdao.placeOne(placeId);
+	    int total_price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+	    String id = (String) session.getAttribute("loginId");
+	    int mileage = mdao.getMileage(id);
+	    model.addAttribute("mileage", mileage);
+	    model.addAttribute("placeOne", placeOne);
+	    model.addAttribute("placeId", placeId);
+	    model.addAttribute("roomDto", roomDto);
+	    model.addAttribute("checkIn", checkIn);
+	    model.addAttribute("checkOut", checkOut);
+	    model.addAttribute("guest", guest);
+	    model.addAttribute("total_price", total_price);
+	    return "reservation/finalPayment";
 	}
 
 	@RequestMapping("/reserve")

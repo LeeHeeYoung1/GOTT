@@ -205,7 +205,7 @@ body {
     <div class="row"><span>객실</span><span>${roomDto.roomName}</span></div>
     <div class="row"><span>체크인</span><span>${checkIn}</span></div>
     <div class="row"><span>체크아웃</span><span>${checkOut}</span></div>
-    <div class="row"><span>인원</span><span>${adult + child}명</span></div>
+   	<div class="row"><span>인원</span><span>${guest}명</span></div>
 
     <h4>마일리지</h4>
     <div class="row">
