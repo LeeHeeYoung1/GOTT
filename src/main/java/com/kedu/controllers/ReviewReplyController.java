@@ -44,4 +44,20 @@ public class ReviewReplyController {
 		rpdao.update(seq, contents);
 		return "ok";
 	}
+	
+	@RequestMapping("/childWrite")
+	public String childWrite(ReviewReplyDTO rpdto, HttpSession session) {
+		rpdto.setMember_id((String)session.getAttribute("loginId"));
+		rpdao.insert(rpdto);
+		ReviewDTO rdto = rdao.selectOne(rpdto.getReview_seq());
+		return "redirect:/review/detail?seq=" + rpdto.getReview_seq()
+				+ "&place_id=" + rdto.getTarget_id();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/childUpdate")
+	public String childUpdate(int seq, String contents) {
+		rpdao.childUpdate(seq, contents);
+		return "ok";
+	}
 }

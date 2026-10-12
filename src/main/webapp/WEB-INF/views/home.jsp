@@ -149,6 +149,19 @@
             width: auto;
             height: auto;
             margin: 20px;
+            position: relative;
+        }
+        .eventbannerbox img {
+        	width: 270px;
+		    height: 200px;
+		    object-fit: cover;
+		    display: block;
+        }
+        .eventbannerbox .eventtext {
+        	position: absolute;
+        	top: 10px;
+        	left: 10px;
+        	color: #FFF;
         }
         .ourtext {
             border: 1px solid black;
@@ -442,16 +455,22 @@
     <div class="eventbannerzone">
         <div class="moreview"><a href="/event/eventpage">더 보기</a></div>
         <div class="eventbannerbox">
-            <img src="https://picsum.photos/270/200?random=1">
-            <div class="eventtext"></div>
+            <img src="/images/gangwondo.png">
+            <div class="eventtext">
+            	<h2>강원도</h2>
+            </div>
         </div>
         <div class="eventbannerbox">
-            <img src="https://picsum.photos/270/200?random=2">
-            <div class="eventtext"></div>
+            <img src="/images/jejudo.png">
+            <div class="eventtext">
+            	<h2>제주도</h2>
+            </div>
         </div>
         <div class="eventbannerbox">
-            <img src="https://picsum.photos/270/200?random=3">
-            <div class="eventtext"></div>
+            <img src="/images/busan.png">
+            <div class="eventtext">
+            	<h2>부산</h2>
+            </div>
         </div>
         <div id="ourpromise"></div>
     </div>
