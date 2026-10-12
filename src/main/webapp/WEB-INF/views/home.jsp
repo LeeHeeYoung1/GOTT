@@ -159,7 +159,18 @@
             height: 700px;
             border: 2px solid black;
             margin: auto;
+            position: relative;
         }
+        .mapMoreView {
+		    position: absolute;
+		    top: 10px;
+		    right: 10px;
+		    z-index: 10;
+		    background-color: white;
+		    padding: 8px 12px;
+		    border-radius: 6px;
+		}
+        
         .placesuggest,
         .hotelsuggest {
             width: 80%;
@@ -191,6 +202,15 @@
             font-size: 14px;
             cursor: pointer;
         }
+        .mapMoreView a {
+		    text-decoration: none;
+		    color: #263238;
+		    font-size: 14px;
+		}
+		
+		.mapMoreView a:hover {
+		    color: #2563eb;
+		}
 
         .placebox,
         .hotelbox {
@@ -480,8 +500,12 @@
     <div class="subtitle">
         <h5>대한민국 지도를 이용해 여행지를 탐색해보세요</h5>
     </div>
+  
     <br>
     <div class="mapzone">
+	    <div class="mapMoreView">
+	        <a href="/place/mappage">자세히 보기</a>
+	    </div>
         <div id="map" style="width:100%; height:100%;"></div>
     </div>
     

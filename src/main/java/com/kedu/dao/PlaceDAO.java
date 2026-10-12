@@ -141,4 +141,56 @@ public class PlaceDAO {
 		String sql = "select * from place where place_type = ? and region = ?";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeType, region);
 	}
+	
+	public List<PlaceDTO> mapPlaceList(String region, String sigungu, String type) {
+
+	    String sql = "select * from place where region = ?";
+	   
+	    if(sigungu != null && !sigungu.trim().isEmpty()) {
+	        sql += " and sigungu = ?";
+	    }
+	    
+	    String dbType = type;
+
+	    if(type != null && type.equals("관광지")) {
+	        dbType = "SPOT";
+	    }
+
+	    if(type != null && type.equals("맛집")) {
+	        dbType = "FOOD";
+	    }
+
+	    if(type != null && type.equals("숙박업소")) {
+	        dbType = "STAY";
+	    }
+
+	    if(dbType != null && !dbType.equals("전체")) {
+	        sql += " and place_type = ?";
+	    }
+	    sql += " order by name";
+
+	    if(sigungu != null && !sigungu.trim().isEmpty()) {
+
+	        if(dbType != null && !dbType.equals("전체")) {
+	            return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),
+	                region, sigungu, dbType);
+	        } else {
+	        	return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),
+	                region, sigungu);
+	        }
+
+	    } else {
+
+	        if(dbType != null && !dbType.equals("전체")) {
+	            return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),
+	                region, dbType);
+	        } else {
+	            return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),region);
+	        }
+	    }
+	}
+	
+	
+	
+	
 }
