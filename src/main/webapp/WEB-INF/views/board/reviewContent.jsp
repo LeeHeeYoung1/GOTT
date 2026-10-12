@@ -242,25 +242,13 @@ form {
 	animation: pop .3s ease;
 }
 
-@keyframes pop {
-	0% {
-		transform: scale(1);
-	}
-	40% {
-		transform: scale(1.4);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-
 /* ===== 하단 버튼 ===== */
 .review_bottom {
 	display: flex;
 	justify-content: center;
 	gap: 10px;
 	max-width: 900px;
-	margin: 20px auto 80px;
+	margin: 20px auto 40px;
 	padding: 0 24px;
 }
 
@@ -309,6 +297,188 @@ form {
 	background: #f6f6f6;
 	border-color: #bbb;
 	color: #222;
+}
+
+/* ===== 댓글 ===== */
+.reply_area {
+	max-width: 900px;
+	margin: 0 auto 80px;
+	padding: 0 24px;
+}
+
+.reply_head {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding-bottom: 12px;
+	border-bottom: 2px solid #222;
+	font-size: 15px;
+	font-weight: 800;
+	color: #1a1a1f;
+}
+
+.reply_num {
+	color: #FF6B35;
+}
+
+/* --- 입력칸 --- */
+.reply_form {
+	margin-top: 16px;
+	padding: 14px 16px;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	background: #fff;
+	transition: border-color .15s;
+}
+
+.reply_form:focus-within {
+	border-color: #222;
+}
+
+#replyContents {
+	width: 100%;
+	height: 72px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	resize: none;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 1.7;
+	color: #33363c;
+}
+
+#replyContents::placeholder {
+	color: #b0b5bc;
+}
+
+.register_btn_box {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 8px;
+	padding-top: 10px;
+	border-top: 1px solid #f1f3f5;
+}
+
+#replyBtn {
+	height: 34px;
+	padding: 0 22px;
+	border: 1px solid #222;
+	border-radius: 6px;
+	background: #222;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 700;
+	color: #fff;
+	cursor: pointer;
+	transition: background .15s, border-color .15s;
+}
+
+#replyBtn:hover {
+	background: #FF6B35;
+	border-color: #FF6B35;
+}
+
+/* --- 목록 --- */
+.reply_list {
+	margin-top: 10px;
+}
+
+.reply_list .reply_header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	max-width: none;
+	margin: 0;
+	padding: 16px 4px 0;
+	font-size: 13px;
+	font-weight: 400;
+	letter-spacing: 0;
+}
+
+.reply_list .nickname {
+	font-size: 13px;
+	font-weight: 700;
+	color: #1a1a1f;
+}
+
+.reply_date {
+	font-size: 11px;
+	color: #a0a4ab;
+}
+
+/* 댓글 본문 — readonly 일 때는 테두리 없이 글처럼 */
+.reply_contents {
+	display: block;
+	width: 100%;
+	margin: 0;
+	padding: 6px 4px 8px;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 1.75;
+	color: #33363c;
+	text-overflow: ellipsis;
+}
+
+/* 수정 모드 — readonly 가 풀리면 입력칸 모양 */
+.reply_contents:not([readonly]) {
+	margin: 4px 0 6px;
+	padding: 9px 12px;
+	border: 1px solid #222;
+	border-radius: 6px;
+	background: #fff;
+	color: #1a1a1f;
+}
+
+/* --- 댓글별 버튼 --- */
+.reply_btn_box {
+	display: flex;
+	justify-content: flex-end;
+	gap: 6px;
+	padding: 0 4px 14px;
+	border-bottom: 1px solid #eceef1;
+}
+
+.replyUpdateBtn, .replyDeleteBtn, .replySaveBtn, .replyCancelBtn {
+	padding: 3px 10px;
+	border: 1px solid #e0e3e7;
+	border-radius: 4px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 11px;
+	color: #8b8f96;
+	cursor: pointer;
+	transition: border-color .15s, background .15s, color .15s;
+}
+
+.replyUpdateBtn:hover, .replyCancelBtn:hover {
+	border-color: #222;
+	background: #f6f6f6;
+	color: #222;
+}
+
+.replyDeleteBtn:hover {
+	border-color: #c0392b;
+	background: #fdecea;
+	color: #c0392b;
+}
+
+.replySaveBtn {
+	border-color: #222;
+	background: #222;
+	color: #fff;
+	font-weight: 700;
+}
+
+.replySaveBtn:hover {
+	border-color: #FF6B35;
+	background: #FF6B35;
+	color: #fff;
 }
 
 /* ===== 수정 모드 ===== */
@@ -841,6 +1011,98 @@ form {
 			</div>
 		</c:otherwise>
 	</c:choose>
+
+	<div class="reply_area">
+
+		<div class="reply_head">
+			댓글 <span class="reply_num">${reply_count}</span>
+		</div>
+
+		<form class="reply_form" action="/review/reply/write" method="post">
+			<input type="hidden" name="review_seq" value="${rdto.seq}">
+			<textarea name="contents" id="replyContents"
+				placeholder="댓글을 입력해 주세요."></textarea>
+			<div class="register_btn_box">
+				<button type="submit" id="replyBtn">등록</button>
+			</div>
+		</form>
+
+		<div class="reply_list">
+			<c:forEach var="i" items="${replyList}">
+				<div class="reply_header">
+					<span class="nickname">${i.nickname}</span> <span
+						class="reply_date"> <fmt:formatDate value="${i.reg_date}"
+							pattern="yyyy.MM.dd HH:mm" />
+					</span>
+				</div>
+				<input type="text" class="reply_contents"
+					id="reply_contents${i.seq}" value="${i.contents}" readonly>
+				<div class="reply_btn_box" id="reply_btn_box${i.seq}">
+					<c:if test="${sessionScope.loginId == i.member_id}">
+						<button type="button" class="replyUpdateBtn"
+							id="replyUpdateBtn${i.seq}">수정</button>
+						<button type="button" class="replyDeleteBtn"
+							id="replyDeleteBtn${i.seq}">삭제</button>
+					</c:if>
+				</div>
+
+				<script>
+					$("#replyDeleteBtn${i.seq}").on("click", function() {
+						location.href = "/review/reply/delete?seq=${i.seq}&review_seq=${rdto.seq}";
+						
+					})
+
+					$("#replyUpdateBtn${i.seq}").on("click", function() {
+
+						let input = $("#reply_contents${i.seq}");
+						let before = input.val();
+
+						input.prop("readonly", false).focus();
+
+						$("#replyUpdateBtn${i.seq}").hide();
+						$("#replyDeleteBtn${i.seq}").hide();
+
+						let saveBtn = $("<button>").attr("type", "button")
+								.addClass("replySaveBtn").text("저장");
+						let cancelBtn = $("<button>").attr("type", "button")
+								.addClass("replyCancelBtn").text("취소");
+
+						$("#reply_btn_box${i.seq}").append(saveBtn).append(cancelBtn);
+
+						saveBtn.on("click", function() {
+
+							let contents = input.val().trim();
+
+							$.ajax({
+								url : "/review/reply/update",
+								type : "post",
+								data : {
+									seq : ${i.seq},
+									contents : contents
+								},
+								success : function() {
+									input.prop("readonly", true);
+									saveBtn.remove();
+									cancelBtn.remove();
+									$("#replyUpdateBtn${i.seq}").show();
+									$("#replyDeleteBtn${i.seq}").show();
+								}
+							})
+						})
+
+						cancelBtn.on("click", function() {
+							input.val(before).prop("readonly", true);
+							saveBtn.remove();
+							cancelBtn.remove();
+							$("#replyUpdateBtn${i.seq}").show();
+							$("#replyDeleteBtn${i.seq}").show();
+						})
+					})
+				</script>
+			</c:forEach>
+		</div>
+	</div>
+
 </body>
 <script>
 	$("#placeType").val("${pdto.place_type}");
@@ -1015,6 +1277,8 @@ form {
 			location.href = "/review/recommendUp?seq=${rdto.seq}";
 		}
 	})
+	
+	
 	
 </script>
 </html>
