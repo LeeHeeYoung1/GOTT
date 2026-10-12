@@ -16,8 +16,22 @@ public class ReplyDAO {
 	private JdbcTemplate jdbc;
 	
 	public int insert(ReplyDTO dto) {
-		String sql = "insert into reply values(reply_seq.nextval, ?, ?, ?, ?, systimestamp)";
-		return jdbc.update(sql, dto.getBoard_seq(), dto.getParent_seq(), dto.getWriter(), dto.getContents());
+	    String sql;
+
+	    if (dto.getParent_seq() == null) {
+	        sql = "insert into reply values(reply_seq.nextval, ?, null, ?, ?, systimestamp)";
+	        return jdbc.update(sql,
+	                dto.getBoard_seq(),
+	                dto.getWriter(),
+	                dto.getContents());
+	    } else {
+	        sql = "insert into reply values(reply_seq.nextval, ?, ?, ?, ?, systimestamp)";
+	        return jdbc.update(sql,
+	                dto.getBoard_seq(),
+	                dto.getParent_seq(),
+	                dto.getWriter(),
+	                dto.getContents());
+	    }
 	}
 	
 	public List<ReplyDTO> selectByBoard(int board_seq) {
