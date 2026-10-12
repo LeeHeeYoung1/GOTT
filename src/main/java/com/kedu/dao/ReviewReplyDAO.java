@@ -27,7 +27,7 @@ public class ReviewReplyDAO {
 
 	public List<ReviewReplyDTO> selectAll(int review_seq) {
 		String sql = "select rp.*, (select m.nickname from members m where m.id = rp.member_id) as nickname from review_reply rp "
-				+ " where rp.review_seq = ? order by rp.seq desc";
+				+ " where rp.review_seq = ? and rp.parent_seq is null order by rp.seq desc";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewReplyDTO.class), review_seq);
 	}
 
@@ -40,4 +40,12 @@ public class ReviewReplyDAO {
 		String sql = "update review_reply set contents = ? where seq = ?";
 		return jdbc.update(sql, contents, seq);
 	}
+	
+	public List<ReviewReplyDTO> selectChild(int review_seq) {
+		String sql = "select rp.*, (select m.nickname from members m where m.id = rp.member_id) as nickname from review_reply rp "
+				+ " where rp.review_seq = ? and rp.parent_seq is not null order by rp.seq asc";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewReplyDTO.class), review_seq);
+	}
+	
+	
 }

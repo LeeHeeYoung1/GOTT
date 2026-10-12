@@ -79,6 +79,8 @@ public class ReviewController {
 		int recommend_count = rrdao.recommendCount(seq);
 		boolean isRecommend = rrdao.isRecommend(seq, (String)session.getAttribute("loginId"));
 		List<ReviewReplyDTO> replyList = rpdao.selectAll(seq);
+		List<ReviewReplyDTO> childList = rpdao.selectChild(seq);
+		model.addAttribute("childList", childList);
 		model.addAttribute("replyList", replyList);
 		model.addAttribute("isRecommend", isRecommend);
 		model.addAttribute("recommend_count", recommend_count);
