@@ -24,6 +24,9 @@ public class ReplyController {
         String writer = (String)session.getAttribute("nickname");
 
         dto.setWriter(writer);
+        System.out.println("board_seq: " + dto.getBoard_seq());
+        System.out.println("parent_seq: " + dto.getParent_seq());
+        System.out.println("writer: " + writer);
         model.addAttribute("nickname",writer);
         
         rdao.insert(dto);

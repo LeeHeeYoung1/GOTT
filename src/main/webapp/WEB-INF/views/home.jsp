@@ -639,7 +639,7 @@
     </div>
     
     <div class="notice">
-        <div class="moreview"><a href="">더 보기</a></div>
+        <div class="moreview"><a href="/notice/notice_list">더 보기</a></div>
         <%-- 
                 <div class="noticebox">
                     <div class="noticetitle" style="float: left;">사이트 점검 안내</div>
