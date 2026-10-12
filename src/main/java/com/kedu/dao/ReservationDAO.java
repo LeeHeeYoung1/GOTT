@@ -51,6 +51,41 @@ public class ReservationDAO {
 		return list;
 	}
 	
+	// 이용 예정 예약 목록
+	public ArrayList<ReservationDTO> myUpcomingList(String memberId) {
+	    String sql = "SELECT r.*, rm.room_name, rm.image1 "
+	            + "FROM reservation r "
+	            + "JOIN room rm ON r.room_id = rm.room_id "
+	            + "WHERE r.member_id = ? "
+	            + "AND r.status = '예약완료' "
+	            + "AND r.check_out >= TRUNC(SYSDATE) "
+	            + "ORDER BY r.check_in ASC";
+	    return (ArrayList<ReservationDTO>) jdbc.query(
+	            sql,
+	            new BeanPropertyRowMapper<>(ReservationDTO.class),
+	            memberId
+	    );
+	}
+
+	// 이용 완료 예약 목록
+	public ArrayList<ReservationDTO> myCompletedList(String memberId) {
+	    String sql = "SELECT r.*, rm.room_name, rm.image1,\r\n"
+	    		+ "       CASE\r\n"
+	    		+ "           WHEN r.status = '예약취소' THEN 'cancelled'\r\n"
+	    		+ "           WHEN r.check_out < TRUNC(SYSDATE) THEN 'completed'\r\n"
+	    		+ "           ELSE 'upcoming'\r\n"
+	    		+ "       END AS reservation_type\r\n"
+	    		+ "FROM reservation r\r\n"
+	    		+ "JOIN room rm ON r.room_id = rm.room_id\r\n"
+	    		+ "WHERE r.member_id = ?\r\n"
+	    		+ "ORDER BY r.reserve_date DESC";
+	    return (ArrayList<ReservationDTO>) jdbc.query(
+	            sql,
+	            new BeanPropertyRowMapper<>(ReservationDTO.class),
+	            memberId
+	    );
+	}
+	
 	public int reservationCount(String memberId) {
 	    String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ?";
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
