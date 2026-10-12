@@ -86,6 +86,15 @@ public class ReservationDAO {
 	    );
 	}
 	
+	// 다가오는 예약 건수
+	public int upcomingReservationCount(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM reservation "
+	            + "WHERE member_id = ? "
+	            + "AND status = '예약완료' "
+	            + "AND check_out >= TRUNC(SYSDATE)";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
+	
 	public int reservationCount(String memberId) {
 	    String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ?";
 	    return jdbc.queryForObject(sql, Integer.class, memberId);

@@ -318,7 +318,7 @@ $(function() {
                 + "&roomId=" + encodeURIComponent("${roomDto.roomId}")
                 + "&checkIn=" + encodeURIComponent("${checkIn}")
                 + "&checkOut=" + encodeURIComponent("${checkOut}")
-                + "&guest=" + encodeURIComponent("${adult + child}")
+                + "&guest=" + encodeURIComponent("${guest}")
                 + "&mileage=" + encodeURIComponent(usedMileage);
         } catch (error) {
             console.error(error);

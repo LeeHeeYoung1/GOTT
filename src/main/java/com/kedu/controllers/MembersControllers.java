@@ -135,12 +135,15 @@ public class MembersControllers {
 	    // 3-1. 찜 갯수표시
 	    int myWishTotalCount = wdao.countByWish(memberId);
 	    
-	    // 1-1. 이용 예정 예약 목록
+	    int upcomingCount = rdao.upcomingReservationCount(memberId);
+	    
+	    // 3-2. 이용 예정 예약 목록
 	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
-	    // 1-2. 이용 완료 예약 목록
+	    // 3-3. 이용 완료 예약 목록
 	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
 	    	    
 	    // 4. JSP로 데이터 전달
+	    model.addAttribute("upcomingCount", upcomingCount);
 	    model.addAttribute("today", LocalDate.now().toString());
 	    model.addAttribute("upcomingList", upcomingList);
 	    model.addAttribute("completedList", completedList);

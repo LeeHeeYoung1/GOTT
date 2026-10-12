@@ -804,7 +804,7 @@ body{
         </div>
         <div class="mainContainer">
             <nav class="mybarBox">
-                <a class="a1"><strong>??</strong><span>다가오는 예약</span></a>
+                <a class="a1"><strong>${upcomingCount}</strong><span>다가오는 예약</span></a>
                 <a class="a2"><strong>${myWishTotalCount}</strong><span>찜한 목록</span></a>
                 <a class="a3"><strong>??</strong><span>작성한 리뷰</span></a>
                 <a class="a4"><strong>${mileage}M</strong><span>보유마일리지</span></a>
