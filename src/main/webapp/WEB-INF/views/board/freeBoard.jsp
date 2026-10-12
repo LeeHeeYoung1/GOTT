@@ -446,11 +446,14 @@ hr {
 		<!-- 검색 -->
 
 		<div class="searchArea">
+			<form action="/board/searchFreeBoard" method="get">
+				<input class="searchInput" type="text" name="keyword" id="keyword"
+					value="${keyword}" placeholder="자유게시판 글 제목 + 작성자 검색">
 
-			<input class="searchInput" type="text"
-				placeholder="자유게시판 글 제목 + 내용 검색">
-
-			<button class="searchBtn">🔍</button>
+				<button type="submit" class="searchBtn">🔍</button>
+				<input type="hidden" name="cpage" value="1"> <input
+					type="hidden" id="sortValue" name="sort" value="${sort}">
+			</form>
 
 		</div>
 
@@ -463,18 +466,22 @@ hr {
 				총 <strong>${boardCount}</strong>건
 			</div>
 
-			<select class="sort"
-				onchange="
-        	if(this.value == 'latest') location.href='/board/freeBoard?cpage=1';
-        	if(this.value == 'view') location.href='/board/viewBoard?cpage=1';
-        	if(this.value == 'recommend') location.href='/board/recommendBoard?cpage=1';
-        	if(this.value == 'reply') location.href='/board/replyBoard?cpage=1'; 
-        	">
+			<select class="sort" onchange="changeSort(this.value)">
 				<option value="latest" <c:if test="${latest}">selected</c:if>>최신순</option>
+
 				<option value="view" <c:if test="${view}">selected</c:if>>조회순</option>
+
 				<option value="recommend" <c:if test="${recommend}">selected</c:if>>추천순</option>
-				<option value="reply">댓글순</option>
+
+				<option value="reply" <c:if test="${reply}">selected</c:if>>댓글순</option>
 			</select>
+
+			<script>
+			function changeSort(sort) {
+			    location.href = "/board/searchFreeBoard?cpage=1&sort=" + sort
+			          + "&keyword=" + $("#keyword").val();
+			}
+			</script>
 
 			<button id="writeBtn">글쓰기</button>
 
@@ -551,58 +558,60 @@ hr {
 
 
 	<script>
-	document.getElementById("home").onclick = function() {
-	    location.href = "/";
-	};
+		document.getElementById("home").onclick = function() {
+			location.href = "/";
+		};
 
-	let recordTotalCount = ${recordTotalCount};
-	let recordCountPerpage = ${recordCountPerPage};
-	let naviCountPerpage = ${naviCountPerpage};
-	let currentPage = ${cpage};
+		  let recordTotalCount = ${recordTotalCount};
+		    let recordCountPerpage = ${recordCountPerPage};
+		    let naviCountPerpage = ${naviCountPerpage};
+		    let currentPage = ${cpage};
 
-	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerpage);
+		    let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerpage);
 
-	let startNavi = Math.floor((currentPage - 1) / naviCountPerpage)
-	        * naviCountPerpage + 1;
+		    let startNavi = Math.floor((currentPage - 1) / naviCountPerpage)
+		            * naviCountPerpage + 1;
 
-	let endNavi = startNavi + naviCountPerpage - 1;
+		    let endNavi = startNavi + naviCountPerpage - 1;
 
-	if (endNavi > pageTotalCount) {
-	    endNavi = pageTotalCount;
-	}
+		if (endNavi > pageTotalCount) {
+			endNavi = pageTotalCount;
+		}
 
-	let needPrev = startNavi > 1;
-	let needNext = endNavi < pageTotalCount;
-	let navi = document.getElementById("navigation");
 
-	if (needPrev) {
+		let needPrev = startNavi > 1;
+		let needNext = endNavi < pageTotalCount;
+		let navi = document.getElementById("navigation");
 
-	    let prev = document.createElement("a");
-	    prev.setAttribute("href", "${boardUrl}?cpage=" + (startNavi - 1));
-	    prev.innerHTML = "<";
-	    navi.append(prev);
-	}
+		let pageUrl = "${boardUrl}";
+		let separator = pageUrl.includes("?") ? "&" : "?";
 
-	for (let i = startNavi; i <= endNavi; i++) {
+		if (needPrev) {
+		    let prev = document.createElement("a");
+		    prev.setAttribute("href", pageUrl + separator + "cpage=" + (startNavi - 1));
+		    prev.innerHTML = "<";
+		    navi.append(prev);
+		}
 
-	    let num = document.createElement("a");
-	    num.setAttribute("href", "${boardUrl}?cpage=" + i);
-	    num.innerHTML = i;
+		for (let i = startNavi; i <= endNavi; i++) {
+		    let num = document.createElement("a");
+		    num.setAttribute("href", pageUrl + separator + "cpage=" + i);
+		    num.innerHTML = i;
 
-	    if (i == currentPage) {
-	        num.className = "current";
-	    }
+		    if (i == currentPage) {
+		        num.className = "current";
+		    }
 
-	    navi.append(num);
-	}
+		    navi.append(num);
+		}
 
-	if (needNext) {
+		if (needNext) {
+		    let next = document.createElement("a");
+		    next.setAttribute("href", pageUrl + separator + "cpage=" + (endNavi + 1));
+		    next.innerHTML = ">";
+		    navi.append(next);
+		}
 
-	    let next = document.createElement("a");
-	    next.setAttribute("href", "${boardUrl}?cpage=" + (endNavi + 1));
-	    next.innerHTML = ">";
-	    navi.append(next);
-	}
 	</script>
 
 

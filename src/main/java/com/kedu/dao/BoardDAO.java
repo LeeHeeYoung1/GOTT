@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kedu.dto.BoardDTO;
+import com.kedu.dto.ReplyDTO;
 
 @Repository
 public class BoardDAO {
@@ -103,4 +104,61 @@ public class BoardDAO {
 	            new BeanPropertyRowMapper<>(BoardDTO.class),
 	            start, end);
 	}
+	
+
+public List<BoardDTO> selectReplyCount(int start, int end) {
+    String sql = "select * from ("
+            + "select b.*, row_number() over(order by "
+            + "(select count(*) from reply r where r.board_seq = b.seq) desc, "
+            + "b.seq desc) rn "
+            + "from board b"
+            + ") where rn between ? and ?";
+
+    System.out.println(sql);
+
+    return jdbc.query(sql,
+            new BeanPropertyRowMapper<>(BoardDTO.class),
+            start, end);
+}
+
+public List<BoardDTO> searchFreeBoard(String keyword, String sort, int start, int end) {
+
+    String orderBy = "b.seq desc";
+
+    if ("view".equals(sort)) {
+        orderBy = "b.view_count desc, b.seq desc";
+    } else if ("recommend".equals(sort)) {
+        orderBy = "nvl(rc.recommend_count, 0) desc, b.seq desc";
+    } else if ("reply".equals(sort)) {
+        orderBy = "(select count(*) from reply r "
+                + "where r.board_seq = b.seq) desc, b.seq desc";
+    }
+
+    String sql = "select * from ("
+            + "select b.*, row_number() over(order by " + orderBy + ") rn "
+            + "from board b "
+            + "left join (select board_seq, count(*) recommend_count "
+            + "from board_recommend group by board_seq) rc "
+            + "on b.seq = rc.board_seq "
+            + "where (b.title like ? or b.writer like ?)"
+            + ") where rn between ? and ?";
+
+    return jdbc.query(sql,
+            new BeanPropertyRowMapper<>(BoardDTO.class),
+            "%" + keyword + "%",
+            "%" + keyword + "%",
+            start,
+            end);
+}
+
+public int searchBoardCount(String keyword) {
+
+    String sql = "select count(*) from board "
+            + "where title like ? or writer like ?";
+
+    return jdbc.queryForObject(sql, Integer.class,
+            "%" + keyword + "%",
+            "%" + keyword + "%");
+}
+
 }
