@@ -141,8 +141,7 @@ public class PlaceDAO {
 		String sql = "select * from place where place_type = ? and region = ?";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeType, region);
 	}
-	
-<<<<<<< HEAD
+
 	public List<PlaceDTO> mapPlaceList(String region, String sigungu, String type) {
 
 	    String sql = "select * from place where region = ?";
@@ -192,12 +191,9 @@ public class PlaceDAO {
 	}
 	
 	
-	
-	
-=======
 	public PlaceDTO selectOne(int place_id) {
 		String sql = "select * from place where place_id = ?";
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), place_id);
 	}
->>>>>>> 127212f6da86a0a8c5901055944d067da564aa06
+
 }

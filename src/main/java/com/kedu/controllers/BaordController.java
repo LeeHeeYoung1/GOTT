@@ -51,7 +51,6 @@ public class BaordController {
 		List<BoardDTO> list = bdao.selectFromTo(cpage * 10 - 9, cpage * 10);
 		for(BoardDTO board : list) {
 		    board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
-		    System.out.println(board.getSeq() + "번 추천수 : " + board.getRecommendCount());
 		}
 		
 		model.addAttribute("boardList", list);
