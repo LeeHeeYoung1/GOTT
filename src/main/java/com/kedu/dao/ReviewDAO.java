@@ -23,10 +23,14 @@ public class ReviewDAO {
 	
 	public List<ReviewDTO> selectSort(int start, int end, String sort){
 		if("reply".equals(sort)) {
-			String sql = "select * from (SELECT r.*, (SELECT COUNT(*) FROM review_reply rp WHERE rp.review_seq = r.seq) AS reply_count FROM review r ORDER BY reply_count DESC) where ROWNUM  between ? and ?";
+			String sql = "select * from ( select r.*, ROW_NUMBER() OVER ( "
+					+ " order by (select count(*) from review_reply rp where rp.review_seq = r.seq) desc, r.seq desc) rn "
+					+ " from review r ) where rn between ? and ?";
 			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), start, end);
 		}else if("recommend".equals(sort)) {
-			String sql = "select * from (SELECT r.*, (SELECT COUNT(*) FROM review_recommend rr WHERE rr.review_seq = r.seq) AS recommend_count FROM review r ORDER BY recommend_count DESC) where ROWNUM  between ? and ?";
+			String sql = "select * from ( select r.*, ROW_NUMBER() OVER ( "
+					+ " order by (select count(*) from review_recommend rr where rr.review_seq = r.seq) desc, r.seq desc) rn "
+					+ " from review r ) where rn between ? and ?";
 			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), start, end);
 		}else if("view".equals(sort)){
 			String sql = "select * from (select review.*, ROW_NUMBER() OVER(order by view_count desc)rn from review) where rn between ? and ?";

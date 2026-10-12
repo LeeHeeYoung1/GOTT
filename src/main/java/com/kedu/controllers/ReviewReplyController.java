@@ -54,10 +54,4 @@ public class ReviewReplyController {
 				+ "&place_id=" + rdto.getTarget_id();
 	}
 	
-	@ResponseBody
-	@RequestMapping("/childUpdate")
-	public String childUpdate(int seq, String contents) {
-		rpdao.childUpdate(seq, contents);
-		return "ok";
-	}
 }

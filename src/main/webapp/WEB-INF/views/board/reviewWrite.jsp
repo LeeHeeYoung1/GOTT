@@ -520,6 +520,11 @@ body {
 				<div class="tag_box">
 					<span class="tag_label">태그</span>
 					<div class="tag_list">
+						<label><input type="checkbox" name="tag" value="청결">관광지</label>
+						<label><input type="checkbox" name="tag" value="가성비">맛집</label>
+						<label><input type="checkbox" name="tag" value="뷰맛집">카페</label>
+						<label><input type="checkbox" name="tag" value="조용함">액티비티</label>
+						<label><input type="checkbox" name="tag" value="친절">숙소</label>
 						<label><input type="checkbox" name="tag" value="청결">청결</label>
 						<label><input type="checkbox" name="tag" value="가성비">가성비</label>
 						<label><input type="checkbox" name="tag" value="뷰맛집">뷰맛집</label>
