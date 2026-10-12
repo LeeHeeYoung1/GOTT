@@ -1121,39 +1121,24 @@
 	<div class="finishBar">
 	    <div id="totalPlanSummary">총 0일 일정 · 방문지 0곳 등록됨</div>
 	    <div class="finishBtns">
-	        <button type="button">임시저장</button>
 	        <button type="button">미리보기</button>
 	        <button type="button" id="sharePlanBtn">완성하고 공유하기</button>
 	    </div>
 	</div>
 	
-	<!-- 공유 결과 영역 -->
-	
-	<div class="sharePanel">
-	    <button type="button" id="toggleBottom" aria-expanded="false">
-	        <span id="toggleArrow">⌃</span>
-	        <span class="toggleLabel">여행 일정 구경하기</span>
-	    </button>
-	    <div class="sharePanelContent" id="sharePanelContent">
-	        <h4>여행 일정 공유</h4>
-	        <p>완성한 여행 일정을 저장하고 공유할 수 있습니다.</p>
-	        <div id="shareResult"></div>
-	    </div>
-	</div>
-
-
 </div>
 
 
 <script>
 
-
 $("#toggleBottom").on("click", function() {
     let isOpen = $("#sharePanelContent").is(":visible");
+
     $("#sharePanelContent").stop(true, true).slideToggle(200);
-    $(this).text(isOpen ? "⌃" : "⌄");
+    $("#toggleArrow").text(isOpen ? "⌄" : "⌃");
     $(this).attr("aria-expanded", !isOpen);
 });
+
 
 $(document).ready(function() {
     let daySchedules = {};
@@ -1514,6 +1499,95 @@ $(document).ready(function() {
             $(this).find(".orderMark").text(index + 1);
         });
     }
+    
+
+ // 완성하고 공유하기 버튼
+ $("#sharePlanBtn").on("click", function() {
+     let title = $("input[name='title']").val().trim();
+     let startDate = $("input[name='startDate']").val();
+     let endDate = $("input[name='endDate']").val();
+     let count = $("#count").val();
+     let isPublic = $("#tf").val();
+
+     // 일정 생성 여부 확인
+     if ($("#dayTabs .dayTab").length == 0) {
+         alert("먼저 여행 일정을 생성해주세요.");
+         return;
+     }
+
+     if (title == "" || startDate == "" || endDate == "") {
+         alert("일정 제목과 여행 날짜를 확인해주세요.");
+         return;
+     }
+
+     // 날짜별 장소 정보를 서버로 전송할 배열
+     let placeIds = [];
+     let dayNos = [];
+     let visitTimes = [];
+
+     Object.keys(daySchedules).forEach(function(dayNo) {
+         daySchedules[dayNo].forEach(function(place) {
+             placeIds.push(place.placeId);
+             dayNos.push(Number(dayNo));
+             visitTimes.push(place.time || "");
+         });
+     });
+
+     // 중복 클릭 방지
+     let shareBtn = $(this);
+     shareBtn.prop("disabled", true).text("저장 중...");
+
+     $.ajax({
+         url: "/travelPlan/add",
+         type: "POST",
+         dataType: "text",
+         traditional: true,
+         data: {
+             title: title,
+             startDate: startDate,
+             endDate: endDate,
+             count: count,
+             isPublic: isPublic,
+             placeIds: placeIds,
+             dayNos: dayNos,
+             visitTimes: visitTimes
+         },
+         success: function(result) {
+             result = $.trim(result);
+
+             if (result == "SUCCESS") {
+                 alert("여행 일정이 저장되었습니다.");
+
+                 $("#shareResult").text(
+                     title + " 일정이 저장되었습니다."
+                 );
+
+                 $("#sharePanelContent").stop(true, true).slideDown(200);
+                 $("#toggleArrow").text("⌃");
+                 $("#toggleBottom").attr("aria-expanded", true);
+
+             } else if (result == "LOGIN_REQUIRED") {
+                 alert("로그인 후 이용해주세요.");
+
+             } else if (result == "INVALID_INPUT" ||
+                        result == "INVALID_DATE") {
+                 alert("입력한 일정 정보와 날짜를 확인해주세요.");
+
+             } else {
+                 alert("일정 저장에 실패했습니다. 다시 시도해주세요.");
+             }
+         },
+         error: function(xhr) {
+             console.error(xhr.responseText);
+             alert("서버 오류가 발생했습니다. 콘솔과 서버 로그를 확인해주세요.");
+         },
+         complete: function() {
+             shareBtn.prop("disabled", false)
+                 .text("완성하고 공유하기");
+         }
+     });
+ });
+
 });
 </script>
 
