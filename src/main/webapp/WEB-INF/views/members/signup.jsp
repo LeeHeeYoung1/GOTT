@@ -66,16 +66,6 @@
             background-color: #f3f4f6;
         }
 
-        .icon {
-            margin-left: 10px;
-            font-size: 20px;
-        }
-        .icon:hover {
-            cursor: pointer;
-        }
-        .icon:active {
-            
-        }
         .title {
             width: 100%;
             height: 120px;
@@ -84,13 +74,16 @@
             justify-content: center;
             background-color: #f8fafc;
         }
-
         .title h1 {
             margin: 0;
             font-size: 32px;
             font-weight: 700;
         }
-
+		.welcome {
+			display: flex;
+            align-items: center;
+            justify-content: center;
+		}
 
         .main {
             width: 100%;
@@ -238,6 +231,72 @@
         .btnbox button {
             margin: auto;
         }
+        .agreement {
+		    width: 100%;
+		    margin: 15px 0 10px;
+		    border: 1px solid #e5e7eb;
+		    border-radius: 8px;
+		    overflow: hidden;
+		    background-color: #fafafa;
+		}
+		
+		.agreement-title {
+		    margin: 0;
+		    padding: 12px 16px;
+		    font-size: 14px;
+		    font-weight: 700;
+		    background-color: #f1f5f9;
+		    border-bottom: 1px solid #e5e7eb;
+		}
+		
+		.agreement-scroll {
+		    max-height: 120px;
+		    overflow-y: auto;
+		    padding: 14px 16px;
+		}
+		
+		.agreement-scroll p {
+		    margin: 0 0 10px;
+		    font-size: 12px;
+		    line-height: 1.6;
+		    color: #555;
+		}
+		
+		.agreement-scroll p:last-child {
+		    margin-bottom: 0;
+		}
+		
+		.agreement-scroll::-webkit-scrollbar {
+		    width: 6px;
+		}
+		
+		.agreement-scroll::-webkit-scrollbar-thumb {
+		    background-color: #d1d5db;
+		    border-radius: 10px;
+		}
+		
+		.agree-list {
+		    width: 100%;
+		    margin-bottom: 15px;
+		    display: flex;
+		    flex-direction: column;
+		    gap: 6px;
+		}
+		
+		.agree-item {
+		    display: flex;
+		    align-items: center;
+		    gap: 8px;
+		    font-size: 13px;
+		    cursor: pointer;
+		}
+		
+		.agree-item input[type="checkbox"] {
+		    width: 16px;
+		    height: 16px;
+		    margin: 0;
+		    cursor: pointer;
+		}
        
     </style>
 </head>
@@ -249,13 +308,15 @@
         <div class="logobox">
             <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
         </div>
-        <div>회원가입에 대한 감사의 말 같은거</div>
+        
     </div>
 
     <div class="title">
         <h1>회원가입</h1>
     </div>
-
+    <div class="welcome">
+		<p>새로운 여행의 시작, GOTT와 함께하세요.</p>
+	</div>
     <div class="main flex-center">
         <form action="/members/signup" id="frm" method="post">
             <fieldset class="mainbox">
@@ -286,7 +347,22 @@
                 <button id="postbtn" type="button">주소 찾기</button>
                 <input id="address1" name="address1" type="text" readonly placeholder="주소 입력">
                 <input id="address2" name="address2" type="text" placeholder="상세주소">
-
+				<div class="agreement">
+				    <p class="agreement-title">개인정보 수집 및 이용 동의서</p>
+				    <div class="agreement-scroll">
+				        <p>GOTT(이하 "서비스")는 회원가입 및 서비스 제공을 위해 아래와 같이 개인정보를 수집·이용합니다.</p>
+				        <p>GOTT는 회원가입 및 서비스 제공을 위해 아이디, 비밀번호, 이름, 닉네임, 이메일 등의 개인정보를 수집·이용합니다. 수집된 개인정보는 회원 탈퇴 시까지 보관하며, 관련 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.
+				        개인정보 수집 및 이용에 동의하지 않을 권리가 있으나, 필수 항목에 동의하지 않을 경우 회원가입이 제한될 수 있습니다.</p>
+				    </div>
+				</div>
+				
+				<div class="agree-list">
+				    <label class="agree-item">
+				        <input id="agree" name="agree" type="checkbox"  value="Y" required>
+				        <span><b>[필수]</b> 개인정보 수집 및 이용에 동의합니다.</span>
+				    </label>
+				</div>
+				
                 <div class="btnbox flex-between">
                     <button id="signup" type="submit">회원가입</button>
                     <button id="cancel" type="button">취소</button>
