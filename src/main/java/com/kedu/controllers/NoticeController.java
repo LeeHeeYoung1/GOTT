@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.kedu.dao.FaqDAO;
 import com.kedu.dao.NoticeDAO;
+import com.kedu.dto.FaqDTO;
 import com.kedu.dto.NoticeDTO;
 
 @Controller
@@ -18,6 +20,9 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeDAO ndao;
+	
+	@Autowired
+	private FaqDAO fdao;
 	
 	@RequestMapping("/notice_list")
 	public String noticeList(Model model) {
@@ -59,5 +64,44 @@ public class NoticeController {
 	public String update(NoticeDTO ndto) {
 		ndao.update(ndto);
 		return "redirect:/notice/detail?notice_id="+ndto.getNotice_id();
+	}
+	
+	@RequestMapping("/qna")
+	public String qna(HttpSession session) {
+		
+		return "notice/qna";
+	}
+	
+	@RequestMapping("/faq")
+	public String faq(Model model) {
+	    List<FaqDTO> flist = fdao.faqList();
+	    model.addAttribute("flist", flist);
+
+	    return "notice/faq";
+	}
+	
+	@RequestMapping("/faq_register")
+	public String faq_register(HttpSession session) {
+
+	    String loginId = (String) session.getAttribute("loginId");
+
+	    if (!"admin0001".equals(loginId)) {
+	        return "redirect:/notice/faq";
+	    }
+
+	    return "notice/faq_register";
+	}
+	
+	@RequestMapping("/write")
+	public String write(FaqDTO dto, HttpSession session) {
+
+	    String loginId = (String) session.getAttribute("loginId");
+
+	    if (!"admin0001".equals(loginId)) {
+	        return "redirect:/notice/faq";
+	    }
+	    fdao.insert(dto);
+
+	    return "redirect:/notice/faq";
 	}
 }

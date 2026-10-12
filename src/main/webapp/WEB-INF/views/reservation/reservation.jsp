@@ -213,7 +213,7 @@ form {
 	<div class="container">
 		<div class="header">${placeOne.name}</div>
 		<hr>
-		<form action="${pageContext.request.contextPath}/reservation/finalPayment" method="post">
+		<form action="${pageContext.request.contextPath}/reservation/finalPayment" method="get">
 			<div class="photo">
 				<div class="room_img">
 					<c:if test="${not empty roomDto.image1}">
