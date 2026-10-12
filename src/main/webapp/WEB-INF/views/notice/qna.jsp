@@ -276,7 +276,7 @@
 
     <nav class="tabs">
         <a href="/notice/qna" class="on">Q&A</a>
-        <a href="/notice/faq">FAQ</a>
+        <a href="/notice/faq?cpage=1">FAQ</a>
     </nav>
 
     <div class="searchArea">

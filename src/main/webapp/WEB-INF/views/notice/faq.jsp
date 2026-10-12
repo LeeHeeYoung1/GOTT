@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -73,14 +72,14 @@
 	color: white;
 }
 
-.searchArea {
+.faqSearchArea {
 	width: 650px;
 	max-width: 100%;
 	margin: 25px auto 18px;
 	position: relative;
 }
 
-.searchInput {
+.faqSearchInput {
 	width: 100%;
 	height: 42px;
 	padding: 0 45px 0 15px;
@@ -91,11 +90,11 @@
 	outline: none;
 }
 
-.searchInput:focus {
+.faqSearchInput:focus {
 	border-color: #555;
 }
 
-.searchBtn {
+.faqSearchBtn {
 	position: absolute;
 	right: 5px;
 	top: 4px;
@@ -108,7 +107,7 @@
 	cursor: pointer;
 }
 
-.searchOption {
+.faqSearchOption {
 	width: 900px;
 	max-width: 100%;
 	margin: 0 auto 12px;
@@ -119,15 +118,15 @@
 	color: #777;
 }
 
-.totalCount {
+.faqTotalCount {
 	margin-right: auto;
 }
 
-.btnbox2 {
+.faqWriteBox {
 	margin-left: auto;
 }
 
-#write {
+#faqWriteBtn {
 	height: 30px;
 	padding: 0 14px;
 	border: 1px solid #222;
@@ -138,11 +137,11 @@
 	cursor: pointer;
 }
 
-#write:hover {
+#faqWriteBtn:hover {
 	background: #444;
 }
 
-.freeBoardContentsBox {
+.faqContentsBox {
 	width: 900px;
 	max-width: 100%;
 	margin: 0 auto;
@@ -154,13 +153,13 @@
 	overflow: hidden;
 }
 
-.freeBoardTable {
+.faqTable {
 	width: 100%;
 	table-layout: fixed;
 	border-collapse: collapse;
 }
 
-.freeBoardTable th {
+.faqTable th {
 	height: 45px;
 	padding: 0 10px;
 	background: #f7f7f7;
@@ -171,7 +170,7 @@
 	text-align: center;
 }
 
-.freeBoardTable td {
+.faqTable td {
 	height: 48px;
 	padding: 0 10px;
 	border-bottom: 1px solid #eee;
@@ -180,56 +179,61 @@
 	text-align: center;
 }
 
-.freeBoardTable tr:last-child td {
+.faqTable tr:last-child td {
 	border-bottom: 0;
 }
 
-.freeBoardTable .number {
+.faqTable .number {
 	width: 70px;
 }
 
-.freeBoardTable .title {
+.faqTable .title {
 	width: auto;
 	text-align: left;
 }
 
-.freeBoardTable .writer {
+.faqTable .writer {
 	width: 130px;
 }
 
-.freeBoardTable .date {
+.faqTable .date {
 	width: 140px;
 }
 
-.faqTitle {
+.faqTitleText,
+.faqWriterText {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 
-.faqWriter {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+.faqTitleText a {
+	color: #555;
+	text-decoration: none;
 }
 
-.freeBoardTable tbody tr:hover {
+.faqTitleText a:hover {
+	color: #222;
+	text-decoration: underline;
+}
+
+.faqTable tbody tr:hover {
 	background: #fafafa;
 }
 
-.emptyMessage {
+.faqEmptyMessage {
 	height: 100px !important;
 	text-align: center !important;
 	color: #999 !important;
 }
 
-.btnbox {
+.faqHomeBox {
 	position: absolute;
 	right: 20px;
 	bottom: 15px;
 }
 
-#home {
+#faqHomeBtn {
 	height: 34px;
 	padding: 0 18px;
 	border: 1px solid #222;
@@ -240,28 +244,59 @@
 	cursor: pointer;
 }
 
-#home:hover {
+#faqHomeBtn:hover {
 	background: #444;
 }
 
-@media ( max-width : 700px) {
+#navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 0;
+}
+
+#navigation a {
+    display: inline-block;
+    min-width: 28px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    color: #555;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+#navigation a.current {
+    background: #222;
+    color: white;
+    border-color: #222;
+}
+
+@media (max-width: 700px) {
 	.breadcrumb, .tabs {
 		margin-left: 0;
 		margin-right: 0;
 	}
-	.searchOption {
+
+	.faqSearchOption {
 		width: 100%;
 	}
-	.freeBoardTable .number {
+
+	.faqTable .number {
 		width: 50px;
 	}
-	.freeBoardTable .writer {
+
+	.faqTable .writer {
 		width: 80px;
 	}
-	.freeBoardTable .date {
+
+	.faqTable .date {
 		width: 100px;
 	}
-	.freeBoardTable th, .freeBoardTable td {
+
+	.faqTable th, .faqTable td {
 		padding: 0 5px;
 		font-size: 11px;
 	}
@@ -280,33 +315,37 @@
 	</div>
 
 	<nav class="tabs">
-		<a href="/notice/qna">Q&A</a> <a href="/notice/faq" class="on">FAQ</a>
+		<a href="/notice/qna">Q&A</a>
+		<a href="/notice/faq?cpage=1" class="on">FAQ</a>
 	</nav>
 
-	<div class="searchArea">
+	<div class="faqSearchArea">
 		<form action="/notice/faq" method="get">
-			<input class="searchInput" type="text" name="keyword"
+		 <input type="hidden" name="cpage" value="1">
+			<input class="faqSearchInput" type="text" name="keyword"
 				placeholder="자주 묻는 질문 검색">
-			<button type="submit" class="searchBtn">🔍</button>
+			<button type="submit" class="faqSearchBtn">🔍</button>
 		</form>
 	</div>
 
-	<div class="searchOption">
-	
-		<div class="totalCount">
+	<div class="faqSearchOption">
+
+		<div class="faqTotalCount">
 			총 <strong>${flist.size()}</strong>건
 		</div>
+
 		<c:if test="${loginId == 'admin0001'}">
-			<div class="btnbox2">
-				<button type="button" id="write"
+			<div class="faqWriteBox">
+				<button type="button" id="faqWriteBtn"
 					onclick="location.href='/notice/faq_register'">FAQ 작성</button>
 			</div>
 		</c:if>
+
 	</div>
 
-	<div class="freeBoardContentsBox">
+	<div class="faqContentsBox">
 
-		<table class="freeBoardTable">
+		<table class="faqTable">
 			<colgroup>
 				<col style="width: 70px;">
 				<col>
@@ -327,7 +366,9 @@
 				<c:choose>
 					<c:when test="${empty flist}">
 						<tr>
-							<td colspan="4" class="emptyMessage">등록된 자주 묻는 질문이 없습니다.</td>
+							<td colspan="4" class="faqEmptyMessage">
+								등록된 자주 묻는 질문이 없습니다.
+							</td>
 						</tr>
 					</c:when>
 
@@ -335,11 +376,19 @@
 						<c:forEach var="faq" items="${flist}">
 							<tr>
 								<td class="number">${faq.faq_id}</td>
-								<td class="title faqTitle" title="${faq.title}">
-									${faq.title}</td>
-								<td class="writer faqWriter" title="${faq.writer}">
-									${faq.writer}</td>
-								<td class="date">${faq.regdate.toString().substring(0, 10)}
+
+								<td class="title faqTitleText" title="${faq.title}">
+									<a href="/notice/faq_content?faq_id=${faq.faq_id}">
+										${faq.title}
+									</a>
+								</td>
+
+								<td class="writer faqWriterText" title="${faq.writer}">
+									${faq.writer}
+								</td>
+
+								<td class="date">
+									${faq.regdate.toString().substring(0, 10)}
 								</td>
 							</tr>
 						</c:forEach>
@@ -347,13 +396,72 @@
 				</c:choose>
 			</tbody>
 		</table>
-
-		<div class="btnbox">
-			<button type="button" id="home" onclick="location.href='/home'">HOME</button>
+		
+		<div id="navigation"></div>
+		
+		<div class="faqHomeBox">
+			<button onclick="location.href='/notice/faq?cpage=1'">목록</button>
 		</div>
 
 	</div>
 
 </div>
+
+<script>
+let recordTotalCount = ${recordTotalCount};
+let recordCountPerPage = ${recordCountPerPage};
+let naviCountPerPage = ${naviCountPerpage};
+let currentPage = ${cpage};
+
+let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
+
+let startNavi = Math.floor((currentPage - 1) / naviCountPerPage)
+				* naviCountPerPage + 1;
+
+let endNavi = startNavi + naviCountPerPage - 1;
+
+if (endNavi > pageTotalCount) {
+	endNavi = pageTotalCount;
+}
+
+let needPrev = startNavi > 1;
+let needNext = endNavi < pageTotalCount;
+
+let navigation = document.getElementById("navigation");
+
+if (needPrev) {
+	let prev = document.createElement("a");
+
+	prev.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage=" + (startNavi - 1));
+
+	prev.innerHTML = "<";
+
+	navigation.append(prev);
+}
+
+for (let i = startNavi; i <= endNavi; i++) {
+	let num = document.createElement("a");
+
+	num.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage=" + i);
+
+	num.innerHTML = i;
+
+	if (i == currentPage) {
+		num.className = "current";
+	}
+
+	navigation.append(num);
+}
+
+if (needNext) {
+	let next = document.createElement("a");
+
+	next.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage=" + (endNavi + 1));
+
+	next.innerHTML = ">";
+
+	navigation.append(next);
+}
+</script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

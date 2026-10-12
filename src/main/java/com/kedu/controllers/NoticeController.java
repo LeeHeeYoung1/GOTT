@@ -73,9 +73,28 @@ public class NoticeController {
 	}
 	
 	@RequestMapping("/faq")
-	public String faq(Model model) {
-	    List<FaqDTO> flist = fdao.faqList();
+	public String faq(Model model, int cpage, String keyword) {
+
+	    if (keyword == null) {
+	        keyword = "";
+	    }
+
+	    int recordCountPerPage = 10;
+	    int naviCountPerpage = 10;
+
+	    int recordTotalCount = fdao.faqCount(keyword);
+
+	    int start = cpage * recordCountPerPage - 9;
+	    int end = cpage * recordCountPerPage;
+
+	    List<FaqDTO> flist = fdao.faqList(start, end, keyword);
+
 	    model.addAttribute("flist", flist);
+	    model.addAttribute("recordTotalCount", recordTotalCount);
+	    model.addAttribute("recordCountPerPage", recordCountPerPage);
+	    model.addAttribute("naviCountPerpage", naviCountPerpage);
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("keyword", keyword);
 
 	    return "notice/faq";
 	}
@@ -86,7 +105,7 @@ public class NoticeController {
 	    String loginId = (String) session.getAttribute("loginId");
 
 	    if (!"admin0001".equals(loginId)) {
-	        return "redirect:/notice/faq";
+	        return "redirect:/notice/faq?cpage=1";
 	    }
 
 	    return "notice/faq_register";
@@ -102,6 +121,13 @@ public class NoticeController {
 	    }
 	    fdao.insert(dto);
 
-	    return "redirect:/notice/faq";
+	    return "redirect:/notice/faq?cpage=1";
+	}
+	
+	@RequestMapping("/faq_content")
+	public String faqContent(Model model, int faq_id) {
+		FaqDTO dto = fdao.faqContent(faq_id);
+	    model.addAttribute("faq", dto);
+		return "notice/faq_content";
 	}
 }

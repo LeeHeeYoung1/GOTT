@@ -22,8 +22,34 @@ public class FaqDAO {
 	
 	
 	
-	public List<FaqDTO> faqList() {
-	    String sql = "select * from faq order by faq_id desc";
-	    return jdbc.query(sql, new BeanPropertyRowMapper<>(FaqDTO.class));
+	public List<FaqDTO> faqList(int start, int end, String keyword) {
+	    String sql = "select * from (" +
+	            "select faq_id, writer, title, content, regdate, " +
+	            "row_number() over(order by faq_id desc) rn " +
+	            "from faq " +
+	            "where title like ? or content like ?" +
+	            ") where rn between ? and ?";
+
+	    String searchKeyword = "%" + keyword + "%";
+
+	    return jdbc.query(sql,
+	            new BeanPropertyRowMapper<>(FaqDTO.class),
+	            searchKeyword, searchKeyword, start, end);
 	}
+
+	public int faqCount(String keyword) {
+	    String sql = "select count(*) from faq " +
+	            "where title like ? or content like ?";
+
+	    String searchKeyword = "%" + keyword + "%";
+
+	    return jdbc.queryForObject(sql, Integer.class,
+	            searchKeyword, searchKeyword);
+	}
+
+	public FaqDTO faqContent(int faq_id) {
+    String sql = "select * from faq where faq_id = ?";
+    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(FaqDTO.class), faq_id);
+}
+
 }
