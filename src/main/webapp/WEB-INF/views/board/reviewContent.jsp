@@ -25,10 +25,6 @@ body {
 	color: #1a1a1f;
 }
 
-form {
-	display: block;
-}
-
 /* ===== 상단 ===== */
 .review_header {
 	max-width: 900px;
@@ -182,13 +178,6 @@ form {
 	color: #FF6B35;
 }
 
-.tag_list:empty::before {
-	content: "등록된 태그가 없습니다.";
-	padding-top: 5px;
-	font-size: 12px;
-	color: #b0b5bc;
-}
-
 /* ===== 추천 버튼 ===== */
 .recommend {
 	max-width: 900px;
@@ -212,7 +201,8 @@ form {
 	font-weight: 700;
 	color: #8b8f96;
 	cursor: pointer;
-	transition: background .15s, border-color .15s, color .15s, transform .12s;
+	transition: background .15s, border-color .15s, color .15s, transform
+		.12s;
 }
 
 .heartBtn:hover {
@@ -321,7 +311,7 @@ form {
 	color: #FF6B35;
 }
 
-/* --- 입력칸 --- */
+/* --- 댓글 쓰는 칸 --- */
 .reply_form {
 	margin-top: 16px;
 	padding: 14px 16px;
@@ -381,21 +371,28 @@ form {
 	border-color: #FF6B35;
 }
 
-/* --- 목록 --- */
+/* --- 댓글 목록 --- */
 .reply_list {
 	margin-top: 10px;
 }
 
+/* 댓글 묶음 구분선 — 머리글 위에 둬서 대댓글이 같은 묶음에 들어가게 */
 .reply_list .reply_header {
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	max-width: none;
 	margin: 0;
-	padding: 16px 4px 0;
+	padding: 18px 4px 0;
+	border-top: 1px solid #eceef1;
 	font-size: 13px;
 	font-weight: 400;
 	letter-spacing: 0;
+}
+
+.reply_list .reply_header:first-child {
+	border-top: 0;
+	padding-top: 6px;
 }
 
 .reply_list .nickname {
@@ -435,16 +432,18 @@ form {
 	color: #1a1a1f;
 }
 
-/* --- 댓글별 버튼 --- */
+/* --- 댓글별 버튼 줄 (대댓글 폼도 여기 안에 있음) --- */
 .reply_btn_box {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: flex-end;
+	align-items: center;
 	gap: 6px;
-	padding: 0 4px 14px;
-	border-bottom: 1px solid #eceef1;
+	padding: 0 4px;
 }
 
-.replyUpdateBtn, .replyDeleteBtn, .replySaveBtn, .replyCancelBtn {
+.replyUpdateBtn, .replyDeleteBtn, .replySaveBtn, .replyCancelBtn,
+	.childReplyUpdateBtn, .childReplyDeleteBtn {
 	padding: 3px 10px;
 	border: 1px solid #e0e3e7;
 	border-radius: 4px;
@@ -456,13 +455,14 @@ form {
 	transition: border-color .15s, background .15s, color .15s;
 }
 
-.replyUpdateBtn:hover, .replyCancelBtn:hover {
+.replyUpdateBtn:hover, .replyCancelBtn:hover, .childReplyUpdateBtn:hover
+	{
 	border-color: #222;
 	background: #f6f6f6;
 	color: #222;
 }
 
-.replyDeleteBtn:hover {
+.replyDeleteBtn:hover, .childReplyDeleteBtn:hover {
 	border-color: #c0392b;
 	background: #fdecea;
 	color: #c0392b;
@@ -479,6 +479,159 @@ form {
 	border-color: #FF6B35;
 	background: #FF6B35;
 	color: #fff;
+}
+
+/* --- 답글 — 버튼 모양 없이 굵은 글씨만, 왼쪽에 --- */
+.replyAnswerBtn {
+	margin-right: auto;
+	padding: 3px 2px;
+	border: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 700;
+	color: #8b8f96;
+	cursor: pointer;
+	transition: color .15s;
+}
+
+.replyAnswerBtn:hover {
+	color: #222;
+	text-decoration: underline;
+}
+
+/* ===== 대댓글 쓰는 칸 ===== */
+.child_reply_form {
+	width: 100%;
+	margin: 8px 0 2px 28px;
+	padding: 7px 12px;
+	border: 1px solid #eceef1;
+	border-radius: 8px;
+	background: #fafbfc;
+	transition: border-color .15s, background .15s;
+}
+
+.child_reply_form:focus-within {
+	border-color: #999;
+	background: #fff;
+}
+
+.child_reply_form::before {
+	content: "↳ 답글";
+	display: block;
+	margin-bottom: 3px;
+	font-size: 11px;
+	font-weight: 700;
+	color: #a0a4ab;
+}
+
+.child_reply_form textarea {
+	width: 100%;
+	height: 30px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	resize: none;
+	background: transparent;
+	font-family: inherit;
+	font-size: 13px;
+	line-height: 1.6;
+	color: #33363c;
+	vertical-align: top;
+}
+
+.child_reply_form textarea::placeholder {
+	color: #c0c5cb;
+}
+
+.child_register_btn_box {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 3px;
+}
+
+.child_register_btn_box button {
+	height: 26px;
+	padding: 0 14px;
+	border: 1px solid #b0b5bc;
+	border-radius: 5px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 600;
+	color: #666;
+	cursor: pointer;
+	transition: border-color .15s, background .15s, color .15s;
+}
+
+.child_register_btn_box button:hover {
+	border-color: #222;
+	background: #222;
+	color: #fff;
+}
+
+/* ===== 대댓글 목록 ===== */
+.childList {
+	margin: 0 0 0 28px;
+	padding: 0 0 0 14px;
+	border-left: 2px solid #eceef1;
+}
+
+.child_reply_header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 4px 0;
+}
+
+.child_reply_header::before {
+	content: "↳";
+	font-size: 12px;
+	color: #c5c9ce;
+}
+
+.child_nickname {
+	font-size: 12px;
+	font-weight: 700;
+	color: #45484f;
+}
+
+.child_reply_date {
+	font-size: 10px;
+	color: #b0b5bc;
+}
+
+.child_reply_contents {
+	display: block;
+	width: 100%;
+	margin: 0;
+	padding: 4px 4px 6px 18px;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 13px;
+	line-height: 1.7;
+	color: #45484f;
+	text-overflow: ellipsis;
+}
+
+.child_reply_contents:not([readonly]) {
+	margin: 4px 0 6px 18px;
+	padding: 8px 10px;
+	width: calc(100% - 18px);
+	border: 1px solid #222;
+	border-radius: 6px;
+	background: #fff;
+	color: #1a1a1f;
+}
+
+.child_reply_btn_box {
+	display: flex;
+	justify-content: flex-end;
+	gap: 6px;
+	padding: 0 4px 10px;
 }
 
 /* ===== 수정 모드 ===== */
@@ -1038,13 +1191,105 @@ form {
 				<input type="text" class="reply_contents"
 					id="reply_contents${i.seq}" value="${i.contents}" readonly>
 				<div class="reply_btn_box" id="reply_btn_box${i.seq}">
+					<button type="button" class="replyAnswerBtn"
+						id="replyAnswerBtn${i.seq}">답글</button>
 					<c:if test="${sessionScope.loginId == i.member_id}">
 						<button type="button" class="replyUpdateBtn"
 							id="replyUpdateBtn${i.seq}">수정</button>
 						<button type="button" class="replyDeleteBtn"
 							id="replyDeleteBtn${i.seq}">삭제</button>
 					</c:if>
+					<form class="child_reply_form" id="child_reply_form${i.seq}"
+						action="/review/reply/childWrite" method="post" hidden>
+						<input type="hidden" name="review_seq" value="${rdto.seq}">
+						<input type="hidden" name="parent_seq" value="${i.seq}">
+						<textarea name="contents" id="childReplyContents${i.seq}"></textarea>
+						<div class="child_register_btn_box">
+							<button type="submit" id="childReplyBtn${i.seq}">등록</button>
+						</div>
+					</form>
 				</div>
+				<c:forEach var="j" items="${childList}">
+					<c:if test="${j.parent_seq == i.seq}">
+						<div class="childList">
+							<div class="child_reply_header">
+								<span class="child_nickname">${j.nickname}</span> <span
+									class="child_reply_date"> <fmt:formatDate
+										value="${j.reg_date}" pattern="yyyy.MM.dd HH:mm" />
+								</span>
+							</div>
+							<input type="text" class="child_reply_contents"
+								id="child_reply_contents${j.seq}" value="${j.contents}" readonly>
+							<div class="child_reply_btn_box" id="child_reply_btn_box${j.seq}">
+								<c:if test="${sessionScope.loginId == j.member_id}">
+									<button type="button" class="childReplyUpdateBtn"
+										id="childReplyUpdateBtn${j.seq}">수정</button>
+									<button type="button" class="childReplyDeleteBtn"
+										id="childReplyDeleteBtn${j.seq}">삭제</button>
+									<script>
+									$("#childReplyDeleteBtn${j.seq}").on("click", function() {
+										location.href = "/review/reply/delete?seq=${j.seq}&review_seq=${rdto.seq}";
+										
+									})
+
+									$("#childReplyUpdateBtn${j.seq}").on("click", function() {
+
+										let input = $("#child_reply_contents${j.seq}");
+										let before = input.val();
+
+										input.prop("readonly", false).focus();
+
+										$("#childReplyUpdateBtn${j.seq}").hide();
+										$("#childReplyDeleteBtn${j.seq}").hide();
+
+										let saveBtn = $("<button>").attr("type", "button")
+												.addClass("childReplySaveBtn").text("저장");
+										let cancelBtn = $("<button>").attr("type", "button")
+												.addClass("childReplyCancelBtn").text("취소");
+
+										$("#child_reply_btn_box${j.seq}").append(saveBtn).append(cancelBtn);
+
+										saveBtn.on("click", function() {
+
+											let contents = input.val().trim();
+
+											$.ajax({
+												url : "/review/reply/update",
+												type : "post",
+												data : {
+													seq : ${j.seq},
+													contents : contents
+												},
+												success : function() {
+													input.prop("readonly", true);
+													saveBtn.remove();
+													cancelBtn.remove();
+													$("#childReplyUpdateBtn${j.seq}").show();
+													$("#childReplyDeleteBtn${j.seq}").show();
+												}
+											})
+										})
+
+										cancelBtn.on("click", function() {
+											input.val(before).prop("readonly", true);
+											saveBtn.remove();
+											cancelBtn.remove();
+											$("#childReplyUpdateBtn${j.seq}").show();
+											$("#childReplyDeleteBtn${j.seq}").show();
+										})
+									})
+									</script>
+								</c:if>
+							</div>
+						</div>
+					</c:if>
+					<script>
+						$("#replyAnswerBtn${i.seq}").on("click", function() {
+							$("#child_reply_form${i.seq}").show();
+							$("#childReplyContents${i.seq}").focus();
+						})
+					</script>
+				</c:forEach>
 
 				<script>
 					$("#replyDeleteBtn${i.seq}").on("click", function() {
