@@ -805,7 +805,7 @@ body{
         <div class="mainContainer">
             <nav class="mybarBox">
                 <a class="a1"><strong>??</strong><span>다가오는 예약</span></a>
-                <a class="a2"><strong>??</strong><span>찜한 목록</span></a>
+                <a class="a2"><strong>${myWishTotalCount}</strong><span>찜한 목록</span></a>
                 <a class="a3"><strong>??</strong><span>작성한 리뷰</span></a>
                 <a class="a4"><strong>${mileage}M</strong><span>보유마일리지</span></a>
                 <a class="a5"><strong><fmt:formatDate value="${regdate}" pattern="yyyy-MM-dd"/></strong><span>가입일자</span></a>
@@ -858,69 +858,97 @@ body{
                     </c:otherwise>
                 </c:choose>
             </div>
+
             <div class="reservationContainer" id="reservationSection">
                 <div class="sectionTitle">
                     <span>예약내역</span>
                     <a href="#">예약내역 열기</a>
                 </div>
+
                 <div class="reservationVar">
-                    <span class="tab active">전체</span>
-                    <span class="tab">이용 예정</span>
-                    <span class="tab">이용 완료</span>
-                    <span class="tab">취소 / 환불</span>
+                    <span class="tab active" data-tab="all">전체</span>
+                    <span class="tab" data-tab="upcoming">이용 예정</span>
+                    <span class="tab" data-tab="completed">이용 완료</span>
+                    <span class="tab" data-tab="cancelled">취소 / 환불</span>
                 </div>
-                <c:forEach var="rs" items="${myRsList}">
-                    <div class="flipCard">
-                        <div class="flipCardInner">
-                            <div class="flipCardFront">
-                                <div class="img"><img src="${rs.image1}" alt="호텔 이미지"></div>
-                                <div class="reservationInfo">
-                                    <h3>${rs.roomName}</h3>
-                                    <p>· 체크인 ${rs.checkIn} / 체크아웃 ${rs.checkOut}</p>
-                                    <p>· 성인 ${rs.guestNum}명<br>· 예약번호 ${rs.paymentId}<br>
-                                        <c:choose>
-                                            <c:when test="${rs.status ne '예약취소'}"><strong>· 적립 마일리지 + ${rs.mileage}M</strong></c:when>
-                                            <c:otherwise><strong>· 회수 마일리지 - ${rs.mileage}M</strong></c:otherwise>
-                                        </c:choose>
-                                    </p>
-                                    <p>결제금액 ${rs.price}원</p>
+
+                <div class="reservationList" id="reservationList">
+                    <c:forEach var="rs" items="${myRsList}">                      
+					<c:choose>
+					    <c:when test="${rs.status eq '예약취소'}">
+					        <c:set var="reservationType" value="cancelled"/>
+					    </c:when>
+					    <c:otherwise>
+					        <c:set var="reservationType" value="upcoming"/>
+					    </c:otherwise>
+					</c:choose>
+
+                        <div class="flipCard" data-tab="${reservationType}">
+                            <div class="flipCardInner">
+                                <div class="flipCardFront">
+                                    <div class="img"><img src="${rs.image1}" alt="호텔 이미지"></div>
+                                    <div class="reservationInfo">
+                                        <h3>${rs.roomName}</h3>
+                                        <p>· 체크인 ${rs.checkIn} / 체크아웃 ${rs.checkOut}</p>
+                                        <p>· 성인 ${rs.guestNum}명<br>· 예약번호 ${rs.paymentId}<br>
+                                            <c:choose>
+                                                <c:when test="${rs.status ne '예약취소'}">
+                                                    <strong>· 적립 마일리지 + ${rs.mileage}M</strong>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <strong>· 회수 마일리지 - ${rs.mileage}M</strong>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </p>
+                                        <p>결제금액 ${rs.price}원</p>
+                                    </div>
+                                    <div class="reservationCondition">
+                                         <button disabled>
+									        <c:choose>
+									            <c:when test="${reservationType eq 'completed'}">이용 완료</c:when>
+									            <c:when test="${reservationType eq 'cancelled'}">예약취소</c:when>
+									            <c:otherwise>이용 예정</c:otherwise>
+									        </c:choose>
+									    </button>
+									    <button type="button" class="detailBtn">예약 상세</button>
+									    <c:if test="${reservationType eq 'upcoming'}">
+									        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}">예약 변경</button>
+									        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
+									    </c:if>
+                                    </div>
                                 </div>
-                                <div class="reservationCondition">
-                                    <button disabled>${rs.status}</button>
-                                    <button type="button" class="detailBtn">예약 상세</button>
-                                    <c:if test="${rs.status ne '예약취소'}">
-                                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color:red;">예약 변경</button>
-                                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color:wheat;">예약 취소</button>
-                                    </c:if>
-                                </div>
-                            </div>
-                            <div class="flipCardBack">
-                                <div class="reservationInfo">
-                                    <h3>${rs.roomName} 상세정보</h3>
-                                    <p>· 체크인: ${rs.checkIn}</p>
-                                    <p>· 체크아웃: ${rs.checkOut}</p>
-                                    <p>· 성인: ${rs.guestNum}명</p>
-                                    <p>· 예약번호: ${rs.paymentId}</p>
-                                    <p>· 결제금액: ${rs.price}원</p>
-                                    <p>· 예약일: ${rs.reserveDate}</p>
-                                </div>
-                                <div class="reservationCondition">
-                                    <button type="button" class="backBtn">돌아가기</button>
-                                    <c:if test="${rs.status ne '예약취소'}">
-                                        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color:blue;">예약 변경</button>
-                                        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color:rgb(153,44,44);">예약 취소</button>
-                                    </c:if>
+                                <div class="flipCardBack">
+                                    <div class="reservationInfo">
+                                        <h3>${rs.roomName} 상세정보</h3>
+                                        <p>· 체크인: ${rs.checkIn}</p>
+                                        <p>· 체크아웃: ${rs.checkOut}</p>
+                                        <p>· 성인: ${rs.guestNum}명</p>
+                                        <p>· 예약번호: ${rs.paymentId}</p>
+                                        <p>· 결제금액: ${rs.price}원</p>
+                                        <p>· 예약일: ${rs.reserveDate}</p>
+                                    </div>
+                                    <div class="reservationCondition">
+                                        <button type="button" class="backBtn">돌아가기</button>
+                                        <c:if test="${reservationType eq 'upcoming'}">
+                                            <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color:blue;">예약 변경</button>
+                                            <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color:rgb(153,44,44);">예약 취소</button>
+                                        </c:if>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </c:forEach>
+                    </c:forEach>
+                </div>
+
+                <%-- ✅ 수정2: 중복 페이징 블록 제거 (하나만 유지) --%>
                 <div class="reservationPaging">
                     <c:forEach var="i" begin="1" end="${totalPage}">
-                        <a href="/members/mypage?cpage=${i}&wishCpage=${wishCpage}#reservationSection" class="${cpage == i ? 'active' : ''}">${i}</a>
+                        <a href="${pageContext.request.contextPath}/members/mypage?cpage=${i}&wishCpage=${wishCpage}#reservationSection"
+                           class="${cpage == i ? 'active' : ''}">${i}</a>
                     </c:forEach>
                 </div>
             </div>
+
             <div class="wishlistContainer" id="wishlistSection">
                 <div class="sectionTitle">
                     <span>찜한 관광지 맛집 숙소</span>
@@ -950,6 +978,7 @@ body{
                     <a href="/members/mypage?cpage=${cpage}&wishCpage=${page}#wishlistSection" class="${wishCpage == page ? 'active' : ''}">${page}</a>
                 </c:forEach>
             </div>
+
             <div class="reviewContainer">
                 <div class="sectionTitle">
                     <span>내가 쓴 리뷰</span>
@@ -971,6 +1000,7 @@ body{
                     </c:forEach>
                 </div>
             </div>
+
             <div class="couponContainer">
                 <div class="couponSectionTitle">
                     <span>마일리지 · 적립내역</span>
@@ -1005,39 +1035,59 @@ body{
         <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
     </div>
 </c:when>
+
 <c:otherwise>
     <script>location.href="${pageContext.request.contextPath}/members/loginpage";</script>
 </c:otherwise>
+
 </c:choose>
+
 <script>
-$(".cancelBtn").on("click",async function(){
-    if(!confirm("이 결제를 취소할까요?"))return;
-    let paymentId=$(this).data("payment-id");
-    try{
-        const res=await fetch("${pageContext.request.contextPath}/reservation/cancel",{
-            method:"POST",
-            headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},
-            body:"paymentId="+encodeURIComponent(paymentId)
+$(".reservationVar .tab").on("click",function(){
+    $(".reservationVar .tab").removeClass("active");
+    $(this).addClass("active");
+    const selectedTab=$(this).data("tab");
+    $(".reservationList .flipCard").each(function(){
+        const reservationType=$(this).attr("data-tab");
+        $(this).toggle(selectedTab==="all"||reservationType===selectedTab);
+    });
+});
+
+$(".cancelBtn").on("click", async function() {
+    if (!confirm("이 결제를 취소할까요?")) return;
+    let paymentId = $(this).data("payment-id");
+    try {
+        const res = await fetch("${pageContext.request.contextPath}/reservation/cancel", {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
+            body: "paymentId=" + encodeURIComponent(paymentId)
         });
-        const text=await res.text();
-        console.log("취소 응답:",text);
-        if(res.ok&&text.trim()==="OK"){
+        const text = await res.text();
+        console.log("취소 응답:", text);
+        if (res.ok && text.trim() === "OK") {
             alert("결제가 취소되었습니다.");
             location.reload();
-        }else{
-            alert("취소 실패: "+text);
+        } else {
+            alert("취소 실패: " + text);
         }
-    }catch(error){
-        console.error("요청 실패:",error);
+    } catch (error) {
+        console.error("요청 실패:", error);
         alert("취소 요청 중 오류가 발생했습니다.");
     }
 });
-$(".updateBtn").on("click",function(){
-    let paymentId=$(this).data("payment-id");
-    window.open("${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId="+encodeURIComponent(paymentId),"reservationUpdate","width=800,height=600,left=100,top=100");
+
+$(".updateBtn").on("click", function() {
+    let paymentId = $(this).data("payment-id");
+    window.open("${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId), "reservationUpdate", "width=800,height=600,left=100,top=100");
 });
-$(".detailBtn").on("click",function(){$(this).closest(".flipCard").addClass("flipped");});
-$(".backBtn").on("click",function(){$(this).closest(".flipCard").removeClass("flipped");});
+
+$(".detailBtn").on("click", function() {
+    $(this).closest(".flipCard").addClass("flipped");
+});
+
+$(".backBtn").on("click", function() {
+    $(this).closest(".flipCard").removeClass("flipped");
+});
 </script>
 </body>
 </html>
