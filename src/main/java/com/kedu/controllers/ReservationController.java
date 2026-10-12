@@ -1,6 +1,5 @@
 package com.kedu.controllers;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -273,34 +271,6 @@ public class ReservationController {
 	public int calculateUpdatePrice(int roomId, String checkIn, String checkOut) {
 	    RoomDTO roomDto = roomDao.roomOne(roomId);
 	    return PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
-	}
-	
-	@RequestMapping(value = "/reservationUpdateSave", method = RequestMethod.POST)
-	@ResponseBody
-	public String reservationUpdateSave(String paymentId, int roomId, String checkIn, String checkOut, int guestNum) {
-	    try {
-	        LocalDate inDate = LocalDate.parse(checkIn);
-	        LocalDate outDate = LocalDate.parse(checkOut);
-	        if (!outDate.isAfter(inDate)) {
-	            return "체크아웃 날짜를 확인해 주세요.";
-	        }
-	        if (inDate.isBefore(LocalDate.now())) {
-	            return "지난 날짜로는 예약을 변경할 수 없습니다.";
-	        }
-	        RoomDTO roomDto = roomDao.roomOne(roomId);
-	        if (roomDto == null) {
-	            return "객실 정보를 찾을 수 없습니다.";
-	        }
-	        if (guestNum < 1 || roomDto.getMaxCount() == null || guestNum > roomDto.getMaxCount()) {
-	            return "객실의 최대 수용 인원을 확인해 주세요.";
-	        }
-	        int price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
-	        int result = rdao.updateReservationDetails(paymentId, roomId, java.sql.Date.valueOf(inDate), java.sql.Date.valueOf(outDate), guestNum, price);
-	        return result > 0 ? "success" : "예약 변경에 실패했습니다.";
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return "예약 변경 중 오류가 발생했습니다.";
-	    }
 	}
 
 }
