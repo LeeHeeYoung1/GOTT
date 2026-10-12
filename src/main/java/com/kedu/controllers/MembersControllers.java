@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kedu.commons.EncryptionUtils;
 import com.kedu.dao.MembersDAO;
 import com.kedu.dao.ReservationDAO;
+import com.kedu.dao.TravelPlanDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dao.WishlistDAO;
 import com.kedu.dto.MembersDTO;
@@ -37,6 +38,8 @@ public class MembersControllers {
 	private EmailService emailService;
 	@Autowired
 	private WishlistDAO wdao;
+	@Autowired
+	private TravelPlanDAO tpdao;
 	
 	@RequestMapping("/loginpage")
 	public String loginPage() {
@@ -103,27 +106,40 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/mypage")
-	public String mypage(Integer cpage, HttpSession session, Model model) {
+	public String mypage(Integer cpage, Integer wishCpage, HttpSession session, Model model) {
 	    String memberId = (String) session.getAttribute("loginId");
-
-	    if(cpage == null) {
-	        cpage = 1;
-	    }
-
 	    int pagesize = 3;
 
-	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize);
-	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
-
+	    // 1. 예약 내역 페이징
+	    if(cpage == null || cpage < 1) cpage = 1;
 	    int totalCount = rdao.reservationCount(memberId);
 	    int totalPage = (int)Math.ceil((double)totalCount / pagesize);
+	    if(totalPage > 0 && cpage > totalPage) cpage = totalPage;
+	    if(totalPage == 0) cpage = 1;
+	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize);
+
+	    // 2. 찜 목록 페이징
+	    if(wishCpage == null || wishCpage < 1) wishCpage = 1;
+	    int wishTotalCount = wdao.countByWish(memberId);
+	    int wishTotalPage = (int)Math.ceil((double)wishTotalCount / pagesize);
+	    if(wishTotalPage > 0 && wishCpage > wishTotalPage) wishCpage = wishTotalPage;
+	    if(wishTotalPage == 0) wishCpage = 1;
+	    int wishStart = (wishCpage - 1) * pagesize + 1;
+	    int wishEnd = wishCpage * pagesize;
+	    List<PlaceDTO> wishList = wdao.selectByWish(memberId, wishStart, wishEnd);
+
+	    // 3. 마일리지 조회
 	    int mileage = mdao.getMileage(memberId);
-	    
-	    model.addAttribute("mileage",mileage);
-	    model.addAttribute("wishList", wishList);
+	    	    
+	    // 4. JSP로 데이터 전달
+	    model.addAttribute("myPlannerList",tpdao.selectMyPlansWithCount(memberId));
+	    model.addAttribute("mileage", mileage);
 	    model.addAttribute("myRsList", myRsList);
 	    model.addAttribute("cpage", cpage);
 	    model.addAttribute("totalPage", totalPage);
+	    model.addAttribute("wishList", wishList);
+	    model.addAttribute("wishCpage", wishCpage);
+	    model.addAttribute("wishTotalPage", wishTotalPage);
 
 	    return "members/mypage";
 	}

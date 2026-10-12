@@ -24,6 +24,7 @@ import com.kedu.dao.ReplyDAO;
 import com.kedu.dao.ReviewDAO;
 import com.kedu.dto.BoardDTO;
 import com.kedu.dto.FilesDTO;
+import com.kedu.dto.ReplyDTO;
 
 @Controller
 @RequestMapping("/board")
@@ -50,7 +51,6 @@ public class BaordController {
 		List<BoardDTO> list = bdao.selectFromTo(cpage * 10 - 9, cpage * 10);
 		for(BoardDTO board : list) {
 		    board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
-		    System.out.println(board.getSeq() + "번 추천수 : " + board.getRecommendCount());
 		}
 		
 		model.addAttribute("boardList", list);
@@ -71,9 +71,62 @@ public class BaordController {
 		model.addAttribute("naviCountPerpage", 10);
 		model.addAttribute("cpage",cpage);
 		model.addAttribute("latest", true);
+		model.addAttribute("sort", "latest");
+		model.addAttribute("keyword", "");
 		model.addAttribute("boardUrl", "/board/freeBoard");
 		
 		return "board/freeBoard";
+	}
+	
+	@RequestMapping("/searchFreeBoard")
+	public String searchBoard(String keyword, String sort, int cpage, Model model) {
+
+	    if (keyword == null) {
+	        keyword = "";
+	    }
+
+	    if (sort == null || sort.isEmpty()) {
+	        sort = "latest";
+	    }
+
+	    List<BoardDTO> list = bdao.searchFreeBoard(keyword, sort, cpage * 10 - 9, cpage * 10);
+
+	    for (BoardDTO board : list) {
+	        board.setRecommendCount(
+	                recommendDao.recommendCount(board.getSeq()));
+	    }
+
+	    model.addAttribute("boardList", list);
+
+	    List<Integer> fileList = new ArrayList<>();
+
+	    for (BoardDTO board : list) {
+	        if (fdao.hasFile(board.getSeq())) {
+	            fileList.add(board.getSeq());
+	        }
+	    }
+
+	    model.addAttribute("fileList", fileList);
+
+	    int boardCount = bdao.searchBoardCount(keyword);
+
+	    model.addAttribute("boardCount", boardCount);
+	    model.addAttribute("recordTotalCount", boardCount);
+	    model.addAttribute("recordCountPerPage", 10);
+	    model.addAttribute("naviCountPerpage", 10);
+	    model.addAttribute("cpage", cpage);
+	    
+	    model.addAttribute("sort", sort);
+	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("latest", "latest".equals(sort));
+	    model.addAttribute("view", "view".equals(sort));
+	    model.addAttribute("recommend", "recommend".equals(sort));
+	    model.addAttribute("reply", "reply".equals(sort));
+
+	    model.addAttribute("boardUrl",
+	            "/board/searchFreeBoard?keyword=" + keyword + "&sort=" + sort);
+
+	    return "board/freeBoard";
 	}
 	
 	@RequestMapping("/viewBoard")
@@ -142,6 +195,41 @@ public class BaordController {
 	    return "board/freeBoard";
 	}
 	
+
+@RequestMapping("/replyBoard")
+public String replyBoard(int cpage, Model model) {
+
+    List<BoardDTO> list = bdao.selectReplyCount(cpage * 10 - 9, cpage * 10);
+
+    for(BoardDTO board : list) {
+        board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
+    }
+
+    model.addAttribute("boardList", list);
+
+    List<Integer> fileList = new ArrayList<>();
+    for(BoardDTO board : list) {
+        if(fdao.hasFile(board.getSeq())) {
+            fileList.add(board.getSeq());
+        }
+    }
+
+    model.addAttribute("fileList", fileList);
+
+    int boardCount = bdao.boardCount();
+
+    model.addAttribute("boardCount", boardCount);
+    model.addAttribute("recordTotalCount", boardCount);
+    model.addAttribute("recordCountPerPage", 10);
+    model.addAttribute("naviCountPerpage", 10);
+    model.addAttribute("cpage", cpage);
+    model.addAttribute("reply", true);
+    model.addAttribute("boardUrl", "/board/replyBoard");
+
+    return "board/freeBoard";
+}
+
+	
 	@RequestMapping("/boardWrite")
 	public String boardWrite(int cpage, Model model) {
 	    model.addAttribute("cpage", cpage);
@@ -162,7 +250,6 @@ public class BaordController {
 		String path = "\\\\10.5.4.10\\gott_uploads\\";
 		
 		for (MultipartFile file : attachFiles) {
-			 System.out.println("첨부파일 : " + file.getOriginalFilename());
 			if (file.isEmpty()) {
 				continue;
 			}
@@ -222,9 +309,6 @@ public class BaordController {
 	
 	@RequestMapping("/download")
 	public void download(String oriname, String sysname, HttpServletResponse resp, Model model) throws Exception {
-		
-		System.out.println("원본파일명 : " + oriname);
-	    System.out.println("시스템파일명 : " + sysname);
 		
 	    String path = "\\\\10.5.4.10\\gott_uploads\\";
 		File target = new File(path + sysname);
