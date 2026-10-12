@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kedu.commons.TagSplitUtil;
 import com.kedu.dao.PlaceDAO;
 import com.kedu.dao.ReviewDAO;
+import com.kedu.dao.ReviewRecommendDAO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.ReviewDTO;
 
@@ -25,6 +26,9 @@ public class ReviewController {
 	
 	@Autowired
 	private PlaceDAO pdao;
+	
+	@Autowired
+	private ReviewRecommendDAO rrdao;
 	
 	@RequestMapping("/reviewBoard")
 	public String reviewBoard(int cpage, Model model) {
@@ -55,15 +59,22 @@ public class ReviewController {
 	}
 	
 	@RequestMapping("/detail")
-	public String datail(int seq, Model model) {
+	public String datail(int seq, int place_id, Model model, HttpSession session) {
+		rdao.viewCountUp(seq);
 		ReviewDTO rdto = rdao.selectOne(seq);
 		String[] myTags = TagSplitUtil.tagSplit(rdto.getTag());
 		String nickname = rdao.nicknameSearch(seq);
 		String placeName = rdao.targetSearch(rdto.getTarget_id());
+		PlaceDTO pdto = pdao.selectOne(place_id);
+		int recommend_count = rrdao.recommendCount(seq);
+		boolean isRecommend = rrdao.isRecommend(seq, (String)session.getAttribute("loginId"));
+		model.addAttribute("isRecommend", isRecommend);
+		model.addAttribute("recommend_count", recommend_count);
 		model.addAttribute("rdto", rdto);
 		model.addAttribute("myTags", myTags);
 		model.addAttribute("nickname", nickname);
 		model.addAttribute("placeName", placeName);
+		model.addAttribute("pdto", pdto);
 		return "/board/reviewContent";
 	}
 
@@ -72,4 +83,25 @@ public class ReviewController {
 		rdao.delete(seq);
 		return "redirect:/review/reviewBoard?cpage=1";
 	}
+	
+	@RequestMapping("/update")
+	public String update(ReviewDTO rdto) {
+		rdao.update(rdto);
+		return "redirect:/review/reviewBoard?cpage=1";
+	}
+	
+	@RequestMapping("/recommendUp")
+	public String recommendUp(int seq, HttpSession session, Model model) {
+		rrdao.recommendUp(seq, (String)session.getAttribute("loginId"));
+		ReviewDTO rdto = rdao.selectOne(seq);
+		return "redirect:/review/detail?seq="+seq+"&place_id="+rdto.getTarget_id();
+	}
+	
+	@RequestMapping("/recommendDown")
+	public String recommendDown(int seq, HttpSession session, Model model) {
+		rrdao.recommendDown(seq, (String)session.getAttribute("loginId"));
+		ReviewDTO rdto = rdao.selectOne(seq);
+		return "redirect:/review/detail?seq="+seq+"&place_id="+rdto.getTarget_id();
+	}
+	
 }
