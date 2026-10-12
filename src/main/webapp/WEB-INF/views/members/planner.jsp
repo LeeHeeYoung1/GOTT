@@ -557,6 +557,14 @@
     font-size: 11px;
 }
 
+.plannerTitle {
+    margin: 0 0 8px;
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
 
 /* 일정 하단 요약 */
 
@@ -853,6 +861,142 @@
     }
 }
 
+
+/* 하단 일정 완료 바 */
+.finishBar {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    width: 100%;
+    min-height: 76px;
+    padding: 14px 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    color: #475569;
+    background-color: rgba(255,255,255,0.97);
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -4px 18px rgba(38,50,56,0.04);
+    font-size: 13px;
+    backdrop-filter: blur(8px);
+}
+#totalPlanSummary {
+    flex: 1;
+    min-width: 0;
+    color: #475569;
+    line-height: 1.6;
+}
+.finishBtns {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+.finishBtns button {
+    min-height: 40px;
+    padding: 10px 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    background-color: #ffffff;
+    border: 1px solid #dbe3ed;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s,color 0.2s,border-color 0.2s;
+}
+.finishBtns button:hover {
+    color: #0f766e;
+    background-color: #eef8f6;
+    border-color: #a7dcd5;
+}
+.finishBtns #sharePlanBtn {
+    color: #ffffff;
+    background-color: #0f766e;
+    border-color: #0f766e;
+}
+.finishBtns #sharePlanBtn:hover {
+    background-color: #115e59;
+    border-color: #115e59;
+}
+
+/* 공유 패널 */
+.sharePanel {
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 1px solid #e2e8f0;
+}
+#toggleBottom {
+    width: 100%;
+    height: 32px;
+    color: #64748b;
+    background-color: #f8fafc;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+#toggleBottom:hover {
+    color: #0f766e;
+    background-color: #eef8f6;
+}
+.sharePanelContent {
+    display: none;
+    padding: 20px 24px;
+}
+.sharePanelContent h4 {
+    margin: 0 0 10px;
+    color: #263238;
+    font-size: 15px;
+}
+.sharePanelContent p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.7;
+}
+#shareResult {
+    margin-top: 12px;
+    overflow-wrap: anywhere;
+}
+
+#toggleBottom {
+    width: 100%;
+    min-height: 58px;
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #64748b;
+    background-color: #f8fafc;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s,color 0.2s;
+}
+#toggleBottom:hover {
+    color: #0f766e;
+    background-color: #eef8f6;
+}
+#toggleArrow {
+    font-size: 19px;
+    line-height: 1;
+}
+.toggleLabel {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+
+
 </style>
 
 <div class="container">
@@ -951,11 +1095,13 @@
                 <div class="dayTabs" id="dayTabs"></div>
 
                 <div class="dayBody">
+                	<p class="plannerTitle" id="plannerTitle"></p>
                     <p class="dayDate" id="dayDate"></p>
                     <div class="dropEmpty">＋ 버튼으로 나의 일정에 장소를 추가하세요</div>
                 </div>
 
-                <div class="dayFooter">Day ? · 방문지 ?곳 · 이동거리 약 ?km</div>
+                <div class="dayFooter" id="dayFooter">Day ? · 방문지 ?곳</div>
+                
             </div>
 
             <!-- 오른쪽: 지도 + 요약 -->
@@ -963,8 +1109,7 @@
                 <div class="mapTitle">동선 미리보기</div>
                 <div class="mapSlot" id="map"></div>
                 <div class="mapSummary">
-                    <div><span>총 일정 기간</span><b>?박 ?일</b></div>
-                    <div><span>총 방문지 수</span><b>??곳</b></div>
+                    <div>내 마음대로 떠나자</div>
                 </div>
             </div>
 
@@ -972,33 +1117,79 @@
     </div>
 
     <!-- 하단 완료 바 -->
-    <div class="finishBar">
-        <div>총 <b>?일</b> 일정 · 방문지 <b>??곳</b> 등록됨</div>
-        <div class="finishBtns">
-            <button type="button">임시저장</button>
-            <button type="button">미리보기</button>
-            <button type="button">완성하고 링크 공유하기</button>
-        </div>
-    </div>
+
+	<div class="finishBar">
+	    <div id="totalPlanSummary">총 0일 일정 · 방문지 0곳 등록됨</div>
+	    <div class="finishBtns">
+	        <button type="button">임시저장</button>
+	        <button type="button">미리보기</button>
+	        <button type="button" id="sharePlanBtn">완성하고 공유하기</button>
+	    </div>
+	</div>
+	
+	<!-- 공유 결과 영역 -->
+	
+	<div class="sharePanel">
+	    <button type="button" id="toggleBottom" aria-expanded="false">
+	        <span id="toggleArrow">⌃</span>
+	        <span class="toggleLabel">여행 일정 구경하기</span>
+	    </button>
+	    <div class="sharePanelContent" id="sharePanelContent">
+	        <h4>여행 일정 공유</h4>
+	        <p>완성한 여행 일정을 저장하고 공유할 수 있습니다.</p>
+	        <div id="shareResult"></div>
+	    </div>
+	</div>
+
 
 </div>
 
+
 <script>
 
-$(document).ready(function() {
 
+$("#toggleBottom").on("click", function() {
+    let isOpen = $("#sharePanelContent").is(":visible");
+    $("#sharePanelContent").stop(true, true).slideToggle(200);
+    $(this).text(isOpen ? "⌃" : "⌄");
+    $(this).attr("aria-expanded", !isOpen);
+});
+
+$(document).ready(function() {
+    let daySchedules = {};
+    let currentDay = 1;
+    
+    function updateDayFooter() {
+        let count = (daySchedules[currentDay] || []).length;
+        $("#dayFooter").text("Day " + currentDay + " · 방문지 " + count + "곳");
+    }
+    
+ 	// 전체 여행 일정 요약
+    function updateTotalPlanSummary() {
+        let totalDays = Object.keys(daySchedules).length;
+        let totalPlaces = 0;
+
+        Object.values(daySchedules).forEach(function(places) {
+            totalPlaces += places.length;
+        });
+
+        $("#totalPlanSummary").text(
+            "총 " + totalDays + "일 일정 · 방문지 " + totalPlaces + "곳 등록됨"
+        );
+    }
+
+    // 일정 생성
     $("#createPlaner").on("click", function() {
         let title = $("input[name='title']").val().trim();
         let startDate = $("input[name='startDate']").val();
         let endDate = $("input[name='endDate']").val();
 
         if (title == "") {
-            alert("제목을 입력해주세요");
+            alert("제목을 입력해주세요.");
             return;
         }
-
         if (startDate == "" || endDate == "") {
-            alert("날짜 입력해주세요");
+            alert("여행 시작일과 종료일을 입력해주세요.");
             return;
         }
 
@@ -1006,9 +1197,18 @@ $(document).ready(function() {
         let end = new Date(endDate + "T00:00:00");
 
         if (start > end) {
-            alert("날짜 잘못 줴줴이~");
+            alert("종료일은 시작일보다 빠를 수 없습니다.");
             return;
         }
+
+        $("#plannerTitle").text(title);
+
+        // 기존 일정 초기화
+        daySchedules = {};
+        currentDay = 1;
+        $(".timelineItem").remove();
+        $(".dropEmpty").remove();
+        clearMarkers();
 
         let dayTabs = $("#dayTabs");
         dayTabs.empty();
@@ -1023,6 +1223,9 @@ $(document).ready(function() {
             let date = String(currentDate.getDate()).padStart(2, "0");
             let dayOfWeek = week[currentDate.getDay()];
 
+            // 날짜별 독립 일정 배열
+            daySchedules[day] = [];
+
             let dayTab = $("<div>")
                 .addClass("dayTab")
                 .text("Day " + day);
@@ -1035,11 +1238,6 @@ $(document).ready(function() {
 
             if (day == 1) {
                 dayTab.addClass("active");
-
-                $("#dayDate").text(
-                    year + "." + month + "." + date +
-                    " (" + dayOfWeek + ") · " + day + "일차"
-                );
             }
 
             dayTabs.append(dayTab);
@@ -1047,13 +1245,11 @@ $(document).ready(function() {
             day++;
         }
 
-        // 수정: 일정 생성이 성공한 뒤에만 + 버튼 활성화
         $(".addBtn").prop("disabled", false);
-
+        renderDay(1);
     });
 
-
-    // 관광지, 맛집, 숙소 탭 필터링
+    // 관광지, 맛집, 숙소 필터링
     function filterWishList(type) {
         $(".wishItem").each(function() {
             if ($(this).data("type") == type) {
@@ -1067,191 +1263,250 @@ $(document).ready(function() {
     $(".tableTitle").on("click", function() {
         $(".tableTitle").removeClass("active");
         $(this).addClass("active");
-
-        let type = $(this).data("type");
-        filterWishList(type);
+        filterWishList($(this).data("type"));
     });
 
-    // 플래너에 처음 들어오면 관광지만 표시
     filterWishList("SPOT");
 
-
-    // 날짜별 Day 탭 클릭
-    $(document).on("click", ".dayTab", function() {
-        $(".dayTab").removeClass("active");
-        $(this).addClass("active");
-
-        let year = $(this).data("year");
-        let month = $(this).data("month");
-        let date = $(this).data("date");
-        let dayOfWeek = $(this).data("dayOfWeek");
-        let day = $(this).data("day");
-
-        $("#dayDate").text(
-            year + "." + month + "." + date +
-            "(" + dayOfWeek + ")." + day + "일차"
-        );
-    });
-
-
-    // 카카오 지도 API
-    var container = document.getElementById("map");
-    var options = {
+    // 카카오 지도 초기화
+    let container = document.getElementById("map");
+    let options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
         level: 8
     };
+    let map = new kakao.maps.Map(container, options);
+    let markers = [];
 
-    var map = new kakao.maps.Map(container, options);
-
-    var markers = [];
-
-    var polyline = new kakao.maps.Polyline({
+    let polyline = new kakao.maps.Polyline({
         path: [],
         strokeWeight: 5,
         strokeColor: "#FF0000",
         strokeOpacity: 0.7,
         strokeStyle: "solid"
     });
-
     polyline.setMap(map);
 
+    // 날짜별 탭 클릭
+    $(document).on("click", ".dayTab", function() {
+        $(".dayTab").removeClass("active");
+        $(this).addClass("active");
+        currentDay = $(this).data("day");
+        renderDay(currentDay);
+    });
 
-    // 수정: 일정 생성 전 장소 추가 차단
+    // 선택한 날짜의 일정과 지도 표시
+    function renderDay(day) {
+        $(".timelineItem").remove();
+        $(".dropEmpty").remove();
+        clearMarkers();
+
+        let selectedTab = $(".dayTab").filter(function() {
+            return $(this).data("day") == day;
+        });
+
+        if (selectedTab.length > 0) {
+            let year = selectedTab.data("year");
+            let month = selectedTab.data("month");
+            let date = selectedTab.data("date");
+            let dayOfWeek = selectedTab.data("dayOfWeek");
+
+            $("#dayDate").text(
+                year + "." + month + "." + date +
+                " (" + dayOfWeek + ") · " + day + "일차"
+            );
+        }
+
+        let schedules = daySchedules[day] || [];
+
+        if (schedules.length == 0) {
+            $(".dayBody").append(
+                '<div class="dropEmpty">＋ 버튼으로 나의 일정에 장소를 추가하세요</div>'
+            );
+        } else {
+            schedules.forEach(function(place) {
+                addTimelineItem(place);
+                addMarker(place);
+            });
+        }
+
+        updateOrder();
+        updatePolyline();
+        updateDayFooter();
+        updateTotalPlanSummary();
+    }
+
+    // 찜 목록에서 장소 추가
     window.addPlace = function(placeId, lat, lng, name, placeType) {
         if ($("#dayTabs .dayTab").length == 0) {
             alert("먼저 일정 제목과 여행 날짜를 입력하고 일정을 생성해주세요.");
             return;
         }
 
-        // 기존 기능 유지
-        addTimelineItem(placeId, name, placeType);
-        addMarker(placeId, lat, lng, name);
-    };
-
-
-    // 마커 생성
-    function addMarker(placeId, lat, lng, name) {
-        var position = new kakao.maps.LatLng(lat, lng);
-
-        var marker = new kakao.maps.Marker({
-            position: position,
-            map: map
-        });
-
-        markers.push({
-            placeId: placeId,
-            name: name,
-            marker: marker,
-            position: position
-        });
-
-        updatePolyline();
-        map.setCenter(position);
-    }
-
-
-    // 경로 업데이트
-    function updatePolyline() {
-        var linePath = [];
-
-        for (var i = 0; i < markers.length; i++) {
-            linePath.push(markers[i].position);
+        if (!daySchedules[currentDay]) {
+            daySchedules[currentDay] = [];
         }
 
-        polyline.setPath(linePath);
-    }
+        // 같은 날짜에 같은 장소 중복 추가 방지
+        let exists = daySchedules[currentDay].some(function(place) {
+            return String(place.placeId) == String(placeId);
+        });
 
+        if (exists) {
+            alert("현재 날짜에 이미 추가된 장소입니다.");
+            return;
+        }
 
-    // 일정표에 장소 추가
-    function addTimelineItem(placeId, name, placeType) {
-        var count = $(".timelineItem").length + 1;
+        // 찜 목록에서 이미지와 지역 정보 가져오기
+        let wishItem = $(".wishItem").filter(function() {
+            let onclickText = $(this).find(".addBtn").attr("onclick") || "";
+            return onclickText.includes(String(placeId));
+        }).first();
 
-        var timelineItem = $("<div>")
+        let image = wishItem.find(".wishThumb img").attr("src") || "/images/logo.png";
+        let region = wishItem.find(".wishText p").text() || "";
+
+        let place = {
+            placeId: placeId,
+            lat: Number(lat),
+            lng: Number(lng),
+            name: name,
+            placeType: placeType,
+            image: image,
+            region: region,
+            time: ""
+        };
+
+        // 현재 날짜 배열에 저장
+        daySchedules[currentDay].push(place);
+
+        // 현재 날짜 화면 갱신
+        renderDay(currentDay);
+    };
+
+    // 일정표에 장소 표시
+    function addTimelineItem(place) {
+        let count = daySchedules[currentDay].findIndex(function(item) {
+            return item.placeId == place.placeId;
+        }) + 1;
+
+        let timelineItem = $("<div>")
             .addClass("timelineItem")
-            .attr("data-place-id", placeId);
+            .attr("data-place-id", place.placeId);
 
-        var orderMark = $("<span>")
+        let orderMark = $("<span>")
             .addClass("orderMark")
             .text(count);
 
-        var timelineCard = $("<div>").addClass("timelineCard");
-
-        var dragHandle = $("<span>")
+        let dragHandle = $("<span>")
             .addClass("dragHandle")
             .text("⋮⋮");
 
-        var thumb = $("<div>")
+        let thumb = $("<div>")
             .addClass("wishThumb")
             .append(
                 $("<img>")
-                    .attr("src", "/images/logo.png")
-                    .css({
-                        width: "50px",
-                        height: "50px"
-                    })
+                    .attr("src", place.image)
+                    .attr("alt", place.name)
             );
 
-        var typeText;
-
-        if (placeType == "SPOT") {
-            typeText = "관광지";
-        } else if (placeType == "FOOD") {
+        let typeText = "관광지";
+        if (place.placeType == "FOOD") {
             typeText = "맛집";
-        } else if (placeType == "STAY") {
+        } else if (place.placeType == "STAY") {
             typeText = "숙박업소";
-        } else {
-            typeText = placeType;
         }
 
-        var wishText = $("<div>")
+        let wishText = $("<div>")
             .addClass("wishText")
             .append($("<p>").text(typeText))
-            .append($("<span>").text(name));
+            .append($("<span>").text(place.name));
 
-        var timeInput = $("<input>")
+        let timeInput = $("<input>")
             .attr("type", "text")
             .addClass("timeInput")
-            .attr("placeholder", "시간");
+            .attr("placeholder", "시간")
+            .val(place.time)
+            .on("input", function() {
+                place.time = $(this).val();
+            });
 
-        var deleteButton = $("<button>")
+        let deleteButton = $("<button>")
             .attr("type", "button")
             .text("✕");
 
-        timelineCard
+        let timelineCard = $("<div>")
+            .addClass("timelineCard")
             .append(dragHandle)
             .append(thumb)
             .append(wishText)
             .append(timeInput)
             .append(deleteButton);
 
-        timelineItem
-            .append(orderMark)
-            .append(timelineCard);
+        timelineItem.append(orderMark).append(timelineCard);
 
-        $(".dropEmpty").before(timelineItem);
+        $(".dayDate").after(timelineItem);
 
-        // 일정에서 장소 삭제
+        // 현재 날짜에서 장소 삭제
         deleteButton.on("click", function() {
-            timelineItem.remove();
-            removeMarker(placeId);
-            updateOrder();
+            daySchedules[currentDay] = daySchedules[currentDay].filter(function(item) {
+                return String(item.placeId) != String(place.placeId);
+            });
+            renderDay(currentDay);
         });
     }
 
-
-    // 지도에서 마커 삭제
-    function removeMarker(placeId) {
-        for (var i = 0; i < markers.length; i++) {
-            if (markers[i].placeId == placeId) {
-                markers[i].marker.setMap(null);
-                markers.splice(i, 1);
-                break;
-            }
+    // 현재 날짜의 마커 생성
+    function addMarker(place) {
+        if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
+            place.lat < -90 || place.lat > 90 ||
+            place.lng < -180 || place.lng > 180) {
+            return;
         }
 
-        updatePolyline();
+        let position = new kakao.maps.LatLng(place.lat, place.lng);
+        let marker = new kakao.maps.Marker({
+            position: position,
+            map: map
+        });
+
+        markers.push({
+            placeId: place.placeId,
+            marker: marker,
+            position: position
+        });
+
+        map.setCenter(position);
     }
 
+    // 현재 화면의 마커 제거
+    function clearMarkers() {
+        markers.forEach(function(item) {
+            item.marker.setMap(null);
+        });
+        markers = [];
+        polyline.setPath([]);
+    }
+
+    // 현재 날짜의 경로 업데이트
+    function updatePolyline() {
+        let linePath = [];
+
+        markers.forEach(function(item) {
+            linePath.push(item.position);
+        });
+
+        polyline.setPath(linePath);
+
+        if (linePath.length > 1) {
+            let bounds = new kakao.maps.LatLngBounds();
+            linePath.forEach(function(position) {
+                bounds.extend(position);
+            });
+            map.setBounds(bounds);
+        } else if (linePath.length == 1) {
+            map.setCenter(linePath[0]);
+        }
+    }
 
     // 일정 순서 번호 갱신
     function updateOrder() {
@@ -1259,9 +1514,8 @@ $(document).ready(function() {
             $(this).find(".orderMark").text(index + 1);
         });
     }
-
 });
-
 </script>
+
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
