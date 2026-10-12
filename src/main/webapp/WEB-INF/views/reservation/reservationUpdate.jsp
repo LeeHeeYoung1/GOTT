@@ -553,105 +553,166 @@ body {
     </div>
 
 
-    <!-- =========================
-         변경
-    ========================== -->
-
-    <div class="bottom_area">
-
-        <div class="price_text">
-
-            현재 결제금액 :
-            <fmt:formatNumber
-                value="${reservation.price}"
-                pattern="#,###"/>원
-
-        </div>
-
-        <button type="button" class="update_btn">
-            예약 변경
-        </button>
-
-    </div>
+    <div class="price_text">
+	    기존 결제금액: <strong><fmt:formatNumber value="${reservation.price}" pattern="#,###"/>원</strong>
+	    <br>
+	    변경 후 예상 금액: <strong id="expectedPrice"><fmt:formatNumber value="${reservation.price}" pattern="#,###"/>원</strong>
+	    <br>
+	    <span id="priceDifference"></span>
+	</div>
+	
+	<div class="bottom_area">
+    	<button type="button" class="update_btn">예약 변경</button>
+	</div>
 
 </div>
 
 
 <script>
 
-/* =========================
-   선택된 객실
-========================= */
 
-$(".room_card_div").on("click", function() {
+$(document).ready(function() {
+    // 1. 객실 선택
+    $(".room_card_div").on("click", function() {
+        $(".room_card_div").removeClass("selected");
+        $(this).addClass("selected");
+        calculatePrice();
+    });
 
-    $(".room_card_div").removeClass("selected");
+    // 2. 체크인·체크아웃 날짜 변경 시 금액 재계산
+    $("#checkIn, #checkOut").on("change", function() {
+        calculatePrice();
+    });
 
-    $(this).addClass("selected");
+    // 3. 인원수 감소
+    $("#minusGuest").on("click", function() {
+        let guest = Number($("#guestCount").text());
+        if (guest > 1) {
+            $("#guestCount").text(guest - 1);
+        }
+    });
 
-    let roomId = $(this).data("room-id");
-
-    console.log("선택한 roomId : " + roomId);
-
-});
-
-
-/* =========================
-   인원 감소
-========================= */
-
-$("#minusGuest").on("click", function() {
-
+    // 4. 인원수 증가
+    $("#minusGuest").on("click", function() {
     let guest = Number($("#guestCount").text());
-
     if (guest > 1) {
+        $("#guestCount").text(guest - 1);
+        calculatePrice();
+    }
+	});
+	$("#plusGuest").on("click", function() {
+	    let guest = Number($("#guestCount").text());
+	    $("#guestCount").text(guest + 1);
+	    calculatePrice();
+	});
+	
+    // 5. 변경 후 예상 금액 계산
+    function calculatePrice() {
+        let roomId = $(".room_card_div.selected").data("room-id");
+        let checkIn = $("#checkIn").val();
+        let checkOut = $("#checkOut").val();
 
-        guest--;
+        if (!roomId || !checkIn || !checkOut || checkIn >= checkOut) {
+            $("#priceDifference").text("날짜와 객실을 확인해 주세요.");
+            return;
+        }
 
-        $("#guestCount").text(guest);
+        $.ajax({
+            url: "${pageContext.request.contextPath}/reservation/calculateUpdatePrice",
+            type: "GET",
+            data: {
+                roomId: roomId,
+                checkIn: checkIn,
+                checkOut: checkOut,
+                guestNum: Number($("#guestCount").text())
+            },
+            success: function(price) {
+                price = Number(price);
 
+                $("#expectedPrice").text(price.toLocaleString("ko-KR") + "원");
+
+                let oldPrice = Number("${reservation.price}");
+                let difference = price - oldPrice;
+
+                if (difference > 0) {
+                    $("#priceDifference").text(
+                        "추가 결제 예상: " + difference.toLocaleString("ko-KR") + "원"
+                    );
+                } else if (difference < 0) {
+                    $("#priceDifference").text(
+                        "환불 예상: " + Math.abs(difference).toLocaleString("ko-KR") + "원"
+                    );
+                } else {
+                    $("#priceDifference").text("금액 변동 없음");
+                }
+            },
+            error: function() {
+                alert("변경 금액 계산에 실패했습니다.");
+            }
+        });
     }
 
+    // 6. 예약 변경 저장
+    $(".update_btn").on("click", function() {
+        let roomId = $(".room_card_div.selected").data("room-id");
+        let checkIn = $("#checkIn").val();
+        let checkOut = $("#checkOut").val();
+        let guest = Number($("#guestCount").text());
+        let paymentId = new URLSearchParams(window.location.search).get("paymentId");
+
+        if (!paymentId || !roomId) {
+            alert("예약 정보 또는 객실을 확인해 주세요.");
+            return;
+        }
+
+        if (!checkIn || !checkOut || checkIn >= checkOut) {
+            alert("체크인과 체크아웃 날짜를 확인해 주세요.");
+            return;
+        }
+
+        if (!Number.isInteger(guest) || guest < 1) {
+            alert("인원수를 확인해 주세요.");
+            return;
+        }
+
+        if (!confirm("예약 정보를 변경하시겠습니까?")) {
+            return;
+        }
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/reservation/reservationUpdateSave",
+            type: "POST",
+            data: {
+                paymentId: paymentId,
+                roomId: roomId,
+                checkIn: checkIn,
+                checkOut: checkOut,
+                guestNum: guest
+            },
+            success: function(result) {
+                result = String(result).trim();
+
+                if (result === "success") {
+                    alert("예약이 변경되었습니다.");
+
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.location.reload();
+                    }
+
+                    window.close();
+                } else {
+                    alert(result || "예약 변경에 실패했습니다.");
+                }
+            },
+            error: function() {
+                alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+            }
+        });
+    });
+
+    // 7. 페이지가 열릴 때 현재 선택된 객실의 예상 금액 표시
+    calculatePrice();
 });
-
-
-/* =========================
-   인원 증가
-========================= */
-
-$("#plusGuest").on("click", function() {
-
-    let guest = Number($("#guestCount").text());
-
-    guest++;
-
-    $("#guestCount").text(guest);
-
-});
-
-
-/* =========================
-   예약 변경
-========================= */
-
-$(".update_btn").on("click", function() {
-
-    let roomId = $(".room_card_div.selected").data("room-id");
-
-    let checkIn = $("#checkIn").val();
-
-    let checkOut = $("#checkOut").val();
-
-    let guest = Number($("#guestCount").text());
-
-    console.log("roomId : " + roomId);
-    console.log("checkIn : " + checkIn);
-    console.log("checkOut : " + checkOut);
-    console.log("guest : " + guest);
-
-});
-
-
 </script>
 
 </body>

@@ -904,12 +904,13 @@ body{
                                     </div>
                                     <div class="reservationCondition">
                                          <button disabled>
-									        <c:choose>
-									            <c:when test="${reservationType eq 'completed'}">이용 완료</c:when>
-									            <c:when test="${reservationType eq 'cancelled'}">예약취소</c:when>
-									            <c:otherwise>이용 예정</c:otherwise>
-									        </c:choose>
-									    </button>
+										    <c:choose>
+										        <c:when test="${rs.reservationType eq 'completed'}">이용 완료</c:when>
+										        <c:when test="${rs.reservationType eq 'cancelled'}">예약취소</c:when>
+										        <c:when test="${rs.reservationType eq 'confirmed'}">예약완료</c:when>
+										        <c:otherwise>이용 예정</c:otherwise>
+										    </c:choose>
+										</button>
 									    <button type="button" class="detailBtn">예약 상세</button>
 									    <c:if test="${reservationType eq 'upcoming'}">
 									        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}">예약 변경</button>

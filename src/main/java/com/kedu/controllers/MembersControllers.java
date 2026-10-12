@@ -1,6 +1,7 @@
 package com.kedu.controllers;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +119,18 @@ public class MembersControllers {
 	    if(totalPage > 0 && cpage > totalPage) cpage = totalPage;
 	    if(totalPage == 0) cpage = 1;
 	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize);
+	    LocalDate today = LocalDate.now();
+	    for (ReservationDTO rs : myRsList) {
+	        if ("예약취소".equals(rs.getStatus())) {
+	            rs.setReservationType("cancelled");
+	        } else if (rs.getCheckOut().toLocalDate().isBefore(today)) {
+	            rs.setReservationType("completed");
+	        } else if (rs.getCheckIn().toLocalDate().isAfter(today)) {
+	            rs.setReservationType("confirmed");
+	        } else {
+	            rs.setReservationType("upcoming");
+	        }
+	    }
 
 	    // 2. 찜 목록 페이징
 	    if(wishCpage == null || wishCpage < 1) wishCpage = 1;
