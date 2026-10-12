@@ -14,8 +14,10 @@ import com.kedu.commons.TagSplitUtil;
 import com.kedu.dao.PlaceDAO;
 import com.kedu.dao.ReviewDAO;
 import com.kedu.dao.ReviewRecommendDAO;
+import com.kedu.dao.ReviewReplyDAO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.ReviewDTO;
+import com.kedu.dto.ReviewReplyDTO;
 
 @Controller
 @RequestMapping("/review")
@@ -28,16 +30,24 @@ public class ReviewController {
 	private PlaceDAO pdao;
 	
 	@Autowired
+	private ReviewReplyDAO rpdao;
+	
+	@Autowired
 	private ReviewRecommendDAO rrdao;
 	
 	@RequestMapping("/reviewBoard")
-	public String reviewBoard(int cpage, Model model) {
-		List<ReviewDTO> rList = rdao.selectFromTo(cpage * 9 - 8, cpage * 9);
+	public String reviewSort(int cpage, String sort, Model model) {
+		if (sort == null) {
+			sort = "new";
+		}
+		
+		List<ReviewDTO> rList = rdao.selectSort(cpage * 9 - 8, cpage * 9, sort);
 		model.addAttribute("rList", rList);
 		model.addAttribute("recordTotalCount", rdao.selectCount());
 		model.addAttribute("recordCountPerPage", 9);
 		model.addAttribute("naviCountPerPage", 10);
 		model.addAttribute("cpage", cpage);
+		model.addAttribute("sort", sort);
 		return "board/reviewBoard";
 	}
 	
@@ -68,6 +78,8 @@ public class ReviewController {
 		PlaceDTO pdto = pdao.selectOne(place_id);
 		int recommend_count = rrdao.recommendCount(seq);
 		boolean isRecommend = rrdao.isRecommend(seq, (String)session.getAttribute("loginId"));
+		List<ReviewReplyDTO> replyList = rpdao.selectAll(seq);
+		model.addAttribute("replyList", replyList);
 		model.addAttribute("isRecommend", isRecommend);
 		model.addAttribute("recommend_count", recommend_count);
 		model.addAttribute("rdto", rdto);
