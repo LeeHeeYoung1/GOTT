@@ -12,11 +12,12 @@ public class ReviewDTO {
 	private Timestamp reg_date;
 	private String tag;
 	private String image1;
-	
-	public ReviewDTO () {}
-	
+	private int view_count;
+
+	public ReviewDTO() {}
+
 	public ReviewDTO(int seq, String member_id, String target_type, int target_id, String contents, int rating,
-			Timestamp reg_date) {
+			Timestamp reg_date, String tag, String image1, int view_count) {
 		this.seq = seq;
 		this.member_id = member_id;
 		this.target_type = target_type;
@@ -24,59 +25,88 @@ public class ReviewDTO {
 		this.contents = contents;
 		this.rating = rating;
 		this.reg_date = reg_date;
+		this.tag = tag;
+		this.image1 = image1;
+		this.view_count = view_count;
 	}
+
 	public int getSeq() {
 		return seq;
 	}
+
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
+
 	public String getMember_id() {
 		return member_id;
 	}
+
 	public void setMember_id(String member_id) {
 		this.member_id = member_id;
 	}
+
 	public String getTarget_type() {
 		return target_type;
 	}
+
 	public void setTarget_type(String target_type) {
 		this.target_type = target_type;
 	}
+
 	public int getTarget_id() {
 		return target_id;
 	}
+
 	public void setTarget_id(int target_id) {
 		this.target_id = target_id;
 	}
+
 	public String getContents() {
 		return contents;
 	}
+
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
+
 	public int getRating() {
 		return rating;
 	}
+
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
+
 	public Timestamp getReg_date() {
 		return reg_date;
 	}
+
 	public void setReg_date(Timestamp reg_date) {
 		this.reg_date = reg_date;
 	}
-	public String getTag(){
-		return tag; 
+
+	public String getTag() {
+		return tag;
 	}
-	public void setTag(String tag){
-		this.tag = tag; 
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
-	public String getImage1(){
-		return image1; 
+
+	public String getImage1() {
+		return image1;
 	}
-	public void setImage1(String image1){
-		this.image1 = image1; 
+
+	public void setImage1(String image1) {
+		this.image1 = image1;
+	}
+
+	public int getView_count() {
+		return view_count;
+	}
+
+	public void setView_count(int view_count) {
+		this.view_count = view_count;
 	}
 }
