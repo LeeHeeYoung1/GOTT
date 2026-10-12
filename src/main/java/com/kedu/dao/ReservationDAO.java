@@ -86,6 +86,15 @@ public class ReservationDAO {
 	    );
 	}
 	
+	// 다가오는 예약 건수
+	public int upcomingReservationCount(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM reservation "
+	            + "WHERE member_id = ? "
+	            + "AND status = '예약완료' "
+	            + "AND check_out >= TRUNC(SYSDATE)";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
+	
 	public int reservationCount(String memberId) {
 	    String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ?";
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
@@ -122,6 +131,11 @@ public class ReservationDAO {
 	            + "JOIN room rm ON r.room_id = rm.room_id "
 	            + "WHERE r.payment_id = ?";
 	    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
+	}
+	
+	public int updateReservationDetails(String paymentId, String memberId, int roomId, java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int price) {
+	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, GUEST_NUM = ?, PRICE = ? WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, price, paymentId, memberId);
 	}
 	
 	

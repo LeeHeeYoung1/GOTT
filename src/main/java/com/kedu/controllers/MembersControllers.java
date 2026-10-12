@@ -1,6 +1,7 @@
 package com.kedu.controllers;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +119,18 @@ public class MembersControllers {
 	    if(totalPage > 0 && cpage > totalPage) cpage = totalPage;
 	    if(totalPage == 0) cpage = 1;
 	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize);
+	    LocalDate today = LocalDate.now();
+	    for (ReservationDTO rs : myRsList) {
+	        if ("예약취소".equals(rs.getStatus())) {
+	            rs.setReservationType("cancelled");
+	        } else if (rs.getCheckOut().toLocalDate().isBefore(today)) {
+	            rs.setReservationType("completed");
+	        } else if (rs.getCheckIn().toLocalDate().isAfter(today)) {
+	            rs.setReservationType("confirmed");
+	        } else {
+	            rs.setReservationType("upcoming");
+	        }
+	    }
 
 	    // 2. 찜 목록 페이징
 	    if(wishCpage == null || wishCpage < 1) wishCpage = 1;
@@ -135,12 +148,15 @@ public class MembersControllers {
 	    // 3-1. 찜 갯수표시
 	    int myWishTotalCount = wdao.countByWish(memberId);
 	    
-	    // 1-1. 이용 예정 예약 목록
+	    int upcomingCount = rdao.upcomingReservationCount(memberId);
+	    
+	    // 3-2. 이용 예정 예약 목록
 	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
-	    // 1-2. 이용 완료 예약 목록
+	    // 3-3. 이용 완료 예약 목록
 	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
 	    	    
 	    // 4. JSP로 데이터 전달
+	    model.addAttribute("upcomingCount", upcomingCount);
 	    model.addAttribute("today", LocalDate.now().toString());
 	    model.addAttribute("upcomingList", upcomingList);
 	    model.addAttribute("completedList", completedList);
