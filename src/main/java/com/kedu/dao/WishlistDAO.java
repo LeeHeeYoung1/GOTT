@@ -39,4 +39,16 @@ public class WishlistDAO {
 		String sql = "select p.* from Wishlist w join Place p on w.target_id = p.place_id where w.member_id = ? order by w.reg_date desc";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), memberId);
 	}
+	
+
+	public int countByWish(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM WISHLIST w JOIN PLACE p ON w.TARGET_ID = p.PLACE_ID WHERE w.MEMBER_ID = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
+
+
+	public List<PlaceDTO> selectByWish(String memberId, int start, int end) {
+	    String sql = "SELECT * FROM (SELECT p.*, ROW_NUMBER() OVER (ORDER BY w.REG_DATE DESC, w.WISHLIST_ID DESC) AS RN FROM WISHLIST w JOIN PLACE p ON w.TARGET_ID = p.PLACE_ID WHERE w.MEMBER_ID = ?) WHERE RN BETWEEN ? AND ?";
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), memberId, start, end);
+	}
 }
