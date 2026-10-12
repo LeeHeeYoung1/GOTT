@@ -19,23 +19,31 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kedu.commons.PriceUtil;
+import com.kedu.dao.MembersDAO;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.RoomDAO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.PlaceRoomDTO;
 import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.RoomDTO;
+import com.kedu.services.ReservationService;
 
 @Controller
 @RequestMapping("/reservation")
 public class ReservationController {
+	
+	@Autowired
+	private ReservationService reservationService;
 
 	@Autowired
 	private ReservationDAO rdao;
 
 	@Autowired
 	private RoomDAO roomDao;
-
+	
+	@Autowired
+	private MembersDAO mdao;
+	
 	@RequestMapping("/list")
 	public String list(int cpage, Model model) {
 		List<PlaceRoomDTO> roomList = roomDao.selectFromTo(cpage * 10 - 9, cpage * 10);
@@ -95,6 +103,7 @@ public class ReservationController {
 		int total_price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
 
 		model.addAttribute("placeOne", placeOne);
+		model.addAttribute("placeId", placeId);
 		model.addAttribute("roomDto", roomDto);
 		model.addAttribute("checkIn", checkIn);
 		model.addAttribute("checkOut", checkOut);
@@ -103,6 +112,28 @@ public class ReservationController {
 		model.addAttribute("total_price", total_price);
 
 		return "reservation/reservation";
+	}
+	
+	@RequestMapping("/finalPayment")
+	public String finalPayment(int placeId,int roomId,String checkIn,String checkOut,Integer adult,Integer child,
+			HttpSession session, Model model) {
+		RoomDTO roomDto = roomDao.roomOne(roomId);
+		PlaceDTO placeOne = rdao.placeOne(placeId);
+		
+		int total_price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+		String id = (String) session.getAttribute("loginId");
+		int mileage = mdao.getMileage(id);
+		
+		model.addAttribute("mileage", mileage);
+		model.addAttribute("placeOne", placeOne);
+		model.addAttribute("placeId", placeId);
+		model.addAttribute("roomDto", roomDto);
+		model.addAttribute("checkIn", checkIn);
+		model.addAttribute("checkOut", checkOut);
+		model.addAttribute("adult", adult);
+		model.addAttribute("child", child);
+		model.addAttribute("total_price", total_price);
+		return "reservation/finalPayment";
 	}
 
 	@RequestMapping("/reserve")
@@ -114,52 +145,69 @@ public class ReservationController {
 		return "redirect:reservation/list?cpage=1";
 	}
 
+
 	@RequestMapping("/paymentComplete")
 	public String paymentComplete(String paymentId, int roomId, String checkIn, String checkOut, int guest,
-			HttpSession session, Model model) throws Exception {
+	        int mileage, HttpSession session, Model model) throws Exception {
+	
 		String apiSecret = "1eCHxu85LeGUbtZZ3YDLU1SfgU2aZVuA6qROvuuNFiSuzSWOiRdaqGcoVVoMfbKxxbtNaRPOM6qsxBHH";
-		String url = "https://api.portone.io/payments/" + paymentId;
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "PortOne " + apiSecret);
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-		String body = response.getBody();
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode payment = mapper.readTree(body);
-		String status = payment.get("status").asText();
-		int paid = payment.get("amount").get("paid").asInt();
-		String currency = payment.get("currency").asText();
-
-		if (!"PAID".equals(status)) {
-			System.out.println("결제 상태가 PAID가 아닙니다.");
-			return "redirect:/";
-		}
-
-		if (!"KRW".equals(currency)) {
-			System.out.println("결제 통화가 KRW가 아닙니다.");
-			return "redirect:/";
-		}
-
-		RoomDTO roomDto = roomDao.roomOne(roomId);
-
-		if (roomDto == null) {
-			System.out.println("객실 정보를 찾을 수 없습니다.");
-			return "redirect:/";
-		}
-
-		int result = rdao.insert(roomDto, checkIn, checkOut, paid, guest, paymentId, session);
-		if (result > 0) {
-			System.out.println("예약 저장 성공");
-			System.out.println("결제 금액 = " + paid);
-		} else {
-			System.out.println("예약 저장 실패");
-		}
-		model.addAttribute("orderName", roomDto.getRoomName());
-		model.addAttribute("total", paid);
-		model.addAttribute("paymentId", paymentId);
-		return "reservation/paymentOk";
+	    if (apiSecret == null || apiSecret.isEmpty()) {
+	        throw new IllegalStateException("PortOne API Secret 설정이 필요합니다.");
+	    }
+	
+	    String url = "https://api.portone.io/payments/" + paymentId;
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set("Authorization", "PortOne " + apiSecret);
+	    HttpEntity<String> entity = new HttpEntity<>(headers);
+	
+	    RestTemplate restTemplate = new RestTemplate();
+	    ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+	
+	    String body = response.getBody();
+	    ObjectMapper mapper = new ObjectMapper();
+	    JsonNode payment = mapper.readTree(body);
+	    String status = payment.path("status").asText();
+	    int paid = payment.path("amount").path("paid").asInt();
+	    String currency = payment.path("currency").asText();
+	
+	    if (!"PAID".equals(status)) {
+	        System.out.println("결제 상태가 PAID가 아닙니다.");
+	        return "redirect:/";
+	    }
+	
+	    if (!"KRW".equals(currency)) {
+	        System.out.println("결제 통화가 KRW가 아닙니다.");
+	        return "redirect:/";
+	    }
+	
+	    RoomDTO roomDto = roomDao.roomOne(roomId);
+	    if (roomDto == null) {
+	        System.out.println("객실 정보를 찾을 수 없습니다.");
+	        return "redirect:/";
+	    }
+	
+	    String id = (String) session.getAttribute("loginId");
+	    if (id == null) {
+	        System.out.println("로그인 정보를 찾을 수 없습니다.");
+	        return "redirect:/";
+	    }
+	
+	    try {
+	        reservationService.saveReservation(id, mileage, roomDto, checkIn, checkOut,
+	                paid, guest, paymentId, session);
+	        System.out.println("예약 저장 및 마일리지 처리 성공");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        System.out.println("예약 저장 또는 마일리지 처리 실패");
+	        return "redirect:/";
+	    }
+	
+	    model.addAttribute("orderName", roomDto.getRoomName());
+	    model.addAttribute("total", paid);
+	    model.addAttribute("paymentId", paymentId);
+	    return "reservation/paymentOk";
 	}
+
 
 	@RequestMapping("/cancel")
 	@ResponseBody

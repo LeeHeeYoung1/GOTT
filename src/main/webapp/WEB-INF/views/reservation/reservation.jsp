@@ -213,7 +213,7 @@ form {
 	<div class="container">
 		<div class="header">${placeOne.name}</div>
 		<hr>
-		<form action="/reservation/reserve" method="post">
+		<form action="${pageContext.request.contextPath}/reservation/finalPayment" method="post">
 			<div class="photo">
 				<div class="room_img">
 					<c:if test="${not empty roomDto.image1}">
@@ -242,6 +242,7 @@ form {
 
 
 			<div class="room_info">
+				<input type="hidden" name="placeId" value="${placeId}">
 				<input type="hidden" name="roomId" value="${roomDto.roomId}">
 				<p class="roomName">${roomDto.roomName}</p>
 				<p class="roomCount">잔여 객실 수 : ${roomDto.roomCount}</p>
@@ -275,94 +276,11 @@ form {
 			</div>
 
 			<div class="buttons">
-				<button type="button" class="payment">결제하기</button>
+				<button class="payment">결제하기</button>
 				<button type="button" class="backBtn">돌아가기</button>
 			</div>
 		</form>
 	</div>
 
-	<script>
-		let idx = 0;
-		let length = $(".room_img").find("img").length;
-
-		$(".leftBtn").on(
-				"click",
-				function() {
-					if (length < 2)
-						return;
-					idx = (idx - 1 + length) % length;
-					$(".room_img").css("transform",
-							"translateX(" + (-idx * 100) + "%)");
-				})
-		$(".rightBtn").on(
-				"click",
-				function() {
-					if (length < 2)
-						return;
-					idx = (idx + 1 + length) % length;
-					$(".room_img").css("transform",
-							"translateX(" + (-idx * 100) + "%)");
-				})
-		$(".backBtn").on("click", function() {
-			history.back();
-		})
-		
-		
-		
-		$(".payment").on("click", async function() {
-
-    	const paymentId = "GOTT-" + crypto.randomUUID();
-
-    	const totalAmount = Number("${total_price}");
-
-    try {
-
-        const response = await PortOne.requestPayment({
-
-            storeId: "store-d4a75cb3-13cc-4226-b7fc-33d40089bf40",
-
-            channelKey: "channel-key-6b882be9-c6c2-4429-a3ba-2a04d40b1f0a",
-
-            paymentId: paymentId,
-
-            orderName: "${placeOne.name} ${roomDto.roomName}",
-
-            totalAmount: totalAmount,
-
-            currency: "CURRENCY_KRW",
-
-            payMethod: "CARD",
-
-            customer: {
-            	fullName: "${name}",
-                phoneNumber: "${phone}",
-                email: "${email}"
-            }
-        });
-
-        console.log(response);
-
-        if (response.code != null) {
-            alert("결제 실패 : " + response.message);
-            return;
-        }
-
-        location.href =
-            "/reservation/paymentComplete"
-            + "?paymentId=" + encodeURIComponent(paymentId)
-            + "&roomId=" + encodeURIComponent("${roomDto.roomId}")
-            + "&checkIn=" + encodeURIComponent("${checkIn}")
-            + "&checkOut=" + encodeURIComponent("${checkOut}")
-            + "&guest=" + encodeURIComponent("${adult + child}");
-
-    } catch (error) {
-
-        console.error(error);
-        alert("결제 중 오류가 발생했습니다.");
-
-    }
-
-});
-	</script>
 </body>
 </html>

@@ -43,6 +43,11 @@ public class MembersDAO {
 		String sql = "select * from members where id=?";
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(MembersDTO.class), id);
 	}
+	
+	public int getMileage(String memberId) {
+	    String sql = "SELECT mileage FROM members WHERE id = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
 
 	public int deleted(String id, MembersDTO mdto) {
 	    String sql = "delete from members where id = ? and pw = ?";

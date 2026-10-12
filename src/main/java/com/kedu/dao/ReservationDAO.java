@@ -38,6 +38,11 @@ public class ReservationDAO {
 	    return jdbc.update(sql,paymentId);
 	}
 	
+	public int reservationMileage(String id,int mileage) {
+		String sql = "update members set mileage = mileage - ? where id = ? and mileage >= ?";
+		return jdbc.update(sql,mileage,id,mileage);
+	}
+	
 	public ArrayList<ReservationDTO> myRsList(String memberId) {
 		String sql = "SELECT reservation.*, room.room_name, room.image1 " + "FROM reservation " + "JOIN room "
 				+ "ON reservation.room_id = room.room_id " + "WHERE reservation.member_id = ? "
