@@ -10,11 +10,20 @@ public class BannerDTO {
 	private Date start_date;
 	private Date end_date;
 	private int sort_order;
+	private String content;
 	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	public BannerDTO () {}
 	
 	public BannerDTO(int banner_id, String title, String image_name, String link_url, Date start_date, Date end_date,
-			int sort_order) {
+			int sort_order, String content) {
 		this.banner_id = banner_id;
 		this.title = title;
 		this.image_name = image_name;
@@ -22,6 +31,7 @@ public class BannerDTO {
 		this.start_date = start_date;
 		this.end_date = end_date;
 		this.sort_order = sort_order;
+		this.content = content;
 	}
 	public int getBanner_id() {
 		return banner_id;

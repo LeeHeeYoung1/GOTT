@@ -22,6 +22,7 @@
 	}
 	.mapTitle {
         margin-bottom: 20px;
+        padding-top: 10px;
     }
 
     .mapDescription {

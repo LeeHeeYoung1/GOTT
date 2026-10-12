@@ -129,11 +129,8 @@
 		    content: "";
 		    position: absolute;
 		    inset: 0;
-		    background: linear-gradient
-		    ( to top,
-		    rgba(0, 0, 0, 0.75),
-		    rgba(0, 0, 0, 0.05)
-		    );
+		    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.05));
+
 		}
 		.eventbox:hover img {
 		    transform: scale(1.05);
@@ -175,6 +172,10 @@
 		    color: white;
 		}
 		
+		.eventText {
+			
+		}
+		
     </style>
 
 
@@ -200,24 +201,17 @@
         <div class="eventzone">
             <c:forEach var="i" items="${banner}">
                	<div class="eventbox">
-                    <img src="$/images/{i.imageName}" alt="${i.title}">
+                    <img src="${pageContext.request.contextPath}/images/${i.image_name}"
+     					 alt="${i.title}">
                     <div class="eventText">
                         <h3>${i.title}</h3>
-                        <p>${i.contents}</p>
-                        <button>${i.title} 여행 바로가기</button>
+                        <p>${i.content}</p>
+                        <button type="button">${i.title} 여행 바로가기</button>
                 	</div>
                 </div>
             </c:forEach>
             
-            <!-- db에 값 넣으면 삭제 할 코드 -->
-            	<div class="eventbox">
-                    <img src="$/images/{i.imageName}" alt="경주">
-                    <div class="eventText">
-                        <h3>경주</h3>
-                        <p>천년의 고도 경주로 떠나보세요</p>
-                        <button>경주 여행 바로가기</button>
-                    </div>
-            	</div>
+            
             	
         </div>
     </div>
