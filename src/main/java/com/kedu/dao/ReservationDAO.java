@@ -133,9 +133,9 @@ public class ReservationDAO {
 	    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
 	}
 	
-	public int updateReservationDetails(String paymentId, int roomId, java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int price) {
-	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, GUEST_NUM = ?, PRICE = ? WHERE PAYMENT_ID = ? AND STATUS = '예약완료'";
-	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, price, paymentId);
+	public int updateReservationDetails(String paymentId, String memberId, int roomId, java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int price) {
+	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, GUEST_NUM = ?, PRICE = ? WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, price, paymentId, memberId);
 	}
 	
 	

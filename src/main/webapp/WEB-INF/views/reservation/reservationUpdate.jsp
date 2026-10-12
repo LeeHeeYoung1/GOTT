@@ -395,10 +395,11 @@ body {
         <c:forEach var="i" items="${detailList}">
 
             <div class="room_card_div
-                <c:if test="${i.roomId == reservation.roomId}">
-                    selected current
-                </c:if>"
-                data-room-id="${i.roomId}">
+			    <c:if test="${i.roomId == reservation.roomId}">
+			        selected current
+			    </c:if>"
+			    data-room-id="${i.roomId}"
+			    data-max-count="${i.maxCount}">
 
                 <div class="room_card">
 
@@ -584,27 +585,34 @@ $(document).ready(function() {
         calculatePrice();
     });
 
+
     // 3. 인원수 감소
     $("#minusGuest").on("click", function() {
         let guest = Number($("#guestCount").text());
         if (guest > 1) {
             $("#guestCount").text(guest - 1);
+            calculatePrice();
         }
     });
 
     // 4. 인원수 증가
-    $("#minusGuest").on("click", function() {
-    let guest = Number($("#guestCount").text());
-    if (guest > 1) {
-        $("#guestCount").text(guest - 1);
+    $("#plusGuest").on("click", function() {
+        let guest = Number($("#guestCount").text());
+        let selectedRoom = $(".room_card_div.selected");
+        let maxCount = Number(selectedRoom.attr("data-max-count"));
+
+        if (!selectedRoom.length) {
+            alert("객실을 먼저 선택해 주세요.");
+            return;
+        }
+        if (guest >= maxCount) {
+            alert("선택한 객실의 최대 인원은 " + maxCount + "명입니다.");
+            return;
+        }
+        $("#guestCount").text(guest + 1);
         calculatePrice();
-    }
-	});
-	$("#plusGuest").on("click", function() {
-	    let guest = Number($("#guestCount").text());
-	    $("#guestCount").text(guest + 1);
-	    calculatePrice();
-	});
+    });
+
 	
     // 5. 변경 후 예상 금액 계산
     function calculatePrice() {
