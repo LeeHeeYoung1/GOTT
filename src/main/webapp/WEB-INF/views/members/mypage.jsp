@@ -780,12 +780,11 @@ body{
                 <span>예약/활동</span>
                 <ul>
                     <li class="active"><a href="/members/mypage">마이페이지 홈</a></li>
-                    <li><a href="#">예약 내역</a></li>
+                    <li><a href="/members/reservationpage">예약 내역</a></li>
                     <li><a href="/members/wishlist">찜한 목록</a></li>
                     <li><a href="/members/planner">여행 일정 플래너</a></li>
                     <li><a href="#">내가 쓴 리뷰</a></li>
                     <li><a href="#">내가 쓴 게시글</a></li>
-                    <li><a href="event/tourTypeTest">여행성향 테스트</a></li>
                 </ul>
                 <span>혜택</span>
                 <ul>
@@ -847,6 +846,10 @@ body{
                                 <div class="sharedPlanCondition">
                                     <span class="shareBadge">전체 공개</span>
                                     <div class="btnGroup">
+                                    	<form action="${pageContext.request.contextPath}/travelPlan/delete" method="post" onsubmit="return confirm('이 여행 일정을 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.');">
+										    <input type="hidden" name="planId" value="${plan.PLAN_ID}">
+										    <button type="button" class="deleteBtn" style="background-color:red;" onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/travelPlan/delete?planId=${plan.PLAN_ID}'">삭제</button>
+										</form>
                                         <button type="button" class="boardViewBtn" onclick="location.href='${pageContext.request.contextPath}/travelPlan/detail?planId=${plan.PLAN_ID}'">일정 보기</button>
                                     </div>
                                	</div>
@@ -941,7 +944,7 @@ body{
                     </c:forEach>
                 </div>
 
-                <%-- ✅ 수정2: 중복 페이징 블록 제거 (하나만 유지) --%>
+
                 <div class="reservationPaging">
                     <c:forEach var="i" begin="1" end="${totalPage}">
                         <a href="${pageContext.request.contextPath}/members/mypage?cpage=${i}&wishCpage=${wishCpage}#reservationSection"

@@ -1,13 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>GOTT 여행 일정 구경하기</title>
 <style>
+.a1,.description{
+	display:flex;
+	justify-content:center;
+	text-align: center;
+}
+
 .sharedPlanner {
     max-width: 1200px;
     margin: 40px auto;
@@ -100,7 +107,7 @@
 </head>
 <body>
 <div class="sharedPlanner">
-    <h2>여행 일정 구경하기</h2>
+    <h2 class="a1">여행 일정 구경하기</h2>
     <p class="description">다른 여행자들이 공유한 여행 계획을 확인해 보세요.</p>
     <div class="planList">
         <c:choose>
@@ -110,9 +117,9 @@
 				        <div class="planCard">
 				            <span class="publicLabel">공개 일정</span>
 				            <h3><c:out value="${plan.plan_title}"/></h3>
-				            <p>여행 시작일: <c:out value="${plan.start_date}"/></p>
-				            <p>여행 종료일: <c:out value="${plan.end_date}"/></p>
-				            <p>여행 인원: <c:out value="${plan.person_count}"/>명</p>
+				            <p>여행 시작일: <fmt:formatDate value="${plan.start_date}" pattern="yyyy-MM-dd"/></p>
+							<p>여행 종료일: <fmt:formatDate value="${plan.end_date}" pattern="yyyy-MM-dd"/></p>
+					        <p>여행 인원: <c:out value="${plan.person_count}"/>명</p>
 				            <span class="detailLink">일정 자세히 보기 →</span>
 				        </div>
 				    </a>
