@@ -662,7 +662,7 @@
         <div class="hotelzone">
             <div class="moreview"><a href="">더 보기</a></div>
             <div class="hotelbox">
-                <div class="hotelphoto"><img src="https://picsum.photos/240/240?random=7"></div>
+                <div class="hotelphoto"><img src="${stayImgs[0]}"></div>
                 <div class="hoteltext" style="padding: 5px;">
                     <p style="font-weight: bold;">호텔</p>
                     <p>편안한 호텔</p>
@@ -670,7 +670,7 @@
                 </div>
             </div>
             <div class="hotelbox">
-                <div class="hotelphoto"><img src="https://picsum.photos/240/240?random=8"></div>
+                <div class="hotelphoto"><img src="${stayImgs[1]}"></div>
                 <div class="hoteltext" style="padding: 5px;">
                     <p style="font-weight: bold;">모텔</p>
                     <p>가성비 모텔</p>
@@ -678,7 +678,7 @@
                 </div>
             </div>
             <div class="hotelbox">
-                <div class="hotelphoto"><img src="https://picsum.photos/240/240?random=9"></div>
+                <div class="hotelphoto"><img src="${stayImgs[2]}"></div>
                 <div class="hoteltext" style="padding: 5px;">
                     <p style="font-weight: bold;">민박</p>
                     <p>감성의 민박</p>
