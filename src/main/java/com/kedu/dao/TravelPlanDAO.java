@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.TravelPlanDTO;
 import com.kedu.dto.TravelPlanDetailDTO;
 
@@ -72,6 +73,17 @@ public class TravelPlanDAO {
                 + "ORDER BY DAY_NO, VISIT_ORDER";
 
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDetailDTO.class), planId);
+	}
+    
+    // 여행 일정에 포함된 장소 사진 조회
+    public List<PlaceDTO> selectImages(int plan_Id) {
+        String sql = "select p.place_id, p.image_name from travel_plan_detail d "
+        		+ "join place p on p.place_id = d.place_id "
+        		+ "where d.plan_id = ? "
+        		+ "and p.image_name is not null "
+        		+ "order by p.place_id asc";
+
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), plan_Id);
 	}
 
     // 여행 일정 삭제

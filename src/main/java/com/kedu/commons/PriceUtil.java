@@ -15,6 +15,20 @@ public class PriceUtil {
 	}
 
 	public static int totalPrice(String checkIn, String checkOut, Integer priceWeekday, Integer priceWeekend) {
+		
+		if(checkIn == null || checkIn.trim().equals("")) {
+			return 0;
+		}
+		if(checkOut == null || checkOut.trim().equals("")) {
+			return 0;
+		}
+		if(priceWeekday == null) {
+			return 0;
+		}
+		if(priceWeekend == null) {
+			priceWeekend = priceWeekday;
+		}
+		
 		int weekday = priceWeekday.intValue();
 		int weekend = priceWeekend.intValue();
 		
