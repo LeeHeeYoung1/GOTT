@@ -47,11 +47,18 @@ public class ReservationDAO {
 	}
 	
 	public ArrayList<ReservationDTO> myRsList(String memberId) {
-		String sql = "SELECT reservation.*, room.room_name, room.image1 " + "FROM reservation " + "JOIN room "
-				+ "ON reservation.room_id = room.room_id " + "WHERE reservation.member_id = ? "
-				+ "ORDER BY reservation.reserve_date DESC";
-		ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId);
-		return list;
+	    String sql = "SELECT reservation.*, room.room_name, room.image1, place.name AS place_name "
+	            + "FROM reservation "
+	            + "JOIN room ON reservation.room_id = room.room_id "
+	            + "JOIN place ON room.place_id = place.place_id "
+	            + "WHERE reservation.member_id = ? "
+	            + "ORDER BY reservation.reserve_date DESC";
+	    ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(
+	            sql,
+	            new BeanPropertyRowMapper<>(ReservationDTO.class),
+	            memberId
+	    );
+	    return list;
 	}
 	
 	// 이용 예정 예약 목록
@@ -172,6 +179,12 @@ public class ReservationDAO {
 	public int countRePaymentHistory(String newPaymentId) {
 	    String sql = "SELECT COUNT(*) FROM RESERVATION_HISTORY WHERE RESERVATION_PAYMENT_ID = ?";
 	    return jdbc.queryForObject(sql, Integer.class, newPaymentId);
+	}
+	
+	public int cancelReservation(String paymentId, String memberId) {
+	    String sql = "UPDATE RESERVATION SET STATUS = '예약취소' "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+	    return jdbc.update(sql, paymentId, memberId);
 	}
 	
 	

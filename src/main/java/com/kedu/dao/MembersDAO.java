@@ -36,7 +36,7 @@ public class MembersDAO {
 		String sql = "insert into members values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, systimestamp, 0, 'user', ?)";
 		return jdbc.update(sql, mdto.getId(), mdto.getPw(), mdto.getName(), mdto.getNickname()
 				, mdto.getPhone(), mdto.getEmail(), mdto.getGender(), mdto.getDob(), mdto.getZipcode()
-				, mdto.getAddress1(), mdto.getAddress2(), mdto.getAgree());
+				, mdto.getAddress1(), mdto.getAddress2(), mdto.getPrivacy_agree());
 	}
 	
 	public MembersDTO selectById(String id) {

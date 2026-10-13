@@ -183,31 +183,7 @@
 		    padding: 8px 12px;
 		    border-radius: 6px;
 		}
-        
-        .placesuggest,
-        .hotelsuggest {
-            width: 80%;
-            height: auto;
-            padding: 20px 30px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .placesuggest .placezone,
-        .hotelsuggest .hotelzone {
-            width: 90%;
-            height: auto;
-            padding: 20px 10px 15px 10px;
-            margin: auto;
-            border: 1px solid black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            position: relative;
-        }
-        .moreview {
+		.moreview {
             position: absolute;
             top: 5px;
             right: 20px;
@@ -224,15 +200,109 @@
 		.mapMoreView a:hover {
 		    color: #2563eb;
 		}
-
-        .placebox,
-        .hotelbox {
-            float: left;
-            width: auto;
+        
+        .travelPlan,
+        .hotelsuggest {
+            width: 80%;
             height: auto;
-            margin: 10px;
-            border: 1px solid black;
+            padding: 20px 30px;
+            margin: auto;
         }
+        .travelPlan .planzone,
+        .hotelsuggest .hotelzone {
+            width: 90%;
+		    max-width: 1400px;
+		    margin: 25px auto 0;
+		    display: grid;
+		    grid-template-columns: repeat(3, minmax(0, 1fr));
+		    gap: 20px;
+			align-items: start;
+        }
+       
+        .planbox,
+        .hotelbox {
+            height: 280px;
+		    position: relative;
+		    overflow: hidden;
+		    border-radius: 14px;
+		    background-color: #eee;
+		    cursor: pointer;
+		    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+        }
+        .planbox .planphoto {
+			width: 260px;
+			height: 280px;
+			overflow: hidden;
+			
+		    border-radius: 14px;
+			}
+        .planbox img,
+        .hotelbox img {
+        	width: 100%;
+		    height: 100%;
+		    display: block;
+		    object-fit: cover;
+		    transition: transform 0.4s ease;
+        }  
+        .planbox::after,
+        .hotelbox::after {
+        	content: "";
+		    position: absolute;
+		    inset: 0;
+		    background: linear-gradient(to top,rgba(0, 0, 0, 0.75),rgba(0, 0, 0, 0.05));
+		    z-index: 1;
+		    pointer-events: none;
+        }
+        .planbox .plantext,
+		.planbox .sharedPlanCondition,
+		.hotelbox .hoteltext {
+		    position: absolute;
+		    z-index: 2;
+		    color: white;
+		}
+		.planbox .plantext {
+		    left: 10px;
+		    right: 10px;
+		    bottom: 55px;
+		}
+		.planbox .plantext h3 {
+		    margin: 0;
+		    font-size: 20px;
+		    color: white;
+		}
+		
+        .planbox:hover img,
+        .hotelbox:hover img {
+        	transform: scale(1.05);
+        }
+        .sharedPlanCondition {
+			left: 10px;
+		    right: 10px;
+		    bottom: 8px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between;
+		    gap: 10px;
+		    padding: 0;
+		}
+		.sharedPlanCondition button {
+			position: relative;
+		    z-index: 3;
+		    padding: 6px 12px;
+		    border: none;
+		    border-radius: 6px;
+		    background-color: white;
+		    color: #263238;
+		    cursor: pointer;
+		}
+		.sharedPlanCondition button:hover{
+		    background-color:#222;
+		    color:white;
+		    border-color:#222;
+		}
+			
+		
+        
         .popularboard {
             width: 80%;
             height: auto;
@@ -430,7 +500,7 @@
 		#searchResult::-webkit-scrollbar-thumb:hover {
 		    background: #bdb0a4;
 		}	
-
+		
     </style>
 
 
@@ -528,49 +598,55 @@
         <div id="map" style="width:100%; height:100%;"></div>
     </div>
     
-	<div id="placesuggest"></div>
+	<div id="travelPlan"></div>
     <hr>
 
     <div class="title">
-        <h2>추천 여행지</h2>
+        <h2>최신 여행 일정</h2>
     </div>
     <div class="subtitle">
-        <h5>지금 가장인기 있는 국내 여행지를 만나보세요</h5>
+        <h5>지금 회원들이 직접 만든 최신 여행 일정들을 만나보세요</h5>
     </div>
     <div class="title-link" style="font-size: 10px; color:#2563eb">
         <a href="/members/planner">찜한 장소로 나만의 여행 일정 만들기</a>
     </div>
    
-    <div class="placesuggest">
-        <i class="fa-solid fa-circle-chevron-left"></i>
-        <div class="placezone">
-            <div class="moreview"><a href="">더 보기</a></div>
-            <div class="placebox">
-                <div class="placephoto"><img src="https://picsum.photos/240/240?random=4"></div>
-                <div class="placetext" style="padding: 5px;">
-                    <p style="font-weight: bold;">제주도</p>
-                    <p>에메랄드 빛 바다</p>
-                    <button>자세히 보기</button>
-                </div>
-            </div>
-            <div class="placebox">
-                <div class="placephoto"><img src="https://picsum.photos/240/240?random=5"></div>
-                <div class="placetext" style="padding: 5px;">
-                    <p style="font-weight: bold;">부산</p>
-                    <p>도시와 바다</p>
-                    <button>자세히 보기</button>
-                </div>
-            </div>
-            <div class="placebox">
-                <div class="placephoto"><img src="https://picsum.photos/240/240?random=6"></div>
-                <div class="placetext" style="padding: 5px;">
-                    <p style="font-weight: bold;">경주</p>
-                    <p>천년 고도의 역사</p>
-                    <button>자세히 보기</button>
-                </div>
-            </div>
-        </div>
-        <i class="fa-solid fa-circle-chevron-right"></i>
+    <div class="travelPlan">
+        <div class="planzone">
+            <div class="moreview"><a href="/travelPlan/list">더 보기</a></div>
+            
+            	<c:choose>
+                    <c:when test="${not empty myPlannerList}">
+                        <c:forEach var="plan" items="${myPlannerList}">
+                        <div class="planbox">
+                            <div class="planphoto">
+                                    <c:choose>
+                                        <c:when test="${not empty plan.IMAGE_NAME}">
+                                            <img src="<c:out value='${plan.IMAGE_NAME}'/>" alt="<c:out value='${plan.PLAN_TITLE}'/>">
+                                        </c:when>
+                                        <c:otherwise>
+                                        	<div class="noImage">이미지 준비 중</div>
+                                        </c:otherwise>
+                                    </c:choose>       
+                            </div>
+                            <div class="plantext">
+                                <h3><c:out value="${plan.PLAN_TITLE}"/></h3>
+                            </div>
+                            <div class="sharedPlanCondition">
+                                <span class="shareBadge">전체 공개</span>
+                                <div class="btnGroup">
+                                    <button type="button" class="boardViewBtn" onclick="location.href='${pageContext.request.contextPath}/travelPlan/detail?planId=${plan.PLAN_ID}'">일정 보기</button>
+                                </div>
+                            </div>
+                          </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p class="emptyPlanner">아직 공유한 여행 일정이 없습니다.</p>
+                    </c:otherwise>
+                </c:choose>
+         
+        	</div>
     </div>
 	<div id="hotelsuggest"></div>
     <hr>
@@ -583,7 +659,6 @@
     </div>
     
     <div class="hotelsuggest">
-        <i class="fa-solid fa-circle-chevron-left"></i>
         <div class="hotelzone">
             <div class="moreview"><a href="">더 보기</a></div>
             <div class="hotelbox">
@@ -611,44 +686,30 @@
                 </div>
             </div>
         </div>
-        <i class="fa-solid fa-circle-chevron-right"></i>
+        
     </div>
 	<div id="popularboard"></div>
     <hr>
 
     <div class="title">
-        <h2>인기 게시글</h2>
+        <h2>인기 리뷰글</h2>
     </div>
     <div class="subtitle">
         <h5>다른 여행자들이 공유하는 생생한 여행 후기를 확인해보세요</h5>
     </div>
 
     <div class="popularboard">
-        <div class="moreview"><a href="">더 보기</a></div>
-        <div class="popularzone">
-            <div class="boardwriter">writer</div>
-            <div class="popularphoto"><img src="https://picsum.photos/290/360?random=11"></div>
-            <div class="boardtext" style="padding: 5px;">
-                <p style="font-weight: bold;">writer</p>
-                <p>contents</p>
-            </div>
-        </div>
-        <div class="popularzone">
-            <div class="boardwriter">writer</div>
-            <div class="popularphoto"><img src="https://picsum.photos/290/360?random=12"></div>
-            <div class="boardtext" style="padding: 5px;">
-                <p style="font-weight: bold;">writer</p>
-                <p>contents</p>
-            </div>
-        </div>
-        <div class="popularzone">
-            <div class="boardwriter">writer</div>
-            <div class="popularphoto"><img src="https://picsum.photos/290/360?random=13"></div>
-            <div class="boardtext" style="padding: 5px;">
-                <p style="font-weight: bold;">writer</p>
-                <p>contents</p>
-            </div>
-        </div>
+        <div class="moreview"><a href="/board/reviewBoard?cpage=1">더 보기</a></div>
+        <c:forEach var="i" items="${review}">
+	        <div class="popularzone">
+	            <div class="boardwriter">${i.writer}</div>
+	            <div class="popularphoto"><img src=""></div>
+	            <div class="boardtext" style="padding: 5px;">
+	                <p style="font-weight: bold;">writer</p>
+	                <p>contents</p>
+	            </div>
+	        </div>
+        </c:forEach>
     </div>
 	<div id="notice"></div>
     <hr>
@@ -675,15 +736,15 @@
             <a href="#eventbannerzone">이벤트</a>
             <a href="#ourpromise">우리의 약속</a>
             <a href="#mapzone">여행지도</a>
-            <a href="#placesuggest">여행지 추천</a>
+            <a href="#travelPlan">최신 여행일정</a>
             <a href="#hotelsuggest">숙박업소 추천</a>
             <a href="#popularboard">인기 게시글</a>
             <a href="#notice">공지사항</a>
         </nav>
     </div>
     
+	</div>
 </div>
-
 <script>
 
 	var container = document.getElementById('map');

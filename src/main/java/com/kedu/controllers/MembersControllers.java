@@ -1,3 +1,4 @@
+
 package com.kedu.controllers;
 
 import java.time.LocalDate;
@@ -70,6 +71,7 @@ public class MembersControllers {
 		    session.setAttribute("mileage", member.getMileage());
 		    session.setAttribute("regdate", member.getRegdate());
 		    session.setAttribute("role", member.getRole());
+		    session.setAttribute("privacy_agree", member.getPrivacy_agree());
 		}
 		return result;
 	}
@@ -334,5 +336,13 @@ public class MembersControllers {
 	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
 	    model.addAttribute("wishList", wishList);
 	    return "members/wishlist";
+	}
+	
+	@RequestMapping("/reservationpage")
+	public String reservationpage(HttpSession session, Model model) {
+		String memberId = (String) session.getAttribute("loginId");
+		ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
+		model.addAttribute("myRsList", myRsList);
+	    return "members/reservationpage";
 	}
 }

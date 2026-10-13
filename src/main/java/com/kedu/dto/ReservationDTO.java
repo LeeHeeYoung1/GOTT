@@ -24,12 +24,13 @@ public class ReservationDTO {
 	private String image1;
 	private int placeId;
 	private String reservationType;
+	private String placeName;
 
 	
 	public ReservationDTO() {}
 	
 	public ReservationDTO(int seq, String memberId, Timestamp reserveDate, int price,int totalPrice ,Date checkIn, Date checkOut,
-			int guestNum, String status, int mileage, int roomId,String paymentId,String roomName,String image1,int placeId,String reservationType) {
+			int guestNum, String status, int mileage, int roomId,String paymentId,String roomName,String image1,int placeId,String reservationType,String placeName) {
 		this.seq = seq;
 		this.memberId = memberId;
 		this.reserveDate = reserveDate;
@@ -46,6 +47,7 @@ public class ReservationDTO {
 		this.image1 = image1;
 		this.placeId = placeId;
 		this.reservationType = reservationType;
+		this.placeName = placeName;
 	}
 	public int getTotalPrice() {
 		return totalPrice;
@@ -154,4 +156,11 @@ public class ReservationDTO {
 	    this.reservationType = reservationType;
 	}
 	
+	public String getPlaceName() {
+	    return placeName;
+	}
+
+	public void setPlaceName(String placeName) {
+	    this.placeName = placeName;
+	}
 }

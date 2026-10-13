@@ -178,51 +178,127 @@
 	    cursor: pointer;
 	}
 	
-	/* 장소 검색 결과 목록 */
+	/* 장소 검색 결과 영역 (최종 검색 + 연관 검색 공용 컨테이너) */
 	#placeSearchResults {
-	    max-height: 300px;
-	    margin-top: 8px;
+	    max-height: 320px;
+	    margin-top: 10px;
 	    overflow-y: auto;
+	
+	    background: #ffffff;
+	    border: 1px solid #e2e8f0;
+	    border-radius: 10px;
+	    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.10);
 	}
 	
+	/* 안에 아무 것도 없을 땐 빈 박스가 보이지 않도록 */
+	#placeSearchResults:empty {
+	    display: none;
+	    border: none;
+	    box-shadow: none;
+	}
+	
+	/* 공통: 이름 / 주소 텍스트 */
+	.placeSearchResult strong,
+	.placeAutocompleteItem strong {
+	    display: block;
+	    grid-column: 2;
+	    grid-row: 1;
+	    color: #1e293b;
+	    font-size: 14px;
+	    font-weight: 600;
+	    min-width: 0;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	}
+	
+	.placeSearchResult span,
+	.placeAutocompleteItem span {
+	    display: block;
+	    grid-column: 2;
+	    grid-row: 2;
+	    margin-top: 3px;
+	    color: #94a3b8;
+	    font-size: 12px;
+	    min-width: 0;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	}
+	
+	/* 최종 장소 검색 결과 한 줄 */
 	.placeSearchResult {
-	    padding: 11px 6px;
-	    border-bottom: 1px solid #e2e8f0;
+	    display: grid;
+	    grid-template-columns: 18px 1fr;
+	    grid-template-rows: auto auto;
+	    column-gap: 10px;
+	
+	    padding: 12px 14px;
+	    border-bottom: 1px solid #f1f5f9;
 	    cursor: pointer;
+	    transition: background-color 0.15s ease;
 	}
 	
+	.placeSearchResult:last-child {
+	    border-bottom: none;
+	}
+	
+	.placeSearchResult::before {
+	    content: "📍";
+	    grid-column: 1;
+	    grid-row: 1 / span 2;
+	    align-self: center;
+	    font-size: 14px;
+	    opacity: 0.9;
+	}
 	
 	.placeSearchResult:hover {
+	    background: #f8fafc;
+	}
+	
+	/* 연관 검색(입력 중 자동완성) 버튼 */
+	.placeAutocompleteItem {
+	    display: grid;
+	    grid-template-columns: 18px 1fr;
+	    grid-template-rows: auto auto;
+	    column-gap: 10px;
+	    width: 100%;
+	
+	    padding: 11px 14px;
+	    border: none;
+	    border-bottom: 1px solid #f1f5f9;
+	    border-radius: 0;
+	    background: #ffffff;
+	
+	    text-align: left;
+	    cursor: pointer;
+	    transition: background-color 0.15s ease;
+	}
+	
+	.placeAutocompleteItem:last-child {
+	    border-bottom: none;
+	}
+	
+	.placeAutocompleteItem::before {
+	    content: "🔍";
+	    grid-column: 1;
+	    grid-row: 1 / span 2;
+	    align-self: center;
+	    font-size: 12px;
+	    opacity: 0.5;
+	}
+	
+	.placeAutocompleteItem:hover,
+	.placeAutocompleteItem:focus-visible {
 	    background: #eff6ff;
 	}
 	
-	.placeSearchResult strong {
-	    display: block;
-	    font-size: 14px;
-	}
-	
-	.placeSearchResult span {
-	    display: block;
-	    margin-top: 4px;
-	    color: #64748b;
-	    font-size: 12px;
-	}
-	.placeAutocompleteItem strong {
-	    display: block;
-	    font-size: 14px;
-	}
-	
-	.placeAutocompleteItem span {
-	    display: block;
-	    margin-top: 4px;
-	    color: #64748b;
-	    font-size: 12px;
-	}
-	
+	/* 로딩중 / 결과없음 안내 문구 */
 	.placeAutocompleteMessage {
-	    padding: 12px 8px;
-	    color: #64748b;
+	    padding: 18px 14px;
+	    color: #94a3b8;
 	    font-size: 13px;
+	    text-align: center;
 	}
 
     /* 자동완성 목록 */
