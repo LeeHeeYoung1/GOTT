@@ -639,7 +639,7 @@ $(document).ready(function() {
 
                 $("#expectedPrice").text(price.toLocaleString("ko-KR") + "원");
 
-                let oldPrice = Number("${reservation.price}");
+                let oldPrice = Number("${reservation.totalPrice}");
                 let difference = price - oldPrice;
 
                 if (difference > 0) {

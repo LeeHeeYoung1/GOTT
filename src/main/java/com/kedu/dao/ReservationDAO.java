@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kedu.commons.NullZeroUtil;
+import com.kedu.commons.PriceUtil;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.PlaceRoomDTO;
 import com.kedu.dto.ReservationDTO;
@@ -27,10 +28,12 @@ public class ReservationDAO {
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeId);
 	}
 
-	public int insert(RoomDTO dto, String checkIn, String checkOut, int price, int guest,String paymentId, HttpSession session) {
-		String sql = "insert into reservation values(reservation_seq.nextval, ?, systimestamp, ?, ?, ?, ?, '예약완료', ?, ?, ?)";
-		int mileage = (int)(price * 0.05);
-		return jdbc.update(sql, session.getAttribute("loginId"), price, checkIn, checkOut, guest, mileage, dto.getRoomId(),paymentId);
+	public int insert(RoomDTO dto, String checkIn, String checkOut, int price, int guest, String paymentId, HttpSession session) {
+	    String sql = "INSERT INTO RESERVATION (SEQ, MEMBER_ID, RESERVE_DATE, PRICE, CHECK_IN, CHECK_OUT, GUEST_NUM, STATUS, MILEAGE, ROOM_ID, PAYMENT_ID, TOTAL_PRICE) "
+	            + "VALUES (RESERVATION_SEQ.NEXTVAL, ?, SYSTIMESTAMP, ?, ?, ?, ?, '예약완료', ?, ?, ?, ?)";
+	    int mileage = (int)(price * 0.05);
+		return jdbc.update(sql, session.getAttribute("loginId"), price, checkIn, checkOut, guest, mileage,
+				dto.getRoomId(), paymentId,PriceUtil.totalPrice(checkIn, checkOut, dto.getPriceWeekday(), dto.getPriceWeekend()));
 	}
 	
 	public int delete(String paymentId) {
@@ -133,9 +136,28 @@ public class ReservationDAO {
 	    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
 	}
 	
-	public int updateReservationDetails(String paymentId, String memberId, int roomId, java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int price) {
-	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, GUEST_NUM = ?, PRICE = ? WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
-	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, price, paymentId, memberId);
+	public int updateReservationDetails(String paymentId, String memberId, int roomId,
+	        java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int totalPrice) {
+	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
+	            + "GUEST_NUM = ?, TOTAL_PRICE = ? "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum,totalPrice, paymentId, memberId);
+	}
+	
+	public int ReservationHistory(int reservationSeq, String paymentId, String reservationPaymentId, String memberId, String paymentType, int amount, String status) {
+	    String sql = "INSERT INTO RESERVATION_HISTORY (HISTORY_ID, RESERVATION_SEQ, PAYMENT_ID, RESERVATION_PAYMENT_ID, MEMBER_ID, PAYMENT_TYPE, AMOUNT, STATUS, CREATED_AT) "
+	            + "VALUES (RESERVATION_HISTORY_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP)";
+	    return jdbc.update(sql, reservationSeq, paymentId, reservationPaymentId, memberId, paymentType, amount, status);
+	}
+	
+	public int updateReservationAfterAdditionalPayment(String paymentId, String memberId,
+	        int roomId, java.sql.Date checkIn, java.sql.Date checkOut,
+	        int guestNum, int additionalPaid, int newTotalPrice) {
+	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
+	            + "GUEST_NUM = ?, PRICE = PRICE + ?, TOTAL_PRICE = ? "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum,
+	            additionalPaid, newTotalPrice, paymentId, memberId);
 	}
 	
 	
