@@ -1018,14 +1018,35 @@ body{
                 </div>
                 <div class="coupon_point" style="padding:20px 20px 12px">
                     <table align="center">
-                        <thead>
-                            <tr><th>날짜</th><th>내용</th><th>구분</th><th>포인트</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>2026-09-02</td><td>리뷰 작성 적립</td><td>적립</td><td>+???M</td></tr>
-                            <tr><td>2026-08-14</td><td>제주 오션뷰 호텔 결제 사용</td><td>사용</td><td>-????M</td></tr>
-                            <tr><td>2026-08-03</td><td>첫 예약 이벤트 적립</td><td>적립</td><td>+????0M</td></tr>
-                        </tbody>
+                    	<thead>
+	                         <tr><th>날짜</th><th>내용</th><th>구분</th><th>포인트</th></tr>
+	                    </thead>
+
+	                        <tbody>
+							    <c:forEach var="mh" items="${mileageHistory}">
+							        <tr>
+							            <td><fmt:formatDate value="${mh.regDate}" pattern="yyyy-MM-dd"/></td>
+							            <td>${mh.reason}</td>
+							            <td>
+							                <c:choose>
+							                    <c:when test="${mh.type eq 'EARN'}">적립</c:when>
+							                    <c:when test="${mh.type eq 'USE'}">사용</c:when>
+							                    <c:when test="${mh.type eq 'RETURN'}">복구</c:when>
+							                    <c:when test="${mh.type eq 'REVOKE'}">회수</c:when>
+							                    <c:otherwise>${mh.type}</c:otherwise>
+							                </c:choose>
+							            </td>
+							            <td>
+							                <c:choose>
+							                    <c:when test="${mh.type eq 'EARN' or mh.type eq 'RETURN'}">+<fmt:formatNumber value="${mh.amount}" pattern="#,##0"/>M</c:when>
+							                    <c:when test="${mh.type eq 'USE' or mh.type eq 'REVOKE'}">- <fmt:formatNumber value="${mh.amount}" pattern="#,##0"/>M</c:when>
+							                    <c:otherwise><fmt:formatNumber value="${mh.amount}" pattern="#,##0"/>M</c:otherwise>
+							                </c:choose>
+							            </td>
+							        </tr>
+							    </c:forEach>
+							</tbody>
+	                    
                     </table>
                     <div class="couponList">
                         <div class="couponBox">
@@ -1067,25 +1088,24 @@ $(".cancelBtn").on("click", async function() {
     if (!confirm("이 결제를 취소할까요?")) return;
     let paymentId = $(this).data("payment-id");
     try {
-        const res = await fetch("${pageContext.request.contextPath}/reservation/cancel", {
+        const res = await fetch("${pageContext.request.contextPath}/reservation/cancelMyReservation", {
             method: "POST",
             headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
             body: "paymentId=" + encodeURIComponent(paymentId)
         });
         const text = await res.text();
         console.log("취소 응답:", text);
-        if (res.ok && text.trim() === "OK") {
-            alert("결제가 취소되었습니다.");
+        if (res.ok && text.trim() === "success") {
+            alert("결제와 예약이 취소되었으며, 사용 마일리지를 복구했습니다.");
             location.reload();
         } else {
-            alert("취소 실패: " + text);
+            alert("취소 처리 결과: " + text);
         }
     } catch (error) {
         console.error("요청 실패:", error);
         alert("취소 요청 중 오류가 발생했습니다.");
     }
 });
-
 
 $(".updateBtn").on("click", function() {
     let paymentId = $(this).data("payment-id");
