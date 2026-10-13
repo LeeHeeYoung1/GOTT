@@ -27,6 +27,16 @@ public class TravelPlanController {
 
     @Autowired
     private TravelPlanDAO dao;
+    
+    @RequestMapping("delete")
+    public String delete(int planId,HttpSession session) {
+    	String memberId = (String) session.getAttribute("loginId");
+    	if (memberId == null) {
+            return "redirect:/members/loginpage";
+        }
+    	dao.deletePlan(planId, memberId);
+    	return "redirect:/members/mypage";
+    }
 
     // 여행 일정 및 장소 저장
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -37,7 +47,7 @@ public class TravelPlanController {
         String memberId = (String) session.getAttribute("loginId");
 
         if (memberId == null) {
-            return "LOGIN_REQUIRED";
+            return "redirect:/members/loginpage";
         }
 
 

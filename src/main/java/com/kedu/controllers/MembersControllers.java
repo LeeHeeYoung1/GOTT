@@ -1,3 +1,4 @@
+
 package com.kedu.controllers;
 
 import java.time.LocalDate;
@@ -334,5 +335,13 @@ public class MembersControllers {
 	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
 	    model.addAttribute("wishList", wishList);
 	    return "members/wishlist";
+	}
+	
+	@RequestMapping("/reservationpage")
+	public String reservationpage(HttpSession session, Model model) {
+		String memberId = (String) session.getAttribute("loginId");
+		ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
+		model.addAttribute("myRsList", myRsList);
+	    return "members/reservationpage";
 	}
 }

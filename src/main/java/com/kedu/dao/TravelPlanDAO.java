@@ -121,8 +121,12 @@ public class TravelPlanDAO {
         return jdbc.queryForList(sql, planId);
     }
     
+
     public List<Map<String, Object>> selectMyPlansWithCount(String memberId) {
-        String sql = "SELECT T.PLAN_ID, T.PLAN_TITLE, T.START_DATE, T.END_DATE, T.IS_PUBLIC, T.CREATED_AT, "
+        String sql = "SELECT T.PLAN_ID, T.PLAN_TITLE, "
+                + "TO_CHAR(T.START_DATE, 'YYYY-MM-DD') AS START_DATE, "
+                + "TO_CHAR(T.END_DATE, 'YYYY-MM-DD') AS END_DATE, "
+                + "T.IS_PUBLIC, T.CREATED_AT, "
                 + "(SELECT COUNT(*) FROM TRAVEL_PLAN_DETAIL D WHERE D.PLAN_ID = T.PLAN_ID) AS SPOT_COUNT, "
                 + "P.IMAGE_NAME AS IMAGE_NAME "
                 + "FROM TRAVEL_PLAN T "
@@ -136,4 +140,5 @@ public class TravelPlanDAO {
                 + "ORDER BY T.CREATED_AT DESC";
         return jdbc.queryForList(sql, memberId);
     }
+
 }
