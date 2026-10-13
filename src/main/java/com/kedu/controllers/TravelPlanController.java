@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.dao.TravelPlanDAO;
+import com.kedu.dao.TravelPlanReplyDAO;
+import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.TravelPlanDTO;
 import com.kedu.dto.TravelPlanDetailDTO;
+import com.kedu.dto.TravelPlanReplyDTO;
 
 @Controller
 @RequestMapping("/travelPlan")
@@ -27,6 +30,9 @@ public class TravelPlanController {
 
     @Autowired
     private TravelPlanDAO dao;
+    
+    @Autowired
+    private TravelPlanReplyDAO tprdao;
     
     @RequestMapping("delete")
     public String delete(int planId,HttpSession session) {
@@ -165,10 +171,15 @@ public class TravelPlanController {
         for (int i = 1; i <= totalDays; i++) {
             dayNumbers.add(i);
         }
+        
+        List<TravelPlanReplyDTO> tprList = tprdao.selectByPlanId(planId);
+		model.addAttribute("tprList", tprList);
 
+        List<PlaceDTO> idAndImg = dao.selectImages(planId);
         model.addAttribute("plan", plan);
         model.addAttribute("detailList", detailList);
         model.addAttribute("dayNumbers", dayNumbers);
+        model.addAttribute("idAndImg", idAndImg);
 
         return "members/planDetail";
     }
