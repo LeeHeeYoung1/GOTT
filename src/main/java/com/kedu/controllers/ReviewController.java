@@ -122,11 +122,5 @@ public class ReviewController {
 		return "redirect:/review/detail?seq="+seq+"&place_id="+rdto.getTarget_id();
 	}
 	
-	@RequestMapping("/reviewlist")
-	public String reviewlist(HttpSession session) {
-		String memberId = (String) session.getAttribute("loginId");
-		rdao.selectMyReview(memberId);
-		return "/members/reviewlist";
-	}
 	
 }

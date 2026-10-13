@@ -549,155 +549,141 @@ body{
     color:white;
     border-color:#222;
 }
-.reviewContainer{margin-top:80px;}
-.reviewList{
-    display:flex;
-    gap:23px;
-}
-.reviewCard{
-    width:250px;
-    border:1px solid #333;
-    background-color:white;
-}
-.reviewUser{
-    height:48px;
-    display:flex;
-    align-items:center;
-    padding:0 12px;
-    border-bottom:1px solid #333;
-}
-.reviewUser strong{font-size:13px;}
-.reviewImage{
-    width:100%;
-    height:248px;
-}
-.reviewImage img{
-    width:100%;
-    height:100%;
-    display:block;
-    object-fit:cover;
-}
-.reviewInfo{padding:10px 12px 14px;}
-.reviewIcons{
-    display:flex;
-    gap:15px;
-    margin-bottom:7px;
-}
-.reviewIcons span{
-    font-size:15px;
-    cursor:pointer;
-}
-.reviewLike{
-    margin:0 0 4px;
-    font-size:12px;
-    font-weight:bold;
-}
-.reviewTitleText{
-    margin:0 0 2px;
-    font-size:12px;
-    font-weight:bold;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-.reviewDescription{
-    margin:0;
-    font-size:12px;
-    line-height:1.5;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-.reviewDate{
-    margin:7px 0 0;
-    font-size:10px;
-    color:#777;
-}
-.reviewDate a{color:#777;}
+
 .couponContainer{
-    margin-top:80px;
     width:100%;
+    margin-top:80px;
+    padding-bottom:30px;
 }
 .couponSectionTitle{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:50px;
+    margin-bottom:20px;
 }
 .couponSectionTitle span{
     font-size:18px;
-    font-weight:bold;
+    font-weight:700;
+    color:#222;
 }
 .couponSectionTitle a{
     font-size:13px;
-    color:#888;
+    color:#64748b;
     text-decoration:none;
+    transition:color .2s;
 }
+.couponSectionTitle a:hover{color:#2563eb;}
 .coupon_point{
-    border:1px solid #555;
-    box-sizing:border-box;
+    padding:20px !important;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    box-shadow:0 3px 12px rgba(0,0,0,.03);
 }
 .coupon_point table{
     width:100%;
     border-collapse:collapse;
+    table-layout:fixed;
+    text-align:center;
 }
+.coupon_point thead{background:#f8fafc;}
 .coupon_point th{
-    height:35px;
-    border-top:1px solid #333;
-    border-bottom:1px solid #999;
+    height:46px;
+    padding:10px;
+    color:#64748b;
     font-size:13px;
+    font-weight:600;
+    border-top:1px solid #e5e7eb;
+    border-bottom:1px solid #e5e7eb;
 }
 .coupon_point td{
-    height:35px;
-    border-bottom:1px solid #eee;
+    height:48px;
+    padding:10px;
+    color:#475569;
     font-size:13px;
+    border-bottom:1px solid #f0f2f5;
+    overflow-wrap:anywhere;
 }
+.coupon_point tbody tr{transition:background .2s;}
+.coupon_point tbody tr:hover{background:#f8fbff;}
 .coupon_point tbody tr:last-child td{border-bottom:none;}
 .coupon_point th:nth-child(1),.coupon_point td:nth-child(1){
-    width:20%;
+    width:22%;
     text-align:left;
 }
 .coupon_point th:nth-child(2),.coupon_point td:nth-child(2){
-    width:40%;
+    width:38%;
     text-align:left;
 }
-.coupon_point th:nth-child(3),.coupon_point td:nth-child(3){
-    width:20%;
-    text-align:center;
-}
+.coupon_point th:nth-child(3),.coupon_point td:nth-child(3){width:18%;}
 .coupon_point th:nth-child(4),.coupon_point td:nth-child(4){
-    width:20%;
+    width:22%;
     text-align:right;
+    white-space:nowrap;
+    font-weight:700;
 }
 .couponList{
-    display:flex;
-    gap:20px;
-    margin-top:14px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+    margin-top:24px;
 }
 .couponBox{
-    width:40%;
-    min-height:105px;
-    border:1px solid #555;
-    padding:13px 14px;
-    box-sizing:border-box;
+    width:100%;
+    min-height:150px;
+    padding:20px;
+    background:linear-gradient(135deg,#f8fbff,#eef5ff);
+    border:1px solid #dce8fa;
+    border-radius:12px;
+    transition:transform .2s,box-shadow .2s;
+}
+.couponBox:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(37,99,235,.08);
 }
 .couponBox strong{
     display:block;
-    margin-bottom:6px;
+    margin-bottom:10px;
+    color:#1e3a5f;
     font-size:15px;
+    font-weight:700;
 }
 .couponBox p{
-    margin:0 0 12px;
+    margin:0 0 16px;
+    color:#64748b;
     font-size:12px;
-    color:#777;
+    line-height:1.6;
 }
 .couponBox button{
-    width:65px;
-    height:30px;
-    background:white;
-    border:1px solid #777;
+    min-width:80px;
+    height:32px;
+    padding:0 14px;
+    color:#fff;
+    background:#2563eb;
+    border:1px solid #2563eb;
+    border-radius:6px;
     font-size:12px;
+    font-weight:600;
     cursor:pointer;
+    transition:background .2s;
+}
+.couponBox button:hover{
+    background:#1d4ed8;
+    border-color:#1d4ed8;
+    color:#fff;
+}
+@media(max-width:560px){
+    .coupon_point{padding:12px !important;}
+    .coupon_point th,.coupon_point td{
+        padding:8px 4px;
+        font-size:11px;
+    }
+    .coupon_point th:nth-child(1),.coupon_point td:nth-child(1){width:25%;}
+    .coupon_point th:nth-child(2),.coupon_point td:nth-child(2){width:32%;}
+    .coupon_point th:nth-child(3),.coupon_point td:nth-child(3){width:18%;}
+    .coupon_point th:nth-child(4),.coupon_point td:nth-child(4){width:25%;}
+    .couponList{grid-template-columns:1fr;gap:12px;}
+    .couponBox{min-height:auto;padding:16px;}
 }
 .plannerContainer .sectionTitle,.sharedPlanContainer .sectionTitle,.reservationContainer>.sectionTitle,.wishlistContainer>.sectionTitle,.reviewContainer>.sectionTitle{
     margin-bottom:50px;
@@ -759,6 +745,262 @@ body{
         flex-basis:100%;
     }
 }
+
+/* 인스타그램 스타일 리뷰 영역 */
+.reviewContainer{
+    width:100%;
+    margin:30px 0;
+    color:#262626;
+    font-family:'Segoe UI',Arial,sans-serif;
+}
+.reviewContainer .sectionTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    padding-bottom:14px;
+    border-bottom:1px solid #efefef;
+}
+.reviewContainer .sectionTitle>span{
+    font-size:21px;
+    font-weight:700;
+    color:#262626;
+}
+.reviewContainer .sectionTitle>a{
+    color:#0095f6;
+    font-size:13px;
+    font-weight:600;
+    text-decoration:none;
+    transition:color .2s;
+}
+.reviewContainer .sectionTitle>a:hover{
+    color:#00376b;
+}
+.reviewContainer .reviewList{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:22px;
+    align-items:start;
+}
+.reviewContainer .reviewCard{
+    min-width:0;
+    overflow:hidden;
+    background:#fff;
+    border:1px solid #dbdbdb;
+    border-radius:12px;
+    transition:transform .25s,box-shadow .25s;
+}
+.reviewContainer .reviewCard:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+}
+.reviewContainer .reviewUser{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 14px;
+}
+.reviewContainer .reviewProfile{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+    border-radius:50%;
+    padding:2px;
+    background:linear-gradient(135deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+}
+.reviewContainer .reviewProfile span{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    height:100%;
+    border:2px solid #fff;
+    border-radius:50%;
+    background:#fff;
+    color:#d62976;
+    font-size:17px;
+    font-weight:800;
+}
+.reviewContainer .reviewUserInfo{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    min-width:0;
+}
+.reviewContainer .reviewUserInfo strong{
+    overflow:hidden;
+    color:#262626;
+    font-size:13px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.reviewContainer .reviewUserInfo>span{
+    color:#8e8e8e;
+    font-size:11px;
+}
+.reviewContainer .reviewMore{
+    margin-left:auto;
+    padding:5px;
+    border:0;
+    background:transparent;
+    color:#262626;
+    font-size:17px;
+    cursor:pointer;
+}
+.reviewContainer .reviewImage{
+    width:100%;
+    aspect-ratio:1/1;
+    overflow:hidden;
+    background:#fafafa;
+}
+.reviewContainer .reviewImage img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .35s;
+}
+.reviewContainer .reviewCard:hover .reviewImage img{
+    transform:scale(1.03);
+}
+.reviewContainer .reviewNoImage{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    height:100%;
+    color:#c13584;
+    background:linear-gradient(135deg,#fff0f6,#f3e8ff,#e8f4ff);
+}
+.reviewContainer .reviewNoImage>span{
+    font-size:45px;
+}
+.reviewContainer .reviewNoImage p{
+    margin:12px 0 0;
+    color:#777;
+    font-size:12px;
+}
+.reviewContainer .reviewInfo{
+    padding:13px 14px 15px;
+}
+.reviewContainer .reviewIcons{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:10px;
+}
+.reviewContainer .reviewIcons span{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#262626;
+    font-size:25px;
+    line-height:1;
+}
+.reviewContainer .reviewIcons .reviewHeart{
+    color:#ed4956;
+    font-size:29px;
+}
+.reviewContainer .reviewIcons .reviewShareIcon{
+    margin-left:auto;
+    color:#262626;
+    font-size:25px;
+}
+.reviewContainer .reviewLike{
+    margin:0 0 10px;
+    color:#262626;
+    font-size:13px;
+}
+.reviewContainer .reviewLike strong{
+    color:#c13584;
+    font-size:15px;
+}
+.reviewContainer .reviewDescription{
+    display:-webkit-box;
+    overflow:hidden;
+    margin:0 0 9px;
+    color:#262626;
+    font-size:13px;
+    line-height:1.7;
+    overflow-wrap:anywhere;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:3;
+}
+.reviewContainer .reviewTag{
+    margin:0 0 10px;
+    color:#00376b;
+    font-size:12px;
+}
+.reviewContainer .reviewDate{
+    margin:10px 0 0;
+    color:#a8a8a8;
+    font-size:10px;
+}
+.reviewContainer .reviewActions{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px solid #efefef;
+}
+.reviewContainer .reviewActions a{
+    color:#8e8e8e;
+    font-size:11px;
+    text-decoration:none;
+}
+.reviewContainer .reviewActions a:hover{
+    color:#c13584;
+}
+.reviewContainer .emptyReview{
+    grid-column:1/-1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    min-height:200px;
+    padding:30px 15px;
+    border:1px dashed #dbdbdb;
+    border-radius:12px;
+    background:#fff;
+    text-align:center;
+}
+.reviewContainer .emptyReview>span{
+    margin-bottom:12px;
+    color:#c13584;
+    font-size:42px;
+}
+.reviewContainer .emptyReview strong{
+    color:#262626;
+    font-size:16px;
+}
+.reviewContainer .emptyReview p{
+    margin:8px 0 0;
+    color:#8e8e8e;
+    font-size:13px;
+}
+@media(max-width:1100px){
+    .reviewContainer .reviewList{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:16px;
+    }
+}
+@media(max-width:600px){
+    .reviewContainer .reviewList{
+        grid-template-columns:1fr;
+        gap:18px;
+    }
+    .reviewContainer .reviewCard{
+        border-radius:10px;
+    }
+    .reviewContainer .sectionTitle>span{
+        font-size:19px;
+    }
+}
 </style>
 </head>
 <body>
@@ -793,7 +1035,7 @@ body{
                 </ul>
                 <span>혜택</span>
                 <ul>
-                    <li><a href="#">포인트 내역</a></li>
+                    <li><a href="/members/mileage">마일리지 내역</a></li>
                     <li><a href="#">쿠폰함</a></li>
                 </ul>
                 <span>계정</span>
@@ -810,8 +1052,8 @@ body{
             <nav class="mybarBox">
                 <a class="a1"><strong>${upcomingCount}</strong><span>다가오는 예약</span></a>
                 <a class="a2"><strong>${myWishTotalCount}</strong><span>찜한 목록</span></a>
-                <a class="a3"><strong>??</strong><span>작성한 리뷰</span></a>
-                <a class="a4"><strong>${mileage}M</strong><span>보유마일리지</span></a>
+                <a class="a3"><strong>${reviewCount}</strong><span>작성한 리뷰</span></a>
+                <a class="a4"><strong><fmt:formatNumber value="${mileage}" pattern="#,##0"/>M</strong><span>보유마일리지</span></a>
                 <a class="a5"><strong><fmt:formatDate value="${regdate}" pattern="yyyy-MM-dd"/></strong><span>가입일자</span></a>
             </nav>
             <div class="plannerContainer">
@@ -989,32 +1231,75 @@ body{
                 </c:forEach>
             </div>
 
-            <div class="reviewContainer">
-                <div class="sectionTitle">
-                    <span>내가 쓴 리뷰</span>
-                    <a href="#">더 보기 &gt;</a>
-                </div>
-                <div class="reviewList">
-                    <c:forEach var="review" items="${review}">
-                        <div class="reviewCard">
-                            <div class="reviewUser"><strong>${review.nickname}</strong></div>
-                            <div class="reviewImage"><img src="${review.image}" alt="${review.title}"></div>
-                            <div class="reviewInfo">
-                                <div class="reviewIcons"><span>♡</span><span>⊙</span><span>↗</span></div>
-                                <p class="reviewLike">좋아요 ${review.likeCount}개</p>
-                                <p class="reviewTitleText">${review.title}</p>
-                                <p class="reviewDescription">후기 · "${review.description}"</p>
-                                <p class="reviewDate">${review.writeDate} · <a href="#">수정</a> / <a href="#">삭제</a></p>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
+
+
+			<div class="reviewContainer">
+			    <div class="sectionTitle">
+			        <span>내가 쓴 리뷰</span>
+			        <a href="/review/myReview">더 보기 <span>→</span></a>
+			    </div>
+			    <div class="reviewList">
+			        <c:forEach var="rv" items="${reviewList}">
+			            <div class="reviewCard">
+			                <div class="reviewUser">
+			                    <div class="reviewProfile">
+			                        <span>G</span>
+			                    </div>
+			                    <div class="reviewUserInfo">
+			                        <strong>${rv.member_id}</strong>
+			                        <span>${rv.target_type} 리뷰</span>
+			                    </div>
+			                    <button type="button" class="reviewMore">•••</button>
+			                </div>
+			                <div class="reviewImage">
+			                    <c:choose>
+			                        <c:when test="${not empty rv.image1}">
+			                            <img src="${rv.image1}" alt="리뷰 이미지">
+			                        </c:when>
+			                        <c:otherwise>
+			                            <div class="reviewNoImage">
+			                                <span>✈</span>
+			                                <p>여행의 순간을 기록해 보세요</p>
+			                            </div>
+			                        </c:otherwise>
+			                    </c:choose>
+			                </div>
+			                <div class="reviewInfo">
+			                    <div class="reviewIcons">
+			                        <span class="reviewHeart">♡</span>
+			                        <span class="reviewCommentIcon">◯</span>
+			                        <span class="reviewShareIcon">↗</span>
+			                    </div>
+			                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
+			                    <p class="reviewDescription">${rv.contents}</p>
+			                    <c:if test="${not empty rv.tag}">
+			                        <p class="reviewTag">${rv.tag}</p>
+			                    </c:if>
+			                    <p class="reviewDate">
+			                        ${rv.reg_date}
+			                    </p>
+			                    <div class="reviewActions">
+			                        <a href="/review/update?seq=${rv.seq}">수정</a>
+			                        <a href="/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
+			                    </div>
+			                </div>
+			            </div>
+			        </c:forEach>
+			        <c:if test="${empty reviewList}">
+			            <div class="emptyReview">
+			                <span>♡</span>
+			                <strong>아직 작성한 리뷰가 없어요</strong>
+			                <p>여행의 소중한 순간을 리뷰로 남겨보세요.</p>
+			            </div>
+			        </c:if>
+			    </div>
+			</div>
+
 
             <div class="couponContainer">
                 <div class="couponSectionTitle">
                     <span>마일리지 · 적립내역</span>
-                    <a href="#">더 보기 &gt;</a>
+                    <a href="/members/mileage">더 보기 &gt;</a>
                 </div>
                 <div class="coupon_point" style="padding:20px 20px 12px">
                     <table align="center">
