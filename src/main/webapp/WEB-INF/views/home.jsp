@@ -471,13 +471,6 @@
             border-radius: 10px;
         }
         
-        .popularzone {
-            float: left;
-            width: auto;
-            height: auto;
-            margin: 10px;
-            
-        }
         .boardwriter {
             width: 100%;
             height: 20px;
@@ -657,6 +650,221 @@
 		#searchResult::-webkit-scrollbar-thumb:hover {
 		    background: #bdb0a4;
 		}	
+		/* 인스타그램 스타일 리뷰 영역 */
+		.reviewContainer{
+		    width:100%;
+		    margin:30px 0;
+		    color:#262626;
+		    font-family:'Segoe UI',Arial,sans-serif;
+		}
+		.reviewContainer .reviewList{
+		    display:grid;
+		    grid-template-columns:repeat(3,minmax(0,1fr));
+		    gap:22px;
+		    align-items:start;
+		}
+		.reviewContainer .reviewCard{
+		    min-width:0;
+		    height: 600px;
+		    overflow:hidden;
+		    background:#fff;
+		    border:1px solid #dbdbdb;
+		    border-radius:12px;
+		    transition:transform .25s,box-shadow .25s;
+		}
+		.reviewContainer .reviewCard:hover{
+		    transform:translateY(-4px);
+		    box-shadow:0 8px 24px rgba(0,0,0,.08);
+		}
+		.reviewContainer .reviewUser{
+		    display:flex;
+		    align-items:center;
+		    gap:10px;
+		    padding:13px 14px;
+		}
+		.reviewContainer .reviewProfile{
+		    display:flex;
+		    justify-content:center;
+		    align-items:center;
+		    width:38px;
+		    height:38px;
+		    flex-shrink:0;
+		    border-radius:50%;
+		    padding:2px;
+		    background:linear-gradient(135deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+		}
+		.reviewContainer .reviewProfile span{
+		    display:flex;
+		    justify-content:center;
+		    align-items:center;
+		    width:100%;
+		    height:100%;
+		    border:2px solid #fff;
+		    border-radius:50%;
+		    background:#fff;
+		    color:#d62976;
+		    font-size:17px;
+		    font-weight:800;
+		}
+		.reviewContainer .reviewUserInfo{
+		    display:flex;
+		    flex-direction:column;
+		    gap:3px;
+		    min-width:0;
+		}
+		.reviewContainer .reviewUserInfo strong{
+		    overflow:hidden;
+		    color:#262626;
+		    font-size:13px;
+		    text-overflow:ellipsis;
+		    white-space:nowrap;
+		}
+		.reviewContainer .reviewUserInfo>span{
+		    color:#8e8e8e;
+		    font-size:11px;
+		}
+		.reviewContainer .reviewMore{
+		    margin-left:auto;
+		    padding:5px;
+		    border:0;
+		    background:transparent;
+		    color:#262626;
+		    font-size:17px;
+		    cursor:pointer;
+		}
+		.reviewContainer .reviewImage{
+		    width:100%;
+		    aspect-ratio:1/1;
+		    overflow:hidden;
+		    background:#fafafa;
+		}
+		.reviewContainer .reviewImage img{
+		    display:block;
+		    width:100%;
+		    height:100%;
+		    object-fit:cover;
+		    transition:transform .35s;
+		}
+		.reviewContainer .reviewCard:hover .reviewImage img{
+		    transform:scale(1.03);
+		}
+		.reviewContainer .reviewNoImage{
+		    display:flex;
+		    flex-direction:column;
+		    justify-content:center;
+		    align-items:center;
+		    width:100%;
+		    height:100%;
+		    color:#c13584;
+		    background:linear-gradient(135deg,#fff0f6,#f3e8ff,#e8f4ff);
+		}
+		.reviewContainer .reviewNoImage>span{
+		    font-size:45px;
+		}
+		.reviewContainer .reviewNoImage p{
+		    margin:12px 0 0;
+		    color:#777;
+		    font-size:12px;
+		}
+		.reviewContainer .reviewInfo{
+		    padding:13px 14px 15px;
+		}
+		.reviewContainer .reviewIcons{
+		    display:flex;
+		    align-items:center;
+		    gap:15px;
+		    margin-bottom:10px;
+		}
+		.reviewContainer .reviewIcons span{
+		    display:inline-flex;
+		    align-items:center;
+		    justify-content:center;
+		    color:#262626;
+		    font-size:25px;
+		    line-height:1;
+		}
+		.reviewContainer .reviewIcons .reviewHeart{
+		    color:#ed4956;
+		    font-size:29px;
+		}
+		.reviewContainer .reviewIcons .reviewShareIcon{
+		    margin-left:auto;
+		    color:#262626;
+		    font-size:25px;
+		}
+		.reviewContainer .reviewLike{
+		    margin:0 0 10px;
+		    color:#262626;
+		    font-size:13px;
+		}
+		.reviewContainer .reviewLike strong{
+		    color:#c13584;
+		    font-size:15px;
+		}
+		.reviewContainer .reviewDescription{
+		    display:-webkit-box;
+		    overflow:hidden;
+		    margin:0 0 9px;
+		    color:#262626;
+		    font-size:13px;
+		    line-height:1.7;
+		    overflow-wrap:anywhere;
+		    -webkit-box-orient:vertical;
+		    -webkit-line-clamp:3;
+		}
+		.reviewContainer .reviewTag{
+		    margin:0 0 10px;
+		    color:#00376b;
+		    font-size:12px;
+		}
+		.reviewContainer .reviewDate{
+		    margin:10px 0 0;
+		    color:#a8a8a8;
+		    font-size:10px;
+		}
+		.reviewContainer .reviewActions{
+		    display:flex;
+		    justify-content:flex-end;
+		    gap:12px;
+		    margin-top:12px;
+		    padding-top:10px;
+		    border-top:1px solid #efefef;
+		}
+		.reviewContainer .reviewActions a{
+		    color:#8e8e8e;
+		    font-size:11px;
+		    text-decoration:none;
+		}
+		.reviewContainer .reviewActions a:hover{
+		    color:#c13584;
+		}
+		.reviewContainer .emptyReview{
+		    grid-column:1/-1;
+		    display:flex;
+		    flex-direction:column;
+		    justify-content:center;
+		    align-items:center;
+		    min-height:200px;
+		    padding:30px 15px;
+		    border:1px dashed #dbdbdb;
+		    border-radius:12px;
+		    background:#fff;
+		    text-align:center;
+		}
+		.reviewContainer .emptyReview>span{
+		    margin-bottom:12px;
+		    color:#c13584;
+		    font-size:42px;
+		}
+		.reviewContainer .emptyReview strong{
+		    color:#262626;
+		    font-size:16px;
+		}
+		.reviewContainer .emptyReview p{
+		    margin:8px 0 0;
+		    color:#8e8e8e;
+		    font-size:13px;
+		}
 		
     </style>
 
@@ -842,17 +1050,68 @@
     </div>
 
     <div class="popularboard">
-        <div class="moreview"><a href="/board/reviewBoard?cpage=1">더 보기</a></div>
-        <c:forEach var="i" items="${review}">
-	        <div class="popularzone">
-	            <div class="boardwriter">${i.writer}</div>
-	            <div class="popularphoto"><img src=""></div>
-	            <div class="boardtext" style="padding: 5px;">
-	                <p style="font-weight: bold;">writer</p>
-	                <p>contents</p>
-	            </div>
-	        </div>
-        </c:forEach>
+        
+    	<div class="reviewContainer">
+    		<div class="moreview"><a href="/review/reviewBoard?cpage=1">더 보기</a></div>
+
+			    <div class="reviewList">
+			        <c:forEach var="rv" items="${reviewList}" end="2"> 
+			            <div class="reviewCard">
+			                <div class="reviewUser">
+			                    <div class="reviewProfile">
+			                        <span>G</span>
+			                    </div>
+			                    <div class="reviewUserInfo">
+			                        <strong>${rv.member_id}</strong>
+			                        <span>${rv.target_type} 리뷰</span>
+			                    </div>
+			                    <button type="button" class="reviewMore">•••</button>
+			                </div>
+			                <div class="reviewImage">
+			                    <c:choose>
+			                        <c:when test="${not empty rv.image1}">
+			                            <img src="${rv.image1}" alt="리뷰 이미지">
+			                        </c:when>
+			                        <c:otherwise>
+			                            <div class="reviewNoImage">
+			                                <span>✈</span>
+			                                <p>여행의 순간을 기록해 보세요</p>
+			                            </div>
+			                        </c:otherwise>
+			                    </c:choose>
+			                </div>
+			                <div class="reviewInfo">
+			                    <div class="reviewIcons">
+			                        <span class="reviewHeart">♡</span>
+			                        <span class="reviewCommentIcon">◯</span>
+			                        <span class="reviewShareIcon">↗</span>
+			                    </div>
+			                    <div class="reviewtext">
+				                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
+				                    <p class="reviewDescription">${rv.contents}</p>
+				                    <c:if test="${not empty rv.tag}">
+				                        <p class="reviewTag">${rv.tag}</p>
+				                    </c:if>
+				                    <p class="reviewDate">
+				                        ${rv.reg_date}
+				                    </p>
+			                    </div>
+			                    <div class="reviewActions">
+			                        <a href="/review/update?seq=${rv.seq}">수정</a>
+			                        <a href="/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
+			                    </div>
+			                </div>
+			            </div>
+			        </c:forEach>
+			        <c:if test="${empty reviewList}">
+			            <div class="emptyReview">
+			                <span>♡</span>
+			                <strong>아직 작성한 리뷰가 없어요</strong>
+			                <p>여행의 소중한 순간을 리뷰로 남겨보세요.</p>
+			            </div>
+			        </c:if>
+			    </div>
+			</div>
     </div>
 	<div id="notice"></div>
     <hr>

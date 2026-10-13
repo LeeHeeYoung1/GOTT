@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kedu.dao.BannerDAO;
 import com.kedu.dao.NoticeDAO;
 import com.kedu.dao.PlaceDAO;
+import com.kedu.dao.ReviewDAO;
 import com.kedu.dao.TravelPlanDAO;
 import com.kedu.dto.BannerDTO;
 import com.kedu.dto.NoticeDTO;
+import com.kedu.dto.ReviewDTO;
 import com.kedu.services.BannerService;
 
 
@@ -36,6 +38,9 @@ public class HomeController {
 	@Autowired
 	private BannerDAO bannerDAO;
 	
+	@Autowired
+	private ReviewDAO rvdao;
+	
 	@RequestMapping(value = "/")
 	public String home(Model model, HttpSession session) {
 		
@@ -49,11 +54,13 @@ public class HomeController {
 		List<NoticeDTO> ilist = ndao.important();
 		List<BannerDTO> banner = bannerService.getBannerList();
 		
+		List<ReviewDTO> reviewList = rvdao.selectRecentReviews();
+		
 		model.addAttribute("planList", tpdao.selectPublicPlansWithCount());
 		
 		model.addAttribute("stayImgs", stayImgs);
 		model.addAttribute("ilist", ilist);
-		
+		model.addAttribute("reviewList",reviewList);
 		model.addAttribute("banner", banner);
 		
 		return "home";

@@ -110,5 +110,12 @@ public class ReviewDAO {
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 	
+	public List<ReviewDTO> selectRecentReviews() {
+
+	    String sql = "select seq, member_id, target_type, image1, rating, contents, tag, reg_date from review order by reg_date desc";
+	           
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class));
+	}
+	
 	
 }
