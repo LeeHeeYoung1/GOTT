@@ -50,9 +50,19 @@ public class ReplyDAO {
 		 return jdbc.update(sql, contents, seq, writer);
 	 }
 	 
-	 public int delete(int seq, String writer) {
-		 String sql = "delete from reply where seq = ? and writer = ?";
-		 return jdbc.update(sql, seq, writer);
+	 public int delete(int seq) {
+		 String sql = "delete from reply where seq = ?";
+		 return jdbc.update(sql, seq);
+	 }
+	 
+	 public int deleteByBoard(int seq) {
+		 String sql = "delete from reply where board_seq = ?";
+		 return jdbc.update(sql, seq);
+	 }
+	 
+	 public int deleteChild(int seq) {
+		 String sql = "delete from reply where parent_seq = ?";
+		 return jdbc.update(sql, seq);
 	 }
 	 
 	 public int replyCount(int board_seq) {

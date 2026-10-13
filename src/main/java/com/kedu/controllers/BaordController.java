@@ -299,10 +299,10 @@ public String replyBoard(int cpage, Model model) {
 	
 	@RequestMapping("/boardDelete")
 	public String delete(int seq, int cpage, HttpSession session) {
-
-	    String nickname = (String) session.getAttribute("nickname");
-
-	    bdao.delete(seq, nickname);
+		recommendDao.deleteRecommend(seq);
+		redao.deleteChild(seq);
+		redao.deleteByBoard(seq);
+	    bdao.delete(seq);
 
 	    return "redirect:/board/freeBoard?cpage=" + cpage;
 	}
@@ -339,7 +339,7 @@ public String replyBoard(int cpage, Model model) {
 	        recommendDao.recommend(board_seq, writer);
 	        return "recommend";
 	    } else {
-	        recommendDao.deleteRecommend(board_seq, writer);
+	        recommendDao.deleteRecommend(board_seq);
 	        return "cancel";
 	    }
 	}
