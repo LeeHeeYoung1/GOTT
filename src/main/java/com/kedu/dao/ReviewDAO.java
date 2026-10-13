@@ -17,7 +17,7 @@ public class ReviewDAO {
 	private JdbcTemplate jdbc;
 	
 	public int insert(ReviewDTO dto) {
-		String sql = "insert into review values(review_seq.nextval, ?, ?, ?, ?, systimestamp, ?, ?, ?)";
+		String sql = "insert into review values(review_seq.nextval, ?, ?, ?, ?, systimestamp, ?, ?, ?, 0)";
 		
 		return jdbc.update(sql, dto.getMember_id(), dto.getTarget_type(), dto.getTarget_id(), dto.getRating(), dto.getTag(), dto.getContents(), dto.getImage1());
 	}
