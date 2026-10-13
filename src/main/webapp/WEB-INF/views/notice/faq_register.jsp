@@ -206,7 +206,7 @@
 
         <div class="buttonBox">
             <button type="button"
-                onclick="location.href='/notice/faq'">취소</button>
+                onclick="location.href='/notice/faq?cpage=${cpage}'">취소</button>
 
             <button type="submit" class="submitBtn">등록</button>
         </div>
