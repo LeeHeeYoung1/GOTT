@@ -768,6 +768,11 @@ body{
     <div class="mypageContainer">
         <h2 style="margin:24px 0 4px;">마이페이지</h2>
         <h5 style="font-size:13px;color:#7c7c7c;margin:0 0 16px;">예약 내역과 찜한 여행지, 내가 남긴 기록을 한 곳에서 관리</h5>
+        <c:if test="${not empty reservationUpdateMessage}">
+		    <script>
+		        alert("${reservationUpdateMessage}");
+		    </script>
+		</c:if>
         <hr style="border:1px solid rgb(248,246,246);margin:0 0 20px;">
         <div class="breadcrumb" style="font-size:12px;margin:20px;">홈 &gt; 마이페이지 &gt; 대시보드</div>
         <div class="sideBox">
@@ -783,7 +788,7 @@ body{
                     <li><a href="/members/reservationpage">예약 내역</a></li>
                     <li><a href="/members/wishlist">찜한 목록</a></li>
                     <li><a href="/members/planner">여행 일정 플래너</a></li>
-                    <li><a href="#">내가 쓴 리뷰</a></li>
+                    <li><a href="/review/reviewlist">내가 쓴 리뷰</a></li>
                     <li><a href="#">내가 쓴 게시글</a></li>
                 </ul>
                 <span>혜택</span>
@@ -865,7 +870,8 @@ body{
             <div class="reservationContainer" id="reservationSection">
                 <div class="sectionTitle">
                     <span>예약내역</span>
-                    <a href="#">예약내역 열기</a>
+                    <a href="/members/reservationpage">예약내역 열기</a>
+                    
                 </div>
 
                 <div class="reservationVar">
@@ -1080,11 +1086,16 @@ $(".cancelBtn").on("click", async function() {
     }
 });
 
+
 $(".updateBtn").on("click", function() {
     let paymentId = $(this).data("payment-id");
-    window.open("${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" 
-    			+ encodeURIComponent(paymentId), "reservationUpdate", "width=1200,height=800,left=" + (screen.width - 1200) / 2 + ",top=" + (screen.height - 800) / 2);
+    if (!paymentId) {
+        alert("예약 정보를 찾을 수 없습니다.");
+        return;
+    }
+    location.href = "${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId);
 });
+
 
 $(".detailBtn").on("click", function() {
     $(this).closest(".flipCard").addClass("flipped");
@@ -1093,6 +1104,8 @@ $(".detailBtn").on("click", function() {
 $(".backBtn").on("click", function() {
     $(this).closest(".flipCard").removeClass("flipped");
 });
+
+
 </script>
 </body>
 </html>

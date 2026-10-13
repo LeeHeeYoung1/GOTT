@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -10,472 +9,530 @@
     <link rel="stylesheet" href="/css/public.css">
     <title>GOTT 예약내역</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 16px;
-            color: #263238;
-            background: #f8fafa;
-            line-height: 1.5;
-        }
-        .mypageContainer {
-            width: 1200px;
-            max-width: calc(100% - 40px);
-            margin: 0 auto;
-        }
-        .mypageContainer a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .mypageContainer button {
-            cursor: pointer;
-        }
-        .mypageContainer > h2,
-        .mypageContainer > h5 {
-            text-align: center;
-        }
-        .sideBox {
-            width: 17%;
-            float: left;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            background: white;
-        }
-        .loginId {
-            padding: 20px;
-            text-align: center;
-        }
-        .loginId strong {
-            font-size: 14px;
-        }
-        .loginId span {
-            font-size: 12px;
-            color: #797472;
-        }
-        .sideBox hr {
-            margin: 0;
-            border: 0;
-            border-top: 1px solid #e5e7eb;
-        }
-        .sideTitle {
-            padding-bottom: 10px;
-        }
-        .sideTitle > span {
-            display: block;
-            margin: 12px 20px 5px;
-            font-size: 12px;
-            color: #797472;
-        }
-        .sideTitle ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sideTitle li {
-            padding: 6px 20px;
-            font-size: 14px;
-        }
-        .sideTitle li a {
-            display: block;
-            color: #222;
-        }
-        .sideTitle li:hover {
-            background: #f2f2f2;
-        }
-        .sideTitle li.active {
-            background: #eff6ff;
-        }
-        .sideTitle li.active a {
-            color: #2563eb;
-            font-weight: 600;
-        }
-        .mainContainer {
-            width: 83%;
-            margin-left: 17%;
-            padding-left: 20px;
-        }
-        .reservationStats {
-            display: flex;
-            width: 100%;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            background: white;
-        }
-        .reservationStats > div {
-            width: 25%;
-            height: 90px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .reservationStats > div + div {
-            border-left: 1px solid #e5e7eb;
-        }
-        .reservationStats > div:hover,
-        .reservationStats > div.active {
-            background: #eff6ff;
-        }
-        .reservationStats strong {
-            font-size: 21px;
-            color: #222;
-        }
-        .reservationStats > div.active strong {
-            color: #2563eb;
-        }
-        .reservationStats span {
-            margin-top: 4px;
-            font-size: 12px;
-            color: #797472;
-        }
-        .reservationToolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 25px 0 14px;
-        }
-        .reservationTabs {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-        }
-        .reservationTabs button {
-            padding: 8px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: white;
-            font-size: 13px;
-            color: #333;
-        }
-        .reservationTabs button.active {
-            background: #222;
-            color: white;
-            border-color: #222;
-            font-weight: 600;
-        }
-        .reservationTabs .count {
-            margin-left: 4px;
-            color: #999;
-        }
-        .reservationTabs button.active .count {
-            color: #ddd;
-        }
-        .reservationTools {
-            display: flex;
-            gap: 8px;
-        }
-        .reservationTools input,
-        .reservationTools select {
-            height: 34px;
-            padding: 0 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: white;
-            font-size: 12px;
-            min-width: 0;
-        }
-        .reservationSummary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 15px 0;
-            font-size: 13px;
-            color: #777;
-        }
-        .reservationSummary strong {
-            color: #222;
-        }
-        .reservationList {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .reservationCard {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            background: white;
-            overflow: hidden;
-        }
-        .reservationCard[hidden] {
-            display: none;
-        }
-        .reservationCardTop {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 18px;
-            background: #fafafa;
-            border-bottom: 1px solid #eee;
-            font-size: 12px;
-            color: #777;
-            gap: 10px;
-        }
-        .reservationNumber {
-            color: #555;
-        }
-        .statusBadge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            background: #eff6ff;
-            color: #2563eb;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .statusBadge.completed {
-            background: #f0fdf4;
-            color: #15803d;
-        }
-        .statusBadge.cancelled {
-            background: #fef2f2;
-            color: #dc2626;
-        }
-        .statusBadge.pending {
-            background: #fefce8;
-            color: #a16207;
-        }
-        .reservationCardBody {
-            display: flex;
-            gap: 18px;
-            padding: 20px;
-        }
-        .stayImage {
-            width: 145px;
-            height: 125px;
-            flex-shrink: 0;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #f1f1f1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 12px;
-        }
-        .stayImage img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .reservationInfo {
-            flex: 1;
-            min-width: 0;
-        }
-        .reservationInfo h3 {
-            margin: 0 0 5px;
-            font-size: 17px;
-            color: #222;
-        }
-        .roomName {
-            margin: 0 0 14px;
-            font-size: 13px;
-            color: #777;
-        }
-        .reservationDetails {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 9px 18px;
-        }
-        .detailItem {
-            font-size: 12px;
-            color: #777;
-            min-width: 0;
-            overflow-wrap: anywhere;
-        }
-        .detailItem strong {
-            display: block;
-            margin-top: 3px;
-            font-size: 13px;
-            color: #333;
-            font-weight: 500;
-        }
-        .reservationPrice {
-            min-width: 130px;
-            text-align: right;
-            align-self: center;
-        }
-        .reservationPrice span {
-            display: block;
-            font-size: 12px;
-            color: #777;
-        }
-        .reservationPrice strong {
-            display: block;
-            margin-top: 5px;
-            font-size: 19px;
-            color: #222;
-        }
-        .reservationCardBottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            padding: 13px 18px;
-            border-top: 1px solid #eee;
-        }
-        .reservationCardBottom .paymentInfo {
-            font-size: 12px;
-            color: #777;
-        }
-        .reservationActions {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-        }
-        .reservationActions a,
-        .reservationActions button {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 33px;
-            padding: 0 13px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: white;
-            font-size: 12px;
-            color: #333;
-        }
-        .reservationActions a:hover,
-        .reservationActions button:hover {
-            background: #222;
-            color: white;
-            border-color: #222;
-        }
-        .reservationActions .cancelBtn {
-            color: #dc2626;
-            border-color: #fecaca;
-        }
-        .emptyReservation {
-            padding: 65px 20px;
-            text-align: center;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            background: white;
-            color: #888;
-            font-size: 14px;
-        }
-        .emptyReservation strong {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 17px;
-            color: #333;
-        }
-        .emptyReservation a {
-            display: inline-block;
-            margin-top: 18px;
-            padding: 10px 18px;
-            border-radius: 6px;
-            background: #222;
-            color: white;
-        }
-        @media (max-width: 1000px) {
-            .mypageContainer {
-                max-width: calc(100% - 24px);
-            }
-            .sideBox {
-                width: 22%;
-            }
-            .mainContainer {
-                width: 78%;
-                margin-left: 22%;
-                padding-left: 14px;
-            }
-            .reservationCardBody {
-                flex-wrap: wrap;
-            }
-            .reservationPrice {
-                width: 100%;
-                text-align: left;
-                border-top: 1px solid #eee;
-                padding-top: 12px;
-            }
-        }
-        @media (max-width: 650px) {
-            .mypageContainer {
-                max-width: calc(100% - 20px);
-            }
-            .sideBox {
-                float: none;
-                width: 100%;
-                margin-bottom: 20px;
-            }
-            .mainContainer {
-                width: 100%;
-                margin-left: 0;
-                padding-left: 0;
-            }
-            .reservationStats > div {
-                height: 75px;
-            }
-            .reservationStats strong {
-                font-size: 17px;
-            }
-            .reservationStats span {
-                font-size: 11px;
-            }
-            .reservationToolbar {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-            .reservationTools {
-                width: 100%;
-            }
-            .reservationTools input {
-                flex: 1;
-                width: 50%;
-            }
-            .reservationTools select {
-                width: 42%;
-            }
-            .reservationCardBody {
-                padding: 14px;
-                gap: 12px;
-            }
-            .stayImage {
-                width: 100px;
-                height: 100px;
-            }
-            .reservationInfo h3 {
-                font-size: 15px;
-            }
-            .roomName {
-                margin-bottom: 10px;
-            }
-            .reservationDetails {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-            .reservationCardTop,
-            .reservationCardBottom {
-                padding: 12px;
-            }
-            .reservationCardBottom {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-            .reservationActions {
-                width: 100%;
-            }
-            .reservationActions a,
-            .reservationActions button {
-                flex: 1;
-                padding: 0 8px;
-            }
-            .reservationPrice strong {
-                font-size: 17px;
-            }
-        }
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    color: #263238;
+    background: #f8fafa;
+    line-height: 1.5;
+}
+
+.mypageContainer {
+    width: 1200px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto;
+}
+
+.mypageContainer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.mypageContainer button {
+    cursor: pointer;
+}
+
+.mypageContainer > h2,
+.mypageContainer > h5 {
+    text-align: center;
+}
+
+.sideBox {
+    width: 17%;
+    float: left;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.loginId {
+    padding: 20px;
+    text-align: center;
+}
+
+.loginId strong {
+    font-size: 14px;
+}
+
+.loginId span {
+    font-size: 12px;
+    color: #797472;
+}
+
+.sideBox hr {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+.sideTitle {
+    padding-bottom: 10px;
+}
+
+.sideTitle > span {
+    display: block;
+    margin: 12px 20px 5px;
+    font-size: 12px;
+    color: #797472;
+}
+
+.sideTitle ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sideTitle li {
+    padding: 6px 20px;
+    font-size: 14px;
+}
+
+.sideTitle li a {
+    display: block;
+    color: #222;
+}
+
+.sideTitle li:hover {
+    background: #f2f2f2;
+}
+
+.sideTitle li.active {
+    background: #eff6ff;
+}
+
+.sideTitle li.active a {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.mainContainer {
+    width: 83%;
+    margin-left: 17%;
+    padding-left: 20px;
+}
+
+.reservationStats {
+    display: flex;
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.reservationStats > div {
+    width: 25%;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.reservationStats > div + div {
+    border-left: 1px solid #e5e7eb;
+}
+
+.reservationStats > div:hover,
+.reservationStats > div.active {
+    background: #eff6ff;
+}
+
+.reservationStats strong {
+    font-size: 21px;
+    color: #222;
+}
+
+.reservationStats > div.active strong {
+    color: #2563eb;
+}
+
+.reservationStats span {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #797472;
+}
+
+.reservationToolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 25px 0 14px;
+}
+
+.reservationTabs {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.reservationTabs button {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 13px;
+    color: #333;
+}
+
+.reservationTabs button.active {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+    font-weight: 600;
+}
+
+.reservationTabs .count {
+    margin-left: 4px;
+    color: #999;
+}
+
+.reservationTabs button.active .count {
+    color: #ddd;
+}
+
+.reservationSummary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.reservationSummary strong {
+    color: #222;
+}
+
+.reservationList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.reservationCard {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.reservationCardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: #fafafa;
+    border-bottom: 1px solid #eee;
+    font-size: 12px;
+    color: #777;
+}
+
+.reservationNumber {
+    color: #555;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.statusBadge.completed {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.statusBadge.cancelled {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.statusBadge.pending {
+    background: #fefce8;
+    color: #a16207;
+}
+
+.reservationCardBody {
+    display: flex;
+    gap: 18px;
+    padding: 20px;
+}
+
+.stayImage {
+    width: 145px;
+    height: 125px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f1f1f1;
+    color: #999;
+    font-size: 12px;
+}
+
+.stayImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.reservationInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.reservationInfo h3 {
+    margin: 0 0 5px;
+    font-size: 17px;
+    color: #222;
+}
+
+.roomName {
+    margin: 0 0 14px;
+    font-size: 13px;
+    color: #777;
+}
+
+.reservationDetails {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px 18px;
+}
+
+.detailItem {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 12px;
+    color: #777;
+}
+
+.detailItem strong {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+}
+
+.reservationPrice {
+    min-width: 130px;
+    text-align: right;
+    align-self: center;
+}
+
+.reservationPrice span {
+    display: block;
+    font-size: 12px;
+    color: #777;
+}
+
+.reservationPrice strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 19px;
+    color: #222;
+}
+
+.reservationCardBottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    border-top: 1px solid #eee;
+}
+
+.reservationCardBottom .paymentInfo {
+    font-size: 12px;
+    color: #777;
+}
+
+.reservationActions {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.reservationActions a,
+.reservationActions button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 33px;
+    padding: 0 13px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+.reservationActions a:hover,
+.reservationActions button:hover {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+}
+
+.reservationActions .cancelBtn {
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+.emptyReservation {
+    padding: 65px 20px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    color: #888;
+    font-size: 14px;
+}
+
+.emptyReservation strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 17px;
+    color: #333;
+}
+
+.emptyReservation a {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    background: #222;
+    color: #fff;
+}
+
+@media (max-width: 1000px) {
+    .mypageContainer {
+        max-width: calc(100% - 24px);
+    }
+
+    .sideBox {
+        width: 22%;
+    }
+
+    .mainContainer {
+        width: 78%;
+        margin-left: 22%;
+        padding-left: 14px;
+    }
+
+    .reservationCardBody {
+        flex-wrap: wrap;
+    }
+
+    .reservationPrice {
+        width: 100%;
+        padding-top: 12px;
+        border-top: 1px solid #eee;
+        text-align: left;
+    }
+}
+
+@media (max-width: 650px) {
+    .mypageContainer {
+        max-width: calc(100% - 20px);
+    }
+
+    .sideBox {
+        float: none;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .mainContainer {
+        width: 100%;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    .reservationStats > div {
+        height: 75px;
+    }
+
+    .reservationStats strong {
+        font-size: 17px;
+    }
+
+    .reservationStats span {
+        font-size: 11px;
+    }
+
+    .reservationToolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .reservationCardBody {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .stayImage {
+        width: 100px;
+        height: 100px;
+    }
+
+    .reservationInfo h3 {
+        font-size: 15px;
+    }
+
+    .roomName {
+        margin-bottom: 10px;
+    }
+
+    .reservationDetails {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .reservationCardTop,
+    .reservationCardBottom {
+        padding: 12px;
+    }
+
+    .reservationCardBottom {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .reservationActions {
+        width: 100%;
+    }
+
+    .reservationActions a,
+    .reservationActions button {
+        flex: 1;
+        padding: 0 8px;
+    }
+
+    .reservationPrice strong {
+        font-size: 17px;
+    }
+}
     </style>
 </head>
 <body>
@@ -498,7 +555,7 @@
                         <ul>
                             <li><a href="/members/mypage">마이페이지 홈</a></li>
                             <li class="active"><a href="/members/reservationList">예약내역</a></li>
-                            <li><a href="/member/wishlist">찜한 목록</a></li>
+                            <li><a href="/members/wishlist">찜한 목록</a></li>
                             <li><a href="/members/planner">여행 일정 플래너</a></li>
                             <li><a href="#">내가 쓴 리뷰</a></li>
                             <li><a href="#">내가 쓴 게시글</a></li>
@@ -611,7 +668,7 @@
                                     <span class="paymentInfo">예약 상태 : <c:out value="${rs.status}"/></span>
                                     <div class="reservationActions">
                                         <c:if test="${rs.status == '예약완료'}">
-                                            <a href="/reservation/change?seq=${rs.seq}">예약 변경</a>
+                                            <button type="button" class="update_btn" data-payment-id="${rs.paymentId}">예약 변경</button>
                                             <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
                                         </c:if>
                                     </div>
@@ -731,6 +788,18 @@ $(function() {
         $(".reservationTabs button[data-status='" + tabStatus + "']").addClass("active");
         filterReservations();
     }
+    
+    $(document).on("click", ".update_btn", function() {
+        let paymentId = $(this).attr("data-payment-id");
+
+        if (!paymentId) {
+            alert("예약 정보를 찾을 수 없습니다.");
+            return;
+        }
+
+        location.href = "/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId);
+   
+    });
 
     $(".reservationStats > div").on("click", function() {
         setActiveFilter(String($(this).data("filter")));
@@ -774,7 +843,7 @@ $(function() {
             }
         });
     });
-
+    
     updateCounts();
     filterReservations();
 });
