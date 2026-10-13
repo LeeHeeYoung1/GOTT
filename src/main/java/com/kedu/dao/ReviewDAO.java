@@ -104,5 +104,11 @@ public class ReviewDAO {
 	    return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), memberId);
 	}
 	
+	public int reviewCount(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM review "
+	            + "WHERE member_id = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
+	
 	
 }

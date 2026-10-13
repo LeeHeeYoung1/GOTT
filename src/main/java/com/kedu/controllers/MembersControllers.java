@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kedu.commons.EncryptionUtils;
 import com.kedu.dao.MembersDAO;
 import com.kedu.dao.ReservationDAO;
+import com.kedu.dao.ReviewDAO;
 import com.kedu.dao.TravelPlanDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dao.WishlistDAO;
@@ -24,6 +25,7 @@ import com.kedu.dto.MembersDTO;
 import com.kedu.dto.MileageHistoryDTO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.ReservationDTO;
+import com.kedu.dto.ReviewDTO;
 import com.kedu.dto.Travel_TypeDTO;
 import com.kedu.services.EmailService;
 
@@ -43,6 +45,9 @@ public class MembersControllers {
 	private WishlistDAO wdao;
 	@Autowired
 	private TravelPlanDAO tpdao;
+	@Autowired
+	private ReviewDAO rvdao;
+	
 	
 	@RequestMapping("/loginpage")
 	public String loginPage() {
@@ -149,15 +154,20 @@ public class MembersControllers {
 	    List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId);
 	    
 	    // 3-1. 찜 갯수표시
-	    int myWishTotalCount = wdao.countByWish(memberId);
-	    
+	    int myWishTotalCount = wdao.countByWish(memberId);	    
 	    int upcomingCount = rdao.upcomingReservationCount(memberId);
+	    int reviewCount = rvdao.selectCount(memberId);
 	    
 	    // 3-2. 이용 예정 예약 목록
 	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
 	    // 3-3. 이용 완료 예약 목록
 	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
-	    	    
+	    
+	    // 리뷰 목록
+	    List<ReviewDTO> reviewList = rvdao.selectMyReview(memberId);
+	    
+	    model.addAttribute("reviewCount",reviewCount);
+		model.addAttribute("reviewList",reviewList);	    	    
 	    model.addAttribute("mileageHistory",mileageHistory);
 	    model.addAttribute("upcomingCount", upcomingCount);
 	    model.addAttribute("today", LocalDate.now().toString());
@@ -350,5 +360,16 @@ public class MembersControllers {
 		ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
 		model.addAttribute("myRsList", myRsList);
 	    return "members/reservationpage";
+	}
+	
+	@RequestMapping("/mileage")
+	public String milagelist(HttpSession session, Model model) {
+		String memberId = (String) session.getAttribute("loginId");
+		int mileage = mdao.getMileage(memberId);
+		List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId);
+		
+		model.addAttribute("mileage", mileage);
+		model.addAttribute("mileageHistory",mileageHistory);
+		return "members/mileage";
 	}
 }
