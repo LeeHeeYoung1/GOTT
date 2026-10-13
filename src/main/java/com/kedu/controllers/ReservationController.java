@@ -1,5 +1,6 @@
 package com.kedu.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -246,24 +247,82 @@ public class ReservationController {
 		return "OK";
 	}
 
-	@RequestMapping("/reservationUpdate")
-	public String reservationUpdate(String paymentId, Model model) {
+	  @RequestMapping("/reservationUpdate")
+	   public String reservationUpdate(String paymentId, Model model) {
 
-		// 1. 현재 예약 조회
-		ReservationDTO rsdto = rdao.reservationOne(paymentId);
+	      ReservationDTO rsdto = rdao.reservationOne(paymentId);
+	      int placeId = rsdto.getPlaceId();
+	      int guest = rsdto.getGuestNum();
 
-		// 2. 현재 예약의 숙소 ID 가져오기
-		int placeId = rsdto.getPlaceId();
+	      List<RoomDTO> all = roomDao.detailList(placeId, rsdto.getCheckIn().toString(), rsdto.getCheckOut().toString());
 
-		// 3. 같은 숙소의 모든 객실 조회
-		List<RoomDTO> detailList = roomDao.detailList(placeId, null, null);
+	      List<RoomDTO> detailList = new ArrayList<RoomDTO>();
+	      for (int i = 0; i < all.size(); i++) {
+	         RoomDTO room = all.get(i);
+	         if (room.getMaxCount() >= guest) {
+	            detailList.add(room);
+	         }
+	      }
 
-		// 4. JSP로 전달
-		model.addAttribute("reservation", rsdto);
-		model.addAttribute("placeOne", rdao.placeOne(placeId));
-		model.addAttribute("detailList", detailList);
+	      model.addAttribute("reservation", rsdto);
+	      model.addAttribute("placeOne", rdao.placeOne(placeId));
+	      model.addAttribute("detailList", detailList);
 
-		return "reservation/reservationUpdate";
-	}
+	      return "reservation/reservationUpdate";
+	   }
+	
+	  @RequestMapping("/calculateUpdatePrice")
+	  @ResponseBody
+	  public int calculateUpdatePrice(int roomId, String checkIn, String checkOut, int guestNum) {
+	      RoomDTO roomDto = roomDao.roomOne(roomId);
+	      if (roomDto == null || roomDto.getMaxCount() == null || guestNum < 1 || guestNum > roomDto.getMaxCount()) {
+	          throw new IllegalArgumentException("객실 최대 인원을 확인해 주세요.");
+	      }
+	      return PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+	  }
 
+	  @RequestMapping("/reservationUpdateSave")
+	  @ResponseBody
+	  public String reservationUpdateSave(String paymentId, int roomId, String checkIn, String checkOut, int guestNum, HttpSession session) {
+	      String memberId = (String) session.getAttribute("loginId");
+	      if (memberId == null) {
+	          return "로그인이 필요합니다.";
+	      }
+	      if (paymentId == null || paymentId.trim().isEmpty() || checkIn == null || checkOut == null || checkIn.trim().isEmpty() || checkOut.trim().isEmpty()) {
+	          return "예약 정보가 올바르지 않습니다.";
+	      }
+	      try {
+	          java.time.LocalDate inDate = java.time.LocalDate.parse(checkIn);
+	          java.time.LocalDate outDate = java.time.LocalDate.parse(checkOut);
+	          if (!inDate.isBefore(outDate)) {
+	              return "체크아웃 날짜는 체크인 날짜보다 늦어야 합니다.";
+	          }
+	          if (guestNum < 1) {
+	              return "인원은 1명 이상이어야 합니다.";
+	          }
+	          ReservationDTO reservation = rdao.reservationOne(paymentId);
+	          if (reservation == null || !memberId.equals(reservation.getMemberId())) {
+	              return "예약 정보를 찾을 수 없습니다.";
+	          }
+	          if (!"예약완료".equals(reservation.getStatus())) {
+	              return "변경할 수 있는 예약이 아닙니다.";
+	          }
+	          RoomDTO roomDto = roomDao.roomOne(roomId);
+	          if (roomDto == null || roomDto.getMaxCount() == null || guestNum > roomDto.getMaxCount()) {
+	              return "선택한 객실의 최대 인원을 확인해 주세요.";
+	          }
+	          if (roomDto.getPlaceId() != reservation.getPlaceId()) {
+	              return "다른 숙소의 객실로 변경할 수 없습니다.";
+	          }
+	          int price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+	          int result = rdao.updateReservationDetails(paymentId, memberId, roomId, java.sql.Date.valueOf(inDate), java.sql.Date.valueOf(outDate), guestNum, price);
+	          if (result > 0) {
+	              return "success";
+	          }
+	          return "예약 변경에 실패했습니다. 다시 시도해 주세요.";
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	          return "예약 변경 중 오류가 발생했습니다.";
+	      }
+	  }
 }

@@ -154,6 +154,45 @@ button:hover {
 	color: white;
 }
 
+/* 카테고리 — 체크박스 칩 */
+.tag_list {
+	width: 520px;
+	max-width: 100%;
+	margin: 0 auto 25px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 4px;
+}
+
+.tag_list label {
+	padding: 4px 9px;
+	border: 1px solid #ddd;
+	border-radius: 14px;
+	background: white;
+	color: #666;
+	font-size: 10px;
+	cursor: pointer;
+	user-select: none;
+	transition: border-color .15s, background .15s, color .15s;
+}
+
+.tag_list label:hover {
+	border-color: #999;
+	color: #333;
+}
+
+.tag_list label:has(input:checked) {
+	border-color: #222;
+	background: #222;
+	color: white;
+	font-weight: 600;
+}
+
+.tag_list input {
+	display: none;
+}
+
 /* 게시판 정보 */
 .searchOption {
 	width: 900px;
@@ -355,20 +394,22 @@ button:hover {
 
 	<!-- 카테고리 -->
 
-	<div class="categoryArea">
-
-		<button class="reviewType on">전체</button>
-		<button class="reviewType">여행지 정보</button>
-		<button class="reviewType">관광지</button>
-		<button class="reviewType">맛집</button>
-		<button class="reviewType">카페</button>
-		<button class="reviewType">액티비티</button>
-		<button class="reviewType">숙소</button>
-		<button class="reviewType">여행후기</button>
-		<button class="reviewType">여행 일정 공유</button>
-		<button class="reviewType">여행 꿀팁</button>
-		<button class="reviewType">기타</button>
-
+	<div class="tag_list">
+		<label><input type="checkbox" name="tag" value="청결">관광지</label>
+		<label><input type="checkbox" name="tag" value="가성비">맛집</label>
+		<label><input type="checkbox" name="tag" value="뷰맛집">카페</label>
+		<label><input type="checkbox" name="tag" value="조용함">액티비티</label>
+		<label><input type="checkbox" name="tag" value="친절">숙소</label>
+		<label><input type="checkbox" name="tag" value="청결">청결</label>
+		<label><input type="checkbox" name="tag" value="가성비">가성비</label>
+		<label><input type="checkbox" name="tag" value="뷰맛집">뷰맛집</label>
+		<label><input type="checkbox" name="tag" value="조용함">조용함</label>
+		<label><input type="checkbox" name="tag" value="친절">친절</label>
+		<label><input type="checkbox" name="tag" value="주차편함">주차편함</label>
+		<label><input type="checkbox" name="tag" value="재방문의사">재방문의사</label>
+		<label><input type="checkbox" name="tag" value="사진맛집">사진맛집</label>
+		<label><input type="checkbox" name="tag" value="교통편리">교통편리</label>
+		<label><input type="checkbox" name="tag" value="아이동반">아이동반</label>
 	</div>
 
 	<!-- 게시판 정보 -->
@@ -419,7 +460,7 @@ button:hover {
 	$("#sort").on("change", function() {
 		location.href = "/review/reviewBoard?cpage=1&sort=" + $(this).val();
 	})
-	
+
 	let sort = "${sort}";
 	$("#sort").val(sort);
 
@@ -427,10 +468,22 @@ button:hover {
 		location.href = "/review/review_write";
 	})
 
-	let recordTotalCount = ${recordTotalCount};
-	let recordCountPerPage = ${recordCountPerPage};
-	let naviCountPerPage = ${naviCountPerPage};
-	let currentPage = ${cpage};
+	let recordTotalCount = $
+	{
+		recordTotalCount
+	};
+	let recordCountPerPage = $
+	{
+		recordCountPerPage
+	};
+	let naviCountPerPage = $
+	{
+		naviCountPerPage
+	};
+	let currentPage = $
+	{
+		cpage
+	};
 
 	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
 
@@ -456,7 +509,8 @@ button:hover {
 	}
 	for (let i = startNavi; i <= endNavi; i++) {
 		let num = document.createElement("a");
-		num.setAttribute("href", "/review/reviewBoard?cpage=" + i + "&sort=" + sort);
+		num.setAttribute("href", "/review/reviewBoard?cpage=" + i + "&sort="
+				+ sort);
 		if (i == currentPage) {
 			num.setAttribute("class", "on");
 		}
@@ -465,7 +519,8 @@ button:hover {
 	}
 	if (needNext) {
 		let next = document.createElement("a");
-		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi + 1) + "&sort=" + sort);
+		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi + 1)
+				+ "&sort=" + sort);
 		next.innerHTML = ">";
 		navi.append(next);
 	}

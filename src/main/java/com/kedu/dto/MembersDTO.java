@@ -18,11 +18,13 @@ public class MembersDTO {
 		private Timestamp regdate;
 		private int mileage;
 		private String role;
+		private String agree;
 		
 		public MembersDTO() {}
 		
 		public MembersDTO(String id, String pw, String name, String nickname, String phone, String email, String gender,
-				String dob, String zipcode, String address1, String address2, Timestamp regdate, int mileage, String role) {
+				String dob, String zipcode, String address1, String address2, Timestamp regdate, int mileage, String role,
+				String agree) {
 			this.id = id;
 			this.pw = pw;
 			this.name = name;
@@ -37,8 +39,17 @@ public class MembersDTO {
 			this.regdate = regdate;
 			this.mileage = mileage;
 			this.role = role;
+			this.agree = agree;
 		}
 		
+		public String getAgree() {
+			return agree;
+		}
+
+		public void setAgree(String agree) {
+			this.agree = agree;
+		}
+
 		public String getRole() {
 			return role;
 		}
