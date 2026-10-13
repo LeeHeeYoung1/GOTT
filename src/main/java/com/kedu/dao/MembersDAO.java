@@ -1,5 +1,7 @@
 package com.kedu.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kedu.commons.EncryptionUtils;
 import com.kedu.dto.MembersDTO;
+import com.kedu.dto.MileageHistoryDTO;
 
 @Repository
 public class MembersDAO {
@@ -83,6 +86,9 @@ public class MembersDAO {
 
 	    return jdbc.update(sql, pw, id);
 	}
-
 	
+	public List<MileageHistoryDTO> mileageHistory(String memberId) {
+	    String sql = "SELECT * FROM MILEAGE_HISTORY WHERE MEMBER_ID = ? ORDER BY REG_DATE DESC, SEQ DESC";
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(MileageHistoryDTO.class), memberId);
+	}
 }

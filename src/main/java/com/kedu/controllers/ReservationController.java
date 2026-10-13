@@ -352,12 +352,13 @@ public class ReservationController {
 	              return "결제 취소 완료 여부를 확인할 수 없습니다. 결제 내역을 확인해 주세요.";
 	          }
 
-	          int updated = rdao.cancelReservation(paymentId, memberId);
-	          if (updated == 1) {
-	              return "success";
-	          }
-
-	          return "결제는 취소되었지만 예약 상태 변경에 실패했습니다. 관리자에게 문의해 주세요.";
+	          try {
+	        	    reservationService.cancelReservationAndRestoreMileage(paymentId, memberId);
+	        	    return "success";
+	        	} catch (Exception e) {
+	        	    e.printStackTrace();
+	        	    return "결제는 취소되었지만 예약 또는 마일리지 처리에 실패했습니다. 관리자에게 문의해 주세요.";
+	        	}
 
 	      } catch (Exception e) {
 	          e.printStackTrace();

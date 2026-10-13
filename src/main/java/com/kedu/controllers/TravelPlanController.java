@@ -93,6 +93,7 @@ public class TravelPlanController {
         dto.setEnd_date(Date.valueOf(endDate));
         dto.setPerson_count(count);
         dto.setIs_public("true".equals(isPublic) ? "Y" : "N");
+        
 
         // 시작일과 종료일 확인
         if (dto.getEnd_date().before(dto.getStart_date())) {
