@@ -172,6 +172,11 @@ public class MembersControllers {
 	    model.addAttribute("wishCpage", wishCpage);
 	    model.addAttribute("wishTotalPage", wishTotalPage);
 
+	    Object message = session.getAttribute("reservationUpdateMessage");
+	    if (message != null) {
+	        model.addAttribute("reservationUpdateMessage", message);
+	        session.removeAttribute("reservationUpdateMessage");
+	    }
 	    return "members/mypage";
 	}
 	

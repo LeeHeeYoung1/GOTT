@@ -146,9 +146,9 @@ public class ReservationDAO {
 	public int updateReservationDetails(String paymentId, String memberId, int roomId,
 	        java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int totalPrice) {
 	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
-	            + "GUEST_NUM = ?, TOTAL_PRICE = ? "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
-	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum,totalPrice, paymentId, memberId);
+	            + "GUEST_NUM = ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND UPDATE_COUNT = 0";
+	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, totalPrice, paymentId, memberId);
 	}
 	
 	public int ReservationHistory(int reservationSeq, String paymentId, String reservationPaymentId, String memberId, String paymentType, int amount, String status) {
@@ -161,19 +161,21 @@ public class ReservationDAO {
 	        int roomId, java.sql.Date checkIn, java.sql.Date checkOut,
 	        int guestNum, int additionalPaid, int newTotalPrice) {
 	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
-	            + "GUEST_NUM = ?, PRICE = PRICE + ?, TOTAL_PRICE = ? "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+	            + "GUEST_NUM = ?, PRICE = PRICE + ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND UPDATE_COUNT = 0";
 	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum,
 	            additionalPaid, newTotalPrice, paymentId, memberId);
 	}
 	
-	public int updateReservationAfterRefund(String paymentId, String memberId, int roomId, java.sql.Date checkIn,
-			java.sql.Date checkOut, int guestNum, int refundAmount, int newTotalPrice) {
-		String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
-				+ "GUEST_NUM = ?, PRICE = PRICE - ?, TOTAL_PRICE = ? "
-				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND PRICE >= ?";
-		return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, refundAmount, newTotalPrice, paymentId, memberId,
-				refundAmount);
+	public int updateReservationAfterRefund(String paymentId, String memberId, int roomId,
+	        java.sql.Date checkIn, java.sql.Date checkOut, int guestNum,
+	        int refundAmount, int newTotalPrice) {
+	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
+	            + "GUEST_NUM = ?, PRICE = PRICE - ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' "
+	            + "AND UPDATE_COUNT = 0 AND PRICE >= ?";
+	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum,
+	            refundAmount, newTotalPrice, paymentId, memberId, refundAmount);
 	}
 	
 	public int countRePaymentHistory(String newPaymentId) {
