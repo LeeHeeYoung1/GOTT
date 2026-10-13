@@ -1,11 +1,11 @@
 package com.kedu.commons;
 
-import java.util.List;
-
 public class TagSplitUtil {
 
-	public static String[] tagSplit(String tags){
-		String[] splitTags = tags.split(",");
-		return splitTags;
+	public static String[] tagSplit(String tags) {
+		if (tags == null || tags.trim().equals("")) {
+			return new String[0];
+		}
+		return tags.split(",");
 	}
 }

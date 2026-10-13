@@ -36,14 +36,17 @@ public class ReviewController {
 	private ReviewRecommendDAO rrdao;
 	
 	@RequestMapping("/reviewBoard")
-	public String reviewSort(int cpage, String sort, Model model) {
+	public String reviewList(int cpage, String sort, String tag_list, Model model) {
 		if (sort == null) {
 			sort = "new";
 		}
+		if (tag_list == null) {
+			tag_list = "";
+		}
 		
-		List<ReviewDTO> rList = rdao.selectSort(cpage * 9 - 8, cpage * 9, sort);
+		List<ReviewDTO> rList = rdao.selectSort(cpage * 9 - 8, cpage * 9, sort, tag_list);
 		model.addAttribute("rList", rList);
-		model.addAttribute("recordTotalCount", rdao.selectCount());
+		model.addAttribute("recordTotalCount", rdao.selectCount(tag_list));
 		model.addAttribute("recordCountPerPage", 9);
 		model.addAttribute("naviCountPerPage", 10);
 		model.addAttribute("cpage", cpage);

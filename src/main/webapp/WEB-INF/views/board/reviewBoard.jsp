@@ -96,69 +96,11 @@ button:hover {
 	color: white;
 }
 
-/* 검색 */
-.searchArea {
-	width: 650px;
-	max-width: 100%;
-	margin: 25px auto 18px;
-	position: relative;
-}
-
-.searchInput {
-	width: 100%;
-	height: 42px;
-	padding: 0 45px 0 15px;
-	border: 1px solid #ccc;
-	border-radius: 7px;
-	background: white;
-	font-size: 12px;
-	outline: none;
-}
-
-.searchInput:focus {
-	border-color: #555;
-}
-
-.searchBtn {
-	position: absolute;
-	right: 5px;
-	top: 4px;
-	width: 34px;
-	height: 34px;
-	border: 0;
-	border-radius: 5px;
-	color: white;
-}
-
-/* 카테고리 */
-.categoryArea {
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
-	gap: 5px;
-	margin-bottom: 25px;
-}
-
-.reviewType {
-	padding: 6px 12px;
-	border: 1px solid #ddd;
-	border-radius: 18px;
-	background: white;
-	color: #666;
-	font-size: 11px;
-}
-
-.reviewType.on {
-	background: #222;
-	border-color: #222;
-	color: white;
-}
-
 /* 카테고리 — 체크박스 칩 */
 .tag_list {
 	width: 520px;
 	max-width: 100%;
-	margin: 0 auto 25px;
+	margin: 25px auto;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -382,24 +324,14 @@ button:hover {
 			href="/review/reviewBoard?cpage=1" class="on">리뷰게시판</a>
 	</nav>
 
-	<!-- 검색 -->
-
-	<div class="searchArea">
-
-		<input class="searchInput" type="text" placeholder="리뷰 제목 + 내용 검색">
-
-		<button class="searchBtn">🔍</button>
-
-	</div>
-
 	<!-- 카테고리 -->
 
 	<div class="tag_list">
-		<label><input type="checkbox" name="tag" value="청결">관광지</label>
-		<label><input type="checkbox" name="tag" value="가성비">맛집</label>
-		<label><input type="checkbox" name="tag" value="뷰맛집">카페</label>
-		<label><input type="checkbox" name="tag" value="조용함">액티비티</label>
-		<label><input type="checkbox" name="tag" value="친절">숙소</label>
+		<label><input type="checkbox" name="tag" value="관광지">관광지</label>
+		<label><input type="checkbox" name="tag" value="맛집">맛집</label>
+		<label><input type="checkbox" name="tag" value="카페">카페</label>
+		<label><input type="checkbox" name="tag" value="액티비티">액티비티</label>
+		<label><input type="checkbox" name="tag" value="숙소">숙소</label>
 		<label><input type="checkbox" name="tag" value="청결">청결</label>
 		<label><input type="checkbox" name="tag" value="가성비">가성비</label>
 		<label><input type="checkbox" name="tag" value="뷰맛집">뷰맛집</label>
@@ -457,33 +389,47 @@ button:hover {
 
 
 <script>
-	$("#sort").on("change", function() {
-		location.href = "/review/reviewBoard?cpage=1&sort=" + $(this).val();
-	})
-
 	let sort = "${sort}";
 	$("#sort").val(sort);
+
+	let tags = "";
+
+	if ("${tag_list}" !== "") {
+		tags = "&tag_list=" + encodeURIComponent("${tag_list}");
+
+		let checkedList = "${tag_list}".split(",");
+		for (let i = 0; i < checkedList.length; i++) {
+			$("input[name=tag][value=" + checkedList[i] + "]").prop("checked", true);
+		}
+	}
+	
+	$("input[name=tag]").on("click", function(){
+		let checked = $("input[name=tag]:checked");
+		let tag_list = [];
+
+		for(let i = 0; i<checked.length; i++){
+			tag_list.push(checked[i].value);
+		}
+		
+		if(tag_list.length>0){
+			location.href = "/review/reviewBoard?cpage=1&sort=" + sort + "&tag_list=" + encodeURIComponent(tag_list.join(",")); 
+		}else{
+			location.href = "/review/reviewBoard?cpage=1&sort=" + sort; 
+		}
+	})
+
+	$("#sort").on("change", function() {
+		location.href = "/review/reviewBoard?cpage=1&sort=" + $(this).val() + tags;
+	})
 
 	$("#writeBtn").on("click", function() {
 		location.href = "/review/review_write";
 	})
 
-	let recordTotalCount = $
-	{
-		recordTotalCount
-	};
-	let recordCountPerPage = $
-	{
-		recordCountPerPage
-	};
-	let naviCountPerPage = $
-	{
-		naviCountPerPage
-	};
-	let currentPage = $
-	{
-		cpage
-	};
+	let recordTotalCount = ${recordTotalCount};
+	let recordCountPerPage = ${recordCountPerPage};
+	let naviCountPerPage = ${naviCountPerPage};
+	let currentPage = ${cpage};
 
 	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
 
@@ -503,14 +449,14 @@ button:hover {
 	if (needPrev) {
 		let prev = document.createElement("a");
 		prev.setAttribute("href", "/review/reviewBoard?cpage="
-				+ (startNavi - 1) + "&sort=" + sort);
+				+ (startNavi - 1) + "&sort=" + sort + tags);
 		prev.innerHTML = "<";
 		navi.append(prev);
 	}
 	for (let i = startNavi; i <= endNavi; i++) {
 		let num = document.createElement("a");
 		num.setAttribute("href", "/review/reviewBoard?cpage=" + i + "&sort="
-				+ sort);
+				+ sort + tags);
 		if (i == currentPage) {
 			num.setAttribute("class", "on");
 		}
@@ -520,7 +466,7 @@ button:hover {
 	if (needNext) {
 		let next = document.createElement("a");
 		next.setAttribute("href", "/review/reviewBoard?cpage=" + (endNavi + 1)
-				+ "&sort=" + sort);
+				+ "&sort=" + sort + tags);
 		next.innerHTML = ">";
 		navi.append(next);
 	}
