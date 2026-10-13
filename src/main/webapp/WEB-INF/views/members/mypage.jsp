@@ -849,7 +849,7 @@ body{
                                     <div class="btnGroup">
                                         <button type="button" class="boardViewBtn" onclick="location.href='${pageContext.request.contextPath}/travelPlan/detail?planId=${plan.PLAN_ID}'">일정 보기</button>
                                     </div>
-                                </div>
+                               	</div>
                             </div>
                         </c:forEach>
                     </c:when>

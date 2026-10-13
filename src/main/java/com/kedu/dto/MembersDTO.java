@@ -18,13 +18,13 @@ public class MembersDTO {
 		private Timestamp regdate;
 		private int mileage;
 		private String role;
-		private String agree;
+		private String privacy_agree;
 		
 		public MembersDTO() {}
 		
 		public MembersDTO(String id, String pw, String name, String nickname, String phone, String email, String gender,
 				String dob, String zipcode, String address1, String address2, Timestamp regdate, int mileage, String role,
-				String agree) {
+				String privacy_agree) {
 			this.id = id;
 			this.pw = pw;
 			this.name = name;
@@ -39,15 +39,17 @@ public class MembersDTO {
 			this.regdate = regdate;
 			this.mileage = mileage;
 			this.role = role;
-			this.agree = agree;
+			this.privacy_agree = privacy_agree;
 		}
 		
-		public String getAgree() {
-			return agree;
+		
+
+		public String getPrivacy_agree() {
+			return privacy_agree;
 		}
 
-		public void setAgree(String agree) {
-			this.agree = agree;
+		public void setPrivacy_agree(String privacy_agree) {
+			this.privacy_agree = privacy_agree;
 		}
 
 		public String getRole() {
