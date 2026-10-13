@@ -195,5 +195,21 @@ public class PlaceDAO {
 		String sql = "select * from place where place_id = ?";
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), place_id);
 	}
+	
+	//숙박업소 사진 랜덤으로 한장 가져오기
+	public String randomImgHotel() {
+		String sql = "select * from (select image_name from place where place_type = 'STAY' and name like '%호텔%' and image_name is not null order by DBMS_RANDOM.VALUE) where ROWNUM = 1";
+		return jdbc.queryForObject(sql, String.class);
+	}
+	
+	public String randomImgMotel() {
+		String sql = "select * from (select image_name from place where place_type = 'STAY' and name like '%모텔%' and image_name is not null order by DBMS_RANDOM.VALUE) where ROWNUM = 1";
+		return jdbc.queryForObject(sql, String.class);
+	}
+	
+	public String randomImgMB() {
+		String sql = "select * from (select image_name from place where place_type = 'STAY' and name like '%민박%' and image_name is not null order by DBMS_RANDOM.VALUE) where ROWNUM = 1";
+		return jdbc.queryForObject(sql, String.class);
+	}
 
 }
