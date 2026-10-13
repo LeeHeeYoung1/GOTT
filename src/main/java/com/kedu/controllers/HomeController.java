@@ -1,5 +1,7 @@
 package com.kedu.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,18 +9,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.kedu.dao.BannerDAO;
+import com.kedu.dao.NoticeDAO;
 import com.kedu.dao.PlaceDAO;
 import com.kedu.dao.TravelPlanDAO;
+import com.kedu.dto.BannerDTO;
+import com.kedu.dto.NoticeDTO;
+import com.kedu.services.BannerService;
 
 
 @Controller
 public class HomeController {
 	
 	@Autowired
-	TravelPlanDAO tpdao;
+	private TravelPlanDAO tpdao;
 	
 	@Autowired
-	PlaceDAO pdao;
+	private PlaceDAO pdao;
+	
+	@Autowired
+	private NoticeDAO ndao;
+	
+	@Autowired
+	private BannerService bannerService;
+	
+	@Autowired
+	private BannerDAO bannerDAO;
 	
 	@RequestMapping(value = "/")
 	public String home(Model model, HttpSession session) {
@@ -30,9 +46,15 @@ public class HomeController {
 		stayImgs[1] = pdao.randomImgMotel();
 		stayImgs[2] = pdao.randomImgMB();
 		
-		model.addAttribute("myPlannerList",tpdao.selectMyPlansWithCount(memberId));
-		model.addAttribute("planList", tpdao.selectPublicPlans());
+		List<NoticeDTO> ilist = ndao.important();
+		List<BannerDTO> banner = bannerService.getBannerList();
+		
+		model.addAttribute("planList", tpdao.selectPublicPlansWithCount());
+		
 		model.addAttribute("stayImgs", stayImgs);
+		model.addAttribute("ilist", ilist);
+		
+		model.addAttribute("banner", banner);
 		
 		return "home";
 	}

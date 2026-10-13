@@ -26,8 +26,6 @@ public class EventControllers {
 		
 		List<BannerDTO> banner = bannerService.getBannerList();
 		
-		System.out.println("조회된 배너 개수: " + banner.size());
-		
 		model.addAttribute("banner", banner);
 		
 		return "event/event";

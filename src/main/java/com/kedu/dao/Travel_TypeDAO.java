@@ -18,4 +18,5 @@ public class Travel_TypeDAO {
 				dto.getHealing_score(), dto.getEmotion_score(), dto.getFood_score(), dto.getActivity_score());
 	}
 	
+	
 }
