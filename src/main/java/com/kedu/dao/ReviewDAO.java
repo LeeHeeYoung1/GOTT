@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kedu.commons.TagSplitUtil;
 import com.kedu.dto.ReviewDTO;
 
 @Repository
@@ -21,29 +22,49 @@ public class ReviewDAO {
 		return jdbc.update(sql, dto.getMember_id(), dto.getTarget_type(), dto.getTarget_id(), dto.getRating(), dto.getTag(), dto.getContents(), dto.getImage1());
 	}
 	
-	public List<ReviewDTO> selectSort(int start, int end, String sort){
+	public List<ReviewDTO> selectSort(int start, int end, String sort, String tag_list){
+		String[] tagList = TagSplitUtil.tagSplit(tag_list);
+		String where = "";
+		Object[] tag = new Object[tagList.length + 2];
+		
+		tag[tagList.length] = start;
+		tag[tagList.length + 1] = end;
+		
+		for(int i = 0; i<tagList.length; i++) {
+			where += " and r.tag like ?";
+			tag[i] = "%" + tagList[i] + "%";
+		}
 		if("reply".equals(sort)) {
 			String sql = "select * from ( select r.*, ROW_NUMBER() OVER ( "
 					+ " order by (select count(*) from review_reply rp where rp.review_seq = r.seq) desc, r.seq desc) rn "
-					+ " from review r ) where rn between ? and ?";
-			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), start, end);
+					+ " from review r where 1 = 1 " + where + ") where rn between ? and ?";
+			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), tag);
 		}else if("recommend".equals(sort)) {
 			String sql = "select * from ( select r.*, ROW_NUMBER() OVER ( "
 					+ " order by (select count(*) from review_recommend rr where rr.review_seq = r.seq) desc, r.seq desc) rn "
-					+ " from review r ) where rn between ? and ?";
-			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), start, end);
+					+ " from review r where 1 = 1 " + where + ") where rn between ? and ?";
+			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), tag);
 		}else if("view".equals(sort)){
-			String sql = "select * from (select review.*, ROW_NUMBER() OVER(order by view_count desc)rn from review) where rn between ? and ?";
-			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), start, end);
+			String sql = "select * from (select r.*, ROW_NUMBER() OVER(order by r.view_count desc)rn from review r where 1 = 1 " + where + ") where rn between ? and ?";
+			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), tag);
 		}else {
-			String sql = "select * from (select review.*, ROW_NUMBER() OVER(order by seq desc)rn from review) where rn between ? and ?";
-			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), start, end);
+			String sql = "select * from (select r.*, ROW_NUMBER() OVER(order by r.seq desc)rn from review r where 1 = 1 " + where + ") where rn between ? and ?";
+			return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), tag);
 		}
 	}
 	
-	public int selectCount() {
-		String sql = "select count(*) from review";
-		return jdbc.queryForObject(sql, Integer.class);
+	public int selectCount(String tag_list) {
+		String[] tagList = TagSplitUtil.tagSplit(tag_list);
+		String where = "";
+		Object[] tag = new Object[tagList.length];
+		
+		for(int i = 0; i<tagList.length; i++) {
+			where += " and tag like ?";
+			tag[i] = "%" + tagList[i] + "%";
+		}
+		
+		String sql = "select count(*) from review where 1 = 1 " + where;
+		return jdbc.queryForObject(sql, Integer.class, tag);
 	}
 	
 	public ReviewDTO selectOne(int seq) {
