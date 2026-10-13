@@ -37,9 +37,7 @@ public class ReplyController {
 	@RequestMapping("/delete")
 	public String delete(ReplyDTO dto, HttpSession session, int cpage) {
 
-	    String writer = (String)session.getAttribute("nickname");
-
-	    rdao.delete(dto.getSeq(), writer);
+	    rdao.delete(dto.getSeq());
 
 	    return "redirect:/board/boardContent?seq=" + dto.getBoard_seq() + "&cpage=" + cpage;
 	}

@@ -232,7 +232,7 @@ form {
 						<img src="${roomDto.image5}">
 					</c:if>
 					<c:if test="${empty roomDto.image1}">
-						<div class="no_img">사진 준비중</div>
+						<img src="${placeOne.image_name}">
 					</c:if>
 				</div>
 			</div>

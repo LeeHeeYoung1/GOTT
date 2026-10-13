@@ -97,6 +97,7 @@ public class TravelPlanDAO {
 	}
     
     // 공개된 여행 일정 목록 화면
+    // 이거 DAO에 들어가는게 맞아?
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         model.addAttribute("planList", dao.selectPublicPlans());

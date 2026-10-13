@@ -358,7 +358,7 @@
 				
 				<div class="agree-list">
 				    <label class="agree-item">
-				        <input id="agree" name="agree" type="checkbox"  value="Y" required>
+				        <input id="agree" name="privacy_agree" type="checkbox"  value="Y" required>
 				        <span><b>[필수]</b> 개인정보 수집 및 이용에 동의합니다.</span>
 				    </label>
 				</div>

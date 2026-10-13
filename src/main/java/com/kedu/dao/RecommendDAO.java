@@ -25,8 +25,8 @@ public class RecommendDAO {
 		return jdbc.queryForObject(sql, Integer.class, board_seq, writer);
 	}
 	
-	public int deleteRecommend(int board_seq, String writer) {
-		String sql = "delete from board_recommend where board_seq = ? and writer = ?";
-		return jdbc.update(sql, board_seq, writer);
+	public int deleteRecommend(int board_seq) {
+		String sql = "delete from board_recommend where board_seq = ?";
+		return jdbc.update(sql, board_seq);
 	}
 }

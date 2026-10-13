@@ -59,11 +59,11 @@ public class BoardDAO {
 	    );
 	}
 	
-	public void delete(int seq, String nickname) {
+	public void delete(int seq) {
 
-	    String sql = "delete from board where seq = ? and writer = ?";
+	    String sql = "delete from board where seq = ?";
 
-	    jdbc.update(sql, seq, nickname);
+	    jdbc.update(sql, seq);
 	}
 	
 	public int viewCount(int seq) {

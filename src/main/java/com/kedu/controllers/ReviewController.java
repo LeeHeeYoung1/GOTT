@@ -51,6 +51,7 @@ public class ReviewController {
 		model.addAttribute("naviCountPerPage", 10);
 		model.addAttribute("cpage", cpage);
 		model.addAttribute("sort", sort);
+		model.addAttribute("tag_list", tag_list);
 		return "board/reviewBoard";
 	}
 	

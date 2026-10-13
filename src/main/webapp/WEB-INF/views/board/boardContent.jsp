@@ -565,7 +565,6 @@ hr {
 
 		<div class="contents boardContents">${boardContent.contents}</div>
 
-
 			<!-- 버튼 -->
 
 			<div class="buttonBox">
@@ -583,16 +582,20 @@ hr {
             수정
         </button>
 
-        <button class="boardDelete" type="button">
-            삭제
-        </button>
-
         <button class="boardUpdateCom" type="button" style="display: none;">
             수정완료
         </button>
 
         <button class="boardBack" type="button" style="display: none;">
             취소
+        </button>
+
+    </c:if>
+
+    <c:if test="${nickname == boardContent.writer or sessionScope.role == 'admin'}">
+
+        <button class="boardDelete" type="button">
+            삭제
         </button>
 
     </c:if>
@@ -675,16 +678,11 @@ hr {
             </div>
 
             <!-- 기존 댓글 수정 및 삭제 -->
-            <c:if test="${nickname == reply.writer}">
+            <div class="replyButton">
 
-                <div class="replyButton">
+                <c:if test="${nickname == reply.writer}">
 
                     <button class="update" type="button">수정</button>
-
-                    <button class="delete" type="button"
-                        onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}&cpage=${cpage}'">
-                        삭제
-                    </button>
 
                     <button class="updateCom" type="button"
                         style="display: none;">
@@ -696,9 +694,18 @@ hr {
                         취소
                     </button>
 
-                </div>
+                </c:if>
 
-            </c:if>
+                <c:if test="${nickname == reply.writer or sessionScope.role == 'admin'}">
+
+                    <button class="delete" type="button"
+                        onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}&cpage=${cpage}'">
+                        삭제
+                    </button>
+
+                </c:if>
+
+            </div>
 
         </div>
 
