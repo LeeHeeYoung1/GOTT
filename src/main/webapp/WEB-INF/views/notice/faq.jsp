@@ -337,7 +337,7 @@
 		<c:if test="${loginId == 'admin0001'}">
 			<div class="faqWriteBox">
 				<button type="button" id="faqWriteBtn"
-					onclick="location.href='/notice/faq_register'">FAQ 작성</button>
+					onclick="location.href='/notice/faq_register?cpage=${cpage}'">FAQ 작성</button>
 			</div>
 		</c:if>
 
@@ -378,7 +378,7 @@
 								<td class="number">${faq.faq_id}</td>
 
 								<td class="title faqTitleText" title="${faq.title}">
-									<a href="/notice/faq_content?faq_id=${faq.faq_id}">
+									<a href="/notice/faq_content?faq_id=${faq.faq_id}&cpage=${cpage}&keyword=${keyword}">
 										${faq.title}
 									</a>
 								</td>
@@ -400,7 +400,7 @@
 		<div id="navigation"></div>
 		
 		<div class="faqHomeBox">
-			<button onclick="location.href='/notice/faq?cpage=1'">목록</button>
+			<button onclick="location.href="/">목록</button>
 		</div>
 
 	</div>

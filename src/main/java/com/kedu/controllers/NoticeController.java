@@ -100,13 +100,15 @@ public class NoticeController {
 	}
 	
 	@RequestMapping("/faq_register")
-	public String faq_register(HttpSession session) {
+	public String faq_register(Model model, HttpSession session, int cpage) {
 
 	    String loginId = (String) session.getAttribute("loginId");
 
 	    if (!"admin0001".equals(loginId)) {
-	        return "redirect:/notice/faq?cpage=1";
+	        return "redirect:/notice/faq?cpage=" + cpage;
 	    }
+
+	    model.addAttribute("cpage", cpage);
 
 	    return "notice/faq_register";
 	}
@@ -125,9 +127,14 @@ public class NoticeController {
 	}
 	
 	@RequestMapping("/faq_content")
-	public String faqContent(Model model, int faq_id) {
-		FaqDTO dto = fdao.faqContent(faq_id);
+	public String faqContent(Model model, int faq_id, int cpage, String keyword) {
+
+	    FaqDTO dto = fdao.faqContent(faq_id);
+
 	    model.addAttribute("faq", dto);
-		return "notice/faq_content";
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("keyword", keyword);
+
+	    return "notice/faq_content";
 	}
 }
