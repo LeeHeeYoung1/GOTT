@@ -200,6 +200,11 @@
         </div>
         <div class="eventzone">
             <c:forEach var="i" items="${banner}">
+            
+            <p style="color:red;">
+		        반복 확인: ${i.banner_id} / ${i.title}
+		    </p>
+		    
                	<div class="eventbox">
                     <img src="${pageContext.request.contextPath}/images/${i.image_name}"
      					 alt="${i.title}">

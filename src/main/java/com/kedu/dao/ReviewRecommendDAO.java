@@ -29,4 +29,6 @@ public class ReviewRecommendDAO {
 		String sql = "select count(*) from review_recommend where review_seq = ? and member_id = ?";
 		return jdbc.queryForObject(sql, Integer.class, seq, loginId) > 0;
 	}
+
+	
 }

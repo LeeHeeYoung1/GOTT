@@ -70,6 +70,7 @@ public class MembersControllers {
 		    session.setAttribute("mileage", member.getMileage());
 		    session.setAttribute("regdate", member.getRegdate());
 		    session.setAttribute("role", member.getRole());
+		    session.setAttribute("privacy_agree", member.getPrivacy_agree());
 		}
 		return result;
 	}
