@@ -76,7 +76,16 @@
 	width: 650px;
 	max-width: 100%;
 	margin: 25px auto 18px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.faqSearchArea form {
 	position: relative;
+	flex: 1;
+	min-width: 0;
+	height: 42px;
 }
 
 .faqSearchInput {
@@ -105,6 +114,45 @@
 	background: #222;
 	color: white;
 	cursor: pointer;
+}
+
+.faqResetBtn {
+	position: static;
+	flex-shrink: 0;
+	height: 38px;
+	padding: 0 12px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background: white;
+	color: #555;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+.faqResetBtn:hover {
+	background: #f2f2f2;
+}
+
+.faqResetBtn:hover {
+	background: #f2f2f2;
+}
+
+.faqSearchBtn {
+	position: absolute;
+	right: 5px;
+	top: 4px;
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background: #222;
+	color: white;
+	cursor: pointer;
+}
+
+.faqSearchBtn:hover {
+	background: #444;
 }
 
 .faqSearchOption {
@@ -179,6 +227,26 @@
 	text-align: center;
 }
 
+.faqTable .manage {
+    width: 120px;
+}
+
+.faqTable .manage button {
+    padding: 5px 8px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    color: #555;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.faqTable .manage button:hover {
+    background: #222;
+    color: white;
+}
+
 .faqTable tr:last-child td {
 	border-bottom: 0;
 }
@@ -200,8 +268,7 @@
 	width: 140px;
 }
 
-.faqTitleText,
-.faqWriterText {
+.faqTitleText, .faqWriterText {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -235,67 +302,76 @@
 
 #faqHomeBtn {
 	height: 34px;
-	padding: 0 18px;
-	border: 1px solid #222;
+	padding: 0 20px;
+	border: 1px solid #ddd;
 	border-radius: 5px;
-	background: #222;
-	color: white;
+	background: #fff;
+	color: #555;
 	font-size: 12px;
+	font-weight: 500;
 	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
 #faqHomeBtn:hover {
 	background: #444;
+	border-color: #222;
+	color: #fff;
 }
 
 #navigation {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 20px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	padding: 20px 0;
 }
 
 #navigation a {
-    display: inline-block;
-    min-width: 28px;
-    padding: 6px 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-align: center;
-    color: #555;
-    text-decoration: none;
-    font-size: 12px;
+	display: inline-block;
+	min-width: 28px;
+	padding: 6px 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	text-align: center;
+	color: #555;
+	text-decoration: none;
+	font-size: 12px;
 }
 
 #navigation a.current {
-    background: #222;
-    color: white;
-    border-color: #222;
+	background: #222;
+	color: white;
+	border-color: #222;
 }
 
-@media (max-width: 700px) {
+@media ( max-width : 700px) {
 	.breadcrumb, .tabs {
 		margin-left: 0;
 		margin-right: 0;
 	}
-
 	.faqSearchOption {
 		width: 100%;
 	}
-
+	.faqSearchArea {
+		width: 100%;
+	}
+	.faqSearchInput {
+		padding-right: 145px;
+	}
+	.faqResetBtn {
+		padding: 0 7px;
+		font-size: 10px;
+	}
 	.faqTable .number {
 		width: 50px;
 	}
-
 	.faqTable .writer {
 		width: 80px;
 	}
-
 	.faqTable .date {
 		width: 100px;
 	}
-
 	.faqTable th, .faqTable td {
 		padding: 0 5px;
 		font-size: 11px;
@@ -306,7 +382,7 @@
 <div class="main">
 
 	<div class="titleBox">
-		<h2>고객센터</h2>
+		<h2>FAQ</h2>
 		<h5>자주 묻는 질문을 통해 궁금한 내용을 확인해 보세요.</h5>
 	</div>
 
@@ -315,17 +391,19 @@
 	</div>
 
 	<nav class="tabs">
-		<a href="/notice/qna">Q&A</a>
-		<a href="/notice/faq?cpage=1" class="on">FAQ</a>
+		<a href="/notice/qna">Q&A</a> <a href="/notice/faq?cpage=1" class="on">FAQ</a>
 	</nav>
 
 	<div class="faqSearchArea">
 		<form action="/notice/faq" method="get">
-		 <input type="hidden" name="cpage" value="1">
-			<input class="faqSearchInput" type="text" name="keyword"
-				placeholder="자주 묻는 질문 검색">
+			<input type="hidden" name="cpage" value="1"> <input
+				class="faqSearchInput" type="text" name="keyword"
+				placeholder="자주 묻는 질문 검색" value="${keyword}">
 			<button type="submit" class="faqSearchBtn">🔍</button>
 		</form>
+
+		<button type="button" class="faqResetBtn"
+			onclick="location.href='/notice/faq?cpage=1'">전체 목록</button>
 	</div>
 
 	<div class="faqSearchOption">
@@ -337,7 +415,8 @@
 		<c:if test="${loginId == 'admin0001'}">
 			<div class="faqWriteBox">
 				<button type="button" id="faqWriteBtn"
-					onclick="location.href='/notice/faq_register?cpage=${cpage}'">FAQ 작성</button>
+					onclick="location.href='/notice/faq_register?cpage=${cpage}'">FAQ
+					작성</button>
 			</div>
 		</c:if>
 
@@ -361,13 +440,11 @@
 					<th class="date">작성일</th>
 				</tr>
 			</thead>
-
 			<tbody>
 				<c:choose>
 					<c:when test="${empty flist}">
 						<tr>
-							<td colspan="4" class="faqEmptyMessage">
-								등록된 자주 묻는 질문이 없습니다.
+							<td colspan="4" class="faqEmptyMessage">등록된 자주 묻는 질문이 없습니다.
 							</td>
 						</tr>
 					</c:when>
@@ -377,18 +454,14 @@
 							<tr>
 								<td class="number">${faq.faq_id}</td>
 
-								<td class="title faqTitleText" title="${faq.title}">
-									<a href="/notice/faq_content?faq_id=${faq.faq_id}&cpage=${cpage}&keyword=${keyword}">
-										${faq.title}
-									</a>
-								</td>
+								<td class="title faqTitleText" title="${faq.title}"><a
+									href="/notice/faq_content?faq_id=${faq.faq_id}&cpage=${cpage}&keyword=${keyword}">
+										${faq.title} </a></td>
 
 								<td class="writer faqWriterText" title="${faq.writer}">
-									${faq.writer}
-								</td>
+									${faq.writer}</td>
 
-								<td class="date">
-									${faq.regdate.toString().substring(0, 10)}
+								<td class="date">${faq.regdate.toString().substring(0, 10)}
 								</td>
 							</tr>
 						</c:forEach>
@@ -396,72 +469,73 @@
 				</c:choose>
 			</tbody>
 		</table>
-		
-		<div id="navigation"></div>
-		
-		<div class="faqHomeBox">
-			<button onclick="location.href="/">목록</button>
-		</div>
 
+		<div id="navigation"></div>
+
+		<div class="faqHomeBox">
+			<button type="button" id="faqHomeBtn" onclick="location.href='/'">Home</button>
+		</div>
 	</div>
 
 </div>
 
 <script>
-let recordTotalCount = ${recordTotalCount};
-let recordCountPerPage = ${recordCountPerPage};
-let naviCountPerPage = ${naviCountPerpage};
-let currentPage = ${cpage};
+	let recordTotalCount = ${recordTotalCount};
+	let recordCountPerPage = ${recordCountPerPage};
+	let naviCountPerPage = ${naviCountPerpage};
+	let currentPage = ${cpage};
 
-let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
+	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
 
-let startNavi = Math.floor((currentPage - 1) / naviCountPerPage)
-				* naviCountPerPage + 1;
+	let startNavi = Math.floor((currentPage - 1) / naviCountPerPage)
+			* naviCountPerPage + 1;
 
-let endNavi = startNavi + naviCountPerPage - 1;
+	let endNavi = startNavi + naviCountPerPage - 1;
 
-if (endNavi > pageTotalCount) {
-	endNavi = pageTotalCount;
-}
-
-let needPrev = startNavi > 1;
-let needNext = endNavi < pageTotalCount;
-
-let navigation = document.getElementById("navigation");
-
-if (needPrev) {
-	let prev = document.createElement("a");
-
-	prev.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage=" + (startNavi - 1));
-
-	prev.innerHTML = "<";
-
-	navigation.append(prev);
-}
-
-for (let i = startNavi; i <= endNavi; i++) {
-	let num = document.createElement("a");
-
-	num.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage=" + i);
-
-	num.innerHTML = i;
-
-	if (i == currentPage) {
-		num.className = "current";
+	if (endNavi > pageTotalCount) {
+		endNavi = pageTotalCount;
 	}
 
-	navigation.append(num);
-}
+	let needPrev = startNavi > 1;
+	let needNext = endNavi < pageTotalCount;
 
-if (needNext) {
-	let next = document.createElement("a");
+	let navigation = document.getElementById("navigation");
 
-	next.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage=" + (endNavi + 1));
+	if (needPrev) {
+		let prev = document.createElement("a");
 
-	next.innerHTML = ">";
+		prev.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage="
+				+ (startNavi - 1));
 
-	navigation.append(next);
-}
+		prev.innerHTML = "<";
+
+		navigation.append(prev);
+	}
+
+	for (let i = startNavi; i <= endNavi; i++) {
+		let num = document.createElement("a");
+
+		num.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage=" + i);
+
+		num.innerHTML = i;
+
+		if (i == currentPage) {
+			num.className = "current";
+		}
+
+		navigation.append(num);
+	}
+
+	if (needNext) {
+		let next = document.createElement("a");
+
+		next.setAttribute("href", "/notice/faq?keyword=${keyword}&cpage="
+				+ (endNavi + 1));
+
+		next.innerHTML = ">";
+
+		navigation.append(next);
+	}
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

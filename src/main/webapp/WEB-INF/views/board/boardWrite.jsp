@@ -190,8 +190,8 @@
 	<form class="writeBox" action="/board/writeRegi?cpage=${cpage}" method="post"  enctype="multipart/form-data">
 
 		<div class="writeRow">
-			<label>제목</label> <input type="text" name="title" class="writeInput"
-				placeholder="제목을 입력해주세요.">
+			<label>제목</label> <input type="text" id="title" name="title"
+       class="writeInput" placeholder="제목을 입력해주세요." required>
 		</div>
 
 
@@ -203,7 +203,7 @@
 		<div class="contentsRow">
 			<label>내용</label>
 
-			<textarea id="summernote" name="contents" class="contents" placeholder="내용을 입력해주세요."></textarea>
+			<textarea id="summernote" name="contents" class="contents" placeholder="내용을 입력해주세요." required></textarea>
 		</div>
 
 
@@ -224,6 +224,8 @@
 
 </div>
 <script>
+
+
 $(document).ready(function() {
 
     $('#summernote').summernote({
@@ -292,8 +294,20 @@ $(document).ready(function() {
             }
         }
     });
+	
+    $(".submitBtn").click(function(e) {
+        if ($("#title").val().trim() == "") {
+            e.preventDefault();
+            alert("제목을 입력해주세요.");
+            return;
+        }
 
-
+        if ($("#summernote").summernote("isEmpty")) {
+            e.preventDefault();
+            alert("내용을 입력해주세요.");
+            return;
+        }
+    });
     // ----------------------------------------
     // 이미지 업로드
     // ----------------------------------------
