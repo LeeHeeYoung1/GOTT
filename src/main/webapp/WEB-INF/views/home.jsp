@@ -111,7 +111,7 @@
         .subtitle h5 {
             color: #6B7280;
         }
-        .eventbannerzone,
+        
         .ourpromise {
             width: 80%;
             height: auto;
@@ -122,28 +122,126 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            border-radius: 10px;
         }
         .notice {
             width: 80%;
-            height: auto;
-            padding: 20px 30px;
+            max-width: 1100px;
+			margin: 28px auto 24px;
+			border-collapse: collapse;
+			border-top: 2px solid #1a1a1f;
+			background: #fff;
+			table-layout: fixed;
             border: 1px solid black;
-            margin: auto;
             position: relative;
+            
         }
-        .noticetitle {
-            width: 80%;
-            height: auto;
-        }
-        .noticewritedate {
-            width: 20%;
-            height: auto;
-        }
-        .noticebox {
-            width: 100%;
-            height: 24px;
-        }
-        .eventbannerbox,
+        
+		/* ===== 중요 공지 ===== */
+		.important {
+			max-width: 1100px;
+			margin: 48px auto 0;
+		}
+		
+		.important_notice {
+			width: 100%;
+			border-collapse: collapse;
+			border: 1px solid #ffd9c6;
+			border-top: 2px solid #FF6B35;
+			border-radius: 0 0 8px 8px;
+			background: #fffaf7;
+			overflow: hidden;
+		}
+		
+		/* --- 머리글 바 --- */
+		.important_header th {
+			padding: 13px 18px;
+			border-bottom: 1px solid #ffd9c6;
+			background: #fff3ec;
+			font-size: 14px;
+			font-weight: 800;
+			color: #FF6B35;
+			text-align: center;
+			letter-spacing: -0.01em;
+			
+		}
+		
+		/* --- 본문 --- */
+		.important_body td {
+			padding: 14px 10px;
+			border-bottom: 1px solid #ffe7da;
+			font-size: 14px;
+			text-align: center;
+			color: #45484f;
+			vertical-align: middle;
+		}
+		
+		.important_body:last-child td {
+			border-bottom: 0;
+		}
+		
+		.important_body:hover {
+			background: #fff3ec;
+		}
+		
+		/* 제목 */
+		.important_body td:nth-child(1) {
+			width: 30%;
+			max-width: 0;
+			padding-left: 18px;
+			text-align: left;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		
+		.important_body td:nth-child(1) a {
+			font-weight: 700;
+			color: #1a1a1f;
+			text-decoration: none;
+		}
+		
+		.important_body td:nth-child(1) a:hover {
+			color: #FF6B35;
+			text-decoration: underline;
+			text-underline-offset: 3px;
+		}
+		
+		/* 내용 */
+		.important_body td:nth-child(2) {
+			max-width: 0;
+			text-align: left;
+			color: #8a7066;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		
+		/* 작성자 */
+		.important_body td:nth-child(3) {
+			width: 110px;
+		}
+		
+		/* 조회수 */
+		.important_body td:nth-child(4) {
+			width: 90px;
+			color: #b09287;
+		}
+		
+		/* 작성일 */
+		.important_body td:nth-child(5) {
+			width: 160px;
+			padding-right: 18px;
+			font-size: 13px;
+			color: #b09287;
+			white-space: nowrap;
+		}
+		
+		/* 중요 공지가 없으면 머리글만 남으므로 통째로 숨김 */
+		.important_notice:not(:has(.important_body)) {
+			display: none;
+		}
+		
         .ourpromisebox {
             float: left;
             width: auto;
@@ -151,18 +249,67 @@
             margin: 20px;
             position: relative;
         }
+        .eventbannerzone {
+        	width: 90%;
+            max-width: 1200px;
+            margin: 5px auto 0;
+            height: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            position: relative;
+            padding-top: 30px;
+        }
+        
+        .eventbannerbox {
+        	height: 280px;
+            position: relative;
+    		overflow: hidden;
+    		border-radius: 14px;
+    		background-color: #eee;
+    		cursor: pointer;
+    		box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);	
+            border: 1px solid red;
+        }
+        
         .eventbannerbox img {
-        	width: 270px;
-		    height: 200px;
-		    object-fit: cover;
+        	width: 100%;
+		    height: 100%;
 		    display: block;
+		    object-fit: cover;
+		    transition: transform 0.4s ease;
         }
-        .eventbannerbox .eventtext {
-        	position: absolute;
-        	top: 10px;
-        	left: 10px;
-        	color: #FFF;
-        }
+        .eventbannerbox::after {
+		    content: "";
+		    position: absolute;
+		    inset: 0;
+		    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.05));
+
+		}
+		.eventbannerbox:hover img {
+		    transform: scale(1.05);
+		}
+		.eventbannerbox .eventtext {
+		    position: absolute;
+		    left: 20px;
+		    right: 20px;
+		    bottom: 20px;
+		    z-index: 2;
+		    color: white;
+		}
+		
+		.eventbannerbox .eventtext h3 {
+		    margin: 0 0 6px;
+		    font-size: 20px;
+		    font-weight: 600;
+		}
+		
+		.eventbannerbox .eventtext p {
+		    margin: 0 0 12px;
+		    font-size: 12px;
+		    opacity: 0.8;
+		}
+        
         .ourtext {
             border: 1px solid black;
         }
@@ -187,7 +334,7 @@
             position: absolute;
             top: 5px;
             right: 20px;
-
+			margin-bottom: 15px;
             font-size: 14px;
             cursor: pointer;
         }
@@ -205,18 +352,20 @@
         .hotelsuggest {
             width: 80%;
             height: auto;
-            padding: 20px 30px;
+            padding: 0px 30px;
             margin: auto;
         }
         .travelPlan .planzone,
         .hotelsuggest .hotelzone {
             width: 90%;
 		    max-width: 1400px;
-		    margin: 25px auto 0;
+		    margin: 10px auto;
 		    display: grid;
 		    grid-template-columns: repeat(3, minmax(0, 1fr));
 		    gap: 20px;
 			align-items: start;
+			position: relative;
+			padding-top: 25px;
         }
        
         .planbox,
@@ -228,10 +377,12 @@
 		    background-color: #eee;
 		    cursor: pointer;
 		    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+		    margin-top: 10px;
         }
-        .planbox .planphoto {
-			width: 260px;
-			height: 280px;
+        .planbox .planphoto,
+        .hotelbox .hotelphoto {
+			width: 100%;
+			height: 100%;
 			overflow: hidden;
 			
 		    border-radius: 14px;
@@ -263,9 +414,15 @@
 		.planbox .plantext {
 		    left: 10px;
 		    right: 10px;
-		    bottom: 55px;
+		    bottom: 45px;
 		}
-		.planbox .plantext h3 {
+		.hotelbox .hoteltext {
+			left: 10px;
+		    right: 10px;
+		    bottom: 10px;
+		}
+		.planbox .plantext h3,
+		.hotelbox .hoteltext h3 {
 		    margin: 0;
 		    font-size: 20px;
 		    color: white;
@@ -300,9 +457,7 @@
 		    color:white;
 		    border-color:#222;
 		}
-			
 		
-        
         .popularboard {
             width: 80%;
             height: auto;
@@ -313,6 +468,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            border-radius: 10px;
         }
         
         .popularzone {
@@ -320,6 +476,7 @@
             width: auto;
             height: auto;
             margin: 10px;
+            
         }
         .boardwriter {
             width: 100%;
@@ -521,27 +678,20 @@
     
     <div class="title">
         <h2>진행 중인 이벤트</h2>
+        
     </div>
     <div class="eventbannerzone">
         <div class="moreview"><a href="/event/eventpage">더 보기</a></div>
-        <div class="eventbannerbox">
-            <img src="/images/gangwondo.png">
-            <div class="eventtext">
-            	<h2>강원도</h2>
-            </div>
-        </div>
-        <div class="eventbannerbox">
-            <img src="/images/jejudo.png">
-            <div class="eventtext">
-            	<h2>제주도</h2>
-            </div>
-        </div>
-        <div class="eventbannerbox">
-            <img src="/images/busan.png">
-            <div class="eventtext">
-            	<h2>부산</h2>
-            </div>
-        </div>
+            <c:forEach var="i" items="${banner}" end="2">
+               	<div class="eventbannerbox">
+                    <img src="${pageContext.request.contextPath}/images/${i.image_name}"
+     					 alt="${i.title}">
+                    <div class="eventtext">
+                        <h3>${i.title}</h3>
+                        <p>${i.content}</p>
+                	</div>
+                </div>
+            </c:forEach>
         <div id="ourpromise"></div>
     </div>
 
@@ -554,13 +704,11 @@
     </div>
     <br>
     <div class="ourpromise">
-        <div class="moreview"><a href="">더 보기</a></div>
         <div class="ourpromisebox">
             <img src="https://picsum.photos/270/200?random=1">
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">체계적인 시스템</p>
                 <p>효율적인 예약 및 정보 관리로 편의성을 제공합니다.</p>
-                <button>자세히 보기</button>
             </div>
         </div>
         <div class="ourpromisebox">
@@ -568,7 +716,6 @@
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">24시간 고객 케어</p>
                 <p>24시간 언제든 궁금한 점을 해결해 드립니다.</p>
-                <button>자세히 보기</button>
             </div>
         </div>
         <div class="ourpromisebox">
@@ -576,7 +723,6 @@
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">신뢰할 수 있는 정보</p>
                 <p>정확하고 검증된 여행 정보를 제공합니다.</p>
-                <button>자세히 보기</button>
             </div>
         </div>
     </div>
@@ -615,10 +761,10 @@
         <div class="planzone">
             <div class="moreview"><a href="/travelPlan/list">더 보기</a></div>
             
-            	<c:choose>
-                    <c:when test="${not empty myPlannerList}">
-                        <c:forEach var="plan" items="${myPlannerList}">
-                        <div class="planbox">
+                <c:choose>
+		            <c:when test="${not empty planList}">
+		                <c:forEach var="plan" items="${planList}" end="2">
+						    <div class="planbox">
                             <div class="planphoto">
                                     <c:choose>
                                         <c:when test="${not empty plan.IMAGE_NAME}">
@@ -639,12 +785,12 @@
                                 </div>
                             </div>
                           </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p class="emptyPlanner">아직 공유한 여행 일정이 없습니다.</p>
-                    </c:otherwise>
-                </c:choose>
+						</c:forEach>
+		            </c:when>
+		            <c:otherwise>
+		                <div class="emptyPlans">아직 공유된 여행 일정이 없습니다.</div>
+		            </c:otherwise>
+		        </c:choose>
          
         	</div>
     </div>
@@ -660,29 +806,26 @@
     
     <div class="hotelsuggest">
         <div class="hotelzone">
-            <div class="moreview"><a href="">더 보기</a></div>
+            <div class="moreview"><a href="/reservation/list?cpage=1">더 보기</a></div>
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="${stayImgs[0]}"></div>
-                <div class="hoteltext" style="padding: 5px;">
+                <div class="hoteltext">
                     <p style="font-weight: bold;">호텔</p>
                     <p>편안한 호텔</p>
-                    <button>자세히 보기</button>
                 </div>
             </div>
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="${stayImgs[1]}"></div>
-                <div class="hoteltext" style="padding: 5px;">
+                <div class="hoteltext">
                     <p style="font-weight: bold;">모텔</p>
                     <p>가성비 모텔</p>
-                    <button>자세히 보기</button>
                 </div>
             </div>
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="${stayImgs[2]}"></div>
-                <div class="hoteltext" style="padding: 5px;">
+                <div class="hoteltext">
                     <p style="font-weight: bold;">민박</p>
                     <p>감성의 민박</p>
-                    <button>자세히 보기</button>
                 </div>
             </div>
         </div>
@@ -720,12 +863,25 @@
     
     <div class="notice">
         <div class="moreview"><a href="/notice/notice_list">더 보기</a></div>
-        <%-- 
-                <div class="noticebox">
-                    <div class="noticetitle" style="float: left;">사이트 점검 안내</div>
-                    <div class="noticewritedate" style="float: left;">날짜</div>
-                </div>
- 		--%>
+        
+        	<div class="important">
+				<table class="important_notice">
+					<tr class="important_header">
+						<th colspan="5">중요 공지사항</th>
+					</tr>
+	
+					<c:forEach var="i" items="${ilist}">
+						<tr class="important_body">
+							<td><a href="/notice/detail?notice_id=${i.notice_id}">${i.title}</a></td>
+							<td>${i.contents}</td>
+							<td>${i.nickname}</td>
+							<td>${i.view_count}</td>
+							<td><fmt:formatDate value="${i.write_date}" pattern="yyyy.MM.dd HH:mm" /></td>
+						</tr>
+					</c:forEach>
+				</table>
+			</div>
+			
     </div>
 
 
@@ -743,7 +899,7 @@
         </nav>
     </div>
     
-	</div>
+	
 </div>
 <script>
 

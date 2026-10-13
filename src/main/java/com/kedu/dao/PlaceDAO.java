@@ -211,5 +211,7 @@ public class PlaceDAO {
 		String sql = "select * from (select image_name from place where place_type = 'STAY' and name like '%민박%' and image_name is not null order by DBMS_RANDOM.VALUE) where ROWNUM = 1";
 		return jdbc.queryForObject(sql, String.class);
 	}
+	
+	
 
 }

@@ -12,13 +12,23 @@ public class TravelPlanDTO {
 	private String is_public; // 일정 공개 여부 (Y: 공개, N: 비공개)
 	private Timestamp created_at; // 일정 최초 생성 날짜 및 시간
 	private Timestamp updated_at; // 일정 마지막 수정 날짜 및 시간
+	private String image_name; // 일정 대표 사진
+
+    public String getImage_name() {
+		return image_name;
+	}
 
 
-    public TravelPlanDTO() {
+	public void setImage_name(String image_name) {
+		this.image_name = image_name;
+	}
+
+
+	public TravelPlanDTO() {
     }
 
  
-    public TravelPlanDTO(int plan_id, String member_id, String plan_title, Date start_date, Date end_date, int person_count, String is_public, Timestamp created_at, Timestamp updated_at) {
+    public TravelPlanDTO(int plan_id, String member_id, String plan_title, Date start_date, Date end_date, int person_count, String is_public, Timestamp created_at, Timestamp updated_at, String image_name) {
         this.plan_id = plan_id;
         this.member_id = member_id;
         this.plan_title = plan_title;
@@ -28,6 +38,7 @@ public class TravelPlanDTO {
         this.is_public = is_public;
         this.created_at = created_at;
         this.updated_at = updated_at;
+        this.image_name = image_name;
     }
 
     public int getPlan_id() {
