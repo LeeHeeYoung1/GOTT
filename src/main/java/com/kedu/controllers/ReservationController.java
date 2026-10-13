@@ -249,28 +249,43 @@ public class ReservationController {
 	}
 
 	@RequestMapping("/reservationUpdate")
-	   public String reservationUpdate(String paymentId, Model model) {
-
-	      ReservationDTO rsdto = rdao.reservationOne(paymentId);
-	      int placeId = rsdto.getPlaceId();
-	      int guest = rsdto.getGuestNum();
-
-	      List<RoomDTO> all = roomDao.detailList(placeId, rsdto.getCheckIn().toString(), rsdto.getCheckOut().toString());
-
-	      List<RoomDTO> detailList = new ArrayList<RoomDTO>();
-	      for (int i = 0; i < all.size(); i++) {
-	         RoomDTO room = all.get(i);
-	         if (room.getMaxCount() >= guest) {
+	public String reservationUpdate(String paymentId, HttpSession session, Model model) {
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) return "redirect:/members/loginpage";
+	    if (paymentId == null || paymentId.trim().isEmpty()) {
+	        return "redirect:/members/mypage";
+	    }
+	    ReservationDTO rsdto;
+	    try {
+	        rsdto = rdao.reservationOne(paymentId);
+	    } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+	        return "redirect:/members/mypage";
+	    }
+	    if (!memberId.equals(rsdto.getMemberId())) {
+	        return "redirect:/members/mypage";
+	    }
+	    if (!"예약완료".equals(rsdto.getStatus())) {
+	        return "redirect:/members/mypage";
+	    }
+	    if (rsdto.getUpdateCount() >= 1) {
+	        session.setAttribute("reservationUpdateMessage", "예약 변경은 한 번만 가능합니다.");
+	        return "redirect:/members/mypage";
+	    }
+	    
+	    int placeId = rsdto.getPlaceId();
+	    int guest = rsdto.getGuestNum();
+	    List<RoomDTO> all = roomDao.detailList(placeId, rsdto.getCheckIn().toString(), rsdto.getCheckOut().toString());
+	    List<RoomDTO> detailList = new ArrayList<RoomDTO>();
+	    for (RoomDTO room : all) {
+	        if (room.getMaxCount() >= guest) {
 	            detailList.add(room);
-	         }
-	      }
-
-	      model.addAttribute("reservation", rsdto);
-	      model.addAttribute("placeOne", rdao.placeOne(placeId));
-	      model.addAttribute("detailList", detailList);
-
-	      return "reservation/reservationUpdate";
-	   }
+	        }
+	    }
+	    model.addAttribute("reservation", rsdto);
+	    model.addAttribute("placeOne", rdao.placeOne(placeId));
+	    model.addAttribute("detailList", detailList);
+	    return "reservation/reservationUpdate";
+	}
 	
 	  @RequestMapping("/calculateUpdatePrice")
 	  @ResponseBody
@@ -337,12 +352,13 @@ public class ReservationController {
 	              return "결제 취소 완료 여부를 확인할 수 없습니다. 결제 내역을 확인해 주세요.";
 	          }
 
-	          int updated = rdao.cancelReservation(paymentId, memberId);
-	          if (updated == 1) {
-	              return "success";
-	          }
-
-	          return "결제는 취소되었지만 예약 상태 변경에 실패했습니다. 관리자에게 문의해 주세요.";
+	          try {
+	        	    reservationService.cancelReservationAndRestoreMileage(paymentId, memberId);
+	        	    return "success";
+	        	} catch (Exception e) {
+	        	    e.printStackTrace();
+	        	    return "결제는 취소되었지만 예약 또는 마일리지 처리에 실패했습니다. 관리자에게 문의해 주세요.";
+	        	}
 
 	      } catch (Exception e) {
 	          e.printStackTrace();

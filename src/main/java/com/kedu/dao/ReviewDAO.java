@@ -96,4 +96,26 @@ public class ReviewDAO {
 		String sql = "update review set view_count = view_count + 1 where seq = ?";
 		jdbc.update(sql, seq);
 	}
+	
+	
+	
+	public List<ReviewDTO> selectMyReview(String memberId) {
+	    String sql = "SELECT * FROM REVIEW WHERE MEMBER_ID = ? ORDER BY REG_DATE DESC";
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), memberId);
+	}
+	
+	public int reviewCount(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM review "
+	            + "WHERE member_id = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
+	
+	public List<ReviewDTO> selectRecentReviews() {
+
+	    String sql = "select seq, member_id, target_type, image1, rating, contents, tag, reg_date from review order by reg_date desc";
+	           
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class));
+	}
+	
+	
 }

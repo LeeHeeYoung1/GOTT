@@ -558,6 +558,7 @@ body {
 	</div>
 	
 	<div class="bottom_area">
+		<button type="button" class="back">뒤로 가기</button>
     	<button type="button" class="update_btn">예약 변경</button>
 	</div>
 
@@ -568,6 +569,11 @@ body {
 
 
 $(document).ready(function() {
+	$(".back").on("click",function(){
+		history.back();
+	});
+	
+	
     // 1. 객실 선택
     $(".room_card_div").on("click", function() {
         $(".room_card_div").removeClass("selected");
@@ -720,8 +726,7 @@ $(document).ready(function() {
                 });
                 if (String(result).trim() === "success") {
                     alert("부분 환불 및 예약 변경이 완료되었습니다.");
-                    if (window.opener && !window.opener.closed) window.opener.location.reload();
-                    window.close();
+                    location.href = "${pageContext.request.contextPath}/members/mypage";
                 } else {
                     alert(String(result));
                 }
@@ -743,10 +748,7 @@ $(document).ready(function() {
 
                 if (String(result).trim() === "success") {
                     alert("예약이 변경되었습니다.");
-                    if (window.opener && !window.opener.closed) {
-                        window.opener.location.reload();
-                    }
-                    window.close();
+                    location.href = "${pageContext.request.contextPath}/members/mypage";
                 } else {
                     alert(String(result));
                 }
@@ -786,16 +788,14 @@ $(document).ready(function() {
 
             if (String(result).trim() === "success") {
                 alert("추가 결제 및 예약 변경이 완료되었습니다.");
-                if (window.opener && !window.opener.closed) {
-                    window.opener.location.reload();
-                }
-                window.close();
+                location.href = "${pageContext.request.contextPath}/members/mypage";
             } else {
                 alert("결제는 완료됐지만 예약 변경 확인이 필요합니다.\n" + result);
             }
         } catch (error) {
-            console.error(error);
-            alert("처리 중 오류가 발생했습니다. 결제 내역을 확인한 후 다시 시도해 주세요.");
+            console.error("부분 환불 오류:", error);
+            console.error("서버 응답:", error.responseText);
+            alert("부분 환불 처리에 실패했습니다. F12 콘솔에서 오류를 확인해 주세요.");
         } finally {
             button.disabled = false;
         }

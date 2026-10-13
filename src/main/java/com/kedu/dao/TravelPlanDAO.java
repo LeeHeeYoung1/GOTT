@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.TravelPlanDTO;
 import com.kedu.dto.TravelPlanDetailDTO;
 
@@ -73,6 +74,17 @@ public class TravelPlanDAO {
 
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDetailDTO.class), planId);
 	}
+    
+    // 여행 일정에 포함된 장소 사진 조회
+    public List<PlaceDTO> selectImages(int plan_Id) {
+        String sql = "select p.place_id, p.image_name from travel_plan_detail d "
+        		+ "join place p on p.place_id = d.place_id "
+        		+ "where d.plan_id = ? "
+        		+ "and p.image_name is not null "
+        		+ "order by p.place_id asc";
+
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), plan_Id);
+	}
 
     // 여행 일정 삭제
     public int deletePlan(int planId, String memberId) {
@@ -95,6 +107,43 @@ public class TravelPlanDAO {
 
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class));
 	}
+    
+    // 모든 회원의 공개 여행 일정 조회 + 첫 번째 장소 이미지
+    // 쿼리문 실화냐 이해 못할거같은데
+    public List<Map<String, Object>> selectPublicPlansWithCount() {
+
+        String sql =
+                "SELECT T.PLAN_ID, "
+              + "       T.MEMBER_ID, "
+              + "       T.PLAN_TITLE, "
+              + "       TO_CHAR(T.START_DATE, 'YYYY-MM-DD') AS START_DATE, "
+              + "       TO_CHAR(T.END_DATE, 'YYYY-MM-DD') AS END_DATE, "
+              + "       T.PERSON_COUNT, "
+              + "       T.IS_PUBLIC, "
+              + "       T.CREATED_AT, "
+              + "       (SELECT COUNT(*) "
+              + "          FROM TRAVEL_PLAN_DETAIL D "
+              + "         WHERE D.PLAN_ID = T.PLAN_ID) AS SPOT_COUNT, "
+              + "       P.IMAGE_NAME AS IMAGE_NAME "
+              + "FROM TRAVEL_PLAN T "
+              + "LEFT JOIN ( "
+              + "    SELECT D.PLAN_ID, "
+              + "           PL.IMAGE_NAME, "
+              + "           ROW_NUMBER() OVER ( "
+              + "               PARTITION BY D.PLAN_ID "
+              + "               ORDER BY D.DAY_NO, D.VISIT_ORDER "
+              + "           ) AS RN "
+              + "    FROM TRAVEL_PLAN_DETAIL D "
+              + "    JOIN PLACE PL "
+              + "      ON D.PLACE_ID = PL.PLACE_ID "
+              + ") P "
+              + "  ON T.PLAN_ID = P.PLAN_ID "
+              + " AND P.RN = 1 "
+              + "WHERE T.IS_PUBLIC = 'Y' "
+              + "ORDER BY T.CREATED_AT DESC";
+
+        return jdbc.queryForList(sql);
+    }
     
     // 공개된 여행 일정 목록 화면
     // 이거 DAO에 들어가는게 맞아?
@@ -141,5 +190,13 @@ public class TravelPlanDAO {
                 + "ORDER BY T.CREATED_AT DESC";
         return jdbc.queryForList(sql, memberId);
     }
-
+    
+    public String placeImagename(int placeId) {
+		
+		String sql = "select image_name from place where place_id = ?";
+		
+		return jdbc.queryForObject(sql, String.class, placeId);
+		
+	}
+    
 }

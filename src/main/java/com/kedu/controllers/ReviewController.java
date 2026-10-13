@@ -122,4 +122,5 @@ public class ReviewController {
 		return "redirect:/review/detail?seq="+seq+"&place_id="+rdto.getTarget_id();
 	}
 	
+	
 }
