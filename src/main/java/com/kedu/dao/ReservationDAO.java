@@ -46,6 +46,50 @@ public class ReservationDAO {
 		return jdbc.update(sql,mileage,id,mileage);
 	}
 	
+	// 마일리지 총액 조회
+	public int selectUsedMileage(String paymentId, String memberId) {
+	    String sql = "SELECT NVL(SUM(AMOUNT), 0) FROM MILEAGE_HISTORY "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND TYPE = 'USE'";
+	    return jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
+	}
+	
+
+	// 회원 현재 마일리지 조회
+	public int selectMileage(String memberId) {
+		String sql = "SELECT NVL(MILEAGE, 0) FROM MEMBERS WHERE ID = ?";
+		return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
+
+	// 회원 마일리지 적립
+	public int addMileage(String memberId, int mileage) {
+		String sql = "UPDATE MEMBERS SET MILEAGE = NVL(MILEAGE, 0) + ? WHERE ID = ?";
+		return jdbc.update(sql, mileage, memberId);
+	}
+
+	// 마일리지 히스토리 기록
+	public int insertMileageHistory(String memberId, String paymentId, String type, int amount, String reason) {
+		String sql = "INSERT INTO MILEAGE_HISTORY (SEQ, MEMBER_ID, RESERVATION_ID, PAYMENT_ID, TYPE, AMOUNT, BALANCE, REASON, REG_DATE) "
+				+ "SELECT MILEAGE_HISTORY_SEQ.NEXTVAL, r.MEMBER_ID, r.SEQ, r.PAYMENT_ID, ?, ?, NVL(m.MILEAGE, 0), ?, SYSDATE "
+				+ "FROM RESERVATION r JOIN MEMBERS m ON r.MEMBER_ID = m.ID "
+				+ "WHERE r.PAYMENT_ID = ? AND r.MEMBER_ID = ?";
+		return jdbc.update(sql, type, amount, reason, paymentId, memberId);
+	}
+	
+	// 해당 예약으로 적립한 마일리지 조회
+	public int selectEarnedMileage(String paymentId, String memberId) {
+	    String sql = "SELECT NVL(SUM(AMOUNT), 0) FROM MILEAGE_HISTORY "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND TYPE = 'EARN'";
+	    return jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
+	}
+
+	// 적립 마일리지 회수
+	public int subtractMileage(String memberId, int mileage) {
+	    String sql = "UPDATE MEMBERS SET MILEAGE = NVL(MILEAGE, 0) - ? "
+	            + "WHERE ID = ? AND NVL(MILEAGE, 0) >= ?";
+	    return jdbc.update(sql, mileage, memberId, mileage);
+	}
+
+	
 	public ArrayList<ReservationDTO> myRsList(String memberId) {
 	    String sql = "SELECT reservation.*, room.room_name, room.image1, place.name AS place_name "
 	            + "FROM reservation "

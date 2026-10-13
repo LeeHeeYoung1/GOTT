@@ -2,7 +2,6 @@
 package com.kedu.controllers;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ import com.kedu.dao.TravelPlanDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dao.WishlistDAO;
 import com.kedu.dto.MembersDTO;
+import com.kedu.dto.MileageHistoryDTO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.Travel_TypeDTO;
@@ -146,6 +146,7 @@ public class MembersControllers {
 
 	    // 3. 마일리지 조회
 	    int mileage = mdao.getMileage(memberId);
+	    List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId);
 	    
 	    // 3-1. 찜 갯수표시
 	    int myWishTotalCount = wdao.countByWish(memberId);
@@ -157,7 +158,7 @@ public class MembersControllers {
 	    // 3-3. 이용 완료 예약 목록
 	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
 	    	    
-	    // 4. JSP로 데이터 전달
+	    model.addAttribute("mileageHistory",mileageHistory);
 	    model.addAttribute("upcomingCount", upcomingCount);
 	    model.addAttribute("today", LocalDate.now().toString());
 	    model.addAttribute("upcomingList", upcomingList);
