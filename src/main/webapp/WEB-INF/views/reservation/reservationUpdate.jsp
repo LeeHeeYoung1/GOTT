@@ -1,19 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
-
 <title>예약 변경</title>
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+<script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
 <style>
 
 * {
@@ -639,7 +634,7 @@ $(document).ready(function() {
 
                 $("#expectedPrice").text(price.toLocaleString("ko-KR") + "원");
 
-                let oldPrice = Number("${reservation.price}");
+                let oldPrice = Number("${reservation.totalPrice}");
                 let difference = price - oldPrice;
 
                 if (difference > 0) {
@@ -660,62 +655,150 @@ $(document).ready(function() {
         });
     }
 
-    // 6. 예약 변경 저장
-    $(".update_btn").on("click", function() {
-        let roomId = $(".room_card_div.selected").data("room-id");
-        let checkIn = $("#checkIn").val();
-        let checkOut = $("#checkOut").val();
-        let guest = Number($("#guestCount").text());
-        let paymentId = new URLSearchParams(window.location.search).get("paymentId");
+
+
+    // 6. 예약 변경 처리
+    $(".update_btn").on("click", async function() {
+        const button = this;
+        const roomId = $(".room_card_div.selected").data("room-id");
+        const checkIn = $("#checkIn").val();
+        const checkOut = $("#checkOut").val();
+        const guest = Number($("#guestCount").text());
+        const paymentId = new URLSearchParams(window.location.search).get("paymentId");
+        const contextPath = "${pageContext.request.contextPath}";
 
         if (!paymentId || !roomId) {
             alert("예약 정보 또는 객실을 확인해 주세요.");
             return;
         }
-
         if (!checkIn || !checkOut || checkIn >= checkOut) {
             alert("체크인과 체크아웃 날짜를 확인해 주세요.");
             return;
         }
-
         if (!Number.isInteger(guest) || guest < 1) {
             alert("인원수를 확인해 주세요.");
             return;
         }
+        if (!confirm("예약 정보를 변경하시겠습니까?")) return;
 
-        if (!confirm("예약 정보를 변경하시겠습니까?")) {
-            return;
-        }
+        button.disabled = true;
 
-        $.ajax({
-            url: "${pageContext.request.contextPath}/reservation/reservationUpdateSave",
-            type: "POST",
-            data: {
-                paymentId: paymentId,
-                roomId: roomId,
-                checkIn: checkIn,
-                checkOut: checkOut,
-                guestNum: guest
-            },
-            success: function(result) {
-                result = String(result).trim();
+        try {
+            const priceResponse = await $.ajax({
+                url: contextPath + "/reservation/calculateUpdatePrice",
+                type: "GET",
+                data: {
+                    roomId: roomId,
+                    checkIn: checkIn,
+                    checkOut: checkOut,
+                    guestNum: guest
+                }
+            });
 
-                if (result === "success") {
+            const newTotalPrice = Number(priceResponse);
+            const oldTotalPrice = Number("${reservation.totalPrice}");
+            const difference = newTotalPrice - oldTotalPrice;
+
+            if (!Number.isFinite(newTotalPrice) || newTotalPrice <= 0) {
+                alert("변경 금액을 확인할 수 없습니다.");
+                return;
+            }
+
+            if (difference < 0) {
+                const refundAmount = Math.abs(difference);
+                if (!confirm("예약 변경으로 " + refundAmount.toLocaleString("ko-KR") + "원을 부분 환불하시겠습니까?")) return;
+                const result = await $.ajax({
+                    url: contextPath + "/reservation/PaymentUpdateRefund",
+                    type: "POST",
+                    data: {
+                        paymentId: paymentId,
+                        roomId: roomId,
+                        checkIn: checkIn,
+                        checkOut: checkOut,
+                        guestNum: guest
+                    }
+                });
+                if (String(result).trim() === "success") {
+                    alert("부분 환불 및 예약 변경이 완료되었습니다.");
+                    if (window.opener && !window.opener.closed) window.opener.location.reload();
+                    window.close();
+                } else {
+                    alert(String(result));
+                }
+                return;
+            }
+
+            if (difference === 0) {
+                const result = await $.ajax({
+                    url: contextPath + "/reservation/reservationUpdateSave",
+                    type: "POST",
+                    data: {
+                        paymentId: paymentId,
+                        roomId: roomId,
+                        checkIn: checkIn,
+                        checkOut: checkOut,
+                        guestNum: guest
+                    }
+                });
+
+                if (String(result).trim() === "success") {
                     alert("예약이 변경되었습니다.");
-
                     if (window.opener && !window.opener.closed) {
                         window.opener.location.reload();
                     }
-
                     window.close();
                 } else {
-                    alert(result || "예약 변경에 실패했습니다.");
+                    alert(String(result));
                 }
-            },
-            error: function() {
-                alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+                return;
             }
-        });
+
+            // 추가 결제: 차액만 PortOne으로 결제
+            const newPaymentId = "GOTT-CHANGE-" + crypto.randomUUID();
+
+            const response = await PortOne.requestPayment({
+                storeId: "store-d4a75cb3-13cc-4226-b7fc-33d40089bf40",
+                channelKey: "channel-key-6b882be9-c6c2-4429-a3ba-2a04d40b1f0a",
+                paymentId: newPaymentId,
+                orderName: "예약 변경 추가 결제",
+                totalAmount: difference,
+                currency: "CURRENCY_KRW",
+                payMethod: "CARD"
+            });
+
+            if (response.code != null) {
+                alert("결제 실패: " + response.message);
+                return;
+            }
+
+            const result = await $.ajax({
+                url: contextPath + "/reservation/PaymentUpdateComplete",
+                type: "POST",
+                data: {
+                    paymentId: paymentId,
+                    newPaymentId: newPaymentId,
+                    roomId: roomId,
+                    checkIn: checkIn,
+                    checkOut: checkOut,
+                    guestNum: guest
+                }
+            });
+
+            if (String(result).trim() === "success") {
+                alert("추가 결제 및 예약 변경이 완료되었습니다.");
+                if (window.opener && !window.opener.closed) {
+                    window.opener.location.reload();
+                }
+                window.close();
+            } else {
+                alert("결제는 완료됐지만 예약 변경 확인이 필요합니다.\n" + result);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("처리 중 오류가 발생했습니다. 결제 내역을 확인한 후 다시 시도해 주세요.");
+        } finally {
+            button.disabled = false;
+        }
     });
 
     // 7. 페이지가 열릴 때 현재 선택된 객실의 예상 금액 표시

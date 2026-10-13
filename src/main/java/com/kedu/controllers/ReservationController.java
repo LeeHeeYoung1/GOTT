@@ -32,6 +32,7 @@ import com.kedu.services.ReservationService;
 @Controller
 @RequestMapping("/reservation")
 public class ReservationController {
+	private String apiSecret = "1eCHxu85LeGUbtZZ3YDLU1SfgU2aZVuA6qROvuuNFiSuzSWOiRdaqGcoVVoMfbKxxbtNaRPOM6qsxBHH";
 	
 	@Autowired
 	private ReservationService reservationService;
@@ -247,7 +248,7 @@ public class ReservationController {
 		return "OK";
 	}
 
-	  @RequestMapping("/reservationUpdate")
+	@RequestMapping("/reservationUpdate")
 	   public String reservationUpdate(String paymentId, Model model) {
 
 	      ReservationDTO rsdto = rdao.reservationOne(paymentId);
@@ -281,48 +282,234 @@ public class ReservationController {
 	      return PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
 	  }
 
-	  @RequestMapping("/reservationUpdateSave")
-	  @ResponseBody
-	  public String reservationUpdateSave(String paymentId, int roomId, String checkIn, String checkOut, int guestNum, HttpSession session) {
-	      String memberId = (String) session.getAttribute("loginId");
-	      if (memberId == null) {
-	          return "로그인이 필요합니다.";
-	      }
-	      if (paymentId == null || paymentId.trim().isEmpty() || checkIn == null || checkOut == null || checkIn.trim().isEmpty() || checkOut.trim().isEmpty()) {
-	          return "예약 정보가 올바르지 않습니다.";
-	      }
-	      try {
-	          java.time.LocalDate inDate = java.time.LocalDate.parse(checkIn);
-	          java.time.LocalDate outDate = java.time.LocalDate.parse(checkOut);
-	          if (!inDate.isBefore(outDate)) {
-	              return "체크아웃 날짜는 체크인 날짜보다 늦어야 합니다.";
-	          }
-	          if (guestNum < 1) {
-	              return "인원은 1명 이상이어야 합니다.";
-	          }
-	          ReservationDTO reservation = rdao.reservationOne(paymentId);
-	          if (reservation == null || !memberId.equals(reservation.getMemberId())) {
-	              return "예약 정보를 찾을 수 없습니다.";
-	          }
-	          if (!"예약완료".equals(reservation.getStatus())) {
-	              return "변경할 수 있는 예약이 아닙니다.";
-	          }
-	          RoomDTO roomDto = roomDao.roomOne(roomId);
-	          if (roomDto == null || roomDto.getMaxCount() == null || guestNum > roomDto.getMaxCount()) {
-	              return "선택한 객실의 최대 인원을 확인해 주세요.";
-	          }
-	          if (roomDto.getPlaceId() != reservation.getPlaceId()) {
-	              return "다른 숙소의 객실로 변경할 수 없습니다.";
-	          }
-	          int price = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
-	          int result = rdao.updateReservationDetails(paymentId, memberId, roomId, java.sql.Date.valueOf(inDate), java.sql.Date.valueOf(outDate), guestNum, price);
-	          if (result > 0) {
-	              return "success";
-	          }
-	          return "예약 변경에 실패했습니다. 다시 시도해 주세요.";
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	          return "예약 변경 중 오류가 발생했습니다.";
-	      }
-	  }
+
+		@RequestMapping("/reservationUpdateSave")
+		@ResponseBody
+		public String reservationUpdateSave(String paymentId, int roomId, String checkIn, String checkOut, int guestNum, HttpSession session) {
+		    String memberId = (String) session.getAttribute("loginId");
+		    if (memberId == null) return "로그인이 필요합니다.";
+		    if (paymentId == null || paymentId.trim().isEmpty() || checkIn == null || checkOut == null || checkIn.trim().isEmpty() || checkOut.trim().isEmpty()) {
+		        return "예약 정보가 올바르지 않습니다.";
+		    }
+		    try {
+		        java.time.LocalDate inDate = java.time.LocalDate.parse(checkIn);
+		        java.time.LocalDate outDate = java.time.LocalDate.parse(checkOut);
+		        if (!inDate.isBefore(outDate)) return "체크아웃 날짜는 체크인 날짜보다 늦어야 합니다.";
+		        if (guestNum < 1) return "인원은 1명 이상이어야 합니다.";
+		
+		        ReservationDTO reservation = rdao.reservationOne(paymentId);
+		        if (reservation == null || !memberId.equals(reservation.getMemberId())) return "예약 정보를 찾을 수 없습니다.";
+		        if (!"예약완료".equals(reservation.getStatus())) return "변경할 수 있는 예약이 아닙니다.";
+		
+		        RoomDTO roomDto = roomDao.roomOne(roomId);
+		        if (roomDto == null || roomDto.getMaxCount() == null || guestNum > roomDto.getMaxCount()) {
+		            return "선택한 객실의 최대 인원을 확인해 주세요.";
+		        }
+		        if (roomDto.getPlaceId() != reservation.getPlaceId()) return "다른 숙소의 객실로 변경할 수 없습니다.";
+		
+		        int newTotalPrice = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+		        int oldTotalPrice = reservation.getTotalPrice();
+		        int difference = newTotalPrice - oldTotalPrice;
+		
+		        if (difference > 0) {
+		            return "추가 결제 필요: " + difference;
+		        } else if (difference < 0) {
+		            return "부분 환불 필요: " + Math.abs(difference);
+		        }
+		
+		        int result = rdao.updateReservationDetails(
+		                paymentId, memberId, roomId,
+		                java.sql.Date.valueOf(inDate),
+		                java.sql.Date.valueOf(outDate),
+		                guestNum, newTotalPrice
+		        );
+		        if (result > 0) return "success";
+		        return "예약 변경에 실패했습니다. 다시 시도해 주세요.";
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        return "예약 변경 중 오류가 발생했습니다.";
+		    }
+		}
+		
+
+	@RequestMapping("/PaymentUpdateComplete")
+	@ResponseBody
+	public String PaymentUpdateComplete(String paymentId, String newPaymentId,
+	        int roomId, String checkIn, String checkOut, int guestNum,
+	        HttpSession session) {
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) return "로그인이 필요합니다.";
+	    if (paymentId == null || paymentId.trim().isEmpty()
+	            || newPaymentId == null || newPaymentId.trim().isEmpty()
+	            || checkIn == null || checkOut == null
+	            || checkIn.trim().isEmpty() || checkOut.trim().isEmpty()) {
+	        return "예약 또는 결제 정보가 올바르지 않습니다.";
+	    }
+	    try {
+	        if (apiSecret == null || apiSecret.trim().isEmpty()) {
+	            return "PortOne API 설정을 확인해 주세요.";
+	        }
+	        java.time.LocalDate inDate = java.time.LocalDate.parse(checkIn);
+	        java.time.LocalDate outDate = java.time.LocalDate.parse(checkOut);
+	        if (!inDate.isBefore(outDate)) {
+	            return "체크아웃 날짜는 체크인 날짜보다 늦어야 합니다.";
+	        }
+	        if (guestNum < 1) return "인원은 1명 이상이어야 합니다.";
+	
+	        ReservationDTO reservation = rdao.reservationOne(paymentId);
+	        if (reservation == null || !memberId.equals(reservation.getMemberId())) {
+	            return "예약 정보를 찾을 수 없습니다.";
+	        }
+	        if (!"예약완료".equals(reservation.getStatus())) {
+	            return "변경할 수 있는 예약이 아닙니다.";
+	        }
+	
+	        RoomDTO roomDto = roomDao.roomOne(roomId);
+	        if (roomDto == null || roomDto.getMaxCount() == null
+	                || guestNum > roomDto.getMaxCount()) {
+	            return "선택한 객실의 최대 인원을 확인해 주세요.";
+	        }
+	        if (roomDto.getPlaceId() != reservation.getPlaceId()) {
+	            return "다른 숙소의 객실로 변경할 수 없습니다.";
+	        }
+	
+	        int newTotalPrice = PriceUtil.totalPrice(
+	                checkIn, checkOut,
+	                roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+	        int difference = newTotalPrice - reservation.getTotalPrice();
+	
+	        if (difference <= 0) {
+	            return "추가 결제가 필요한 예약이 아닙니다. 예약 변경 금액을 다시 확인해 주세요.";
+	        }
+	
+	        if (rdao.countRePaymentHistory(newPaymentId) > 0) {
+	            return "이미 처리된 결제입니다.";
+	        }
+	
+	        String url = "https://api.portone.io/payments/"
+	                + java.net.URLEncoder.encode(newPaymentId, "UTF-8");
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.set("Authorization", "PortOne " + apiSecret);
+	        HttpEntity<String> entity = new HttpEntity<>(headers);
+	        RestTemplate restTemplate = new RestTemplate();
+	
+	        ResponseEntity<String> response = restTemplate.exchange(
+	                url, HttpMethod.GET, entity, String.class);
+	
+	        ObjectMapper mapper = new ObjectMapper();
+	        JsonNode payment = mapper.readTree(response.getBody());
+	
+	        String status = payment.path("status").asText();
+	        String currency = payment.path("currency").asText();
+	        int paid = payment.path("amount").path("paid").asInt();
+	
+	        if (!"PAID".equals(status)) {
+	            return "결제가 완료된 상태가 아닙니다.";
+	        }
+	        if (!"KRW".equals(currency)) {
+	            return "결제 통화가 올바르지 않습니다.";
+	        }
+	        if (paid != difference) {
+	            return "결제 금액이 변경 금액과 일치하지 않습니다.";
+	        }
+	
+	        reservationService.completeReservationUpdatePayment(
+	                reservation,
+	                newPaymentId,
+	                memberId,
+	                roomId,
+	                java.sql.Date.valueOf(inDate),
+	                java.sql.Date.valueOf(outDate),
+	                guestNum,
+	                paid,
+	                newTotalPrice);
+	
+	        return "success";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "예약 변경 결제 처리 중 오류가 발생했습니다.";
+	    }
+	}
+	
+	@RequestMapping("/PaymentUpdateRefund")
+	@ResponseBody
+	public String PaymentUpdateRefund(String paymentId, int roomId, String checkIn, String checkOut, int guestNum, HttpSession session) {
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) return "로그인이 필요합니다.";
+	    if (paymentId == null || paymentId.trim().isEmpty() || checkIn == null || checkOut == null || checkIn.trim().isEmpty() || checkOut.trim().isEmpty()) {
+	        return "예약 정보가 올바르지 않습니다.";
+	    }
+	    try {
+	        if (apiSecret == null || apiSecret.trim().isEmpty()) return "PortOne API 설정을 확인해 주세요.";
+	        java.time.LocalDate inDate = java.time.LocalDate.parse(checkIn);
+	        java.time.LocalDate outDate = java.time.LocalDate.parse(checkOut);
+	        if (!inDate.isBefore(outDate)) return "체크아웃 날짜는 체크인 날짜보다 늦어야 합니다.";
+	        if (guestNum < 1) return "인원은 1명 이상이어야 합니다.";
+
+	        ReservationDTO reservation = rdao.reservationOne(paymentId);
+	        if (reservation == null || !memberId.equals(reservation.getMemberId())) return "예약 정보를 찾을 수 없습니다.";
+	        if (!"예약완료".equals(reservation.getStatus())) return "변경할 수 있는 예약이 아닙니다.";
+
+	        RoomDTO roomDto = roomDao.roomOne(roomId);
+	        if (roomDto == null || roomDto.getMaxCount() == null || guestNum > roomDto.getMaxCount()) return "선택한 객실의 최대 인원을 확인해 주세요.";
+	        if (roomDto.getPlaceId() != reservation.getPlaceId()) return "다른 숙소의 객실로 변경할 수 없습니다.";
+
+	        int newTotalPrice = PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
+	        int refundAmount = reservation.getTotalPrice() - newTotalPrice;
+	        if (refundAmount <= 0) return "부분 환불이 필요한 예약이 아닙니다.";
+	        if (reservation.getPrice() < refundAmount) return "환불 금액이 실제 결제 잔액을 초과합니다.";
+
+	        String paymentUrl = "https://api.portone.io/payments/" + java.net.URLEncoder.encode(paymentId, "UTF-8");
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.set("Authorization", "PortOne " + apiSecret);
+	        HttpEntity<String> getEntity = new HttpEntity<>(headers);
+	        RestTemplate restTemplate = new RestTemplate();
+	        ResponseEntity<String> paymentResponse = restTemplate.exchange(paymentUrl, HttpMethod.GET, getEntity, String.class);
+
+	        ObjectMapper mapper = new ObjectMapper();
+	        JsonNode payment = mapper.readTree(paymentResponse.getBody());
+	        if (!"PAID".equals(payment.path("status").asText())) return "기존 결제 상태를 확인할 수 없습니다.";
+	        if (!"KRW".equals(payment.path("currency").asText())) return "결제 통화가 올바르지 않습니다.";
+
+	        int paidAmount = payment.path("amount").path("paid").asInt();
+	        if (paidAmount <= 0) return "기존 결제 금액을 확인할 수 없습니다.";
+
+	        int alreadyCancelled = payment.path("amount").path("cancelled").asInt(0);
+	        int cancellableAmount = paidAmount - alreadyCancelled;
+	        if (refundAmount > cancellableAmount) return "환불 가능 금액을 초과했습니다.";
+
+	        org.springframework.http.HttpHeaders cancelHeaders = new org.springframework.http.HttpHeaders();
+	        cancelHeaders.set("Authorization", "PortOne " + apiSecret);
+	        cancelHeaders.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+
+	        com.fasterxml.jackson.databind.node.ObjectNode cancelBody = mapper.createObjectNode();
+	        cancelBody.put("amount", refundAmount);
+	        cancelBody.put("currentCancellableAmount", cancellableAmount);
+	        cancelBody.put("reason", "예약 변경에 따른 부분 환불");
+
+	        HttpEntity<String> cancelEntity = new HttpEntity<>(mapper.writeValueAsString(cancelBody), cancelHeaders);
+	        String cancelUrl = "https://api.portone.io/payments/" + java.net.URLEncoder.encode(paymentId, "UTF-8") + "/cancel";
+	        ResponseEntity<String> cancelResponse = restTemplate.exchange(cancelUrl, HttpMethod.POST, cancelEntity, String.class);
+
+	        JsonNode cancelResult = mapper.readTree(cancelResponse.getBody());
+	        JsonNode cancellation = cancelResult.path("cancellation");
+	        String cancelStatus = cancellation.path("status").asText();
+
+	        if (!"SUCCEEDED".equals(cancelStatus)) {
+	            return "환불 요청은 접수되었지만 완료 상태를 확인하지 못했습니다. 결제 내역을 확인해 주세요.";
+	        }
+
+	        reservationService.completeReservationUpdateRefund(
+	                reservation, memberId, roomId,
+	                java.sql.Date.valueOf(inDate), java.sql.Date.valueOf(outDate),
+	                guestNum, refundAmount, newTotalPrice);
+
+	        return "success";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "환불 처리 중 오류가 발생했습니다. 결제 내역을 확인해 주세요.";
+	    }
+	}
+
+
 }
