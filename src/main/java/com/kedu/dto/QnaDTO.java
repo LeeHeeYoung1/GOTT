@@ -10,11 +10,22 @@ public class QnaDTO {
 	private String contents;
 	private Timestamp write_date;
 	private String status;
-	
+	private String reply;
+	private String is_private;
+	private String nickname;
+
+	public String getNickname() {
+	    return nickname;
+	}
+
+	public void setNickname(String nickname) {
+	    this.nickname = nickname;
+	}
+
 	public QnaDTO () {}
 	
 	public QnaDTO(int qid, String member_id, String pw, String title, String contents, Timestamp write_date,
-			String status) {
+			String status, String reply, String is_private) {
 
 		this.qid = qid;
 		this.member_id = member_id;
@@ -23,6 +34,8 @@ public class QnaDTO {
 		this.contents = contents;
 		this.write_date = write_date;
 		this.status = status;
+		this.reply = reply;
+		this.is_private = is_private;
 	}
 	public int getQid() {
 		return qid;
@@ -66,7 +79,21 @@ public class QnaDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+	public String getReply() {
+		return reply;
+	}
+
+	public void setReply(String reply) {
+		this.reply = reply;
+	}
+	public String getIs_private() {
+	    return is_private;
+	}
+
+	public void setIs_private(String is_private) {
+	    this.is_private = is_private;
+	}
+
 	
 	
 }

@@ -109,11 +109,16 @@
 	top: 4px;
 	width: 34px;
 	height: 34px;
+	padding: 0;
 	border: 0;
 	border-radius: 5px;
 	background: #222;
 	color: white;
 	cursor: pointer;
+}
+
+.faqSearchBtn:hover {
+	background: #444;
 }
 
 .faqResetBtn {
@@ -131,28 +136,6 @@
 
 .faqResetBtn:hover {
 	background: #f2f2f2;
-}
-
-.faqResetBtn:hover {
-	background: #f2f2f2;
-}
-
-.faqSearchBtn {
-	position: absolute;
-	right: 5px;
-	top: 4px;
-	width: 34px;
-	height: 34px;
-	padding: 0;
-	border: 0;
-	border-radius: 5px;
-	background: #222;
-	color: white;
-	cursor: pointer;
-}
-
-.faqSearchBtn:hover {
-	background: #444;
 }
 
 .faqSearchOption {
@@ -209,7 +192,7 @@
 
 .faqTable th {
 	height: 45px;
-	padding: 0 10px;
+	padding: 0 4px;
 	background: #f7f7f7;
 	border-bottom: 1px solid #ddd;
 	color: #555;
@@ -220,7 +203,7 @@
 
 .faqTable td {
 	height: 48px;
-	padding: 0 10px;
+	padding: 0 4px;
 	border-bottom: 1px solid #eee;
 	color: #555;
 	font-size: 12px;
@@ -228,47 +211,61 @@
 }
 
 .faqTable .manage {
-    width: 120px;
+	width: 120px;
 }
 
 .faqTable .manage button {
-    padding: 5px 8px;
-    margin: 0 2px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: white;
-    color: #555;
-    font-size: 11px;
-    cursor: pointer;
+	padding: 5px 8px;
+	margin: 0 2px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background: white;
+	color: #555;
+	font-size: 11px;
+	cursor: pointer;
 }
 
 .faqTable .manage button:hover {
-    background: #222;
-    color: white;
+	background: #222;
+	color: white;
 }
 
 .faqTable tr:last-child td {
 	border-bottom: 0;
 }
 
+/* 번호 */
 .faqTable .number {
 	width: 70px;
+	text-align: center;
+	padding-right: 0;
 }
 
+/* 제목: 번호와 간격을 넓힘 */
 .faqTable .title {
 	width: auto;
 	text-align: left;
+	padding-left: 25px;
 }
 
+/* 작성자: 너비 축소 */
 .faqTable .writer {
-	width: 130px;
+	width: 100px;
+	text-align: center;
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
+/* 작성일: 너비 축소 */
 .faqTable .date {
-	width: 140px;
+	width: 100px;
+	text-align: center;
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
-.faqTitleText, .faqWriterText {
+.faqTitleText,
+.faqWriterText {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -345,38 +342,53 @@
 	border-color: #222;
 }
 
-@media ( max-width : 700px) {
-	.breadcrumb, .tabs {
+@media (max-width: 700px) {
+	.breadcrumb,
+	.tabs {
 		margin-left: 0;
 		margin-right: 0;
 	}
+
 	.faqSearchOption {
 		width: 100%;
 	}
+
 	.faqSearchArea {
 		width: 100%;
 	}
+
 	.faqSearchInput {
 		padding-right: 145px;
 	}
+
 	.faqResetBtn {
 		padding: 0 7px;
 		font-size: 10px;
 	}
+
 	.faqTable .number {
 		width: 50px;
 	}
+
 	.faqTable .writer {
-		width: 80px;
+		width: 75px;
 	}
+
 	.faqTable .date {
-		width: 100px;
+		width: 90px;
 	}
-	.faqTable th, .faqTable td {
+
+	.faqTable th,
+	.faqTable td {
 		padding: 0 5px;
 		font-size: 11px;
 	}
+
+	.faqTable .title {
+		padding-left: 15px;
+	}
 }
+
 </style>
 
 <div class="main">
@@ -391,7 +403,7 @@
 	</div>
 
 	<nav class="tabs">
-		<a href="/notice/qna">Q&A</a> <a href="/notice/faq?cpage=1" class="on">FAQ</a>
+		<a href="/notice/qna?cpage=1">Q&A</a> <a href="/notice/faq?cpage=1" class="on">FAQ</a>
 	</nav>
 
 	<div class="faqSearchArea">
