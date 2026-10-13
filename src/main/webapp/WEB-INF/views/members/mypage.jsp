@@ -1079,7 +1079,8 @@ $(".cancelBtn").on("click", async function() {
 
 $(".updateBtn").on("click", function() {
     let paymentId = $(this).data("payment-id");
-    window.open("${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId), "reservationUpdate", "width=800,height=600,left=100,top=100");
+    window.open("${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" 
+    			+ encodeURIComponent(paymentId), "reservationUpdate", "width=1200,height=800,left=" + (screen.width - 1200) / 2 + ",top=" + (screen.height - 800) / 2);
 });
 
 $(".detailBtn").on("click", function() {

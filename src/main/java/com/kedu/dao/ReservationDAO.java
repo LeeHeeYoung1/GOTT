@@ -160,6 +160,20 @@ public class ReservationDAO {
 	            additionalPaid, newTotalPrice, paymentId, memberId);
 	}
 	
+	public int updateReservationAfterRefund(String paymentId, String memberId, int roomId, java.sql.Date checkIn,
+			java.sql.Date checkOut, int guestNum, int refundAmount, int newTotalPrice) {
+		String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
+				+ "GUEST_NUM = ?, PRICE = PRICE - ?, TOTAL_PRICE = ? "
+				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND PRICE >= ?";
+		return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, refundAmount, newTotalPrice, paymentId, memberId,
+				refundAmount);
+	}
+	
+	public int countRePaymentHistory(String newPaymentId) {
+	    String sql = "SELECT COUNT(*) FROM RESERVATION_HISTORY WHERE RESERVATION_PAYMENT_ID = ?";
+	    return jdbc.queryForObject(sql, Integer.class, newPaymentId);
+	}
+	
 	
 	public int selectCount() {
 		String sql = "select count(*) from place p " + " where p.place_type = 'STAY' "

@@ -78,6 +78,38 @@ public class ReservationService {
 	    if (historyResult != 1) {
 	        throw new Exception("추가 결제 이력 저장에 실패했습니다.");
 	    }
-}
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void completeReservationUpdateRefund(ReservationDTO reservation,
+	        String memberId, int roomId,
+	        java.sql.Date checkIn, java.sql.Date checkOut,
+	        int guestNum, int refundAmount, int newTotalPrice) throws Exception {
+
+	    if (reservation == null || refundAmount <= 0) {
+	        throw new Exception("환불 정보가 올바르지 않습니다.");
+	    }
+
+	    int updateResult = rdao.updateReservationAfterRefund(
+	            reservation.getPaymentId(), memberId, roomId,
+	            checkIn, checkOut, guestNum, refundAmount, newTotalPrice);
+
+	    if (updateResult != 1) {
+	        throw new Exception("환불 후 예약 변경 저장에 실패했습니다.");
+	    }
+
+	    int historyResult = rdao.ReservationHistory(
+	            reservation.getSeq(),
+	            reservation.getPaymentId(),
+	            reservation.getPaymentId(),
+	            memberId,
+	            "REFUND",
+	            refundAmount,
+	            "COMPLETED");
+
+	    if (historyResult != 1) {
+	        throw new Exception("환불 이력 저장에 실패했습니다.");
+	    }
+	}
 
 }
