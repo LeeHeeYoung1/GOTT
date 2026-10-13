@@ -558,9 +558,9 @@
                                         <c:when test="${rs.status == '이용완료'}">
                                             <span class="statusBadge completed">이용 완료</span>
                                         </c:when>
-                                        <c:when test="${rs.status == '취소' || rs.status == '취소완료' || rs.status == '환불완료'}">
-                                            <span class="statusBadge cancelled">${rs.status}</span>
-                                        </c:when>
+                                        <c:when test="${rs.status == '예약취소' || rs.status == '취소완료' || rs.status == '환불완료' || rs.status == '취소·환불'}">
+											<span class="statusBadge cancelled">${rs.status}</span>
+										</c:when>
                                         <c:when test="${rs.status == '예약완료'}">
                                             <span class="statusBadge">예약 완료</span>
                                         </c:when>
@@ -612,7 +612,7 @@
                                     <div class="reservationActions">
                                         <c:if test="${rs.status == '예약완료'}">
                                             <a href="/reservation/change?seq=${rs.seq}">예약 변경</a>
-                                            <button type="button" class="cancelBtn" data-seq="${rs.seq}">예약 취소</button>
+                                            <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
                                         </c:if>
                                     </div>
                                 </div>
@@ -637,134 +637,147 @@
         </c:otherwise>
     </c:choose>
     <script>
-        $(function() {
-            let activeFilter = "ALL";
+$(function() {
+    let activeFilter = "ALL";
 
-            function getGroup(card) {
-                let status = String(card.data("status") || "");
+    function getGroup(card) {
+        let status = String(card.attr("data-status") || "").trim();
 
-                if (status === "이용완료") {
-                    return "COMPLETED";
-                }
-                if (["예약취소", "취소완료", "환불완료", "취소·환불"].includes(status)) {
-                    return "CANCELLED";
-                }
-                if (status === "예약완료") {
-                    let checkIn = String(card.data("checkin") || "").substring(0, 10).replaceAll("/", "-");
-                    let today = new Date();
-                    let todayString = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
-                    let inDate = new Date(todayString);
+        if (["예약취소", "취소완료", "환불완료", "취소·환불"].includes(status)) {
+            return "CANCELLED";
+        }
+        if (status === "이용완료") {
+            return "COMPLETED";
+        }
+        if (status === "예약완료") {
+            let checkIn = String(card.attr("data-checkin") || "").substring(0, 10).replaceAll("/", "-");
+            let today = new Date();
+            let todayString = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+            let inDate = new Date(todayString);
+            let checkInDate = new Date(checkIn);
 
-                    if (checkIn && !isNaN(new Date(checkIn).getTime()) && new Date(checkIn) < inDate) {
-                        return "COMPLETED";
-                    }
-                    return "UPCOMING";
-                }
-                return "OTHER";
+            if (checkIn && !isNaN(checkInDate.getTime()) && checkInDate < inDate) {
+                return "COMPLETED";
             }
+            return "UPCOMING";
+        }
+        return "OTHER";
+    }
 
-            function updateCounts() {
-                let cards = $(".reservationCard");
-                let upcoming = 0;
-                let completed = 0;
-                let cancelled = 0;
+    function updateCounts() {
+        let cards = $(".reservationCard");
+        let upcoming = 0;
+        let completed = 0;
+        let cancelled = 0;
 
-                cards.each(function() {
-                    let group = getGroup($(this));
+        cards.each(function() {
+            let group = getGroup($(this));
 
-                    if (group === "UPCOMING") {
-                        upcoming++;
-                    } else if (group === "COMPLETED") {
-                        completed++;
-                    } else if (group === "CANCELLED") {
-                        cancelled++;
-                    }
-                });
-
-                $("#totalCount").text(cards.length);
-                $("#upcomingCount").text(upcoming);
-                $("#completedCount").text(completed);
-                $("#cancelledCount").text(cancelled);
-                $(".reservationTabs button[data-status='ALL'] .count").text(cards.length);
+            if (group === "UPCOMING") {
+                upcoming++;
+            } else if (group === "COMPLETED") {
+                completed++;
+            } else if (group === "CANCELLED") {
+                cancelled++;
             }
-
-            function filterReservations() {
-                let keyword = $("#reservationSearch").val().trim().toLowerCase();
-                let shown = 0;
-
-                $(".reservationCard").each(function() {
-                    let card = $(this);
-                    let status = String(card.data("status") || "");
-                    let group = getGroup(card);
-                    let name = String(card.data("name") || "").toLowerCase();
-                    let matchesStatus = activeFilter === "ALL" || activeFilter === status || activeFilter === group;
-                    let matchesName = name.includes(keyword);
-                    let visible = matchesStatus && matchesName;
-
-                    card.toggle(visible);
-
-                    if (visible) {
-                        shown++;
-                    }
-                });
-
-                $("#visibleCount").text(shown);
-                $("#emptyReservation").toggle(shown === 0);
-            }
-
-            $(".reservationStats > div").on("click", function() {
-                let filter = $(this).data("filter");
-
-                $(".reservationStats > div").removeClass("active");
-                $(this).addClass("active");
-                $(".reservationTabs button").removeClass("active");
-                $(".reservationTabs button[data-status='" + filter + "']").addClass("active");
-
-                activeFilter = filter;
-                filterReservations();
-            });
-
-            $(".reservationTabs button").on("click", function() {
-                activeFilter = $(this).data("status");
-
-                $(".reservationTabs button").removeClass("active");
-                $(this).addClass("active");
-                $(".reservationStats > div").removeClass("active");
-                $(".reservationStats > div[data-filter='" + activeFilter + "']").addClass("active");
-
-                filterReservations();
-            });
-
-            $("#reservationSearch").on("input", filterReservations);
-
-            $("#reservationSort").on("change", function() {
-                let cards = $(".reservationCard").get();
-
-                cards.sort(function(a, b) {
-                    let first = String($(a).data("reserved") || "");
-                    let second = String($(b).data("reserved") || "");
-
-                    return $("#reservationSort").val() === "recent"
-                        ? second.localeCompare(first)
-                        : first.localeCompare(second);
-                });
-
-                $("#reservationList").append(cards);
-            });
-
-            $(document).on("click", ".cancelBtn", function() {
-                let seq = $(this).data("seq");
-
-                if (!confirm("예약을 취소하시겠습니까?")) {
-                    return;
-                }
-
-                alert("예약 취소 Controller와 연결해야 합니다. 예약번호: " + seq);
-            });
-
-            updateCounts();
-            filterReservations();
         });
-    </script>
+
+        $("#totalCount").text(cards.length);
+        $("#upcomingCount").text(upcoming);
+        $("#completedCount").text(completed);
+        $("#cancelledCount").text(cancelled);
+        $(".reservationTabs button[data-status='ALL'] .count").text(cards.length);
+    }
+
+    function filterReservations() {
+        let shown = 0;
+
+        $(".reservationCard").each(function() {
+            let card = $(this);
+            let status = String(card.attr("data-status") || "").trim();
+            let group = getGroup(card);
+            let visible = activeFilter === "ALL"
+                || activeFilter === status
+                || activeFilter === group;
+
+            card.toggle(visible);
+
+            if (visible) {
+                shown++;
+            }
+        });
+
+        $("#visibleCount").text(shown);
+        $("#emptyReservation").toggle(shown === 0);
+    }
+
+    function setActiveFilter(filter) {
+        activeFilter = filter;
+
+        $(".reservationStats > div").removeClass("active");
+        $(".reservationStats > div[data-filter='" + filter + "']").addClass("active");
+
+        $(".reservationTabs button").removeClass("active");
+
+        let tabStatus = filter;
+        if (filter === "COMPLETED") {
+            tabStatus = "이용완료";
+        } else if (filter === "UPCOMING") {
+            tabStatus = "UPCOMING";
+        } else if (filter === "CANCELLED") {
+            tabStatus = "CANCELLED";
+        }
+
+        $(".reservationTabs button[data-status='" + tabStatus + "']").addClass("active");
+        filterReservations();
+    }
+
+    $(".reservationStats > div").on("click", function() {
+        setActiveFilter(String($(this).data("filter")));
+    });
+
+    $(".reservationTabs button").on("click", function() {
+        setActiveFilter(String($(this).data("status")));
+    });
+
+    $(document).on("click", ".cancelBtn", function() {
+        let button = $(this);
+        let paymentId = button.attr("data-payment-id");
+
+        if (!paymentId) {
+            alert("결제 정보를 찾을 수 없습니다.");
+            return;
+        }
+
+        if (!confirm("예약을 취소하시겠습니까?\n결제 취소도 함께 요청됩니다.")) {
+            return;
+        }
+
+        button.prop("disabled", true).text("취소 처리 중...");
+
+        $.ajax({
+            url: "/reservation/cancelMyReservation",
+            type: "POST",
+            data: { paymentId: paymentId },
+            success: function(result) {
+                if (result === "success") {
+                    alert("예약 및 결제가 취소되었습니다.");
+                    location.reload();
+                } else {
+                    alert(result);
+                    button.prop("disabled", false).text("예약 취소");
+                }
+            },
+            error: function() {
+                alert("예약 취소 요청에 실패했습니다. 결제 내역을 확인해 주세요.");
+                button.prop("disabled", false).text("예약 취소");
+            }
+        });
+    });
+
+    updateCounts();
+    filterReservations();
+});
+</script>
 </body>
 </html>

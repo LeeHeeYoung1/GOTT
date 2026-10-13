@@ -181,6 +181,12 @@ public class ReservationDAO {
 	    return jdbc.queryForObject(sql, Integer.class, newPaymentId);
 	}
 	
+	public int cancelReservation(String paymentId, String memberId) {
+	    String sql = "UPDATE RESERVATION SET STATUS = '예약취소' "
+	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+	    return jdbc.update(sql, paymentId, memberId);
+	}
+	
 	
 	public int selectCount() {
 		String sql = "select count(*) from place p " + " where p.place_type = 'STAY' "
