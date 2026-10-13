@@ -443,7 +443,8 @@ body {
 }
 
 .replyUpdateBtn, .replyDeleteBtn, .replySaveBtn, .replyCancelBtn,
-	.childReplyUpdateBtn, .childReplyDeleteBtn {
+	.childReplyUpdateBtn, .childReplyDeleteBtn, .childReplySaveBtn,
+	.childReplyCancelBtn {
 	padding: 3px 10px;
 	border: 1px solid #e0e3e7;
 	border-radius: 4px;
@@ -455,8 +456,8 @@ body {
 	transition: border-color .15s, background .15s, color .15s;
 }
 
-.replyUpdateBtn:hover, .replyCancelBtn:hover, .childReplyUpdateBtn:hover
-	{
+.replyUpdateBtn:hover, .replyCancelBtn:hover, .childReplyUpdateBtn:hover,
+	.childReplyCancelBtn:hover {
 	border-color: #222;
 	background: #f6f6f6;
 	color: #222;
@@ -468,14 +469,14 @@ body {
 	color: #c0392b;
 }
 
-.replySaveBtn {
+.replySaveBtn, .childReplySaveBtn {
 	border-color: #222;
 	background: #222;
 	color: #fff;
 	font-weight: 700;
 }
 
-.replySaveBtn:hover {
+.replySaveBtn:hover, .childReplySaveBtn:hover {
 	border-color: #FF6B35;
 	background: #FF6B35;
 	color: #fff;
@@ -1160,6 +1161,9 @@ body {
 				</button>
 			</div>
 			<div class="review_bottom">
+				<c:if test="${sessionScope.role == 'admin'}">
+					<button type="button" id="deleteBtn">삭제하기</button>
+				</c:if>
 				<button type="button" id="backBtn">뒤로가기</button>
 			</div>
 		</c:otherwise>
@@ -1196,6 +1200,9 @@ body {
 					<c:if test="${sessionScope.loginId == i.member_id}">
 						<button type="button" class="replyUpdateBtn"
 							id="replyUpdateBtn${i.seq}">수정</button>
+					</c:if>
+					<c:if
+						test="${sessionScope.loginId == i.member_id or sessionScope.role == 'admin'}">
 						<button type="button" class="replyDeleteBtn"
 							id="replyDeleteBtn${i.seq}">삭제</button>
 					</c:if>
@@ -1224,41 +1231,46 @@ body {
 								<c:if test="${sessionScope.loginId == j.member_id}">
 									<button type="button" class="childReplyUpdateBtn"
 										id="childReplyUpdateBtn${j.seq}">수정</button>
+								</c:if>
+								<c:if
+									test="${sessionScope.loginId == j.member_id or sessionScope.role == 'admin'}">
 									<button type="button" class="childReplyDeleteBtn"
 										id="childReplyDeleteBtn${j.seq}">삭제</button>
-									<script>
-									$("#childReplyDeleteBtn${j.seq}").on("click", function() {
-										location.href = "/review/reply/delete?seq=${j.seq}&review_seq=${rdto.seq}";
+								</c:if>
+							</div>
+						</div>
+						<script>
+							$("#childReplyDeleteBtn${j.seq}").on("click", function() {
+								location.href = "/review/reply/delete?seq=${j.seq}&review_seq=${rdto.seq}";
 										
-									})
+							})
 
-									$("#childReplyUpdateBtn${j.seq}").on("click", function() {
+							$("#childReplyUpdateBtn${j.seq}").on("click", function() {
+								let input = $("#child_reply_contents${j.seq}");
+								let before = input.val();
 
-										let input = $("#child_reply_contents${j.seq}");
-										let before = input.val();
+								input.prop("readonly", false).focus();
 
-										input.prop("readonly", false).focus();
+								$("#childReplyUpdateBtn${j.seq}").hide();
+								$("#childReplyDeleteBtn${j.seq}").hide();
 
-										$("#childReplyUpdateBtn${j.seq}").hide();
-										$("#childReplyDeleteBtn${j.seq}").hide();
+								let saveBtn = $("<button>").attr("type", "button")
+									.addClass("childReplySaveBtn").text("저장");
+								let cancelBtn = $("<button>").attr("type", "button")
+									.addClass("childReplyCancelBtn").text("취소");
 
-										let saveBtn = $("<button>").attr("type", "button")
-												.addClass("childReplySaveBtn").text("저장");
-										let cancelBtn = $("<button>").attr("type", "button")
-												.addClass("childReplyCancelBtn").text("취소");
+								$("#child_reply_btn_box${j.seq}").append(saveBtn).append(cancelBtn);
 
-										$("#child_reply_btn_box${j.seq}").append(saveBtn).append(cancelBtn);
+								saveBtn.on("click", function() {
 
-										saveBtn.on("click", function() {
+									let contents = input.val().trim();
 
-											let contents = input.val().trim();
-
-											$.ajax({
-												url : "/review/reply/update",
-												type : "post",
-												data : {
-													seq : ${j.seq},
-													contents : contents
+									$.ajax({
+										url : "/review/reply/update",
+										type : "post",
+										data : {
+											seq : ${j.seq},
+											contents : contents
 												},
 												success : function() {
 													input.prop("readonly", true);
@@ -1279,16 +1291,7 @@ body {
 										})
 									})
 									</script>
-								</c:if>
-							</div>
-						</div>
 					</c:if>
-					<script>
-						$("#replyAnswerBtn${i.seq}").on("click", function() {
-							$("#child_reply_form${i.seq}").show();
-							$("#childReplyContents${i.seq}").focus();
-						})
-					</script>
 				</c:forEach>
 
 				<script>
@@ -1343,6 +1346,11 @@ body {
 							$("#replyDeleteBtn${i.seq}").show();
 						})
 					})
+					
+					$("#replyAnswerBtn${i.seq}").on("click", function() {
+							$("#child_reply_form${i.seq}").show();
+							$("#childReplyContents${i.seq}").focus();
+						})
 				</script>
 			</c:forEach>
 		</div>
