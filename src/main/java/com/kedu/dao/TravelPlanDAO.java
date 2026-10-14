@@ -103,21 +103,246 @@ public class TravelPlanDAO {
     public List<TravelPlanDTO> selectPublicPlans() {
         String sql = "select * from ( "
 				+ " select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
-				+ " from travel_plan p where p.is_public = 'Y' "
-				+ " ) where rn between ? and ?";
+				+ " from travel_plan p where p.is_public = 'Y'";
 
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class));
 	}
     
     
-    public List<TravelPlanDTO> selectFromTo(int start, int end) {
-        String sql = "select * from ( "
-				+ " select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
-				+ " from travel_plan p where p.is_public = 'Y' "
-				+ " ) where rn between ? and ?";
+    // 1. sort만 선택 시
+ 	public List<TravelPlanDTO> selectFromTo(int start, int end, String sort) {
 
-		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), start, end);
-	}
+ 		if (sort.equals("scrap")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER ( "
+ 					+ "          order by (select count(*) from travel_plan_scrap s "
+ 					+ "                     where s.plan_id = p.plan_id) desc, p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), start, end);
+
+ 		} else {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), start, end);
+ 		}
+ 	}
+
+ 	// 2. 지역&sort 선택 시
+ 	public List<TravelPlanDTO> selectByRegion(int start, int end, String sort, String region) {
+
+ 		if (sort.equals("scrap")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER ( "
+ 					+ "          order by (select count(*) from travel_plan_scrap s "
+ 					+ "                     where s.plan_id = p.plan_id) desc, p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and exists (select 1 from travel_plan_detail d "
+ 					+ "                    join place p2 on p2.place_id = d.place_id "
+ 					+ "                   where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), region, start, end);
+
+ 		} else {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and exists (select 1 from travel_plan_detail d "
+ 					+ "                    join place p2 on p2.place_id = d.place_id "
+ 					+ "                   where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), region, start, end);
+ 		}
+ 	}
+
+ 	// 3. 기간&sort 선택 시
+ 	public List<TravelPlanDTO> selectByNights(int start, int end, String sort, String nights) {
+
+ 		int night = Integer.parseInt(nights);
+
+ 		if (sort.equals("scrap") && nights.equals("4")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER ( "
+ 					+ "          order by (select count(*) from travel_plan_scrap s "
+ 					+ "                     where s.plan_id = p.plan_id) desc, p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and (p.end_date - p.start_date) >= ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), night, start, end);
+
+ 		} else if (sort.equals("scrap")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER ( "
+ 					+ "          order by (select count(*) from travel_plan_scrap s "
+ 					+ "                     where s.plan_id = p.plan_id) desc, p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and (p.end_date - p.start_date) = ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), night, start, end);
+
+ 		} else if (nights.equals("4")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and (p.end_date - p.start_date) >= ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), night, start, end);
+
+ 		} else {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and (p.end_date - p.start_date) = ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), night, start, end);
+ 		}
+ 	}
+
+ 	// 4. 지역&기간&sort 선택 시
+ 	public List<TravelPlanDTO> selectByRegionAndNights(int start, int end, String sort,
+ 			String region, String nights) {
+
+ 		int night = Integer.parseInt(nights);
+
+ 		if (sort.equals("scrap") && nights.equals("4")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER ( "
+ 					+ "          order by (select count(*) from travel_plan_scrap s "
+ 					+ "                     where s.plan_id = p.plan_id) desc, p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and exists (select 1 from travel_plan_detail d "
+ 					+ "                    join place p2 on p2.place_id = d.place_id "
+ 					+ "                   where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ "      and (p.end_date - p.start_date) >= ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), region, night, start, end);
+
+ 		} else if (sort.equals("scrap")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER ( "
+ 					+ "          order by (select count(*) from travel_plan_scrap s "
+ 					+ "                     where s.plan_id = p.plan_id) desc, p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and exists (select 1 from travel_plan_detail d "
+ 					+ "                    join place p2 on p2.place_id = d.place_id "
+ 					+ "                   where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ "      and (p.end_date - p.start_date) = ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), region, night, start, end);
+
+ 		} else if (nights.equals("4")) {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and exists (select 1 from travel_plan_detail d "
+ 					+ "                    join place p2 on p2.place_id = d.place_id "
+ 					+ "                   where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ "      and (p.end_date - p.start_date) >= ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), region, night, start, end);
+
+ 		} else {
+ 			String sql = "select * from ( "
+ 					+ "   select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+ 					+ "     from travel_plan p "
+ 					+ "    where p.is_public = 'Y' "
+ 					+ "      and exists (select 1 from travel_plan_detail d "
+ 					+ "                    join place p2 on p2.place_id = d.place_id "
+ 					+ "                   where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ "      and (p.end_date - p.start_date) = ? "
+ 					+ " ) where rn between ? and ?";
+
+ 			return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), region, night, start, end);
+ 		}
+ 	}
+
+ 	// ===== 개수 =====
+
+ 	public int countAll() {
+ 		String sql = "select count(*) from travel_plan p where p.is_public = 'Y'";
+
+ 		return jdbc.queryForObject(sql, Integer.class);
+ 	}
+
+ 	public int countByRegion(String region) {
+ 		String sql = "select count(*) from travel_plan p "
+ 				+ " where p.is_public = 'Y' "
+ 				+ "   and exists (select 1 from travel_plan_detail d "
+ 				+ "                 join place p2 on p2.place_id = d.place_id "
+ 				+ "                where d.plan_id = p.plan_id and p2.region = ?)";
+
+ 		return jdbc.queryForObject(sql, Integer.class, region);
+ 	}
+
+ 	public int countByNights(String nights) {
+
+ 		int night = Integer.parseInt(nights);
+
+ 		if (nights.equals("4")) {
+ 			String sql = "select count(*) from travel_plan p "
+ 					+ " where p.is_public = 'Y' "
+ 					+ "   and (p.end_date - p.start_date) >= ?";
+
+ 			return jdbc.queryForObject(sql, Integer.class, night);
+
+ 		} else {
+ 			String sql = "select count(*) from travel_plan p "
+ 					+ " where p.is_public = 'Y' "
+ 					+ "   and (p.end_date - p.start_date) = ?";
+
+ 			return jdbc.queryForObject(sql, Integer.class, night);
+ 		}
+ 	}
+
+ 	public int countByRegionAndNights(String region, String nights) {
+
+ 		int night = Integer.parseInt(nights);
+
+ 		if (nights.equals("4")) {
+ 			String sql = "select count(*) from travel_plan p "
+ 					+ " where p.is_public = 'Y' "
+ 					+ "   and exists (select 1 from travel_plan_detail d "
+ 					+ "                 join place p2 on p2.place_id = d.place_id "
+ 					+ "                where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ "   and (p.end_date - p.start_date) >= ?";
+
+ 			return jdbc.queryForObject(sql, Integer.class, region, night);
+
+ 		} else {
+ 			String sql = "select count(*) from travel_plan p "
+ 					+ " where p.is_public = 'Y' "
+ 					+ "   and exists (select 1 from travel_plan_detail d "
+ 					+ "                 join place p2 on p2.place_id = d.place_id "
+ 					+ "                where d.plan_id = p.plan_id and p2.region = ?) "
+ 					+ "   and (p.end_date - p.start_date) = ?";
+
+ 			return jdbc.queryForObject(sql, Integer.class, region, night);
+ 		}
+ 	}
     
     // 모든 회원의 공개 여행 일정 조회 + 첫 번째 장소 이미지
     // 쿼리문 실화냐 이해 못할거같은데
