@@ -1,5 +1,7 @@
 package com.kedu.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,5 +20,20 @@ public class Travel_TypeDAO {
 				dto.getHealing_score(), dto.getEmotion_score(), dto.getFood_score(), dto.getActivity_score());
 	}
 	
+	public String selectMyType(String memberId) {
+	    String sql = "select type_code from ("
+	            + "select type_code from travel_type "
+	            + "where member_id = ? "
+	            + "order by reg_date desc"
+	            + ") where rownum = 1";
+
+	    List<String> list = jdbc.queryForList(sql, String.class, memberId);
+
+	    if (list.size() > 0) {
+	        return list.get(0);
+	    }
+
+	    return null;
+	}
 	
 }

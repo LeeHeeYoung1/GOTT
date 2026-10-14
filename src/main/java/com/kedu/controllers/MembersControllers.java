@@ -117,6 +117,8 @@ public class MembersControllers {
 	@RequestMapping("/mypage")
 	public String mypage(Integer cpage, Integer wishCpage, HttpSession session, Model model) {
 	    String memberId = (String) session.getAttribute("loginId");
+	    String tourType = tdao.selectMyType(memberId);
+	    model.addAttribute("tourType", tourType);
 	    int pagesize = 3;
 
 	    // 1. 예약 내역 페이징
