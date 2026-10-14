@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
+
 <meta charset="UTF-8">
 <title>여행 일정 상세</title>
 <style>
@@ -186,10 +187,59 @@
 	border-radius: 12px;
 }
 
-/* ===== 버튼 ===== */
+/* ===== 스크랩 · 돌아가기 ===== */
+.scrapBtnBox {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	margin: 24px 0 36px;
+}
+
+.scrapBtn {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 8px 16px;
+	background: #fff;
+	border: 1px solid #e0e3e7;
+	border-radius: 8px;
+	font-size: 13px;
+	font-family: inherit;
+	font-weight: 600;
+	color: #8b8f96;
+	cursor: pointer;
+	transition: border-color .15s, color .15s;
+}
+
+.scrapBtn:hover {
+	border-color: #9ddfd5;
+	color: #0f766e;
+}
+
+.scrapBtn i {
+	font-size: 15px;
+}
+
+.scrapBtn.on {
+	border-color: #0f766e;
+	color: #0f766e;
+}
+
+.scrapBtn.on i {
+	animation: pop .3s ease;
+}
+
+.backBtnBox {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px;
+}
+
 .backButton {
 	display: inline-block;
-	margin: 10px 10px 30px 0;
+	margin: 0;
 	padding: 12px 22px;
 	background: #0f766e;
 	color: #fff;
@@ -206,13 +256,13 @@
 	transform: translateY(-1px);
 }
 
-.planDetail>.backButton:last-of-type {
+.backBtnBox .backButton:last-of-type {
 	background: #fff;
 	color: #0f766e;
 	border: 1px solid #0f766e;
 }
 
-.planDetail>.backButton:last-of-type:hover {
+.backBtnBox .backButton:last-of-type:hover {
 	background: #f0fdfa;
 	box-shadow: 0 5px 14px rgba(15, 118, 110, .12);
 }
@@ -294,7 +344,9 @@
 	box-shadow: 0 5px 14px rgba(15, 118, 110, .25);
 }
 
+/* ===== 댓글 한 건 ===== */
 .replyList {
+	position: relative;
 	padding: 16px 2px;
 	border-bottom: 1px solid #f0f3f6;
 }
@@ -310,6 +362,7 @@
 	align-items: center;
 	gap: 10px;
 	margin-bottom: 7px;
+	padding-right: 120px;
 }
 
 .replyList .info p {
@@ -334,132 +387,270 @@
 	padding: 0;
 	background: transparent;
 	border: 0;
+	box-sizing: border-box;
 	font-size: 14px;
 	font-family: inherit;
 	color: #37474f;
 	line-height: 1.6;
 	cursor: default;
+	transition: padding .15s, border-color .15s, box-shadow .15s;
 }
 
 .replyContents input:focus {
 	outline: none;
 }
+
+/* 수정 모드 — readonly가 풀리면 입력창처럼 보이게 */
+.replyContents input:not([readonly]) {
+	padding: 9px 12px;
+	background: #fff;
+	border: 1px solid #0f766e;
+	border-radius: 8px;
+	box-shadow: 0 0 0 3px rgba(15, 118, 110, .12);
+	cursor: text;
+}
+
+/* ===== 댓글 버튼 ===== */
+.reply_btn_box {
+	position: absolute;
+	top: 14px;
+	right: 2px;
+	display: flex;
+	gap: 6px;
+}
+
+.reply_btn_box button {
+	padding: 4px 11px;
+	background: #fff;
+	border: 1px solid #e0e3e7;
+	border-radius: 6px;
+	font-size: 12px;
+	font-family: inherit;
+	color: #8b8f96;
+	cursor: pointer;
+	transition: border-color .15s, color .15s, background .15s;
+}
+
+.reply_btn_box button:hover {
+	border-color: #9ddfd5;
+	color: #0f766e;
+}
+
+.replySaveBtn {
+	background: #0f766e !important;
+	border-color: #0f766e !important;
+	color: #fff !important;
+}
+
+.replySaveBtn:hover {
+	background: #0b5d56 !important;
+	border-color: #0b5d56 !important;
+	color: #fff !important;
+}
 </style>
-</head>
-<body>
-	<div class="planDetail">
-		<div class="planHeader">
-			<h2>
-				<c:out value="${plan.plan_title}" />
-			</h2>
-			<div class="planInfo">
-				<span>시작일: <c:out value="${plan.start_date}" /></span> <span>종료일:
-					<c:out value="${plan.end_date}" />
-				</span> <span>여행 인원: <c:out value="${plan.person_count}" />명
-				</span> <span>공개 여부: <c:choose>
-						<c:when test="${plan.is_public eq 'Y'}">전체 공개</c:when>
-						<c:otherwise>비공개</c:otherwise>
-					</c:choose></span>
-			</div>
-		</div>
 
-		<h3>여행 일정</h3>
-
-		<c:forEach var="dayNo" items="${dayNumbers}">
-			<div class="daySection">
-				<div class="dayTitle">
-					Day
-					<c:out value="${dayNo}" />
-				</div>
-				<c:set var="placeCount" value="0" />
-				<c:forEach var="place" items="${detailList}">
-					<c:if test="${place.DAY_NO eq dayNo}">
-						<c:set var="placeCount" value="${placeCount + 1}" />
-						<div class="placeCard">
-							<c:forEach var="i" items="${idAndImg}">
-								<c:if test="${i.place_id == place.place_id}">
-									<img src="${i.image_name}">
-								</c:if>
-							</c:forEach>
-							<div class="placeNumber">
-								<c:out value="${place.VISIT_ORDER}" />
-							</div>
-							<div class="placeInfo">
-								<h4>
-									<c:out value="${place.PLACE_NAME}" />
-								</h4>
-								<c:if test="${not empty place.VISIT_TIME}">
-									<p>
-										방문 시간:
-										<c:out value="${place.VISIT_TIME}" />
-									</p>
-								</c:if>
-								<c:if test="${not empty place.PLACE_TYPE}">
-										<c:choose>
-											<c:when test="${place.PLACE_TYPE == 'STAY'}">
-												<p>장소유형 : 숙박업소</p>
-											</c:when>
-											<c:when test="${place.PLACE_TYPE == 'FOOD'}">
-												<p>장소유형 : 식당</p>
-											</c:when>
-											<c:otherwise>
-												<p>장소유형 : 관광지</p>
-											</c:otherwise>
-										</c:choose>
-								</c:if>
-								<c:if test="${not empty place.REGION}">
-									<p>
-										지역:
-										<c:out value="${place.REGION}" />
-									</p>
-								</c:if>
-								<c:if test="${not empty place.ADDRESS}">
-									<p>
-										주소:
-										<c:out value="${place.ADDRESS}" />
-									</p>
-								</c:if>
-							</div>
-						</div>
-					</c:if>
-				</c:forEach>
-				<c:if test="${placeCount eq 0}">
-					<div class="emptyDay">아직 추가된 장소가 없습니다.</div>
-				</c:if>
-			</div>
-		</c:forEach>
-
-		<a href="${pageContext.request.contextPath}/travelPlan/list"
-			class="backButton">목록으로 돌아가기</a> <a
-			href="${pageContext.request.contextPath}/members/mypage"
-			class="backButton">마이페이지로 돌아가기</a>
-
-
-		<div class="replyBox">
-			<form action="/travelPlanReply/insert" method="post">
-				<p>${sessionScope.nickname}</p>
-				<input type="hidden" id="nickname" name="nickname"
-					value="${sessionScope.nickname}"> <input type="hidden"
-					id="member_id" name="member_id" value="${sessionScope.loginId}">
-				<input type="hidden" id="plan_id" name="plan_id"
-					value="${plan.plan_id}"> <input type="text" id="replyInput"
-					name="contents">
-				<button id="register">등록</button>
-			</form>
-			<c:forEach var="i" items="${tprList}">
-				<div class="replyList">
-					<div class="info">
-						<p>작성자 : ${i.nickname}</p>
-						<p>등록일: ${i.reg_date}</p>
-					</div>
-					<div class="replyContents">
-						<input type="text" value="${i.contents}" readonly>
-					</div>
-
-				</div>
-			</c:forEach>
+<div class="planDetail">
+	<div class="planHeader">
+		<h2>
+			<c:out value="${plan.plan_title}" />
+		</h2>
+		<div class="planInfo">
+			<span>시작일: <c:out value="${plan.start_date}" /></span> <span>종료일:
+				<c:out value="${plan.end_date}" />
+			</span> <span>여행 인원: <c:out value="${plan.person_count}" />명
+			</span> <span>공개 여부: <c:choose>
+					<c:when test="${plan.is_public eq 'Y'}">전체 공개</c:when>
+					<c:otherwise>비공개</c:otherwise>
+				</c:choose></span>
 		</div>
 	</div>
-</body>
-</html>
+
+	<h3>여행 일정</h3>
+
+	<c:forEach var="dayNo" items="${dayNumbers}">
+		<div class="daySection">
+			<div class="dayTitle">
+				Day
+				<c:out value="${dayNo}" />
+			</div>
+			<c:set var="placeCount" value="0" />
+			<c:forEach var="place" items="${detailList}">
+				<c:if test="${place.DAY_NO eq dayNo}">
+					<c:set var="placeCount" value="${placeCount + 1}" />
+					<div class="placeCard">
+						<c:forEach var="i" items="${idAndImg}">
+							<c:if test="${i.place_id == place.place_id}">
+								<img src="${i.image_name}">
+							</c:if>
+						</c:forEach>
+						<div class="placeNumber">
+							<c:out value="${place.VISIT_ORDER}" />
+						</div>
+						<div class="placeInfo">
+							<h4>
+								<c:out value="${place.PLACE_NAME}" />
+							</h4>
+							<c:if test="${not empty place.VISIT_TIME}">
+								<p>
+									방문 시간:
+									<c:out value="${place.VISIT_TIME}" />
+								</p>
+							</c:if>
+							<c:if test="${not empty place.PLACE_TYPE}">
+								<c:choose>
+									<c:when test="${place.PLACE_TYPE == 'STAY'}">
+										<p>장소유형 : 숙박업소</p>
+									</c:when>
+									<c:when test="${place.PLACE_TYPE == 'FOOD'}">
+										<p>장소유형 : 식당</p>
+									</c:when>
+									<c:otherwise>
+										<p>장소유형 : 관광지</p>
+									</c:otherwise>
+								</c:choose>
+							</c:if>
+							<c:if test="${not empty place.REGION}">
+								<p>
+									지역:
+									<c:out value="${place.REGION}" />
+								</p>
+							</c:if>
+							<c:if test="${not empty place.ADDRESS}">
+								<p>
+									주소:
+									<c:out value="${place.ADDRESS}" />
+								</p>
+							</c:if>
+						</div>
+					</div>
+				</c:if>
+			</c:forEach>
+			<c:if test="${placeCount eq 0}">
+				<div class="emptyDay">아직 추가된 장소가 없습니다.</div>
+			</c:if>
+		</div>
+	</c:forEach>
+
+	<div class="scrapBtnBox">
+		<button type="button" class="scrapBtn" id="scrapBtn">
+			<i class="fa-regular fa-bookmark"></i> <span>스크랩</span>
+		</button>
+
+		<div class="backBtnBox">
+			<a href="${pageContext.request.contextPath}/travelPlan/list"
+				class="backButton" id="backToList">목록으로 돌아가기</a> <a
+				href="${pageContext.request.contextPath}/members/mypage"
+				class="backButton" id="backToMypage">마이페이지로 돌아가기</a>
+		</div>
+	</div>
+	<div class="replyBox">
+		<form action="/travelPlanReply/insert" method="post">
+			<p>${sessionScope.nickname}</p>
+			<input type="hidden" id="nickname" name="nickname"
+				value="${sessionScope.nickname}"> <input type="hidden"
+				id="member_id" name="member_id" value="${sessionScope.loginId}">
+			<input type="hidden" id="plan_id" name="plan_id"
+				value="${plan.plan_id}"> <input type="text" id="replyInput"
+				name="contents">
+			<button id="register">등록</button>
+		</form>
+		<c:forEach var="i" items="${tprList}">
+			<div class="replyList">
+				<div class="info">
+					<p>작성자 : ${i.nickname}</p>
+					<p>
+						등록일 :
+						<fmt:formatDate value="${i.reg_date}" pattern="yyyy-MM-dd HH:mm" />
+					</p>
+				</div>
+				<div class="replyContents">
+					<input type="text" id="reply_contents${i.seq}"
+						value="${i.contents}" readonly>
+				</div>
+				<div class="reply_btn_box" id="reply_btn_box${i.seq}">
+					<c:if test="${sessionScope.loginId == i.member_id}">
+						<button type="button" class="replyUpdateBtn"
+							id="replyUpdateBtn${i.seq}">수정</button>
+					</c:if>
+					<c:if
+						test="${sessionScope.loginId == i.member_id or sessionScope.role == 'admin'}">
+						<button type="button" class="replyDeleteBtn"
+							id="replyDeleteBtn${i.seq}">삭제</button>
+					</c:if>
+				</div>
+			</div>
+			<script>
+				$("#replyDeleteBtn${i.seq}").on("click", function() {
+						location.href = "/travelPlanReply/delete?seq=${i.seq}&plan_id=${plan.plan_id}";
+						
+					})
+
+				$("#replyUpdateBtn${i.seq}").on("click", function() {
+
+					let input = $("#reply_contents${i.seq}");
+					let before = input.val();
+
+					input.prop("readonly", false).focus();
+
+					$("#replyUpdateBtn${i.seq}").hide();
+					$("#replyDeleteBtn${i.seq}").hide();
+
+					let saveBtn = $("<button>").attr("type", "button").addClass("replySaveBtn").text("저장");
+					let cancelBtn = $("<button>").attr("type", "button").addClass("replyCancelBtn").text("취소");
+
+					$("#reply_btn_box${i.seq}").append(saveBtn).append(cancelBtn);
+
+					saveBtn.on("click", function() {
+
+						let contents = input.val().trim();
+
+						$.ajax({
+							url : "/travelPlanReply/update",
+							type : "post",
+							data : {
+								seq : ${i.seq},
+								contents : contents},
+								success : function() {
+									input.prop("readonly", true);
+									saveBtn.remove();
+									cancelBtn.remove();
+									$("#replyUpdateBtn${i.seq}").show();
+									$("#replyDeleteBtn${i.seq}").show();
+								}
+							})
+						})
+
+						cancelBtn.on("click", function() {
+							input.val(before).prop("readonly", true);
+							saveBtn.remove();
+							cancelBtn.remove();
+							$("#replyUpdateBtn${i.seq}").show();
+							$("#replyDeleteBtn${i.seq}").show();
+						})
+					})
+				</script>
+		</c:forEach>
+	</div>
+</div>
+<script>
+
+let isScrap = ${isScrap};
+
+if (isScrap) {
+	$("#scrapBtn").css({
+		"color" : "#ff4757",
+		"border-color" : "#ff4757"
+	});
+	$("#scrapBtn i").removeClass("fa-regular").addClass("fa-solid");
+}
+
+$("#scrapBtn").on("click", function() {
+	if (isScrap) {
+		location.href = "/travelPlan/scrapDown?seq=${plan.plan_id}";
+	} else {
+		location.href = "/travelPlan/scrapUp?seq=${plan.plan_id}";
+	}
+})
+</script>
+
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
