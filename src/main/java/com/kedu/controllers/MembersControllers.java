@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.commons.EncryptionUtils;
+import com.kedu.dao.CouponDAO;
 import com.kedu.dao.MembersDAO;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.ReviewDAO;
@@ -47,7 +48,8 @@ public class MembersControllers {
 	private TravelPlanDAO tpdao;
 	@Autowired
 	private ReviewDAO rvdao;
-	
+	@Autowired
+	private CouponDAO cdao;
 	
 	@RequestMapping("/loginpage")
 	public String loginPage() {
@@ -194,6 +196,7 @@ public class MembersControllers {
 	    List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
 
 	    // 8. 모델 전달
+	    model.addAttribute("myCoupons", cdao.selectMyCoupons(memberId));
 	    model.addAttribute("mileageCpage", mileageCpage);
 	    model.addAttribute("mileageTotalPage", mileageTotalPage);
 	    model.addAttribute("reviewCount", reviewCount);

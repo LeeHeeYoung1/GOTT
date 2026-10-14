@@ -1407,18 +1407,34 @@ body{
 				</div>
 
                 </div>
-                <div class="couponList">
-                        <div class="couponBox">
-                            <strong>첫 회원가입 3%쿠폰</strong>
-                            <p>?????까지 100만원 이상 결제시</p>
-                            <button type="button" onclick="location.href='/reservation/list?cpage=1'">사용하기</button>
-                        </div>
-                        <div class="couponBox">
-                            <strong>첫 회원가입 10%쿠폰</strong>
-                            <p>?????까지 300만원 이상 결제시</p>
-                            <button type="button" onclick="location.href='/reservation/list?cpage=1'">사용하기</button>
-                        </div>
-                 </div>
+                
+
+
+<div class="couponList">
+    <c:choose>
+        <c:when test="${not empty myCoupons}">
+            <c:forEach var="coupon" items="${myCoupons}" begin="0" end="1">
+			    <div class="couponBox">
+			        <strong><c:out value="${coupon.couponName}"/></strong>
+			        <p>
+			            <fmt:formatDate value="${coupon.expireDate}" pattern="yyyy-MM-dd"/>까지
+			            <fmt:formatNumber value="${coupon.minOrderPrice}" pattern="#,##0"/>원 이상 결제 시
+			        </p>
+			        <button type="button" onclick="location.href='${pageContext.request.contextPath}/reservation/list?cpage=1'">사용하기</button>
+			    </div>
+			</c:forEach>
+        </c:when>
+        <c:otherwise>
+            <div class="couponBox">
+                <strong>보유 중인 쿠폰이 없습니다.</strong>
+                <p>사용할 수 있는 쿠폰이 없습니다.</p>
+                <button type="button" onclick="location.href='${pageContext.request.contextPath}/coupon/myCoupon'">쿠폰함 보기</button>
+            </div>
+        </c:otherwise>
+    </c:choose>
+</div>
+
+
             </div>
         </div>
         <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
