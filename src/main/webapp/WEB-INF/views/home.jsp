@@ -16,9 +16,7 @@
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
   <style>	
-  		.container {
-  			padding-bottom: 20px;
-  		}
+  		        
         .searchBox {
 			width: 750px;
 			height: 60px;
@@ -118,6 +116,7 @@
             width: 80%;
             height: auto;
             padding: 20px 30px;
+            border: 1px solid black;
             margin: auto;
             display: flex;
             align-items: center;
@@ -133,7 +132,7 @@
 			border-top: 2px solid #1a1a1f;
 			background: #fff;
 			table-layout: fixed;
-            border: 1px solid #dbdbdb;;
+            border: 1px solid black;
             position: relative;
             
         }
@@ -141,7 +140,7 @@
 		/* ===== 중요 공지 ===== */
 		.important {
 			max-width: 1100px;
-			margin: auto;
+			margin: 48px auto 0;
 		}
 		
 		.important_notice {
@@ -437,6 +436,7 @@
             width: 80%;
             height: auto;
             padding: 20px 10px 15px 10px;
+            border: 1px solid black;
             margin: auto;
             display: flex;
             align-items: center;

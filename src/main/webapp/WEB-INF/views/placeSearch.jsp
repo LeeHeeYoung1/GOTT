@@ -228,6 +228,29 @@ button {
     border-color: #333;
 }
 
+.home {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.home button {
+    padding: 9px 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    background-color:black;
+    color:white;
+    font-weight:bold;
+}
+
+.home button:hover {
+    background: #333;
+    color: white;
+}
+
 @media (max-width: 800px) {
     .grid {
         grid-template-columns: repeat(2, 1fr);
@@ -325,7 +348,11 @@ button {
         <div class="empty-msg" id="emptyMsg" style="display: none;">
             검색 결과가 없어요. 다른 지역명으로 검색하세요.
         </div>
-
+	
+		<div class="home">
+			<button onclick="location.href='/'">Home</button>
+		</div>
+		
         <div class="paging" id="paging"></div>
 
     </main>
