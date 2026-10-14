@@ -19,12 +19,21 @@ public class BannerDAO {
 	
 	public List<BannerDTO> getBannerList() {
 
-		 String sql = "SELECT BANNER_ID, TITLE, IMAGE_NAME, LINK_URL, "
-                 + "START_DATE, END_DATE, SORT_ORDER, CONTENT "
-                 + "FROM BANNER "
-                 + "ORDER BY SORT_ORDER ASC";
+		 String sql = "SELECT BANNER_ID, TITLE, IMAGE_NAME, LINK_URL "
+                 + "FROM BANNER ORDER BY SORT_ORDER ASC";
 
         return jdbc.query(sql, new BeanPropertyRowMapper<>(BannerDTO.class));
     }
 	
+	public int insertEvent(BannerDTO dto) {
+	    
+	    String sql = "INSERT INTO BANNER VALUES (BANNER_SEQ.NEXTVAL, ?, ?, ?, sysdate, sysdate + 30, 1, null)";
+
+	    return jdbc.update(sql, dto.getTitle(),dto.getImage_name(),dto.getLink_url());
+	}
+	
+	public int deleteEvent(int banner_id) {
+		String sql = "delete from banner where banner_id = ?";
+		return jdbc.update(sql, banner_id);
+	}
 }
