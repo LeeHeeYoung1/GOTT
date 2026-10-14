@@ -1454,6 +1454,8 @@ body {
 							<li><a href="/members/planner">여행 일정 플래너</a></li>
 							<li><a href="/review/reviewlist">내가 쓴 리뷰</a></li>
 							<li><a href="/board/boardlist">내가 쓴 게시글</a></li>
+							<li><a href="/bookmark/bookmarklist">북마크</a></li>
+							
 						</ul>
 						<span>혜택</span>
 						<ul>
