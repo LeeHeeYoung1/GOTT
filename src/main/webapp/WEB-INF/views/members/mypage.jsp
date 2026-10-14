@@ -1151,6 +1151,13 @@ body{
 </style>
 </head>
 <body>
+
+<c:if test="${not empty message}">
+    <script>
+        alert("${message}");
+    </script>
+</c:if>
+
 <c:choose>
 <c:when test="${loginId != null}">
     <jsp:include page="/WEB-INF/views/common/header.jsp"/>

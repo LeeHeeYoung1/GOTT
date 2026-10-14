@@ -284,13 +284,35 @@ public class MembersControllers {
 		return "event/tourTypeTest";
 	}
 	
-	@RequestMapping("/tourTypeTestResult")
-	public String tourTypeTestResult(Travel_TypeDTO dto, HttpSession session) {
-		String id = (String)session.getAttribute("loginId");
-		dto.setMember_id(id);
-		tdao.insertType(dto);
-		return "redirect:/members/mypage";
-	}
+
+@RequestMapping("/tourTypeTestResult")
+public String tourTypeTestResult(Travel_TypeDTO dto, HttpSession session,
+        org.springframework.web.servlet.mvc.support.RedirectAttributes rttr) {
+
+    String id = (String) session.getAttribute("loginId");
+
+    if (id == null) {
+        rttr.addFlashAttribute("message", "로그인 후 이용해주세요.");
+        return "redirect:/members/loginpage";
+    }
+
+    dto.setMember_id(id);
+
+    int count = tdao.countMyType(id);
+
+    tdao.insertType(dto);
+
+    if (count == 0 && tdao.countTravelCoupon(id) == 0) {
+        tdao.issueCoupon(id);
+        rttr.addFlashAttribute("message",
+                "첫 여행성향 테스트 결과가 저장되었습니다! 숙박 5% 할인 쿠폰이 발급되었습니다.");
+    } else {
+        rttr.addFlashAttribute("message", "여행성향 테스트 결과가 저장되었습니다.");
+    }
+
+    return "redirect:/members/mypage";
+}
+
 	
 	@RequestMapping("/idsearchpage")
 	public String idsearchpage() {
