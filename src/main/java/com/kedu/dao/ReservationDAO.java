@@ -392,4 +392,29 @@ public class ReservationDAO {
 		return jdbc.queryForObject(sql, Integer.class, region, region, a1, a1, a2, a2, a3, a3,
 				a4, a4, a5, a5, guest, guest, in, out, out, in, maxPrice, maxPrice);
 	}
+	
+	//전체 예약 건수
+	public int totalReservation() {
+		String sql = "select count(*) from reservation";
+		return jdbc.queryForObject(sql, Integer.class);
+	}
+	
+	//취소 예약 건수
+	public int cancelReservation() {
+		String sql = "select count(*) from reservation where status = '예약취소'";
+		return jdbc.queryForObject(sql, Integer.class);
+	}
+	
+	//매출 집계
+	public int totalSales() {
+		String sql = "select sum(total_price) from reservation where status = '예약완료' and check_out <= sysdate";
+		return jdbc.queryForObject(sql, Integer.class);
+	}
+	
+	//월별 매출 집계
+	public int monthlySales(String monthStart, String monthEnd) {
+		String sql = "select SUM(total_price)from reservation where status = '예약완료' and check_in  >= TO_DATE(?, 'YYYY-MM-DD') and check_out <= TO_DATE(?, 'YYYY-MM-DD')";
+		return jdbc.queryForObject(sql, Integer.class, monthStart, monthEnd);
+	}
+	
 }
