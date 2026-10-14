@@ -130,21 +130,21 @@ public class MembersControllers {
 	    String tourType = tdao.selectMyType(memberId);
 	       
 	    
-	    // 1. 예약 내역 페이징
-	    if(cpage == null || cpage < 1) cpage = 1;
+	 // 1. 예약 내역 페이징
+	    if (cpage == null || cpage < 1) cpage = 1;
 	    int totalCount = rdao.reservationCount(memberId);
-	    int totalPage = (int)Math.ceil((double)totalCount / pagesize);
-	    if(totalPage > 0 && cpage > totalPage) cpage = totalPage;
-	    if(totalPage == 0) cpage = 1;
+	    int totalPage = (int) Math.ceil((double) totalCount / pagesize);
+	    if (totalPage > 0 && cpage > totalPage) cpage = totalPage;
+	    if (totalPage == 0) cpage = 1;
+
 	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize);
+
 	    LocalDate today = LocalDate.now();
 	    for (ReservationDTO rs : myRsList) {
 	        if ("예약취소".equals(rs.getStatus())) {
 	            rs.setReservationType("cancelled");
-	        } else if (rs.getCheckOut().toLocalDate().isBefore(today)) {
+	        } else if (!rs.getCheckOut().toLocalDate().isAfter(today)) {
 	            rs.setReservationType("completed");
-	        } else if (rs.getCheckIn().toLocalDate().isAfter(today)) {
-	            rs.setReservationType("confirmed");
 	        } else {
 	            rs.setReservationType("upcoming");
 	        }
