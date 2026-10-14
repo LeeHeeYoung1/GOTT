@@ -251,16 +251,22 @@ public class ReservationService {
 	 // 5. 예약으로 적립한 마일리지 회수
 	    if (earnedMileage > 0) {
 	        int revokeResult = rdao.subtractMileage(memberId, earnedMileage);
-	        if (revokeResult != 1) {
-	            throw new Exception("적립 마일리지 회수에 실패했습니다. 보유 마일리지를 확인해 주세요.");
-	        }
-	        int revokeHistoryResult = rdao.insertMileageHistory(
-	                memberId, paymentId, "REVOKE",
-	                earnedMileage, "예약 취소로 적립 마일리지 회수");
-	        if (revokeHistoryResult != 1) {
-	            throw new Exception("마일리지 회수 내역 저장에 실패했습니다.");
-	        }
+		        if (revokeResult != 1) {
+		            throw new Exception("적립 마일리지 회수에 실패했습니다. 보유 마일리지를 확인해 주세요.");
+		        }
+		        int revokeHistoryResult = rdao.insertMileageHistory(
+		                memberId, paymentId, "REVOKE",
+		                earnedMileage, "예약 취소로 적립 마일리지 회수");
+		        if (revokeHistoryResult != 1) {
+		            throw new Exception("마일리지 회수 내역 저장에 실패했습니다.");
+		        }
+		    }
+	    
+	    // 6. 예약 취소 시 사용한 쿠폰 복구
+	    int restoreCouponResult = cdao.restoreCoupon(memberId, paymentId);
+	    if (restoreCouponResult < 0) {
+	        throw new Exception("쿠폰 복구에 실패했습니다.");
 	    }
 
-	    }
+	}
 }
