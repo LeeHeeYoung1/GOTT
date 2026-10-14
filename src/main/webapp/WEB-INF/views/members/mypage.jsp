@@ -1080,7 +1080,7 @@ body{
                     </div>
                     <div class="plannerBtns">
                         <button type="button" class="newScheduleBtn" onclick="location.href='/members/planner'">새 일정 만들기</button>
-                        <button type="button" class="viewShareBtn" onclick="location.href='/travelPlan/list'">공유일정 전부 보기</button>
+                        <button type="button" class="viewShareBtn" onclick="location.href='/travelPlan/list?cpage=1'">공유일정 전부 보기</button>
                     </div>
                 </div>
             </div>
