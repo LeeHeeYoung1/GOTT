@@ -98,8 +98,6 @@ public class ReviewDAO {
 		jdbc.update(sql, seq);
 	}
 	
-	
-	
 	public ArrayList<ReviewDTO> selectMyReview(String memberId, int cpage, int pagesize) {
 	    int start = (cpage - 1) * pagesize + 1;
 	    int end = cpage * pagesize;
@@ -114,10 +112,9 @@ public class ReviewDAO {
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 	
-	public int reviewCount(String memberId) {
-	    String sql = "SELECT COUNT(*) FROM review "
-	            + "WHERE member_id = ?";
-	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	public int reviewCount() {
+	    String sql = "SELECT COUNT(*) FROM review";
+	    return jdbc.queryForObject(sql, Integer.class);
 	}
 	
 	public List<ReviewDTO> selectRecentReviews() {
