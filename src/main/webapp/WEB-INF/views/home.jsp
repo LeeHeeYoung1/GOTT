@@ -261,54 +261,23 @@
             padding-top: 30px;
         }
         
-        .eventbannerbox {
-        	height: 280px;
+        .eventbox {
+            height: auto;
             position: relative;
     		overflow: hidden;
     		border-radius: 14px;
     		background-color: #eee;
     		cursor: pointer;
     		box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);	
-            border: 1px solid red;
         }
-        
-        .eventbannerbox img {
-        	width: 100%;
+
+        .eventbox img {
+            width: 100%;
 		    height: 100%;
 		    display: block;
-		    object-fit: cover;
+		    object-fit: contain;
 		    transition: transform 0.4s ease;
         }
-        .eventbannerbox::after {
-		    content: "";
-		    position: absolute;
-		    inset: 0;
-		    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.05));
-
-		}
-		.eventbannerbox:hover img {
-		    transform: scale(1.05);
-		}
-		.eventbannerbox .eventtext {
-		    position: absolute;
-		    left: 20px;
-		    right: 20px;
-		    bottom: 20px;
-		    z-index: 2;
-		    color: white;
-		}
-		
-		.eventbannerbox .eventtext h3 {
-		    margin: 0 0 6px;
-		    font-size: 20px;
-		    font-weight: 600;
-		}
-		
-		.eventbannerbox .eventtext p {
-		    margin: 0 0 12px;
-		    font-size: 12px;
-		    opacity: 0.8;
-		}
         
         .ourtext {
             border: 1px solid black;
@@ -890,16 +859,21 @@
     </div>
     <div class="eventbannerzone">
         <div class="moreview"><a href="/event/eventpage">더 보기</a></div>
-            <c:forEach var="i" items="${banner}" end="2">
-               	<div class="eventbannerbox">
-                    <img src="${pageContext.request.contextPath}/images/${i.image_name}"
-     					 alt="${i.title}">
-                    <div class="eventtext">
-                        <h3>${i.title}</h3>
-                        <p>${i.content}</p>
-                	</div>
-                </div>
-            </c:forEach>
+            		<div class="eventbox">
+		           		<a href="/members/signuppage">
+		                  	<img src="/images/Welcome_coupon.jpg" alt="Welcome_coupon">
+		                </a>
+		           </div>
+		           <div class="eventbox">
+		           		<a href="/members/tourTypeTest">
+		                  	<img src="/images/Travel_type_test.png" alt="Travel_type_test">
+		                </a>
+		           </div>
+		           <div class="eventbox">
+		           		<a href="/reservation/list?cpage=1">
+		                  	<img src="/images/Coupon2.png" alt="Coupon2">
+		                </a>
+		           </div>
         <div id="ourpromise"></div>
     </div>
 
