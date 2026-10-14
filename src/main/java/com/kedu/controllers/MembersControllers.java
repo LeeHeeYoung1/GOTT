@@ -115,8 +115,11 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/mypage")
-	public String mypage(Integer cpage, Integer wishCpage, HttpSession session, Model model) {
+	public String mypage(Integer cpage, Integer wishCpage, Integer mileageCpage, Integer plannerCpage, HttpSession session, Model model) {
 	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) {
+	        return "redirect:/members/loginpage";
+	    }
 	    int pagesize = 3;
 
 	    // 1. 예약 내역 페이징
@@ -149,34 +152,62 @@ public class MembersControllers {
 	    int wishEnd = wishCpage * pagesize;
 	    List<PlaceDTO> wishList = wdao.selectByWish(memberId, wishStart, wishEnd);
 
-	    // 3. 마일리지 조회
+	    // 3. 마일리지 내역 페이징
+	    int mileagePagesize = 10;
+	    if (mileageCpage == null || mileageCpage < 1) mileageCpage = 1;
+	    int mileageTotalCount = mdao.mileageHistoryCount(memberId);
+	    int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / mileagePagesize);
+	    if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
+	        mileageCpage = mileageTotalPage;
+	    }
+	    if (mileageTotalPage == 0) mileageCpage = 1;
 	    int mileage = mdao.getMileage(memberId);
-	    List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId);
-	    
-	    // 3-1. 찜 갯수표시
-	    int myWishTotalCount = wdao.countByWish(memberId);	    
+	    List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId, mileageCpage, mileagePagesize);
+
+	    // 4. 마이페이지 요약 정보
+	    int myWishTotalCount = wdao.countByWish(memberId);
 	    int upcomingCount = rdao.upcomingReservationCount(memberId);
 	    int reviewCount = rvdao.selectCount(memberId);
-	    
-	    // 3-2. 이용 예정 예약 목록
+
+	    // 5. 이용 예정 및 이용 완료 예약
 	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
-	    // 3-3. 이용 완료 예약 목록
 	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
-	    
-	    // 리뷰 목록
+
+	    // 6. 리뷰 목록
 	    List<ReviewDTO> reviewList = rvdao.selectMyReview(memberId);
-	    
-	    model.addAttribute("reviewCount",reviewCount);
-		model.addAttribute("reviewList",reviewList);	    	    
-	    model.addAttribute("mileageHistory",mileageHistory);
+
+	    // 7. 내가 공유한 여행 일정 페이징
+	    int plannerPagesize = 3;
+	    if (plannerCpage == null || plannerCpage < 1) plannerCpage = 1;
+
+	    List<?> allPlannerList = tpdao.selectMyPlansWithCount(memberId);
+	    int plannerTotalCount = allPlannerList.size();
+	    int plannerTotalPage = (int)Math.ceil((double)plannerTotalCount / plannerPagesize);
+
+	    if (plannerTotalPage > 0 && plannerCpage > plannerTotalPage) {
+	        plannerCpage = plannerTotalPage;
+	    }
+	    if (plannerTotalPage == 0) plannerCpage = 1;
+
+	    int plannerStart = (plannerCpage - 1) * plannerPagesize;
+	    int plannerEnd = Math.min(plannerStart + plannerPagesize, plannerTotalCount);
+	    List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
+
+	    // 8. 모델 전달
+	    model.addAttribute("mileageCpage", mileageCpage);
+	    model.addAttribute("mileageTotalPage", mileageTotalPage);
+	    model.addAttribute("reviewCount", reviewCount);
+	    model.addAttribute("reviewList", reviewList);
+	    model.addAttribute("mileageHistory", mileageHistory);
 	    model.addAttribute("upcomingCount", upcomingCount);
-	    model.addAttribute("today", LocalDate.now().toString());
+	    model.addAttribute("today", LocalDate.now());
 	    model.addAttribute("upcomingList", upcomingList);
 	    model.addAttribute("completedList", completedList);
 	    model.addAttribute("myWishTotalCount", myWishTotalCount);
-	    model.addAttribute("myPlannerList",tpdao.selectMyPlansWithCount(memberId));
+	    model.addAttribute("myPlannerList", myPlannerList);
+	    model.addAttribute("plannerCpage", plannerCpage);
+	    model.addAttribute("plannerTotalPage", plannerTotalPage);
 	    model.addAttribute("mileage", mileage);
-	    model.addAttribute("today", java.time.LocalDate.now());
 	    model.addAttribute("myRsList", myRsList);
 	    model.addAttribute("cpage", cpage);
 	    model.addAttribute("totalPage", totalPage);
@@ -189,6 +220,7 @@ public class MembersControllers {
 	        model.addAttribute("reservationUpdateMessage", message);
 	        session.removeAttribute("reservationUpdateMessage");
 	    }
+
 	    return "members/mypage";
 	}
 	
@@ -360,14 +392,37 @@ public class MembersControllers {
 	    return "members/reservationpage";
 	}
 	
+
+
 	@RequestMapping("/mileage")
-	public String milagelist(HttpSession session, Model model) {
-		String memberId = (String) session.getAttribute("loginId");
-		int mileage = mdao.getMileage(memberId);
-		List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId);
-		
-		model.addAttribute("mileage", mileage);
-		model.addAttribute("mileageHistory",mileageHistory);
-		return "members/mileage";
+	public String milagelist(Integer mileageCpage, HttpSession session, Model model) {
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	
+	    int pagesize = 10;
+	    if (mileageCpage == null || mileageCpage < 1) mileageCpage = 1;
+	
+	    int mileageTotalCount = mdao.mileageHistoryCount(memberId);
+	    int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / pagesize);
+	
+	    if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
+	        mileageCpage = mileageTotalPage;
+	    }
+	    if (mileageTotalPage == 0) mileageCpage = 1;
+	
+	    int mileage = mdao.getMileage(memberId);
+	    List<MileageHistoryDTO> mileageHistory =
+	            mdao.mileageHistory(memberId, mileageCpage, pagesize);
+	
+	    model.addAttribute("mileage", mileage);
+	    model.addAttribute("mileageHistory", mileageHistory);
+	    model.addAttribute("mileageCpage", mileageCpage);
+	    model.addAttribute("mileageTotalPage", mileageTotalPage);
+	
+	    return "members/mileage";
 	}
+
+
 }
