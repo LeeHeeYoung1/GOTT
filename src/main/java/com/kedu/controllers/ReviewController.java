@@ -1,5 +1,6 @@
 package com.kedu.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -120,6 +121,29 @@ public class ReviewController {
 		rrdao.recommendDown(seq, (String)session.getAttribute("loginId"));
 		ReviewDTO rdto = rdao.selectOne(seq);
 		return "redirect:/review/detail?seq="+seq+"&place_id="+rdto.getTarget_id();
+	}
+	
+	@RequestMapping("/reviewlist")
+	public String reviewlist(Integer cpage, HttpSession session, Model model) {
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	    if (cpage == null || cpage < 1) {
+	        cpage = 1;
+	    }
+	    int pagesize = 5;
+	    int recordTotalCount = rdao.countMyReview(memberId);
+	    int pageTotalCount = (int)Math.ceil(recordTotalCount / (double)pagesize);
+	    if (pageTotalCount > 0 && cpage > pageTotalCount) {
+	        cpage = pageTotalCount;
+	    }
+	    ArrayList<ReviewDTO> myReviewList = rdao.selectMyReview(memberId, cpage, pagesize);
+	    model.addAttribute("myReviewList", myReviewList);
+	    model.addAttribute("recordTotalCount", recordTotalCount);
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("pageTotalCount", pageTotalCount);
+	    return "members/reviewlist";
 	}
 	
 	
