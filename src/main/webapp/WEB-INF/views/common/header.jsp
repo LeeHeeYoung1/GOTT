@@ -223,7 +223,7 @@
 		                <h2>메뉴</h2>
 		            </div>
 		            <div class="sidemenu-main">
-		                <p><a href="/">메인</a></p>
+		                <p><a href="/">메인페이지</a></p>
 		                <p><a href="/members/mypage">마이페이지</a></p>
 		                <p><a href="/members/wishlist">찜목록</a></p>
 		                <p><a href="/">북마크</a></p>
