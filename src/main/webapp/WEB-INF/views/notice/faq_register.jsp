@@ -214,7 +214,7 @@
 		enctype="multipart/form-data">
 
 		<div class="writeRow">
-			<label>질문</label> <input type="text" name="title" class="writeInput"
+			<label>질문</label> <input type="text" name="title" id="writeInput" class="writeInput"
 				placeholder="질문을 입력해주세요.">
 		</div>
 
@@ -225,7 +225,7 @@
 
 		<div class="contentsRow">
 			<label>답변</label>
-			<textarea id="summernote" name="content" class="contents"
+			<textarea id="summernote" name="content" id="contents" class="contents"
 				placeholder="답변을 작성해주세요."></textarea>
 		</div>
 
@@ -240,101 +240,93 @@
 			<button type="button"
 				onclick="location.href='/notice/faq?cpage=${cpage}'">취소</button>
 
-			<button type="submit" class="submitBtn">등록</button>
+			<button type="submit" class="submitBtn" id="submitBtn">등록</button>
 		</div>
 
 	</form>
 
 </div>
 
+
 <script>
-	$(document)
-			.ready(
-					function() {
+	
+	$("#submitBtn").on("click", function() {
+		
+		if($("#writeInput").val().trim() == "") {
+		alert("질문을 입력해주세요.");
+		return false;
+		}
+		if($("#summernote").summernote("isEmpty")) {
+	        alert("답변을 입력해주세요.");
+	        return false;
+	    }
+	});
+	
+    $(document).ready(function() {
 
-						$('#summernote')
-								.summernote(
-										{
-											toolbar : [
-													[ 'fontname',
-															[ 'fontname' ] ],
-													[ 'fontsize',
-															[ 'fontsize' ] ],
-													[
-															'style',
-															[
-																	'bold',
-																	'italic',
-																	'underline',
-																	'strikethrough',
-																	'clear' ] ],
-													[
-															'color',
-															[ 'forecolor',
-																	'color' ] ],
-													[ 'table', [ 'table' ] ],
-													[
-															'para',
-															[ 'ul', 'ol',
-																	'paragraph' ] ],
-													[ 'height', [ 'height' ] ],
-													[
-															'insert',
-															[ 'picture',
-																	'link',
-																	'video' ] ] ],
+        $('#summernote').summernote({
+            toolbar: [
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['style', [
+                    'bold', 'italic', 'underline',
+                    'strikethrough', 'clear'
+                ]],
+                ['color', ['forecolor', 'color']],
+                ['table', ['table']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['insert', ['picture', 'link', 'video']]
+            ],
 
-											fontNames : [ 'Arial',
-													'Arial Black',
-													'Comic Sans MS',
-													'Courier New', '맑은 고딕',
-													'궁서', '굴림체', '굴림', '돋움체',
-													'바탕체' ],
+            fontNames: [
+                'Arial', 'Arial Black', 'Comic Sans MS',
+                'Courier New', '맑은 고딕', '궁서',
+                '굴림체', '굴림', '돋움체', '바탕체'
+            ],
 
-											fontSizes : [ '8', '9', '10', '11',
-													'12', '14', '16', '18',
-													'20', '22', '24', '28',
-													'30', '36', '50', '72' ],
+            fontSizes: [
+                '8', '9', '10', '11', '12', '14', '16',
+                '18', '20', '22', '24', '28', '30',
+                '36', '50', '72'
+            ],
 
-											height : 450,
-											lang : "ko-KR",
-											placeholder : "답변을 작성해주세요.",
+            height: 450,
+            lang: "ko-KR",
+            placeholder: "답변을 작성해주세요.",
 
-											callbacks : {
-												onImageUpload : function(files) {
-													for (var i = 0; i < files.length; i++) {
-														uploadImageFile(
-																files[i], this);
-													}
-												}
-											}
-										});
+            callbacks: {
+                onImageUpload: function(files) {
+                    for (var i = 0; i < files.length; i++) {
+                        uploadImageFile(files[i], this);
+                    }
+                }
+            }
+        });
 
-						function uploadImageFile(file, el) {
-							let data = new FormData();
-							data.append("file", file);
+        function uploadImageFile(file, el) {
+            let data = new FormData();
+            data.append("file", file);
 
-							$.ajax({
-								data : data,
-								type : "POST",
-								url : "/file/uploadImageFile",
-								contentType : false,
-								processData : false,
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/file/uploadImageFile",
+                contentType: false,
+                processData: false,
 
-								success : function(data) {
-									$(el).summernote('editor.insertImage',
-											data.url);
-								},
+                success: function(data) {
+                    $(el).summernote('editor.insertImage', data.url);
+                },
 
-								error : function(xhr) {
-									console
-											.log("이미지 업로드 실패:",
-													xhr.responseText);
-								}
-							});
-						}
+                error: function(xhr) {
+                    console.log("이미지 업로드 실패:", xhr.responseText);
+                }
+            });
+        }
 
-					});
+    });
 </script>
+
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
