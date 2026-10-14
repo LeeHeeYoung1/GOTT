@@ -109,13 +109,22 @@ public class ReservationService {
 	        }
 	    }
 	
+	 
 	    // 8. 쿠폰 사용 처리
+	    System.out.println("전달받은 memberCouponId = " + memberCouponId);
+
 	    if (memberCouponId != null) {
+	        CouponDTO coupon = cdao.selectUsableCoupon(id, memberCouponId, originalPrice);
+	        System.out.println("쿠폰 검증 결과 = " + (coupon != null ? "사용 가능" : "사용 불가"));
+
 	        int couponResult = cdao.useCoupon(id, memberCouponId, originalPrice);
-	
+	        System.out.println("쿠폰 사용 처리 결과 = " + couponResult);
+
 	        if (couponResult != 1) {
 	            throw new Exception("쿠폰 사용 처리 실패");
 	        }
+
+	        System.out.println("쿠폰 사용 처리 직후 확인 완료");
 	    }
 	
 	    // 9. 실제 결제 금액 기준 적립 마일리지 계산
