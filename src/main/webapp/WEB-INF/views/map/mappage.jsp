@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>GOTT MAP</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea87fc26ee3f75472cb75c454c18b302&libraries=services"></script>

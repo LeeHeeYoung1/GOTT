@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kedu.commons.EncryptionUtils;
 import com.kedu.dto.MembersDTO;
@@ -35,12 +36,25 @@ public class MembersDAO {
 		return jdbc.queryForObject(sql, Integer.class, nickname);
 	}
 	
+
+	@Transactional
 	public int signup(MembersDTO mdto) {
-		String sql = "insert into members values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, systimestamp, 0, 'user', ?)";
-		return jdbc.update(sql, mdto.getId(), mdto.getPw(), mdto.getName(), mdto.getNickname()
-				, mdto.getPhone(), mdto.getEmail(), mdto.getGender(), mdto.getDob(), mdto.getZipcode()
-				, mdto.getAddress1(), mdto.getAddress2(), mdto.getPrivacy_agree());
+	    String sql = "INSERT INTO members VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP, 3000, 'user', ?)";
+	    int result = jdbc.update(sql, mdto.getId(), mdto.getPw(), mdto.getName(), mdto.getNickname(),
+	            mdto.getPhone(), mdto.getEmail(), mdto.getGender(), mdto.getDob(), mdto.getZipcode(),
+	            mdto.getAddress1(), mdto.getAddress2(), mdto.getPrivacy_agree());
+	
+	    if (result > 0) {
+	        String mileageSql = "INSERT INTO MILEAGE_HISTORY "
+	                + "(SEQ, MEMBER_ID, RESERVATION_ID, PAYMENT_ID, TYPE, AMOUNT, BALANCE, REASON, REG_DATE) "
+	                + "VALUES (MILEAGE_HISTORY_SEQ.NEXTVAL, ?, NULL, NULL, ?, ?, ?, ?, SYSDATE)";
+	
+	        jdbc.update(mileageSql, mdto.getId(), "적립", 3000, 3000, "회원가입 축하 마일리지");
+	    }
+	
+	    return result;
 	}
+
 	
 	public MembersDTO selectById(String id) {
 		String sql = "select * from members where id=?";

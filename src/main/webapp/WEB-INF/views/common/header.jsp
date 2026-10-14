@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/css/public.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<title>GOTT 메인화면</title>
+<title>GOTT</title>
 <script
   src="https://code.jquery.com/jquery-3.7.1.js"
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -25,7 +25,7 @@
             padding-top: 70px;
         }
         .header {
-            width: 1200px;
+            width: 100%;
             height: 70px;
             background-color: rgba(255, 255, 255, 0.95);
             position : fixed;
@@ -96,8 +96,8 @@
             width: 200px;
             height: 500px;
             position: fixed;
-            right: -200px;
-            top: 0;
+            right: 0;
+            top: 70px;
             background-color: rgba(255, 255, 255, 0.7);
             
             box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
@@ -145,7 +145,6 @@
         hr {
             margin: 25px 0px;
             border: none;
-            border-top: 1px solid #e5e7eb;
         }
 
         .footer {
@@ -182,7 +181,7 @@
         <div class="navi flex-between">
             <div class="textzone"><a href="/members/tourTypeTest">여행성향 테스트</a></div>
             <div class="textzone"><a href="/place/mappage">지역</a></div>
-            <div class="textzone"><a href="">추천여행지</a></div>
+            <div class="textzone"><a href="${pageContext.request.contextPath}/place/search?keyword=&type=전체&cpage=1">여행지</a></div>
             <div class="textzone"><a href="/reservation/list?cpage=1">숙박업소</a></div>
             <div class="textzone"><a href="/members/planner">여행플래너</a></div>
             <div class="textzone"><a href="/board/freeBoard?cpage=1">게시판</a></div>

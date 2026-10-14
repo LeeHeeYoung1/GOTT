@@ -89,21 +89,19 @@ public class ReservationDAO {
 	    return jdbc.update(sql, mileage, memberId, mileage);
 	}
 
-	
+	//예약내역전체조회
+
 	public ArrayList<ReservationDTO> myRsList(String memberId) {
-	    String sql = "SELECT reservation.*, room.room_name, room.image1, place.name AS place_name "
-	            + "FROM reservation "
-	            + "JOIN room ON reservation.room_id = room.room_id "
-	            + "JOIN place ON room.place_id = place.place_id "
-	            + "WHERE reservation.member_id = ? "
-	            + "ORDER BY reservation.reserve_date DESC";
-	    ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(
-	            sql,
-	            new BeanPropertyRowMapper<>(ReservationDTO.class),
-	            memberId
+		String sql = "SELECT reservation.*, room.room_name, room.image1, " + "CASE "
+				+ "WHEN reservation.status = '예약취소' THEN 'cancelled' "
+				+ "WHEN reservation.check_out <= TRUNC(SYSDATE) THEN 'completed' " + "ELSE 'upcoming' "
+				+ "END AS reservation_type " + "FROM reservation " + "JOIN room ON reservation.room_id = room.room_id "
+				+ "WHERE reservation.member_id = ? " + "ORDER BY reservation.reserve_date DESC";
+	
+		return (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId
 	    );
-	    return list;
 	}
+
 	
 	// 이용 예정 예약 목록
 	public ArrayList<ReservationDTO> myUpcomingList(String memberId) {
@@ -160,8 +158,17 @@ public class ReservationDAO {
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 	
-	public int reservationCount(String memberId) {
-	    String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ?";
+	public int reservationCount(String memberId, String reservationTab) {
+	    String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ? ";
+
+	    if ("cancelled".equals(reservationTab)) {
+	        sql += "AND status = '예약취소' ";
+	    } else if ("completed".equals(reservationTab)) {
+	        sql += "AND status <> '예약취소' AND check_out <= TRUNC(SYSDATE) ";
+	    } else if ("upcoming".equals(reservationTab)) {
+	        sql += "AND status <> '예약취소' AND check_out > TRUNC(SYSDATE) ";
+	    }
+
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 	
@@ -170,26 +177,37 @@ public class ReservationDAO {
 	    return jdbc.update(sql, status, paymentId);
 	}
 	
-	public ArrayList<ReservationDTO> myRsList(String memberId, int cpage, int pagesize) {
+	public ArrayList<ReservationDTO> myRsList(String memberId, int cpage, int pagesize, String reservationTab) {
 	    int start = (cpage - 1) * pagesize + 1;
 	    int end = cpage * pagesize;
 
-	    String sql = "SELECT * FROM ( "
-	            + "SELECT reservation.*, room.room_name, room.image1, "
-	            + "ROW_NUMBER() OVER (ORDER BY reservation.reserve_date DESC) AS rn "
-	            + "FROM reservation "
-	            + "JOIN room ON reservation.room_id = room.room_id "
-	            + "WHERE reservation.member_id = ? "
-	            + ") WHERE rn BETWEEN ? AND ?";
+		String sql = "SELECT * FROM ( " + "SELECT reservation.*, room.room_name, room.image1, " + "CASE "
+				+ "WHEN reservation.status = '예약취소' THEN 'cancelled' "
+				+ "WHEN reservation.check_out <= TRUNC(SYSDATE) THEN 'completed' " + "ELSE 'upcoming' "
+				+ "END AS reservation_type, " + "ROW_NUMBER() OVER (ORDER BY reservation.reserve_date DESC) AS rn "
+				+ "FROM reservation " + "JOIN room ON reservation.room_id = room.room_id "
+				+ "WHERE reservation.member_id = ? ";
 
-	    ArrayList<ReservationDTO> list = (ArrayList<ReservationDTO>) jdbc.query(
+	    if ("cancelled".equals(reservationTab)) {
+	        sql += "AND reservation.status = '예약취소' ";
+	    } else if ("completed".equals(reservationTab)) {
+	        sql += "AND reservation.status <> '예약취소' "
+	                + "AND reservation.check_out <= TRUNC(SYSDATE) ";
+	    } else if ("upcoming".equals(reservationTab)) {
+	        sql += "AND reservation.status <> '예약취소' "
+	                + "AND reservation.check_out > TRUNC(SYSDATE) ";
+	    }
+
+	    sql += ") WHERE rn BETWEEN ? AND ?";
+
+	    return (ArrayList<ReservationDTO>) jdbc.query(
 	            sql,
 	            new BeanPropertyRowMapper<>(ReservationDTO.class),
 	            memberId, start, end
 	    );
-
-	    return list;
 	}
+	
+	
 	public ReservationDTO reservationOne(String paymentId) {
 	    String sql = "SELECT r.*, rm.room_name, rm.image1, rm.place_id "
 	            + "FROM reservation r "
