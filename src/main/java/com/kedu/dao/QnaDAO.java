@@ -71,8 +71,13 @@ public class QnaDAO {
 	}
 	
 	public QnaDTO qnaContent(int qid) {
-		String sql = "select * from qna where qid = ?";
-		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(QnaDTO.class), qid);
+	    String sql = "select q.*, m.nickname as nickname "
+	            + "from qna q "
+	            + "join members m on q.member_id = m.id "
+	            + "where q.qid = ?";
+
+	    return jdbc.queryForObject(sql,
+	            new BeanPropertyRowMapper<>(QnaDTO.class), qid);
 	}
 	
 	public int insertReply(int qid, String reply) {

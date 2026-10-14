@@ -410,7 +410,7 @@ button {
             <h3>${qna.title}</h3>
 
             <div class="contentsInfo">
-                <span>작성자 ${nickname}</span>
+                <span>작성자 ${qna.nickname}</span>
                 <span>
                     ${qna.write_date.toString().substring(0, 10)}
                 </span>
