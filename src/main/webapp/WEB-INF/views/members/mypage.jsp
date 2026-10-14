@@ -1976,59 +1976,61 @@ body {
 <script>
 
 $(document).ready(function() {
+
+    // 예약 탭 클릭
     $(".reservationVar .tab").on("click", function() {
         const selectedTab = $(this).attr("data-tab");
         const url = new URL(window.location.href);
-
         url.searchParams.set("reservationTab", selectedTab);
         url.searchParams.set("cpage", "1");
-
         window.location.href = url.pathname + url.search + "#reservationSection";
     });
-});
 
-$(".cancelBtn").on("click", async function() {
-    if (!confirm("이 결제를 취소할까요?")) return;
-    let paymentId = $(this).data("payment-id");
-    try {
-        const res = await fetch("${pageContext.request.contextPath}/reservation/cancelMyReservation", {
-            method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
-            body: "paymentId=" + encodeURIComponent(paymentId)
-        });
-        const text = await res.text();
-        console.log("취소 응답:", text);
-        if (res.ok && text.trim() === "success") {
-            alert("결제와 예약이 취소되었으며, 사용 마일리지를 복구했습니다.");
-            location.reload();
-        } else {
-            alert("취소 처리 결과: " + text);
+    // 예약 취소 버튼
+    $(".cancelBtn").on("click", async function() {
+        if (!confirm("이 결제를 취소할까요?")) return;
+        let paymentId = $(this).data("payment-id");
+        try {
+            const res = await fetch("${pageContext.request.contextPath}/reservation/cancelMyReservation", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
+                body: "paymentId=" + encodeURIComponent(paymentId)
+            });
+            const text = await res.text();
+            console.log("취소 응답:", text);
+            if (res.ok && text.trim() === "success") {
+                alert("결제와 예약이 취소되었으며, 사용 마일리지를 복구했습니다.");
+                location.reload();
+            } else {
+                alert("취소 처리 결과: " + text);
+            }
+        } catch (error) {
+            console.error("요청 실패:", error);
+            alert("취소 요청 중 오류가 발생했습니다.");
         }
-    } catch (error) {
-        console.error("요청 실패:", error);
-        alert("취소 요청 중 오류가 발생했습니다.");
-    }
+    });
+
+    // 예약 변경 버튼
+    $(".updateBtn").on("click", function() {
+        let paymentId = $(this).data("payment-id");
+        if (!paymentId) {
+            alert("예약 정보를 찾을 수 없습니다.");
+            return;
+        }
+        location.href = "${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId);
+    });
+
+    // 카드 앞면 (상세 보기)
+    $(".detailBtn").on("click", function() {
+        $(this).closest(".flipCard").addClass("flipped");
+    });
+
+    // 카드 뒷면 (뒤로)
+    $(".backBtn").on("click", function() {
+        $(this).closest(".flipCard").removeClass("flipped");
+    });
+
 });
-
-$(".updateBtn").on("click", function() {
-    let paymentId = $(this).data("payment-id");
-    if (!paymentId) {
-        alert("예약 정보를 찾을 수 없습니다.");
-        return;
-    }
-    location.href = "${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId);
-});
-
-
-$(".detailBtn").on("click", function() {
-    $(this).closest(".flipCard").addClass("flipped");
-});
-
-$(".backBtn").on("click", function() {
-    $(this).closest(".flipCard").removeClass("flipped");
-});
-
-
 
 </script>
 </body>
