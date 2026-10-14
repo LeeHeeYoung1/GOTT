@@ -195,6 +195,13 @@ body {
         font-size: 19px;
     }
 }
+
+
+.couponSelectWrap{margin-top:15px}
+#couponSelect{width:100%;height:48px;padding:0 14px;border:1px solid #CBD5E1;border-radius:8px;background:#fff;color:#1E293B;font-size:14px;outline:none}
+#couponSelect:focus{border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+#couponHelp{min-height:20px;margin-top:8px;color:#DC2626;font-size:13px}
+
 </style>
 </head>
 <body>
@@ -206,6 +213,34 @@ body {
     <div class="row"><span>체크인</span><span>${checkIn}</span></div>
     <div class="row"><span>체크아웃</span><span>${checkOut}</span></div>
    	<div class="row"><span>인원</span><span>${guest}명</span></div>
+   	
+   	
+    <h4>쿠폰 할인</h4>
+    <div class="row">
+        <span>보유 쿠폰</span>
+        <span>${empty couponList ? 0 : couponList.size()}장</span>
+    </div>
+    <div class="couponSelectWrap">
+        <select id="couponSelect">
+            <option value="">쿠폰을 선택해 주세요</option>
+            <c:forEach var="coupon" items="${couponList}">
+                <option value="${coupon.memberCouponId}"
+                    data-type="${coupon.discountType}"
+                    data-discount="${coupon.discountValue}"
+                    data-min-price="${coupon.minOrderPrice}">
+                    <c:out value="${coupon.couponName}"/>
+                    (
+                    <c:choose>
+                        <c:when test="${coupon.discountType eq 'PERCENT'}">${coupon.discountValue}% 할인</c:when>
+                        <c:otherwise>${coupon.discountValue}원 할인</c:otherwise>
+                    </c:choose>
+                    )
+                </option>
+            </c:forEach>
+        </select>
+    </div>
+    <div id="couponHelp" role="alert"></div>
+   	
 
     <h4>마일리지</h4>
     <div class="row">
@@ -223,37 +258,108 @@ body {
     <h4>결제 금액</h4>
     <div class="row"><span>객실 금액</span><span id="roomPrice" data-price="${total_price}"></span></div>
     <div class="row"><span>마일리지 사용</span><span id="usedMileage">0P</span></div>
+    <div class="row"><span>쿠폰 할인</span> <span id="couponDiscount">0원</span></div>
     <div class="row total"><span>최종 결제 금액</span><span id="finalPrice"></span></div>
 
-    <button class="payment full" type="button">결제하기</button>
+	<button class="payment full" type="button">결제하기</button>
     <button id="cancelBtn" class="full" type="button">뒤로가기</button>
 </div>
 
 <script>
 
+
 $(function() {
     const roomPrice = Number($("#roomPrice").data("price")) || 0;
     const myMileage = Number($("#myMileage").data("mileage")) || 0;
     let usedMileage = 0;
+    let couponDiscount = 0;
 
     function formatPrice(price) {
         return price.toLocaleString("ko-KR") + "원";
     }
 
-    function updatePrice() {
-        $("#roomPrice").text(formatPrice(roomPrice));
-        $("#usedMileage").text(usedMileage.toLocaleString("ko-KR") + "P");
-        $("#finalPrice").text(formatPrice(roomPrice - usedMileage));
+    function getCouponDiscount() {
+        const selected = $("#couponSelect option:selected");
+
+        if (!selected.val()) {
+            return 0;
+        }
+
+        const type = selected.data("type");
+        const discount = Number(selected.data("discount")) || 0;
+        const minPrice = Number(selected.data("min-price")) || 0;
+
+        if (roomPrice < minPrice) {
+            $("#couponHelp").text(
+                "최소 결제 금액 " + formatPrice(minPrice) + " 이상부터 사용할 수 있습니다."
+            );
+            return 0;
+        }
+
+        $("#couponHelp").text("");
+
+        let amount = 0;
+
+        if (type === "PERCENT") {
+            amount = Math.floor(roomPrice * discount / 100);
+        } else if (type === "FIXED") {
+            amount = discount;
+        }
+
+        // PortOne 결제 금액이 0원이 되지 않도록 제한
+        return Math.max(0, Math.min(amount, Math.max(0, roomPrice - 1)));
     }
 
+    function updatePrice() {
+        couponDiscount = getCouponDiscount();
+
+        const priceAfterCoupon = roomPrice - couponDiscount;
+        const maxMileage = Math.floor(
+            Math.max(0, priceAfterCoupon - 1) / 100
+        ) * 100;
+
+        // 쿠폰 변경으로 사용 가능 마일리지를 초과하면 자동 조정
+        if (usedMileage > maxMileage) {
+            usedMileage = Math.min(
+                Math.floor(myMileage / 100) * 100,
+                maxMileage
+            );
+            $("#mileageInput").val(usedMileage);
+            $("#mileageHelp").text(
+                "쿠폰 적용 금액에 맞춰 마일리지 사용액을 조정했습니다."
+            );
+        }
+
+        const finalAmount = priceAfterCoupon - usedMileage;
+
+        $("#roomPrice").text(formatPrice(roomPrice));
+        $("#couponDiscount").text(formatPrice(couponDiscount));
+        $("#usedMileage").text(usedMileage.toLocaleString("ko-KR") + "P");
+        $("#finalPrice").text(formatPrice(finalAmount));
+    }
+
+    $("#couponSelect").on("change", function() {
+        $("#couponHelp").text("");
+        updatePrice();
+    });
+
     $("#btnAll").on("click", function() {
-        const maxMileage = Math.floor(Math.min(myMileage, Math.max(0, roomPrice - 1)) / 100) * 100;
-        $("#mileageInput").val(maxMileage);
+        const couponAmount = getCouponDiscount();
+        const maxMileage = Math.floor(
+            Math.max(0, roomPrice - couponAmount - 1) / 100
+        ) * 100;
+
+        const availableMileage = Math.floor(myMileage / 100) * 100;
+        const amount = Math.min(availableMileage, maxMileage);
+
+        $("#mileageInput").val(amount);
         $("#mileageHelp").text("");
     });
 
     $("#btnApply").on("click", function() {
         const inputMileage = Number($("#mileageInput").val());
+        const couponAmount = getCouponDiscount();
+        const priceAfterCoupon = roomPrice - couponAmount;
 
         if (!Number.isFinite(inputMileage) || inputMileage < 0) {
             $("#mileageHelp").text("사용할 마일리지를 올바르게 입력해 주세요.");
@@ -270,7 +376,7 @@ $(function() {
             return;
         }
 
-        if (inputMileage >= roomPrice) {
+        if (inputMileage >= priceAfterCoupon) {
             $("#mileageHelp").text("최종 결제 금액은 0원보다 커야 합니다.");
             return;
         }
@@ -281,7 +387,10 @@ $(function() {
     });
 
     $(".payment").on("click", async function() {
-        const finalAmount = roomPrice - usedMileage;
+        updatePrice();
+
+        const finalAmount = roomPrice - couponDiscount - usedMileage;
+
         if (finalAmount <= 0) {
             $("#mileageHelp").text("최종 결제 금액은 0원보다 커야 합니다.");
             return;
@@ -292,6 +401,7 @@ $(function() {
 
         try {
             const paymentId = "GOTT-" + crypto.randomUUID();
+
             const response = await PortOne.requestPayment({
                 storeId: "store-d4a75cb3-13cc-4226-b7fc-33d40089bf40",
                 channelKey: "channel-key-6b882be9-c6c2-4429-a3ba-2a04d40b1f0a",
@@ -313,13 +423,21 @@ $(function() {
             }
 
             const contextPath = "${pageContext.request.contextPath}";
-            location.href = contextPath + "/reservation/paymentComplete"
+            const selectedCouponId = $("#couponSelect").val();
+
+            let url = contextPath + "/reservation/paymentComplete"
                 + "?paymentId=" + encodeURIComponent(paymentId)
                 + "&roomId=" + encodeURIComponent("${roomDto.roomId}")
                 + "&checkIn=" + encodeURIComponent("${checkIn}")
                 + "&checkOut=" + encodeURIComponent("${checkOut}")
                 + "&guest=" + encodeURIComponent("${guest}")
                 + "&mileage=" + encodeURIComponent(usedMileage);
+
+            if (selectedCouponId) {
+                url += "&memberCouponId=" + encodeURIComponent(selectedCouponId);
+            }
+
+            location.href = url;
         } catch (error) {
             console.error(error);
             alert("결제 중 오류가 발생했습니다.");
@@ -334,6 +452,7 @@ $(function() {
 
     updatePrice();
 });
+
 </script>
 </body>
 </html>

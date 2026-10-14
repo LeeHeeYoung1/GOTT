@@ -140,6 +140,17 @@ public class ReservationDAO {
 	    );
 	}
 	
+	// 이용날짜당일 및 지나면 취소불가
+	public boolean canModifyReservation(String paymentId, String memberId) {
+	    String sql = "SELECT COUNT(*) FROM reservation "
+	               + "WHERE payment_id = ? "
+	               + "AND member_id = ? "
+	               + "AND status = '예약완료' "
+	               + "AND check_in > TRUNC(SYSDATE)";
+	    Integer count = jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
+	    return count != null && count > 0;
+	}
+	
 	// 다가오는 예약 건수
 	public int upcomingReservationCount(String memberId) {
 	    String sql = "SELECT COUNT(*) FROM reservation "

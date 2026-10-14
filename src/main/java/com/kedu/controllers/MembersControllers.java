@@ -176,6 +176,7 @@ public class MembersControllers {
 	    model.addAttribute("myWishTotalCount", myWishTotalCount);
 	    model.addAttribute("myPlannerList",tpdao.selectMyPlansWithCount(memberId));
 	    model.addAttribute("mileage", mileage);
+	    model.addAttribute("today", java.time.LocalDate.now());
 	    model.addAttribute("myRsList", myRsList);
 	    model.addAttribute("cpage", cpage);
 	    model.addAttribute("totalPage", totalPage);
@@ -358,6 +359,8 @@ public class MembersControllers {
 	public String reservationpage(HttpSession session, Model model) {
 		String memberId = (String) session.getAttribute("loginId");
 		ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
+		
+		model.addAttribute("today", java.sql.Date.valueOf(java.time.LocalDate.now()));
 		model.addAttribute("myRsList", myRsList);
 	    return "members/reservationpage";
 	}

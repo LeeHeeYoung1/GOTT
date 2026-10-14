@@ -845,11 +845,26 @@ body{
     margin-left:auto;
     padding:5px;
     border:0;
+    border-radius:4px;
     background:transparent;
     color:#262626;
     font-size:17px;
     cursor:pointer;
+    outline:none;
+    box-shadow:none;
+    -webkit-tap-highlight-color:transparent;
 }
+
+.reviewContainer .reviewMore:hover,
+.reviewContainer .reviewMore:focus,
+.reviewContainer .reviewMore:focus-visible,
+.reviewContainer .reviewMore:active{
+    background:transparent !important;
+    color:#262626 !important;
+    outline:none !important;
+    box-shadow:none !important;
+}
+
 .reviewContainer .reviewImage{
     width:100%;
     aspect-ratio:1/1;
@@ -1036,7 +1051,7 @@ body{
                 <span>혜택</span>
                 <ul>
                     <li><a href="/members/mileage">마일리지 내역</a></li>
-                    <li><a href="#">쿠폰함</a></li>
+                    <li><a href="/coupon/myCoupon">쿠폰함</a></li>
                 </ul>
                 <span>계정</span>
                 <ul>
@@ -1163,10 +1178,10 @@ body{
 										    </c:choose>
 										</button>
 									    <button type="button" class="detailBtn">예약 상세</button>
-									    <c:if test="${reservationType eq 'upcoming'}">
-									        <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}">예약 변경</button>
-									        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
-									    </c:if>
+									    <c:if test="${rs.reservationType eq 'confirmed'}">
+										    <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}">예약 변경</button>
+										    <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
+										</c:if>
                                     </div>
                                 </div>
                                 <div class="flipCardBack">
@@ -1267,7 +1282,7 @@ body{
 			                <div class="reviewInfo">
 			                    <div class="reviewIcons">
 			                        <span class="reviewHeart">♡</span>
-			                        <span class="reviewCommentIcon">◯</span>
+			                        
 			                        <span class="reviewShareIcon">↗</span>
 			                    </div>
 			                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
@@ -1298,7 +1313,7 @@ body{
 
             <div class="couponContainer">
                 <div class="couponSectionTitle">
-                    <span>마일리지 · 적립내역</span>
+                    <span>마일리지 · 쿠폰</span>
                     <a href="/members/mileage">더 보기 &gt;</a>
                 </div>
                 <div class="coupon_point" style="padding:20px 20px 12px">
@@ -1330,10 +1345,10 @@ body{
 							            </td>
 							        </tr>
 							    </c:forEach>
-							</tbody>
-	                    
+							</tbody>	                    
                     </table>
-                    <div class="couponList">
+                </div>
+                <div class="couponList">
                         <div class="couponBox">
                             <strong>첫 회원가입 3%쿠폰</strong>
                             <p>?????까지 100만원 이상 결제시</p>
@@ -1344,8 +1359,7 @@ body{
                             <p>?????까지 300만원 이상 결제시</p>
                             <button type="button">사용하기</button>
                         </div>
-                    </div>
-                </div>
+                 </div>
             </div>
         </div>
         <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
