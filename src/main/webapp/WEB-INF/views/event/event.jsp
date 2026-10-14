@@ -197,7 +197,7 @@
             </div>
         </div>
         <div class="eventzone">
-            <c:forEach var="i" items="${banner}">
+            <%-- <c:forEach var="i" items="${banner}">
                	<div class="eventbox">
                     <img src="${pageContext.request.contextPath}/images/${i.image_name}"
      					 alt="${i.title}">
@@ -207,7 +207,14 @@
                         <button type="button">${i.title} 여행 바로가기</button>
                 	</div>
                 </div>
-            </c:forEach>
+            </c:forEach> --%>
+            
+            <a href="/members/planner">
+	            <div class="eventbox">
+	                  <img src="/images/Coupon2" alt="Coupon2">
+	            </div>
+            </a>
+             
         </div>
     </div>
     

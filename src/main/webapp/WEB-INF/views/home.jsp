@@ -652,7 +652,7 @@
 		}	
 		/* 인스타그램 스타일 리뷰 영역 */
 		.reviewContainer{
-		    width:100%;
+		    width: 100%;
 		    margin:30px 0;
 		    color:#262626;
 		    font-family:'Segoe UI',Arial,sans-serif;
@@ -660,7 +660,7 @@
 		.reviewContainer .reviewList{
 		    display:grid;
 		    grid-template-columns:repeat(3,minmax(0,1fr));
-		    gap:22px;
+		    gap:20px;
 		    align-items:start;
 		}
 		.reviewContainer .reviewCard{
@@ -1018,22 +1018,22 @@
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="${stayImgs[0]}"></div>
                 <div class="hoteltext">
-                    <p style="font-weight: bold;">호텔</p>
-                    <p>편안한 호텔</p>
+                    <p style="font-weight: 900;">호텔</p>
+                    <p>편안한 휴식과 품격 있는 서비스를 누려보세요.</p>
                 </div>
             </div>
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="${stayImgs[1]}"></div>
                 <div class="hoteltext">
-                    <p style="font-weight: bold;">모텔</p>
-                    <p>가성비 모텔</p>
+                    <p style="font-weight: 900;">모텔</p>
+                    <p>합리적인 가격으로 편안한 하루를 보내세요.</p>
                 </div>
             </div>
             <div class="hotelbox">
                 <div class="hotelphoto"><img src="${stayImgs[2]}"></div>
                 <div class="hoteltext">
-                    <p style="font-weight: bold;">민박</p>
-                    <p>감성의 민박</p>
+                    <p style="font-weight: 900;">민박</p>
+                    <p>아늑하고 따뜻한 분위기에서 특별한 추억을 만들어보세요.</p>
                 </div>
             </div>
         </div>
@@ -1056,52 +1056,56 @@
 
 			    <div class="reviewList">
 			        <c:forEach var="rv" items="${reviewList}" end="2"> 
-			            <div class="reviewCard">
-			                <div class="reviewUser">
-			                    <div class="reviewProfile">
-			                        <span>G</span>
-			                    </div>
-			                    <div class="reviewUserInfo">
-			                        <strong>${rv.member_id}</strong>
-			                        <span>${rv.target_type} 리뷰</span>
-			                    </div>
-			                    <button type="button" class="reviewMore">•••</button>
-			                </div>
-			                <div class="reviewImage">
-			                    <c:choose>
-			                        <c:when test="${not empty rv.image1}">
-			                            <img src="${rv.image1}" alt="리뷰 이미지">
-			                        </c:when>
-			                        <c:otherwise>
-			                            <div class="reviewNoImage">
-			                                <span>✈</span>
-			                                <p>여행의 순간을 기록해 보세요</p>
-			                            </div>
-			                        </c:otherwise>
-			                    </c:choose>
-			                </div>
-			                <div class="reviewInfo">
-			                    <div class="reviewIcons">
-			                        <span class="reviewHeart">♡</span>
-			                        <span class="reviewCommentIcon">◯</span>
-			                        <span class="reviewShareIcon">↗</span>
-			                    </div>
-			                    <div class="reviewtext">
-				                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
-				                    <p class="reviewDescription">${rv.contents}</p>
-				                    <c:if test="${not empty rv.tag}">
-				                        <p class="reviewTag">${rv.tag}</p>
-				                    </c:if>
-				                    <p class="reviewDate">
-				                        ${rv.reg_date}
-				                    </p>
-			                    </div>
-			                    <div class="reviewActions">
-			                        <a href="/review/update?seq=${rv.seq}">수정</a>
-			                        <a href="/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
-			                    </div>
-			                </div>
-			            </div>
+			           	 
+				            <div class="reviewCard">
+				                <div class="reviewUser">
+				                    <div class="reviewProfile">
+				                        <span>G</span>
+				                    </div>
+				                    <div class="reviewUserInfo">
+				                        <strong>${rv.member_id}</strong>
+				                        <span>${rv.target_type} 리뷰</span>
+				                    </div>
+				                    <button type="button" class="reviewMore">•••</button>
+				                </div>
+				                <a href="/review/detail?seq=${rv.seq}&place_id=${rv.target_id}">
+					                <div class="reviewImage">
+					                    <c:choose>
+					                        <c:when test="${not empty rv.image1}">
+					                            <img src="${rv.image1}" alt="리뷰 이미지">
+					                        </c:when>
+					                        <c:otherwise>
+					                            <div class="reviewNoImage">
+					                                <span>✈</span>
+					                                <p>여행의 순간을 기록해 보세요</p>
+					                            </div>
+					                        </c:otherwise>
+					                    </c:choose>
+					                </div>
+				                </a>
+				                <div class="reviewInfo">
+				                    <div class="reviewIcons">
+				                        <span class="reviewHeart">♡</span>
+				                        <span class="reviewCommentIcon">◯</span>
+				                        <span class="reviewShareIcon">↗</span>
+				                    </div>
+				                    <div class="reviewtext">
+					                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
+					                    <p class="reviewDescription">${rv.contents}</p>
+					                    <c:if test="${not empty rv.tag}">
+					                        <p class="reviewTag">${rv.tag}</p>
+					                    </c:if>
+					                    <p class="reviewDate">
+					                        ${rv.reg_date}
+					                    </p>
+				                    </div>
+				                    <div class="reviewActions">
+				                        <a href="/review/update?seq=${rv.seq}">수정</a>
+				                        <a href="/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
+				                    </div>
+				                </div>
+				            </div>
+			           	 
 			        </c:forEach>
 			        <c:if test="${empty reviewList}">
 			            <div class="emptyReview">
@@ -1147,7 +1151,7 @@
     <div class="linkbar">
         <nav>
             <div id="vertical-underline"></div>
-            <h2 style="margin-top: 10px;">MENU</h2>
+            <h3 style="margin-top: 10px; border-bottom: 2px solid #318de4;">QUICK MENU</h3>
             <a href="#eventbannerzone">이벤트</a>
             <a href="#ourpromise">우리의 약속</a>
             <a href="#mapzone">여행지도</a>
