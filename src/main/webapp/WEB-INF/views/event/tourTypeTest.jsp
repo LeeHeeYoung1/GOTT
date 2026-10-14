@@ -283,7 +283,7 @@ p {
 
     <div class="testBox">
       <h4>Q11</h4>
-      <span class="question">11. 여행 중 계획이 바뀌는 것을 별로 선호하지 않나요?</span>
+      <span class="question">11. 여행 중 계획이 바뀌는 것도 여행의 묘미라고 생각하나요?</span>
       <div class="answers">
         <input name="answer11" type="radio" value="4">매우그렇다
         <input name="answer11" type="radio" value="3">그렇다

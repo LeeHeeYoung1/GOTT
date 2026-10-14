@@ -141,6 +141,68 @@ body{
 .a1:hover,.a2:hover,.a3:hover,.a4:hover,.a5:hover{
     background-color:#f8fafa;
 }
+
+.tourTypeBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 30px;
+    margin-top: 30px;
+    background: #fff;
+    border: 1px solid #e5ebe7;
+    border-radius: 12px;
+}
+
+.tourTypeText {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tourTypeText strong {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.tourTypeText strong span {
+    color: #27866b;
+}
+
+.tourTypeText p {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.5;
+}
+
+.tourTypeBox button {
+    flex-shrink: 0;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 7px;
+    background: #27866b;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tourTypeBox button:hover {
+    background: #206e58;
+}
+
+@media (max-width: 600px) {
+    .tourTypeBox {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px 18px;
+    }
+
+    .tourTypeBox button {
+        width: 100%;
+    }
+}
+
 .plannerContainer{margin-top:80px;}
 .plannerBox{
     display:flex;
@@ -1106,6 +1168,33 @@ body{
                 <a class="a4"><strong><fmt:formatNumber value="${mileage}" pattern="#,##0"/>M</strong><span>보유마일리지</span></a>
                 <a class="a5"><strong><fmt:formatDate value="${regdate}" pattern="yyyy-MM-dd"/></strong><span>가입일자</span></a>
             </nav>
+            
+			<div class="tourType">
+			    <div class="sectionTtitle">
+			        <span>나의 여행 성향</span>
+			    </div>
+			
+			    <div class="tourTypeBox">
+			        <div class="tourTypeText">
+			            <c:choose>
+			                <c:when test="${not empty tourType}">
+			                    <strong>나의 여행 성향은 <span>${tourType}</span>입니다.</strong>
+			                    <p>나에게 맞는 여행을 더 알아보세요.</p>
+			                </c:when>
+			                <c:otherwise>
+			                    <strong>아직 여행 성향 테스트 결과가 없습니다.</strong>
+			                    <p>테스트를 통해 나에게 맞는 여행 스타일을 찾아보세요.</p>
+			                </c:otherwise>
+			            </c:choose>
+			        </div>
+			
+			        <button type="button"
+			            onclick="location.href='/members/tourTypeTest'">
+			            테스트 하러가기 →
+			        </button>
+			    </div>
+			</div>
+            
             <div class="plannerContainer">
                 <div class="sectionTitle"><span>여행 일정 플래너</span></div>
                 <div class="plannerBox">

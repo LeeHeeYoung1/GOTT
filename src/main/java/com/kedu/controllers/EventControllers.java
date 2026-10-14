@@ -31,4 +31,8 @@ public class EventControllers {
 		return "event/event";
 	}
 	
+	@RequestMapping("/company")
+	public String company() {
+		return "company";
+	}
 }
