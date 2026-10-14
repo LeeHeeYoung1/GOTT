@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kedu.dao.TravelPlanDAO;
 import com.kedu.dao.TravelPlanReplyDAO;
+import com.kedu.dao.TravelPlanScrapDAO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.TravelPlanDTO;
 import com.kedu.dto.TravelPlanDetailDTO;
@@ -33,6 +34,9 @@ public class TravelPlanController {
     
     @Autowired
     private TravelPlanReplyDAO tprdao;
+    
+    @Autowired
+    private TravelPlanScrapDAO tpsrdao;
     
     @RequestMapping("delete")
     public String delete(int planId,HttpSession session) {
@@ -175,13 +179,29 @@ public class TravelPlanController {
         
         List<TravelPlanReplyDTO> tprList = tprdao.selectByPlanId(planId);
 		model.addAttribute("tprList", tprList);
+		
+		boolean isScrap = tpsrdao.isScrap(planId, memberId);
 
         List<PlaceDTO> idAndImg = dao.selectImages(planId);
         model.addAttribute("plan", plan);
         model.addAttribute("detailList", detailList);
         model.addAttribute("dayNumbers", dayNumbers);
         model.addAttribute("idAndImg", idAndImg);
-
+        model.addAttribute("isScrap", isScrap);
+        
         return "members/planDetail";
     }
+    
+    @RequestMapping("/scrapUp")
+	public String scrapUp(int seq, HttpSession session) {
+    	tpsrdao.scrapUp(seq, (String)session.getAttribute("loginId"));
+		
+		return "redirect:/travelPlan/detail?planId="+seq;
+	}
+	
+	@RequestMapping("/scrapDown")
+	public String scrapDown(int seq, HttpSession session) {
+		tpsrdao.scrapDown(seq, (String)session.getAttribute("loginId"));
+		return "redirect:/travelPlan/detail?planId="+seq;
+	}
 }

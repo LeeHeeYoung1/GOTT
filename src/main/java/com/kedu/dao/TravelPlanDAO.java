@@ -77,7 +77,7 @@ public class TravelPlanDAO {
     
     // 여행 일정에 포함된 장소 사진 조회
     public List<PlaceDTO> selectImages(int plan_Id) {
-        String sql = "select p.place_id, p.image_name from travel_plan_detail d "
+        String sql = "select distinct p.place_id, p.image_name from travel_plan_detail d "
         		+ "join place p on p.place_id = d.place_id "
         		+ "where d.plan_id = ? "
         		+ "and p.image_name is not null "

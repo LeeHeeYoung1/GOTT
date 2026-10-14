@@ -618,9 +618,12 @@ body {
                                         <c:when test="${rs.status == '예약취소' || rs.status == '취소완료' || rs.status == '환불완료' || rs.status == '취소·환불'}">
 											<span class="statusBadge cancelled">${rs.status}</span>
 										</c:when>
-                                        <c:when test="${rs.status == '예약완료'}">
-                                            <span class="statusBadge">예약 완료</span>
-                                        </c:when>
+                                        <c:when test="${rs.status == '예약완료' && rs.checkOut lt today}">
+										    <span class="statusBadge completed">이용 완료</span>
+										</c:when>
+										<c:when test="${rs.status == '예약완료'}">
+										    <span class="statusBadge">예약 완료</span>
+										</c:when>
                                         <c:otherwise>
                                             <span class="statusBadge pending">${rs.status}</span>
                                         </c:otherwise>
@@ -665,13 +668,25 @@ body {
                                     </div>
                                 </div>
                                 <div class="reservationCardBottom">
-                                    <span class="paymentInfo">예약 상태 : <c:out value="${rs.status}"/></span>
+									<span class="paymentInfo">예약 상태 :
+									    <c:choose>
+									        <c:when test="${rs.status == '예약완료' && rs.checkOut lt today}">
+									            이용완료
+									        </c:when>
+									        <c:when test="${rs.status == '예약완료'}">
+									            이용예정
+									        </c:when>
+									        <c:otherwise>
+									            <c:out value="${rs.status}"/>
+									        </c:otherwise>
+									    </c:choose>
+									</span>
                                     <div class="reservationActions">
-                                        <c:if test="${rs.status == '예약완료'}">
-                                            <button type="button" class="update_btn" data-payment-id="${rs.paymentId}">예약 변경</button>
-                                            <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
-                                        </c:if>
-                                    </div>
+									    <c:if test="${rs.status == '예약완료' && rs.checkIn gt today}">
+									        <button type="button" class="update_btn" data-payment-id="${rs.paymentId}">예약 변경</button>
+									        <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
+									    </c:if>
+									</div>
                                 </div>
                             </div>
                         </c:forEach>
