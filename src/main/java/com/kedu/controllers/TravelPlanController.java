@@ -152,17 +152,40 @@ public class TravelPlanController {
     	if (sort == null) {
     		sort = "new";
     	}
+    	
+    	int start = cpage * 9 - 8;
+    	int end = cpage * 9;
+    	
+    	List<TravelPlanDTO> planList;
+    	int total;
+    	
+    	if (region.equals("") && nights.equals("")) {
+    		planList = dao.selectFromTo(start, end, sort);
+    		total = dao.countAll();
+
+    	} else if (!region.equals("") && nights.equals("")) {
+    		planList = dao.selectByRegion(start, end, sort, region);
+    		total = dao.countByRegion(region);
+
+    	} else if (region.equals("") && !nights.equals("")) {
+    		planList = dao.selectByNights(start, end, sort, nights);
+    		total = dao.countByNights(nights);
+
+    	} else {
+    		planList = dao.selectByRegionAndNights(start, end, sort, region, nights);
+    		total = dao.countByRegionAndNights(region, nights);
+    	}
 
     	model.addAttribute("region", region);
     	model.addAttribute("nights", nights);
     	model.addAttribute("sort", sort);
     	
-		model.addAttribute("recordTotalCount", dao.recordCount());
+		model.addAttribute("recordTotalCount", total);
 		model.addAttribute("recordCountPerPage", 9);
 		model.addAttribute("naviCountPerPage", 10);
 		model.addAttribute("cpage", cpage);
 		
-        model.addAttribute("planList", dao.selectFromTo(cpage * 9 - 8, cpage * 9));
+        model.addAttribute("planList", planList);
         return "members/plannerList";
     }
 

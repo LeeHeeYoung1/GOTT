@@ -267,7 +267,7 @@ $("#sort").val(sort);
 
 
 $("#filter select").on("change", function() {
-	location.href = "$/travelPlan/list?cpage=1&region=" + $("#region").val()) + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val();
+	location.href = "/travelPlan/list?cpage=1&region=" + $("#region").val() + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val();
 })
 
 let recordTotalCount = ${recordTotalCount};
@@ -293,13 +293,13 @@ let navi = document.getElementById("navi");
 if (needPrev) {
 	let prev = document.createElement("a");
 	prev.setAttribute("href", "/travelPlan/list?cpage="
-			+ (startNavi - 1) + "&region=" + $("#region").val()) + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val());
+			+ (startNavi - 1) + "&region=" + $("#region").val() + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val());
 	prev.innerHTML = "<";
 	navi.append(prev);
 }
 for (let i = startNavi; i <= endNavi; i++) {
 	let num = document.createElement("a");
-	num.setAttribute("href", "/travelPlan/list?cpage=" + i + "&region=" + $("#region").val()) + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val());
+	num.setAttribute("href", "/travelPlan/list?cpage=" + i + "&region=" + $("#region").val() + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val());
 	if (i == currentPage) {
 		num.setAttribute("class", "on");
 	}
@@ -308,7 +308,7 @@ for (let i = startNavi; i <= endNavi; i++) {
 }
 if (needNext) {
 	let next = document.createElement("a");
-	next.setAttribute("href", "/travelPlan/list?cpage=" + (endNavi + 1) + "&region=" + $("#region").val()) + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val());
+	next.setAttribute("href", "/travelPlan/list?cpage=" + (endNavi + 1) + "&region=" + $("#region").val() + "&nights=" + $("#nights").val() + "&sort=" + $("#sort").val());
 	next.innerHTML = ">";
 	navi.append(next);
 }
