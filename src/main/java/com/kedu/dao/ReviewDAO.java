@@ -108,6 +108,7 @@ public class ReviewDAO {
 	    return (ArrayList<ReviewDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), memberId, start, end);
 	}
 	
+	
 	public int countMyReview(String memberId) {
 	    String sql = "SELECT COUNT(*) FROM review WHERE member_id = ?";
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
