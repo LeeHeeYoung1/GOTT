@@ -101,11 +101,22 @@ public class TravelPlanDAO {
     
     // 공개된 여행 일정 목록 조회
     public List<TravelPlanDTO> selectPublicPlans() {
-        String sql = "SELECT * FROM TRAVEL_PLAN "
-                + "WHERE IS_PUBLIC = 'Y' "
-                + "ORDER BY CREATED_AT DESC";
+        String sql = "select * from ( "
+				+ " select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+				+ " from travel_plan p where p.is_public = 'Y' "
+				+ " ) where rn between ? and ?";
 
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class));
+	}
+    
+    
+    public List<TravelPlanDTO> selectFromTo(int start, int end) {
+        String sql = "select * from ( "
+				+ " select p.*, ROW_NUMBER() OVER (order by p.plan_id desc) rn "
+				+ " from travel_plan p where p.is_public = 'Y' "
+				+ " ) where rn between ? and ?";
+
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), start, end);
 	}
     
     // 모든 회원의 공개 여행 일정 조회 + 첫 번째 장소 이미지
@@ -198,5 +209,10 @@ public class TravelPlanDAO {
 		return jdbc.queryForObject(sql, String.class, placeId);
 		
 	}
+    
+    public int recordCount() {
+    	String sql = "select count(*) from travel_plan";
+    	return jdbc.queryForObject(sql, Integer.class);
+    }
     
 }
