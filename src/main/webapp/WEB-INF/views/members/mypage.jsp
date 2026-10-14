@@ -1419,6 +1419,12 @@ body {
 </style>
 </head>
 <body>
+	<c:if test="${not empty message}">
+		<script>
+	        alert("${message}");
+	    </script>
+	</c:if>
+
 	<c:choose>
 		<c:when test="${loginId != null}">
 			<jsp:include page="/WEB-INF/views/common/header.jsp" />
@@ -1613,13 +1619,14 @@ body {
 											<h3>
 												<c:out value="${i.plan_title}" />
 											</h3>
-											<p>${i.start_date} ~ ${i.end_date} · 방문지
-												${i.spot_count}곳</p>
+											<p>${i.start_date}~ ${i.end_date} · 방문지 ${i.spot_count}곳</p>
 											<p>작성자 ${i.nickname}</p>
 										</div>
 										<div class="btnBox">
-											<button type="button" class="scrapDeleteBtn" id="scrapDeleteBtn${i.plan_id}">스크랩 취소</button>
-											<button type="button" class="scrapDetailBtn" id="scrapDetailBtn${i.plan_id}">일정 보기</button>
+											<button type="button" class="scrapDeleteBtn"
+												id="scrapDeleteBtn${i.plan_id}">스크랩 취소</button>
+											<button type="button" class="scrapDetailBtn"
+												id="scrapDetailBtn${i.plan_id}">일정 보기</button>
 										</div>
 									</div>
 									<script>

@@ -100,4 +100,5 @@ public class CouponDAO {
 	            + "ORDER BY mc.EXPIRE_DATE";
 		return (ArrayList<CouponDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(CouponDTO.class), memberId);
 	}
+	
 }

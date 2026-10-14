@@ -52,7 +52,7 @@ button:hover {
 /* 제목 */
 .titleBox {
     text-align: center;
-    padding: 35px 0 20px;
+    padding: 105px 0 20px;
 }
 
 .titleBox h2 {
@@ -328,7 +328,7 @@ button:hover {
 <div class="main">
 
     <div class="titleBox">
-        <h2>게시판</h2>
+        <h2>자유게시판</h2>
         <h5>여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.</h5>
     </div>
 
