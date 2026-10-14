@@ -1,11 +1,14 @@
 
 package com.kedu.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 import com.kedu.dto.CouponDTO;
 
 @Repository
@@ -66,13 +69,35 @@ public class CouponDAO {
     }
 
 	// 결제 검증 후 쿠폰 사용 처리
-	public int useCoupon(String memberId, int memberCouponId, int originalPrice) {
-		String sql = "UPDATE MEMBERS_COUPON mc " + "SET STATUS = 'USED', USED_DATE = SYSDATE "
+	public int useCoupon(String memberId, int memberCouponId, int originalPrice, String paymentId) {
+		String sql = "UPDATE MEMBERS_COUPON mc " + "SET STATUS = 'USED', USED_DATE = SYSDATE, USED_PAYMENT_ID = ? "
 				+ "WHERE mc.MEMBER_ID = ? " + "AND mc.MEMBER_COUPON_ID = ? " + "AND mc.STATUS = 'AVAILABLE' "
-				+ "AND EXISTS ( " + "SELECT 1 FROM COUPON c " + "WHERE c.COUPON_ID = mc.COUPON_ID "
-				+ "AND c.ACTIVE_YN = 'Y' " + "AND TRUNC(SYSDATE) BETWEEN TRUNC(c.START_DATE) AND TRUNC(c.END_DATE) "
-				+ "AND TRUNC(SYSDATE) <= TRUNC(mc.EXPIRE_DATE) " + "AND c.MIN_ORDER_PRICE <= ?" + ")";
+				+ "AND EXISTS (SELECT 1 FROM COUPON c " + "WHERE c.COUPON_ID = mc.COUPON_ID " + "AND c.ACTIVE_YN = 'Y' "
+				+ "AND TRUNC(SYSDATE) BETWEEN TRUNC(c.START_DATE) AND TRUNC(c.END_DATE) "
+				+ "AND TRUNC(SYSDATE) <= TRUNC(mc.EXPIRE_DATE) " + "AND c.MIN_ORDER_PRICE <= ?)";
+	    return jdbc.update(sql, paymentId, memberId, memberCouponId, originalPrice);
+	}
 
-        return jdbc.update(sql, memberId, memberCouponId, originalPrice);
-    }
+	// 예약 취소 시 해당 예약에서 사용한 쿠폰 복구
+	public int restoreCoupon(String memberId, String paymentId) {
+	    String sql = "UPDATE MEMBERS_COUPON "
+	            + "SET STATUS = 'AVAILABLE', USED_DATE = NULL, USED_PAYMENT_ID = NULL "
+	            + "WHERE MEMBER_ID = ? AND USED_PAYMENT_ID = ? AND STATUS = 'USED'";
+	    return jdbc.update(sql, memberId, paymentId);
+	}
+	
+	//마이페이지 쿠폰 2개만
+	public ArrayList<CouponDTO> selectMyCoupons2(String memberId) {
+	    String sql = "SELECT mc.MEMBER_COUPON_ID, c.COUPON_NAME, "
+	            + "c.DISCOUNT_RATE, c.MIN_PRICE, mc.EXPIRE_DATE "
+	            + "FROM MEMBERS_COUPON mc "
+	            + "JOIN COUPON c ON mc.COUPON_ID = c.COUPON_ID "
+	            + "WHERE mc.MEMBER_ID = ? "
+	            + "AND mc.STATUS = 'AVAILABLE' "
+	            + "AND mc.EXPIRE_DATE >= TRUNC(SYSDATE) "
+	            + "AND c.START_DATE <= TRUNC(SYSDATE) "
+	            + "AND c.END_DATE >= TRUNC(SYSDATE) "
+	            + "ORDER BY mc.EXPIRE_DATE";
+		return (ArrayList<CouponDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(CouponDTO.class), memberId);
+	}
 }

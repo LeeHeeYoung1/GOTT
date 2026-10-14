@@ -1078,6 +1078,41 @@ body{
         font-size:19px;
     }
 }
+
+
+.pagination{display:flex;justify-content:center;align-items:center;gap:7px;margin:25px 0}
+.pagination a{display:flex;justify-content:center;align-items:center;min-width:34px;height:34px;padding:0 10px;border:1px solid #e0e5eb;border-radius:6px;background:#fff;color:#596574;font-size:13px;text-decoration:none;transition:.2s}
+.pagination a:hover,.pagination a.active{background:#263238;border-color:#263238;color:#fff}
+
+
+.plannerPagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+}
+.plannerPagination a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #555;
+    text-decoration: none;
+    font-size: 14px;
+}
+.plannerPagination a.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+}
+.plannerPagination a:hover {
+    background: #eff6ff;
+}
 </style>
 </head>
 <body>
@@ -1169,7 +1204,7 @@ body{
                     </div>
                     <div class="plannerBtns">
                         <button type="button" class="newScheduleBtn" onclick="location.href='/members/planner'">새 일정 만들기</button>
-                        <button type="button" class="viewShareBtn" onclick="location.href='/travelPlan/list'">공유일정 전부 보기</button>
+                        <button type="button" class="viewShareBtn" onclick="location.href='/travelPlan/list?cpage=1'">공유일정 전부 보기</button>
                     </div>
                 </div>
             </div>
@@ -1206,6 +1241,18 @@ body{
                                	</div>
                             </div>
                         </c:forEach>
+                        <c:if test="${plannerTotalPage > 1}">
+						    <div class="plannerPagination">
+						        <c:if test="${plannerCpage > 1}">
+						            <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage - 1}">&lt;</a>
+						        </c:if>
+						
+						        <c:forEach var="i" begin="1" end="${plannerTotalPage}">
+						            <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${i}"
+						               class="${plannerCpage == i ? 'active' : ''}">${i}</a>
+						        </c:forEach>
+						    </div>
+						</c:if>
                     </c:when>
                     <c:otherwise>
                         <p class="emptyPlanner">아직 공유한 여행 일정이 없습니다.</p>
@@ -1340,7 +1387,7 @@ body{
 			<div class="reviewContainer">
 			    <div class="sectionTitle">
 			        <span>내가 쓴 리뷰</span>
-			        <a href="/review/myReview">더 보기 <span>→</span></a>
+			        <a href="/review/reviewBoard?cpage=1">더 보기 <span>→</span></a>
 			    </div>
 			    <div class="reviewList">
 			        <c:forEach var="rv" items="${reviewList}">
@@ -1400,7 +1447,7 @@ body{
 			</div>
 
 
-            <div class="couponContainer">
+            <div class="couponContainer" id="mileageSection">
                 <div class="couponSectionTitle">
                     <span>마일리지 · 쿠폰</span>
                     <a href="/members/mileage">더 보기 &gt;</a>
@@ -1434,21 +1481,49 @@ body{
 							            </td>
 							        </tr>
 							    </c:forEach>
-							</tbody>	                    
+							</tbody>								                    
                     </table>
+                    
+				<div class="pagination">
+				    <c:if test="${mileageCpage > 1}">
+				        <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage - 1}#mileageSection">&lt;</a>
+				    </c:if>
+				
+				    <c:forEach var="i" begin="1" end="${mileageTotalPage}">
+				        <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${i}#mileageSection"
+				           class="${mileageCpage == i ? 'active' : ''}">${i}</a>
+				    </c:forEach>
+				</div>
+
                 </div>
-                <div class="couponList">
-                        <div class="couponBox">
-                            <strong>첫 회원가입 3%쿠폰</strong>
-                            <p>?????까지 100만원 이상 결제시</p>
-                            <button type="button">사용하기</button>
-                        </div>
-                        <div class="couponBox">
-                            <strong>첫 회원가입 10%쿠폰</strong>
-                            <p>?????까지 300만원 이상 결제시</p>
-                            <button type="button">사용하기</button>
-                        </div>
-                 </div>
+                
+
+
+<div class="couponList">
+    <c:choose>
+        <c:when test="${not empty myCoupons}">
+            <c:forEach var="coupon" items="${myCoupons}" begin="0" end="1">
+			    <div class="couponBox">
+			        <strong><c:out value="${coupon.couponName}"/></strong>
+			        <p>
+			            <fmt:formatDate value="${coupon.expireDate}" pattern="yyyy-MM-dd"/>까지
+			            <fmt:formatNumber value="${coupon.minOrderPrice}" pattern="#,##0"/>원 이상 결제 시
+			        </p>
+			        <button type="button" onclick="location.href='${pageContext.request.contextPath}/reservation/list?cpage=1'">사용하기</button>
+			    </div>
+			</c:forEach>
+        </c:when>
+        <c:otherwise>
+            <div class="couponBox">
+                <strong>보유 중인 쿠폰이 없습니다.</strong>
+                <p>사용할 수 있는 쿠폰이 없습니다.</p>
+                <button type="button" onclick="location.href='${pageContext.request.contextPath}/coupon/myCoupon'">쿠폰함 보기</button>
+            </div>
+        </c:otherwise>
+    </c:choose>
+</div>
+
+
             </div>
         </div>
         <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
