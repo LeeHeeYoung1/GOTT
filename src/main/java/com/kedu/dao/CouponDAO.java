@@ -1,11 +1,14 @@
 
 package com.kedu.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 import com.kedu.dto.CouponDTO;
 
 @Repository
@@ -81,5 +84,20 @@ public class CouponDAO {
 	            + "SET STATUS = 'AVAILABLE', USED_DATE = NULL, USED_PAYMENT_ID = NULL "
 	            + "WHERE MEMBER_ID = ? AND USED_PAYMENT_ID = ? AND STATUS = 'USED'";
 	    return jdbc.update(sql, memberId, paymentId);
+	}
+	
+	//마이페이지 쿠폰 2개만
+	public ArrayList<CouponDTO> selectMyCoupons2(String memberId) {
+	    String sql = "SELECT mc.MEMBER_COUPON_ID, c.COUPON_NAME, "
+	            + "c.DISCOUNT_RATE, c.MIN_PRICE, mc.EXPIRE_DATE "
+	            + "FROM MEMBERS_COUPON mc "
+	            + "JOIN COUPON c ON mc.COUPON_ID = c.COUPON_ID "
+	            + "WHERE mc.MEMBER_ID = ? "
+	            + "AND mc.STATUS = 'AVAILABLE' "
+	            + "AND mc.EXPIRE_DATE >= TRUNC(SYSDATE) "
+	            + "AND c.START_DATE <= TRUNC(SYSDATE) "
+	            + "AND c.END_DATE >= TRUNC(SYSDATE) "
+	            + "ORDER BY mc.EXPIRE_DATE";
+		return (ArrayList<CouponDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(CouponDTO.class), memberId);
 	}
 }
