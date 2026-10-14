@@ -50,7 +50,7 @@
             max-width: 1200px;
             border: 1px solid blue;
             margin: 0 auto;
-            height: 450px;
+            height: auto;
             position: relative;
             overflow: hidden;
             border-radius: 18px;
@@ -60,43 +60,8 @@
             width: 100%;
     		height: 100%;
     		display: block;
-    		object-fit: cover;
+    		object-fit: contain;
         }
-        .maineventbox::after {
-		    content: "";
-		    position: absolute;
-		    inset: 0;
-		    background: linear-gradient(
-		        to top,
-		        rgba(0, 0, 0, 0.7),
-		        rgba(0, 0, 0, 0.1)
-		    );
-		}	
-		.maineventbox .eventText {
-		    position: absolute;
-		    left: 50px;
-		    bottom: 45px;
-		    z-index: 2;
-		    color: white;
-		}
-		.maineventbox .eventText h1 {
-		    margin: 0 0 12px;
-		    font-size: 42px;
-		    font-weight: 700;
-		}
-		
-		.maineventbox .eventText h3 {
-		    margin: 0 0 8px;
-		    font-size: 22px;
-		    font-weight: 500;
-		}
-		
-		.maineventbox .eventText h5 {
-		    margin: 0;
-		    font-size: 14px;
-		    font-weight: 400;
-		    opacity: 0.7;
-		}
 		
         .eventzone {
             width: 90%;
@@ -108,71 +73,22 @@
             gap: 10px;
         }
         .eventbox {
-            height: 280px;
+            height: auto;
             position: relative;
     		overflow: hidden;
     		border-radius: 14px;
     		background-color: #eee;
     		cursor: pointer;
     		box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);	
-            border: 1px solid red;
         }
 
         .eventbox img {
             width: 100%;
 		    height: 100%;
 		    display: block;
-		    object-fit: cover;
+		    object-fit: contain;
 		    transition: transform 0.4s ease;
         }
-		.eventbox::after {
-		    content: "";
-		    position: absolute;
-		    inset: 0;
-		    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.05));
-
-		}
-		.eventbox:hover img {
-		    transform: scale(1.05);
-		}
-		.eventbox .eventText {
-		    position: absolute;
-		    left: 20px;
-		    right: 20px;
-		    bottom: 20px;
-		    z-index: 2;
-		    color: white;
-		}
-		
-		.eventbox .eventText h3 {
-		    margin: 0 0 6px;
-		    font-size: 20px;
-		    font-weight: 600;
-		}
-		
-		.eventbox .eventText p {
-		    margin: 0 0 12px;
-		    font-size: 12px;
-		    opacity: 0.8;
-		}
-		.eventbox button {
-		    padding: 8px 14px;
-		    border: none;
-		    border-radius: 6px;
-		    background-color: white;
-		    color: black;
-		    font-size: 12px;
-		    font-weight: 600;
-		    cursor: pointer;
-		    transition: 0.2s;
-		}
-		
-		.eventbox button:hover {
-		    background-color: #2563eb;
-		    color: white;
-		}
-		
-		
 		
     </style>
 
@@ -189,31 +105,38 @@
     
     <div class="eventcontainer">
         <div class="maineventbox">
-            <img src="/images/mainbackground1.png" alt="mianbanner">
-            <div class="eventText">
-                <h1>국내여행</h1>
-                <h3>특별한 순간을 만나보세요!</h3>
-                <h5>아름다운 우리나라, 여행할 땐 GOTT와 함께</h5>
-            </div>
+				<a href="/"> 
+					<img src="/images/First_reservation.png"alt="First_reservation">
+				</a>
         </div>
         <div class="eventzone">
-            <%-- <c:forEach var="i" items="${banner}">
-               	<div class="eventbox">
-                    <img src="${pageContext.request.contextPath}/images/${i.image_name}"
-     					 alt="${i.title}">
-                    <div class="eventText">
-                        <h3>${i.title}</h3>
-                        <p>${i.content}</p>
-                        <button type="button">${i.title} 여행 바로가기</button>
-                	</div>
-                </div>
-            </c:forEach> --%>
             
-            <a href="/members/planner">
 	            <div class="eventbox">
-	                  <img src="/images/Coupon2" alt="Coupon2">
-	            </div>
-            </a>
+	           		<a href="/reservation/list?cpage=1">
+	                  	<img src="/images/Coupon1.png" alt="Coupon1">
+	                </a>
+	           </div>
+	           <div class="eventbox">
+	           		<a href="/reservation/list?cpage=1">
+	                  	<img src="/images/Coupon2.png" alt="Coupon2">
+	                </a>
+	           </div>
+	           <div class="eventbox">
+	           		<a href="/board/freeBoard?cpage=1">
+	                  	<img src="/images/Review_coupon.png" alt="Review_coupon">
+	                </a>
+	           </div>
+	           <div class="eventbox">
+	           		<a href="/members/tourTypeTest">
+	                  	<img src="/images/Travel_type_test.png" alt="Travel_type_test">
+	                </a>
+	           </div>
+	           <div class="eventbox">
+	           		<a href="/members/signuppage">
+	                  	<img src="/images/Welcome_coupon.jpg" alt="Welcome_coupon">
+	                </a>
+	           </div>
+         
              
         </div>
     </div>
