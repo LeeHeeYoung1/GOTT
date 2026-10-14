@@ -172,30 +172,34 @@
 	border-bottom: 0;
 }
 
-/* 번호 */
 .qnaNumber {
-	width: 70px;
+    width: 70px;
 }
 
-/* 제목: 번호와 간격 확보 */
 .qnaTitle {
-	text-align: left !important;
-	padding-left: 25px !important;
+    width: 330px;
+    text-align: left !important;
+    padding-left: 25px !important;
 }
 
-/* 작성자 */
 .qnaWriter {
-	width: 100px;
+    width: 110px;
 }
 
-/* 공개 여부 */
-.qnaTable th:nth-child(4), .qnaTable td:nth-child(4) {
-	width: 85px;
+.qnaPrivate {
+    width: 100px;
 }
 
-/* 작성일 */
+.qnaStatus {
+    width: 110px;
+}
+
+.qnaView {
+    width: 70px;
+}
+
 .qnaDate {
-	width: 110px;
+    width: 110px;
 }
 
 .qnaTitle a {
@@ -290,79 +294,78 @@
 }
 
 .qnaSearchArea {
-    width: 650px;
-    max-width: 100%;
-    margin: 25px auto 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	width: 650px;
+	max-width: 100%;
+	margin: 25px auto 18px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .qnaSearchArea form {
-    position: relative;
-    flex: 1;
-    min-width: 0;
-    height: 42px;
+	position: relative;
+	flex: 1;
+	min-width: 0;
+	height: 42px;
 }
 
 .qnaSearchInput {
-    width: 100%;
-    height: 42px;
-    padding: 0 45px 0 15px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    background: white;
-    font-size: 12px;
-    outline: none;
+	width: 100%;
+	height: 42px;
+	padding: 0 45px 0 15px;
+	border: 1px solid #ccc;
+	border-radius: 7px;
+	background: white;
+	font-size: 12px;
+	outline: none;
 }
 
 .qnaSearchInput:focus {
-    border-color: #555;
+	border-color: #555;
 }
 
 .qnaSearchBtn {
-    position: absolute;
-    right: 5px;
-    top: 4px;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    border: 0;
-    border-radius: 5px;
-    background: #222;
-    color: white;
-    cursor: pointer;
+	position: absolute;
+	right: 5px;
+	top: 4px;
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background: #222;
+	color: white;
+	cursor: pointer;
 }
 
 .qnaSearchBtn:hover {
-    background: #444;
+	background: #444;
 }
 
 .qnaResetBtn {
-    flex-shrink: 0;
-    height: 38px;
-    padding: 0 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: white;
-    color: #555;
-    font-size: 11px;
-    cursor: pointer;
+	flex-shrink: 0;
+	height: 38px;
+	padding: 0 12px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background: white;
+	color: #555;
+	font-size: 11px;
+	cursor: pointer;
 }
 
 .qnaResetBtn:hover {
-    background: #f2f2f2;
+	background: #f2f2f2;
 }
 
-@media (max-width: 700px) {
-    .qnaSearchArea {
-        width: 100%;
-    }
-
-    .qnaResetBtn {
-        padding: 0 7px;
-        font-size: 10px;
-    }
+@media ( max-width : 700px) {
+	.qnaSearchArea {
+		width: 100%;
+	}
+	.qnaResetBtn {
+		padding: 0 7px;
+		font-size: 10px;
+	}
 }
 </style>
 
@@ -382,25 +385,22 @@
 			href="/notice/faq?cpage=1">FAQ</a>
 	</nav>
 
-<div class="qnaSearchArea">
-    <form action="/notice/qna" method="get">
-        <input type="hidden" name="cpage" value="1">
+	<div class="qnaSearchArea">
+		<form action="/notice/qna" method="get">
+			<input type="hidden" name="cpage" value="1"> <input
+				class="qnaSearchInput" type="text" name="keyword"
+				placeholder="Q&A 제목 검색" value="${keyword}">
 
-        <input class="qnaSearchInput" type="text" name="keyword"
-            placeholder="Q&A 제목 검색" value="${keyword}">
+			<button type="submit" class="qnaSearchBtn">🔍</button>
+		</form>
 
-        <button type="submit" class="qnaSearchBtn">🔍</button>
-    </form>
-
-    <button type="button" class="qnaResetBtn"
-        onclick="location.href='/notice/qna?cpage=1'">
-        전체 목록
-    </button>
-</div>
+		<button type="button" class="qnaResetBtn"
+			onclick="location.href='/notice/qna?cpage=1'">전체 목록</button>
+	</div>
 
 	<div class="qnaSearchOption">
 		<div class="qnaTotalCount">
-			총 <strong>0</strong>건
+			총 <strong>${recordTotalCount}</strong>건
 		</div>
 		<button type="button" id="qnaWriteBtn"
 			onclick="location.href='/notice/qna_register?cpage=${cpage}'">질문하기</button>
@@ -413,15 +413,16 @@
 				<th class="qnaNumber">번호</th>
 				<th class="qnaTitle">제목</th>
 				<th class="qnaWriter">작성자</th>
-				<th>공개 여부</th>
-				<th>답변 상태</th>
+				<th class="qnaPrivate">공개 여부</th>
+				<th class="qnaStatus">답변 상태</th>
+				<th class="qnaView">조회수</th>
 				<th class="qnaDate">작성일</th>
 			</tr>
 
 			<c:choose>
 				<c:when test="${empty qList}">
 					<tr>
-						<td colspan="6">등록된 질문이 없습니다.</td>
+						<td colspan="7">등록된 질문이 없습니다.</td>
 					</tr>
 				</c:when>
 
@@ -434,7 +435,8 @@
 									<c:when test="${qna.is_private == 'Y'}">
 										<a href="#"
 											onclick="window.open('/notice/qna_content?qid=${qna.qid}&cpage=${cpage}',
-											'qnaPassword','width=400,height=300'); return false;"> 🔒 ${qna.title} </a>
+											'qnaPassword','width=400,height=300'); return false;">
+											🔒 ${qna.title} </a>
 									</c:when>
 
 									<c:otherwise>
@@ -445,7 +447,7 @@
 
 							<td class="qnaWriter">${qna.nickname}</td>
 
-							<td><c:choose>
+							<td class="qnaPrivate"><c:choose>
 									<c:when test="${qna.is_private == 'Y'}">
                                 비공개
                             </c:when>
@@ -454,7 +456,7 @@
                             </c:otherwise>
 								</c:choose></td>
 
-							<td><c:choose>
+							<td class="qnaStatus"><c:choose>
 									<c:when test="${qna.status == '답변완료'}">
 										<span style="color: #198754; font-weight: 600;"> 답변완료 </span>
 									</c:when>
@@ -462,6 +464,8 @@
 										<span style="color: #dc3545; font-weight: 600;"> 답변대기 </span>
 									</c:otherwise>
 								</c:choose></td>
+
+							<td class="qnaView">${qna.view_count}</td>
 
 							<td class="qnaDate">${qna.write_date.toString().substring(0, 10)}
 						</tr>

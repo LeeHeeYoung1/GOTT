@@ -9,7 +9,8 @@ public class FaqDTO {
 	private String writer;
 	private String content;
 	private Timestamp regdate;
-	
+	private int view_count;
+
 	public FaqDTO() {};
 	
 	public int getFaq_id() {
@@ -42,14 +43,22 @@ public class FaqDTO {
 	public void setRegdate(Timestamp regdate) {
 		this.regdate = regdate;
 	}
+	public int getView_count() {
+		return view_count;
+	}
+
+	public void setView_count(int view_count) {
+		this.view_count = view_count;
+	}
 	
-	public FaqDTO(int faq_id, String title, String writer, String content, Timestamp regdate) {
+	public FaqDTO(int faq_id, String title, String writer, String content, Timestamp regdate,int view_count) {
 		super();
 		this.faq_id = faq_id;
 		this.title = title;
 		this.writer = writer;
 		this.content = content;
 		this.regdate = regdate;
+		this.view_count = view_count;
 	}
 	
 }

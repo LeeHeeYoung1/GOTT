@@ -27,4 +27,15 @@ public class TravelPlanReplyDAO {
 				+ "values(travel_plan_reply_seq.nextval, ?, ?, ?)";
 		return jdbc.update(sql, dto.getPlan_id(), dto.getMember_id(), dto.getContents());
 	}
+	
+	public int tprDelete(int seq){
+		String sql = "delete from travel_plan_reply where seq = ?";
+		return jdbc.update(sql, seq);
+	}
+	
+	public int tprUpdate(int seq, String contents) {
+		String sql = "update travel_plan_reply set contents = ? where seq = ?";
+		return jdbc.update(sql, contents, seq);
+	}
+	
 }

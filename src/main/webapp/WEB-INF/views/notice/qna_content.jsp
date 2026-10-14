@@ -289,6 +289,94 @@ button {
     font-size: 12px;
 }
 
+/* 첨부파일 영역 */
+.qnaFileBox {
+    padding: 18px 30px;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+}
+
+.qnaFileTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.qnaFileTitle span {
+    color: #999;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.qnaFileList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.qnaFileItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 11px 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background: #fff;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.qnaFileItem:hover {
+    background: #f2f6f5;
+    border-color: #b9ceca;
+}
+
+.qnaFileName {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: #444;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.qnaFileIcon {
+    flex-shrink: 0;
+    font-size: 17px;
+}
+
+.qnaDownload {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #555;
+    background: #fff;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.qnaDownload:hover {
+    color: #fff;
+    background: #333;
+    border-color: #333;
+}
+
+@media (max-width: 600px) {
+    .qnaFileBox {
+        padding: 15px;
+    }
+
+    .qnaFileItem {
+        padding: 10px;
+    }
+}
+
 /* 반응형 */
 @media (max-width: 960px) {
     .contentsBox,
@@ -300,6 +388,8 @@ button {
         margin: 0;
     }
 }
+
+
 </style>
 
 <div class="main">
@@ -335,17 +425,31 @@ button {
 </div>
 
 <c:if test="${not empty fileList}">
-    <div style="padding: 15px 30px; border-top: 1px solid #eee;">
-        <strong>첨부파일</strong>
+    <div class="qnaFileBox">
 
-        <c:forEach var="file" items="${fileList}">
-            <div style="margin-top: 8px;">
-                <a href="/notice/qna_download?oriname=${file.oriname}&sysname=${file.sysname}"
-                   style="color: #333; text-decoration: underline;">
-                    ${file.oriname}
-                </a>
-            </div>
-        </c:forEach>
+        <div class="qnaFileTitle">
+            📎 첨부파일
+            <span>${fileList.size()}개</span>
+        </div>
+
+        <div class="qnaFileList">
+            <c:forEach var="i" items="${fileList}">
+                <div class="qnaFileItem">
+
+                    <div class="qnaFileName">
+                        <span class="qnaFileIcon">📄</span>
+                        <span>${i.oriname}</span>
+                    </div>
+
+                    <a class="qnaDownload"
+                       href="/notice/qna_download?oriname=${i.oriname}&sysname=${i.sysname}">
+                        다운로드 ↓
+                    </a>
+
+                </div>
+            </c:forEach>
+        </div>
+
     </div>
 </c:if>
 

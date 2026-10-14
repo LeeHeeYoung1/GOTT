@@ -16,8 +16,26 @@ public class QnaDAO {
 	private JdbcTemplate jdbc;
 	
 	public int insert(QnaDTO dto) {
-		String sql = "insert into qna values(qna_seq.nextval, ?, ?, ?, ?, systimestamp, ?, null, ?)";
-		return jdbc.update(sql, dto.getMember_id(), dto.getPw() == null ? "" : dto.getPw(), dto.getTitle(),dto.getContents(), dto.getStatus(), dto.getIs_private());
+
+	    String sql = "insert into qna values(?, ?, ?, ?, ?, systimestamp, ?, null, ?, 0)";
+
+	    return jdbc.update(sql,
+	            dto.getQid(),
+	            dto.getMember_id(),
+	            dto.getPw() == null ? "" : dto.getPw(),
+	            dto.getTitle(),
+	            dto.getContents(),
+	            dto.getStatus(),
+	            dto.getIs_private()
+	    );
+	}
+	
+	public int updateViewCount(int qid) {
+	    String sql = "update qna set view_count = view_count + 1 where qid = ?";
+	    jdbc.update(sql, qid);
+
+	    sql = "select view_count from qna where qid = ?";
+	    return jdbc.queryForObject(sql, Integer.class, qid);
 	}
 	
 	public List<QnaDTO> selectQnaList(int start, int end, String keyword) {

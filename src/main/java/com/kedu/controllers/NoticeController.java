@@ -187,8 +187,10 @@ public class NoticeController {
 	@RequestMapping("/faq_content")
 	public String faqContent(Model model, int faq_id, int cpage, String keyword) {
 
+		
 	    FaqDTO dto = fdao.faqContent(faq_id);
-
+	    dto.setView_count(fdao.updateViewCount(faq_id));
+	    
 	    List<FilesDTO> fileList = filesDAO.getFile(faq_id);
 
 	    model.addAttribute("faq", dto);
@@ -326,6 +328,7 @@ public class NoticeController {
 
 	    // 공개 글은 바로 상세 페이지로 이동
 	    if (!"Y".equals(dto.getIs_private())) {
+	    	dto.setView_count(qdao.updateViewCount(qid));
 	        model.addAttribute("qna", dto);
 	        model.addAttribute("cpage", cpage);
 	        model.addAttribute("loginId", session.getAttribute("loginId"));
@@ -340,6 +343,7 @@ public class NoticeController {
 
 	    if (Boolean.TRUE.equals(session.getAttribute(authKey))) {
 	        session.removeAttribute(authKey);
+	        dto.setView_count(qdao.updateViewCount(qid));
 
 	        model.addAttribute("qna", dto);
 	        model.addAttribute("cpage", cpage);
