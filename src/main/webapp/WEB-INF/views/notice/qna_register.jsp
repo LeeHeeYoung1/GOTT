@@ -126,10 +126,6 @@
     cursor: pointer;
 }
 
-#attachFiles {
-    width: 100%;
-    font-size: 14px;
-}
 
 .qnaWriteSubmit {
     background-color: #333;
@@ -139,6 +135,32 @@
 .qnaWriteCancel {
     background-color: #eee;
     color: #333;
+}
+
+.qnaAttachRow {
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.qnaAttachRow .qnaWriteLabel {
+    width: 80px;
+    flex-shrink: 0;
+    font-size: 13px;
+}
+
+#attachFiles {
+    flex: 1;
+    width: 0;
+    height: 36px;
+    padding: 5px 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    font-size: 12px;
+    color: #555;
+    box-sizing: border-box;
 }
 </style>
 </head>
@@ -188,10 +210,10 @@
     </div>
 </div>
 		
-		<div class="qnaWriteRow">
+		<div class="qnaAttachRow">
     <label class="qnaWriteLabel" for="attachFiles">첨부파일</label>
     <input type="file" id="attachFiles" name="attachFiles" multiple>
-		</div>
+</div>
 
         <div class="qnaWriteButtonBox">
             <button type="submit" class="qnaWriteButton qnaWriteSubmit">

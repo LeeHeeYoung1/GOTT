@@ -234,38 +234,37 @@
 	border-bottom: 0;
 }
 
-/* 번호 */
 .faqTable .number {
-	width: 70px;
-	text-align: center;
-	padding-right: 0;
+    width: 70px;
+    text-align: center;
+    padding-right: 0;
 }
 
-/* 제목: 번호와 간격을 넓힘 */
 .faqTable .title {
-	width: auto;
-	text-align: left;
-	padding-left: 25px;
+    width: auto;
+    text-align: left;
+    padding-left: 25px;
 }
 
-/* 작성자: 너비 축소 */
 .faqTable .writer {
-	width: 100px;
-	text-align: center;
-	padding-left: 2px;
-	padding-right: 2px;
+    width: 100px;
+    text-align: center;
+    padding-left: 10px;
 }
 
-/* 작성일: 너비 축소 */
+.faqTable .view {
+    width: 80px;
+    text-align: center;
+    padding-left: 10px;
+}
+
 .faqTable .date {
-	width: 100px;
-	text-align: center;
-	padding-left: 2px;
-	padding-right: 2px;
+    width: 110px;
+    text-align: center;
+    padding-left: 10px;
 }
 
-.faqTitleText,
-.faqWriterText {
+.faqTitleText, .faqWriterText {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -342,53 +341,41 @@
 	border-color: #222;
 }
 
-@media (max-width: 700px) {
-	.breadcrumb,
-	.tabs {
+@media ( max-width : 700px) {
+	.breadcrumb, .tabs {
 		margin-left: 0;
 		margin-right: 0;
 	}
-
 	.faqSearchOption {
 		width: 100%;
 	}
-
 	.faqSearchArea {
 		width: 100%;
 	}
-
 	.faqSearchInput {
 		padding-right: 145px;
 	}
-
 	.faqResetBtn {
 		padding: 0 7px;
 		font-size: 10px;
 	}
-
 	.faqTable .number {
 		width: 50px;
 	}
-
 	.faqTable .writer {
 		width: 75px;
 	}
-
 	.faqTable .date {
 		width: 90px;
 	}
-
-	.faqTable th,
-	.faqTable td {
+	.faqTable th, .faqTable td {
 		padding: 0 5px;
 		font-size: 11px;
 	}
-
 	.faqTable .title {
 		padding-left: 15px;
 	}
 }
-
 </style>
 
 <div class="main">
@@ -403,7 +390,8 @@
 	</div>
 
 	<nav class="tabs">
-		<a href="/notice/qna?cpage=1">Q&A</a> <a href="/notice/faq?cpage=1" class="on">FAQ</a>
+		<a href="/notice/qna?cpage=1">Q&A</a> <a href="/notice/faq?cpage=1"
+			class="on">FAQ</a>
 	</nav>
 
 	<div class="faqSearchArea">
@@ -437,26 +425,19 @@
 	<div class="faqContentsBox">
 
 		<table class="faqTable">
-			<colgroup>
-				<col style="width: 70px;">
-				<col>
-				<col style="width: 130px;">
-				<col style="width: 140px;">
-			</colgroup>
-
 			<thead>
 				<tr>
 					<th class="number">번호</th>
 					<th class="title">질문</th>
 					<th class="writer">작성자</th>
+					<th class="view">조회수</th>
 					<th class="date">작성일</th>
 				</tr>
 			</thead>
-			<tbody>
 				<c:choose>
 					<c:when test="${empty flist}">
 						<tr>
-							<td colspan="4" class="faqEmptyMessage">등록된 자주 묻는 질문이 없습니다.
+							<td colspan="5" class="faqEmptyMessage">등록된 자주 묻는 질문이 없습니다.
 							</td>
 						</tr>
 					</c:when>
@@ -473,13 +454,14 @@
 								<td class="writer faqWriterText" title="${faq.writer}">
 									${faq.writer}</td>
 
+								<td class="view">${faq.view_count}</td>
+
 								<td class="date">${faq.regdate.toString().substring(0, 10)}
 								</td>
 							</tr>
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
-			</tbody>
 		</table>
 
 		<div id="navigation"></div>
