@@ -86,19 +86,33 @@ public class CouponDAO {
 	    return jdbc.update(sql, memberId, paymentId);
 	}
 	
-	//마이페이지 쿠폰 2개만
+	//마이페이지 쿠폰 최대 2개만표시
 	public ArrayList<CouponDTO> selectMyCoupons2(String memberId) {
-	    String sql = "SELECT mc.MEMBER_COUPON_ID, c.COUPON_NAME, "
-	            + "c.DISCOUNT_RATE, c.MIN_PRICE, mc.EXPIRE_DATE "
-	            + "FROM MEMBERS_COUPON mc "
-	            + "JOIN COUPON c ON mc.COUPON_ID = c.COUPON_ID "
-	            + "WHERE mc.MEMBER_ID = ? "
-	            + "AND mc.STATUS = 'AVAILABLE' "
-	            + "AND mc.EXPIRE_DATE >= TRUNC(SYSDATE) "
-	            + "AND c.START_DATE <= TRUNC(SYSDATE) "
-	            + "AND c.END_DATE >= TRUNC(SYSDATE) "
-	            + "ORDER BY mc.EXPIRE_DATE";
+		String sql = "SELECT mc.MEMBER_COUPON_ID, c.COUPON_NAME, " + "c.DISCOUNT_RATE, c.MIN_PRICE, mc.EXPIRE_DATE "
+				+ "FROM MEMBERS_COUPON mc " + "JOIN COUPON c ON mc.COUPON_ID = c.COUPON_ID " + "WHERE mc.MEMBER_ID = ? "
+				+ "AND mc.STATUS = 'AVAILABLE' " + "AND mc.EXPIRE_DATE >= TRUNC(SYSDATE) "
+				+ "AND c.START_DATE <= TRUNC(SYSDATE) " + "AND c.END_DATE >= TRUNC(SYSDATE) "
+				+ "ORDER BY mc.EXPIRE_DATE";
 		return (ArrayList<CouponDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(CouponDTO.class), memberId);
 	}
 	
+	// 첫 숙박 완료 회원에게 10% 쿠폰 발급
+		public int issueFirstStayCoupon(String memberId) {
+			String sql = "INSERT INTO MEMBERS_COUPON "
+					+ "(MEMBER_COUPON_ID, COUPON_ID, MEMBER_ID, ISSUE_DATE, EXPIRE_DATE, STATUS) "
+					+ "SELECT MEMBER_COUPON_SEQ.NEXTVAL, c.COUPON_ID, ?, SYSDATE, c.END_DATE, 'AVAILABLE' "
+					+ "FROM COUPON c " + "WHERE c.COUPON_ID = 3 " + "AND c.ACTIVE_YN = 'Y' "
+					+ "AND TRUNC(SYSDATE) BETWEEN TRUNC(c.START_DATE) AND TRUNC(c.END_DATE) " + "AND EXISTS ( "
+					+ "    SELECT 1 FROM RESERVATION r " + "    WHERE r.MEMBER_ID = ? "
+					+ "    AND r.CHECK_OUT < TRUNC(SYSDATE) " + "    AND r.STATUS <> '예약취소' " + ") " + "AND NOT EXISTS ( "
+					+ "    SELECT 1 FROM RESERVATION r " + "    WHERE r.MEMBER_ID = ? "
+					+ "    AND r.CHECK_OUT < TRUNC(SYSDATE) " + "    AND r.STATUS <> '예약취소' " + "    AND r.CHECK_OUT < ( "
+					+ "        SELECT MIN(r2.CHECK_OUT) " + "        FROM RESERVATION r2 "
+					+ "        WHERE r2.MEMBER_ID = ? " + "        AND r2.CHECK_OUT < TRUNC(SYSDATE) "
+					+ "        AND r2.STATUS <> '예약취소' " + "    ) " + ") " + "AND NOT EXISTS ( "
+					+ "    SELECT 1 FROM MEMBERS_COUPON mc " + "    WHERE mc.MEMBER_ID = ? " + "    AND mc.COUPON_ID = 3 "
+					+ ")";
+		    return jdbc.update(sql, memberId, memberId, memberId, memberId, memberId);
+		}
+
 }

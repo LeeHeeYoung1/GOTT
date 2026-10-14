@@ -89,7 +89,7 @@ public class ReservationDAO {
 	    return jdbc.update(sql, mileage, memberId, mileage);
 	}
 
-	
+	//예약내역전체조회
 	public ArrayList<ReservationDTO> myRsList(String memberId) {
 	    String sql = "SELECT reservation.*, room.room_name, room.image1, place.name AS place_name "
 	            + "FROM reservation "

@@ -4,7 +4,6 @@ package com.kedu.controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +20,6 @@ import com.kedu.dao.MembersDAO;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.ReviewDAO;
 import com.kedu.dao.TravelPlanDAO;
-import com.kedu.dao.TravelPlanScrapDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dao.WishlistDAO;
 import com.kedu.dto.MembersDTO;
@@ -29,7 +27,6 @@ import com.kedu.dto.MileageHistoryDTO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.ReviewDTO;
-import com.kedu.dto.TravelPlanDTO;
 import com.kedu.dto.Travel_TypeDTO;
 import com.kedu.services.EmailService;
 
@@ -62,7 +59,8 @@ public class MembersControllers {
 	@ResponseBody
 	@RequestMapping("/login")
 	public int login(MembersDTO mdto, HttpSession session) {
-		
+		System.out.println("===== 마이페이지 진입 =====");
+		System.out.println("loginId = " + session.getAttribute("loginId"));
 		int result = mdao.login(mdto);
 		
 		if(result == 1) {
@@ -126,6 +124,8 @@ public class MembersControllers {
 	        return "redirect:/members/loginpage";
 	    }
 	    int pagesize = 3;
+	    // 첫 숙박 완료 후 10% 쿠폰 발급 확인
+	    cdao.issueFirstStayCoupon(memberId);
 	    
 	    String tourType = tdao.selectMyType(memberId);
 	       
@@ -206,11 +206,8 @@ public class MembersControllers {
 	    int plannerStart = (plannerCpage - 1) * plannerPagesize;
 	    int plannerEnd = Math.min(plannerStart + plannerPagesize, plannerTotalCount);
 	    List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
-	    
-	    // 8. 내가 스크랩한 여행일정
-	    List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
-	    
-	    // 9. 모델 전달
+
+	    // 8. 모델 전달
 	    model.addAttribute("tourType", tourType);
 	    model.addAttribute("reviewCount", reviewCount);
 	    model.addAttribute("reviewList", reviewList);
@@ -235,7 +232,6 @@ public class MembersControllers {
 	    model.addAttribute("wishList", wishList);
 	    model.addAttribute("wishCpage", wishCpage);
 	    model.addAttribute("wishTotalPage", wishTotalPage);
-	    model.addAttribute("scrapPlanList", scrapPlanList);
 
 	    Object message = session.getAttribute("reservationUpdateMessage");
 	    if (message != null) {
@@ -291,35 +287,13 @@ public class MembersControllers {
 		return "event/tourTypeTest";
 	}
 	
-
-@RequestMapping("/tourTypeTestResult")
-public String tourTypeTestResult(Travel_TypeDTO dto, HttpSession session,
-        org.springframework.web.servlet.mvc.support.RedirectAttributes rttr) {
-
-    String id = (String) session.getAttribute("loginId");
-
-    if (id == null) {
-        rttr.addFlashAttribute("message", "로그인 후 이용해주세요.");
-        return "redirect:/members/loginpage";
-    }
-
-    dto.setMember_id(id);
-
-    int count = tdao.countMyType(id);
-
-    tdao.insertType(dto);
-
-    if (count == 0 && tdao.countTravelCoupon(id) == 0) {
-        tdao.issueCoupon(id);
-        rttr.addFlashAttribute("message",
-                "첫 여행성향 테스트 결과가 저장되었습니다! 숙박 5% 할인 쿠폰이 발급되었습니다.");
-    } else {
-        rttr.addFlashAttribute("message", "여행성향 테스트 결과가 저장되었습니다.");
-    }
-
-    return "redirect:/members/mypage";
-}
-
+	@RequestMapping("/tourTypeTestResult")
+	public String tourTypeTestResult(Travel_TypeDTO dto, HttpSession session) {
+		String id = (String)session.getAttribute("loginId");
+		dto.setMember_id(id);
+		tdao.insertType(dto);
+		return "redirect:/members/mypage";
+	}
 	
 	@RequestMapping("/idsearchpage")
 	public String idsearchpage() {

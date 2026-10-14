@@ -5,7 +5,7 @@ import java.sql.Date;
 public class MileageHistoryDTO {
     private int seq;
     private String memberId;
-    private int reservationId;
+    private Integer reservationId;
     private String paymentId;
     private String type;
     private int amount;
@@ -15,7 +15,7 @@ public class MileageHistoryDTO {
 
     public MileageHistoryDTO() {}
     
-    public MileageHistoryDTO(int seq, String memberId, int reservationId, String paymentId,
+    public MileageHistoryDTO(int seq, String memberId, Integer reservationId, String paymentId,
             String type, int amount, int balance, String reason, Date regDate) {
         this.seq = seq;
         this.memberId = memberId;
@@ -40,10 +40,10 @@ public class MileageHistoryDTO {
     public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
-    public int getReservationId() {
+    public Integer getReservationId() {
         return reservationId;
     }
-    public void setReservationId(int reservationId) {
+    public void setReservationId(Integer reservationId) {
         this.reservationId = reservationId;
     }
     public String getPaymentId() {
