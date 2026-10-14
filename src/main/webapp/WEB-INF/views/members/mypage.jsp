@@ -1113,6 +1113,41 @@ body{
 .plannerPagination a:hover {
     background: #eff6ff;
 }
+
+.tourType{
+	margin-top:50px;
+}
+
+.reviewNavi {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin: 20px 0;
+}
+.reviewNavi a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #333;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.reviewNavi a:hover {
+    background: #f1f5f9;
+}
+.reviewNavi a.active {
+    background: #2563eb;
+    color: #fff;
+    border-color: #2563eb;
+}
+
 </style>
 </head>
 <body>
@@ -1171,7 +1206,7 @@ body{
             
 			<div class="tourType">
 			    <div class="sectionTtitle">
-			        <span>나의 여행 성향</span>
+			        <strong>나의 여행 성향</strong>
 			    </div>
 			
 			    <div class="tourTypeBox">
@@ -1384,10 +1419,10 @@ body{
 
 
 
-			<div class="reviewContainer">
+			<div class="reviewContainer" id="reviewSection">
 			    <div class="sectionTitle">
 			        <span>내가 쓴 리뷰</span>
-			        <a href="/review/reviewBoard?cpage=1">더 보기 <span>→</span></a>
+			        <a href="${pageContext.request.contextPath}/review/reviewBoard?cpage=1">더 보기 <span>→</span></a>
 			    </div>
 			    <div class="reviewList">
 			        <c:forEach var="rv" items="${reviewList}">
@@ -1418,7 +1453,6 @@ body{
 			                <div class="reviewInfo">
 			                    <div class="reviewIcons">
 			                        <span class="reviewHeart">♡</span>
-			                        
 			                        <span class="reviewShareIcon">↗</span>
 			                    </div>
 			                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
@@ -1426,12 +1460,10 @@ body{
 			                    <c:if test="${not empty rv.tag}">
 			                        <p class="reviewTag">${rv.tag}</p>
 			                    </c:if>
-			                    <p class="reviewDate">
-			                        ${rv.reg_date}
-			                    </p>
+			                    <p class="reviewDate">${rv.reg_date}</p>
 			                    <div class="reviewActions">
-			                        <a href="/review/update?seq=${rv.seq}">수정</a>
-			                        <a href="/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
+			                        <a href="${pageContext.request.contextPath}/review/update?seq=${rv.seq}">수정</a>
+			                        <a href="${pageContext.request.contextPath}/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -1444,6 +1476,19 @@ body{
 			            </div>
 			        </c:if>
 			    </div>
+			    <c:if test="${not empty reviewList and reviewTotalPage > 0}">
+			        <div class="reviewNavi">
+			            <c:if test="${reviewCpage > 1}">
+			                <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${reviewCpage - 1}#reviewSection">&lt;</a>
+			            </c:if>
+			            <c:forEach var="page" begin="1" end="${reviewTotalPage}">
+			                <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${page}#reviewSection" class="${page == reviewCpage ? 'active' : ''}">${page}</a>
+			            </c:forEach>
+			            <c:if test="${reviewCpage < reviewTotalPage}">
+			                <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${reviewCpage + 1}#reviewSection">&gt;</a>
+			            </c:if>
+			        </div>
+			    </c:if>
 			</div>
 
 
@@ -1499,29 +1544,29 @@ body{
                 
 
 
-<div class="couponList">
-    <c:choose>
-        <c:when test="${not empty myCoupons}">
-            <c:forEach var="coupon" items="${myCoupons}" begin="0" end="1">
-			    <div class="couponBox">
-			        <strong><c:out value="${coupon.couponName}"/></strong>
-			        <p>
-			            <fmt:formatDate value="${coupon.expireDate}" pattern="yyyy-MM-dd"/>까지
-			            <fmt:formatNumber value="${coupon.minOrderPrice}" pattern="#,##0"/>원 이상 결제 시
-			        </p>
-			        <button type="button" onclick="location.href='${pageContext.request.contextPath}/reservation/list?cpage=1'">사용하기</button>
-			    </div>
-			</c:forEach>
-        </c:when>
-        <c:otherwise>
-            <div class="couponBox">
-                <strong>보유 중인 쿠폰이 없습니다.</strong>
-                <p>사용할 수 있는 쿠폰이 없습니다.</p>
-                <button type="button" onclick="location.href='${pageContext.request.contextPath}/coupon/myCoupon'">쿠폰함 보기</button>
-            </div>
-        </c:otherwise>
-    </c:choose>
-</div>
+			<div class="couponList">
+			    <c:choose>
+			        <c:when test="${not empty myCoupons}">
+			            <c:forEach var="coupon" items="${myCoupons}" begin="0" end="1">
+						    <div class="couponBox">
+						        <strong><c:out value="${coupon.couponName}"/></strong>
+						        <p>
+						            <fmt:formatDate value="${coupon.expireDate}" pattern="yyyy-MM-dd"/>까지
+						            <fmt:formatNumber value="${coupon.minOrderPrice}" pattern="#,##0"/>원 이상 결제 시
+						        </p>
+						        <button type="button" onclick="location.href='${pageContext.request.contextPath}/reservation/list?cpage=1'">사용하기</button>
+						    </div>
+						</c:forEach>
+			        </c:when>
+			        <c:otherwise>
+			            <div class="couponBox">
+			                <strong>보유 중인 쿠폰이 없습니다.</strong>
+			                <p>사용할 수 있는 쿠폰이 없습니다.</p>
+			                <button type="button" onclick="location.href='${pageContext.request.contextPath}/coupon/myCoupon'">쿠폰함 보기</button>
+			            </div>
+			        </c:otherwise>
+			    </c:choose>
+			</div>
 
 
             </div>

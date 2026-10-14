@@ -117,13 +117,16 @@ public class MembersControllers {
 	}
 	
 	@RequestMapping("/mypage")
-	public String mypage(Integer cpage, Integer wishCpage, Integer mileageCpage, Integer plannerCpage, HttpSession session, Model model) {
+	public String mypage(Integer cpage, Integer wishCpage, Integer mileageCpage, Integer plannerCpage, Integer reviewCpage, HttpSession session, Model model){
 	    String memberId = (String) session.getAttribute("loginId");
 	    if (memberId == null) {
 	        return "redirect:/members/loginpage";
 	    }
 	    int pagesize = 3;
-
+	    
+	    String tourType = tdao.selectMyType(memberId);
+	       
+	    
 	    // 1. 예약 내역 페이징
 	    if(cpage == null || cpage < 1) cpage = 1;
 	    int totalCount = rdao.reservationCount(memberId);
@@ -175,8 +178,14 @@ public class MembersControllers {
 	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
 	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
 
-	    // 6. 리뷰 목록
-	    List<ReviewDTO> reviewList = rvdao.selectMyReview(memberId);
+	 // 6. 내가 작성한 리뷰 페이징
+	    int reviewPagesize = 3;
+	    if (reviewCpage == null || reviewCpage < 1) reviewCpage = 1;
+	    int reviewTotalCount = rvdao.countMyReview(memberId);
+	    int reviewTotalPage = (int)Math.ceil((double)reviewTotalCount / reviewPagesize);
+	    if (reviewTotalPage > 0 && reviewCpage > reviewTotalPage) reviewCpage = reviewTotalPage;
+	    if (reviewTotalPage == 0) reviewCpage = 1;
+	    List<ReviewDTO> reviewList = rvdao.selectMyReview(memberId, reviewCpage, reviewPagesize);
 
 	    // 7. 내가 공유한 여행 일정 페이징
 	    int plannerPagesize = 3;
@@ -196,11 +205,14 @@ public class MembersControllers {
 	    List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
 
 	    // 8. 모델 전달
+	    model.addAttribute("tourType", tourType);
+	    model.addAttribute("reviewCount", reviewCount);
+	    model.addAttribute("reviewList", reviewList);
+	    model.addAttribute("reviewCpage", reviewCpage);
+	    model.addAttribute("reviewTotalPage", reviewTotalPage);
 	    model.addAttribute("myCoupons", cdao.selectMyCoupons(memberId));
 	    model.addAttribute("mileageCpage", mileageCpage);
 	    model.addAttribute("mileageTotalPage", mileageTotalPage);
-	    model.addAttribute("reviewCount", reviewCount);
-	    model.addAttribute("reviewList", reviewList);
 	    model.addAttribute("mileageHistory", mileageHistory);
 	    model.addAttribute("upcomingCount", upcomingCount);
 	    model.addAttribute("today", LocalDate.now());
@@ -226,6 +238,7 @@ public class MembersControllers {
 
 	    return "members/mypage";
 	}
+	
 	
 	@RequestMapping("/update")
 	public String update() {

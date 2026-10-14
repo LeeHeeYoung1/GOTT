@@ -1,5 +1,6 @@
 package com.kedu.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,9 +100,18 @@ public class ReviewDAO {
 	
 	
 	
-	public List<ReviewDTO> selectMyReview(String memberId) {
-	    String sql = "SELECT * FROM REVIEW WHERE MEMBER_ID = ? ORDER BY REG_DATE DESC";
-	    return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), memberId);
+	public ArrayList<ReviewDTO> selectMyReview(String memberId, int cpage, int pagesize) {
+	    int start = (cpage - 1) * pagesize + 1;
+	    int end = cpage * pagesize;
+		String sql = "SELECT * FROM (" + "SELECT r.*, ROW_NUMBER() OVER (ORDER BY r.reg_date DESC) AS rn "
+				+ "FROM review r WHERE r.member_id = ?" + ") WHERE rn BETWEEN ? AND ?";
+	    return (ArrayList<ReviewDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), memberId, start, end);
+	}
+	
+	
+	public int countMyReview(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM review WHERE member_id = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 	
 	public int reviewCount(String memberId) {
@@ -111,7 +121,6 @@ public class ReviewDAO {
 	}
 	
 	public List<ReviewDTO> selectRecentReviews() {
-
 	    String sql = "select seq, member_id, target_type, image1, rating, contents, tag, reg_date, target_id from review order by reg_date desc";
 	    return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class));
 	}
