@@ -4,6 +4,7 @@ package com.kedu.controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +21,7 @@ import com.kedu.dao.MembersDAO;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.ReviewDAO;
 import com.kedu.dao.TravelPlanDAO;
+import com.kedu.dao.TravelPlanScrapDAO;
 import com.kedu.dao.Travel_TypeDAO;
 import com.kedu.dao.WishlistDAO;
 import com.kedu.dto.MembersDTO;
@@ -27,6 +29,7 @@ import com.kedu.dto.MileageHistoryDTO;
 import com.kedu.dto.PlaceDTO;
 import com.kedu.dto.ReservationDTO;
 import com.kedu.dto.ReviewDTO;
+import com.kedu.dto.TravelPlanDTO;
 import com.kedu.dto.Travel_TypeDTO;
 import com.kedu.services.EmailService;
 
@@ -203,8 +206,11 @@ public class MembersControllers {
 	    int plannerStart = (plannerCpage - 1) * plannerPagesize;
 	    int plannerEnd = Math.min(plannerStart + plannerPagesize, plannerTotalCount);
 	    List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
-
-	    // 8. 모델 전달
+	    
+	    // 8. 내가 스크랩한 여행일정
+	    List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
+	    
+	    // 9. 모델 전달
 	    model.addAttribute("tourType", tourType);
 	    model.addAttribute("reviewCount", reviewCount);
 	    model.addAttribute("reviewList", reviewList);
@@ -229,6 +235,7 @@ public class MembersControllers {
 	    model.addAttribute("wishList", wishList);
 	    model.addAttribute("wishCpage", wishCpage);
 	    model.addAttribute("wishTotalPage", wishTotalPage);
+	    model.addAttribute("scrapPlanList", scrapPlanList);
 
 	    Object message = session.getAttribute("reservationUpdateMessage");
 	    if (message != null) {
