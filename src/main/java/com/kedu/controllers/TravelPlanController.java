@@ -21,6 +21,7 @@ import com.kedu.dao.TravelPlanDAO;
 import com.kedu.dao.TravelPlanReplyDAO;
 import com.kedu.dao.TravelPlanScrapDAO;
 import com.kedu.dto.PlaceDTO;
+import com.kedu.dto.ReviewDTO;
 import com.kedu.dto.TravelPlanDTO;
 import com.kedu.dto.TravelPlanDetailDTO;
 import com.kedu.dto.TravelPlanReplyDTO;
@@ -141,8 +142,50 @@ public class TravelPlanController {
     
  // 공개된 여행 일정 목록 조회
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String list(Model model) {
-        model.addAttribute("planList", dao.selectPublicPlans());
+    public String list(int cpage, String region, String nights, String sort, Model model) {
+    	if (region == null) {
+    		region = "";
+    	}
+    	if (nights == null) {
+    		nights = "";
+    	}
+    	if (sort == null) {
+    		sort = "new";
+    	}
+    	
+    	int start = cpage * 9 - 8;
+    	int end = cpage * 9;
+    	
+    	List<TravelPlanDTO> planList;
+    	int total;
+    	
+    	if (region.equals("") && nights.equals("")) {
+    		planList = dao.selectFromTo(start, end, sort);
+    		total = dao.countAll();
+
+    	} else if (!region.equals("") && nights.equals("")) {
+    		planList = dao.selectByRegion(start, end, sort, region);
+    		total = dao.countByRegion(region);
+
+    	} else if (region.equals("") && !nights.equals("")) {
+    		planList = dao.selectByNights(start, end, sort, nights);
+    		total = dao.countByNights(nights);
+
+    	} else {
+    		planList = dao.selectByRegionAndNights(start, end, sort, region, nights);
+    		total = dao.countByRegionAndNights(region, nights);
+    	}
+
+    	model.addAttribute("region", region);
+    	model.addAttribute("nights", nights);
+    	model.addAttribute("sort", sort);
+    	
+		model.addAttribute("recordTotalCount", total);
+		model.addAttribute("recordCountPerPage", 9);
+		model.addAttribute("naviCountPerPage", 10);
+		model.addAttribute("cpage", cpage);
+		
+        model.addAttribute("planList", planList);
         return "members/plannerList";
     }
 

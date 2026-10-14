@@ -32,6 +32,7 @@ public class EventControllers {
 		return "event/event";
 	}
 	
+
 	@RequestMapping("/insert")
 	public String insertEvent(BannerDTO dto) {
 		
@@ -44,6 +45,9 @@ public class EventControllers {
 		bannerDAO.deleteEvent(banner_id);
 		return "redirect:/event/eventpage";
 	}
-	
-	
+
+	@RequestMapping("/company")
+	public String company() {
+		return "company";
+	}
 }

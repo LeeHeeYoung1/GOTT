@@ -141,6 +141,68 @@ body{
 .a1:hover,.a2:hover,.a3:hover,.a4:hover,.a5:hover{
     background-color:#f8fafa;
 }
+
+.tourTypeBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 30px;
+    margin-top: 30px;
+    background: #fff;
+    border: 1px solid #e5ebe7;
+    border-radius: 12px;
+}
+
+.tourTypeText {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tourTypeText strong {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.tourTypeText strong span {
+    color: #27866b;
+}
+
+.tourTypeText p {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.5;
+}
+
+.tourTypeBox button {
+    flex-shrink: 0;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 7px;
+    background: #27866b;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tourTypeBox button:hover {
+    background: #206e58;
+}
+
+@media (max-width: 600px) {
+    .tourTypeBox {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px 18px;
+    }
+
+    .tourTypeBox button {
+        width: 100%;
+    }
+}
+
 .plannerContainer{margin-top:80px;}
 .plannerBox{
     display:flex;
@@ -1016,6 +1078,76 @@ body{
         font-size:19px;
     }
 }
+
+
+.pagination{display:flex;justify-content:center;align-items:center;gap:7px;margin:25px 0}
+.pagination a{display:flex;justify-content:center;align-items:center;min-width:34px;height:34px;padding:0 10px;border:1px solid #e0e5eb;border-radius:6px;background:#fff;color:#596574;font-size:13px;text-decoration:none;transition:.2s}
+.pagination a:hover,.pagination a.active{background:#263238;border-color:#263238;color:#fff}
+
+
+.plannerPagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+}
+.plannerPagination a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #555;
+    text-decoration: none;
+    font-size: 14px;
+}
+.plannerPagination a.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+}
+.plannerPagination a:hover {
+    background: #eff6ff;
+}
+
+.tourType{
+	margin-top:50px;
+}
+
+.reviewNavi {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin: 20px 0;
+}
+.reviewNavi a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #333;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.reviewNavi a:hover {
+    background: #f1f5f9;
+}
+.reviewNavi a.active {
+    background: #2563eb;
+    color: #fff;
+    border-color: #2563eb;
+}
+
 </style>
 </head>
 <body>
@@ -1071,6 +1203,33 @@ body{
                 <a class="a4"><strong><fmt:formatNumber value="${mileage}" pattern="#,##0"/>M</strong><span>보유마일리지</span></a>
                 <a class="a5"><strong><fmt:formatDate value="${regdate}" pattern="yyyy-MM-dd"/></strong><span>가입일자</span></a>
             </nav>
+            
+			<div class="tourType">
+			    <div class="sectionTtitle">
+			        <strong>나의 여행 성향</strong>
+			    </div>
+			
+			    <div class="tourTypeBox">
+			        <div class="tourTypeText">
+			            <c:choose>
+			                <c:when test="${not empty tourType}">
+			                    <strong>나의 여행 성향은 <span>${tourType}</span>입니다.</strong>
+			                    <p>나에게 맞는 여행을 더 알아보세요.</p>
+			                </c:when>
+			                <c:otherwise>
+			                    <strong>아직 여행 성향 테스트 결과가 없습니다.</strong>
+			                    <p>테스트를 통해 나에게 맞는 여행 스타일을 찾아보세요.</p>
+			                </c:otherwise>
+			            </c:choose>
+			        </div>
+			
+			        <button type="button"
+			            onclick="location.href='/members/tourTypeTest'">
+			            테스트 하러가기 →
+			        </button>
+			    </div>
+			</div>
+            
             <div class="plannerContainer">
                 <div class="sectionTitle"><span>여행 일정 플래너</span></div>
                 <div class="plannerBox">
@@ -1080,7 +1239,7 @@ body{
                     </div>
                     <div class="plannerBtns">
                         <button type="button" class="newScheduleBtn" onclick="location.href='/members/planner'">새 일정 만들기</button>
-                        <button type="button" class="viewShareBtn" onclick="location.href='/travelPlan/list'">공유일정 전부 보기</button>
+                        <button type="button" class="viewShareBtn" onclick="location.href='/travelPlan/list?cpage=1'">공유일정 전부 보기</button>
                     </div>
                 </div>
             </div>
@@ -1117,6 +1276,18 @@ body{
                                	</div>
                             </div>
                         </c:forEach>
+                        <c:if test="${plannerTotalPage > 1}">
+						    <div class="plannerPagination">
+						        <c:if test="${plannerCpage > 1}">
+						            <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage - 1}">&lt;</a>
+						        </c:if>
+						
+						        <c:forEach var="i" begin="1" end="${plannerTotalPage}">
+						            <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${i}"
+						               class="${plannerCpage == i ? 'active' : ''}">${i}</a>
+						        </c:forEach>
+						    </div>
+						</c:if>
                     </c:when>
                     <c:otherwise>
                         <p class="emptyPlanner">아직 공유한 여행 일정이 없습니다.</p>
@@ -1248,10 +1419,10 @@ body{
 
 
 
-			<div class="reviewContainer">
+			<div class="reviewContainer" id="reviewSection">
 			    <div class="sectionTitle">
 			        <span>내가 쓴 리뷰</span>
-			        <a href="/review/myReview">더 보기 <span>→</span></a>
+			        <a href="${pageContext.request.contextPath}/review/reviewBoard?cpage=1">더 보기 <span>→</span></a>
 			    </div>
 			    <div class="reviewList">
 			        <c:forEach var="rv" items="${reviewList}">
@@ -1282,7 +1453,6 @@ body{
 			                <div class="reviewInfo">
 			                    <div class="reviewIcons">
 			                        <span class="reviewHeart">♡</span>
-			                        
 			                        <span class="reviewShareIcon">↗</span>
 			                    </div>
 			                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
@@ -1290,12 +1460,10 @@ body{
 			                    <c:if test="${not empty rv.tag}">
 			                        <p class="reviewTag">${rv.tag}</p>
 			                    </c:if>
-			                    <p class="reviewDate">
-			                        ${rv.reg_date}
-			                    </p>
+			                    <p class="reviewDate">${rv.reg_date}</p>
 			                    <div class="reviewActions">
-			                        <a href="/review/update?seq=${rv.seq}">수정</a>
-			                        <a href="/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
+			                        <a href="${pageContext.request.contextPath}/review/update?seq=${rv.seq}">수정</a>
+			                        <a href="${pageContext.request.contextPath}/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -1308,10 +1476,23 @@ body{
 			            </div>
 			        </c:if>
 			    </div>
+			    <c:if test="${not empty reviewList and reviewTotalPage > 0}">
+			        <div class="reviewNavi">
+			            <c:if test="${reviewCpage > 1}">
+			                <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${reviewCpage - 1}#reviewSection">&lt;</a>
+			            </c:if>
+			            <c:forEach var="page" begin="1" end="${reviewTotalPage}">
+			                <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${page}#reviewSection" class="${page == reviewCpage ? 'active' : ''}">${page}</a>
+			            </c:forEach>
+			            <c:if test="${reviewCpage < reviewTotalPage}">
+			                <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${reviewCpage + 1}#reviewSection">&gt;</a>
+			            </c:if>
+			        </div>
+			    </c:if>
 			</div>
 
 
-            <div class="couponContainer">
+            <div class="couponContainer" id="mileageSection">
                 <div class="couponSectionTitle">
                     <span>마일리지 · 쿠폰</span>
                     <a href="/members/mileage">더 보기 &gt;</a>
@@ -1345,21 +1526,49 @@ body{
 							            </td>
 							        </tr>
 							    </c:forEach>
-							</tbody>	                    
+							</tbody>								                    
                     </table>
+                    
+				<div class="pagination">
+				    <c:if test="${mileageCpage > 1}">
+				        <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage - 1}#mileageSection">&lt;</a>
+				    </c:if>
+				
+				    <c:forEach var="i" begin="1" end="${mileageTotalPage}">
+				        <a href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${i}#mileageSection"
+				           class="${mileageCpage == i ? 'active' : ''}">${i}</a>
+				    </c:forEach>
+				</div>
+
                 </div>
-                <div class="couponList">
-                        <div class="couponBox">
-                            <strong>첫 회원가입 3%쿠폰</strong>
-                            <p>?????까지 100만원 이상 결제시</p>
-                            <button type="button">사용하기</button>
-                        </div>
-                        <div class="couponBox">
-                            <strong>첫 회원가입 10%쿠폰</strong>
-                            <p>?????까지 300만원 이상 결제시</p>
-                            <button type="button">사용하기</button>
-                        </div>
-                 </div>
+                
+
+
+			<div class="couponList">
+			    <c:choose>
+			        <c:when test="${not empty myCoupons}">
+			            <c:forEach var="coupon" items="${myCoupons}" begin="0" end="1">
+						    <div class="couponBox">
+						        <strong><c:out value="${coupon.couponName}"/></strong>
+						        <p>
+						            <fmt:formatDate value="${coupon.expireDate}" pattern="yyyy-MM-dd"/>까지
+						            <fmt:formatNumber value="${coupon.minOrderPrice}" pattern="#,##0"/>원 이상 결제 시
+						        </p>
+						        <button type="button" onclick="location.href='${pageContext.request.contextPath}/reservation/list?cpage=1'">사용하기</button>
+						    </div>
+						</c:forEach>
+			        </c:when>
+			        <c:otherwise>
+			            <div class="couponBox">
+			                <strong>보유 중인 쿠폰이 없습니다.</strong>
+			                <p>사용할 수 있는 쿠폰이 없습니다.</p>
+			                <button type="button" onclick="location.href='${pageContext.request.contextPath}/coupon/myCoupon'">쿠폰함 보기</button>
+			            </div>
+			        </c:otherwise>
+			    </c:choose>
+			</div>
+
+
             </div>
         </div>
         <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

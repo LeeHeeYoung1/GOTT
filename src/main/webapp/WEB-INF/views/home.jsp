@@ -886,6 +886,7 @@
     </div>
     <br>
     <div class="ourpromise">
+    	<div class="moreview"><a href="/event/company">더 보기</a></div>
         <div class="ourpromisebox">
             <img src="https://picsum.photos/270/200?random=1">
             <div class="ourtext" style="padding: 5px;">

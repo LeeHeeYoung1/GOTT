@@ -74,6 +74,7 @@ a{text-decoration:none;color:inherit}
 </style>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <div class="couponPage">
     <div class="pageHeader">
         <div>
@@ -164,6 +165,7 @@ a{text-decoration:none;color:inherit}
         <p>· 사용 완료 또는 기간이 만료된 쿠폰은 결제에 사용할 수 없습니다.</p>
         <p>· 쿠폰의 실제 할인 금액은 결제 단계에서 서버가 검증한 뒤 적용해야 합니다.</p>
     </div>
+ 		<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </div>
 </body>
 </html>
