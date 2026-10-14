@@ -145,7 +145,6 @@
         hr {
             margin: 25px 0px;
             border: none;
-            border-top: 1px solid #e5e7eb;
         }
 
         .footer {
