@@ -1665,10 +1665,10 @@ body {
 					        <a href="${pageContext.request.contextPath}/members/reservationpage">예약내역 열기</a>
 					    </div>
 					    <div class="reservationVar">
-					        <span class="tab active" data-tab="all">전체</span>
-					        <span class="tab" data-tab="upcoming">이용 예정</span>
-					        <span class="tab" data-tab="completed">이용 완료</span>
-					        <span class="tab" data-tab="cancelled">취소 / 환불</span>
+					        <span class="tab ${reservationTab eq 'all' ? 'active' : ''}" data-tab="all">전체</span>
+							<span class="tab ${reservationTab eq 'upcoming' ? 'active' : ''}" data-tab="upcoming">이용 예정</span>
+							<span class="tab ${reservationTab eq 'completed' ? 'active' : ''}" data-tab="completed">이용 완료</span>
+							<span class="tab ${reservationTab eq 'cancelled' ? 'active' : ''}" data-tab="cancelled">취소 / 환불</span>
 					    </div>
 					    <div class="reservationList" id="reservationList">
 					        <c:forEach var="rs" items="${myRsList}">
@@ -1743,14 +1743,14 @@ body {
 					        </c:forEach>
 					    </div>
 					    
-					    <div class="reservationPaging">
+					    
+						<div class="reservationPaging">
 						    <c:forEach var="i" begin="1" end="${totalPage}">
-						        <a href="${pageContext.request.contextPath}/members/mypage?cpage=${i}&wishCpage=${wishCpage}&reservationTab=${reservationTab}#reservationSection"
-						           class="${cpage == i ? 'active' : ''}">
-						            ${i}
-						        </a>
+						        <a href="${pageContext.request.contextPath}/members/mypage?cpage=${i}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${reviewCpage}&reservationTab=${reservationTab}#reservationSection"
+						           class="${cpage == i ? 'active' : ''}">${i}</a>
 						    </c:forEach>
 						</div>
+
 						
 					</div>
 
@@ -1975,21 +1975,19 @@ body {
 	</c:choose>
 
 <script>
+
 $(document).ready(function() {
     $(".reservationVar .tab").on("click", function() {
         const selectedTab = $(this).attr("data-tab");
-        $(".reservationVar .tab").removeClass("active");
-        $(this).addClass("active");
-        $("#reservationList .flipCard").each(function() {
-            const reservationType = $(this).attr("data-tab");
-            if (selectedTab === "all" || selectedTab === reservationType) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
+        const url = new URL(window.location.href);
+
+        url.searchParams.set("reservationTab", selectedTab);
+        url.searchParams.set("cpage", "1");
+
+        window.location.href = url.pathname + url.search + "#reservationSection";
     });
 });
+
 $(".cancelBtn").on("click", async function() {
     if (!confirm("이 결제를 취소할까요?")) return;
     let paymentId = $(this).data("payment-id");
