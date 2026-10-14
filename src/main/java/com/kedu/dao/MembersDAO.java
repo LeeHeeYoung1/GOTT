@@ -108,4 +108,10 @@ public class MembersDAO {
 	    String sql = "SELECT COUNT(*) FROM MILEAGE_HISTORY WHERE MEMBER_ID = ?";
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
+	
+	//전체 회원 수 조회
+	public int totalMembers() {
+		String sql = "select count(*) from members";
+		return jdbc.queryForObject(sql, Integer.class);
+	}
 }
