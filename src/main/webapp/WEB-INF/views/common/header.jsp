@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/css/public.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<title>GOTT 메인화면</title>
+<title>GOTT</title>
 <script
   src="https://code.jquery.com/jquery-3.7.1.js"
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -25,7 +25,7 @@
             padding-top: 70px;
         }
         .header {
-            width: 1200px;
+            width: 100%;
             height: 70px;
             background-color: rgba(255, 255, 255, 0.95);
             position : fixed;
@@ -96,8 +96,8 @@
             width: 200px;
             height: 500px;
             position: fixed;
-            right: -200px;
-            top: 0;
+            right: 0;
+            top: 70px;
             background-color: rgba(255, 255, 255, 0.7);
             
             box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);

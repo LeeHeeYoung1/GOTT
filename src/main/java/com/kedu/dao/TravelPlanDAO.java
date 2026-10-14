@@ -427,6 +427,28 @@ public class TravelPlanDAO {
         return jdbc.queryForList(sql, memberId);
     }
     
+    // 내가 스크랩한 여행 일정 목록
+ 	public List<Map<String, Object>> scrapPlan(String loginId) {
+ 		String sql = "SELECT T.PLAN_ID, T.PLAN_TITLE, "
+ 				+ "TO_CHAR(T.START_DATE, 'YYYY-MM-DD') AS START_DATE, "
+ 				+ "TO_CHAR(T.END_DATE, 'YYYY-MM-DD') AS END_DATE, "
+ 				+ "T.PERSON_COUNT, M.NICKNAME, "
+ 				+ "(SELECT COUNT(*) FROM TRAVEL_PLAN_DETAIL D WHERE D.PLAN_ID = T.PLAN_ID) AS SPOT_COUNT, "
+ 				+ "P.IMAGE_NAME AS IMAGE_NAME "
+ 				+ "FROM TRAVEL_PLAN_SCRAP S "
+ 				+ "JOIN TRAVEL_PLAN T ON T.PLAN_ID = S.PLAN_ID "
+ 				+ "JOIN MEMBERS M ON M.ID = T.MEMBER_ID "
+ 				+ "LEFT JOIN ("
+ 				+ "SELECT D.PLAN_ID, PL.IMAGE_NAME, "
+ 				+ "ROW_NUMBER() OVER (PARTITION BY D.PLAN_ID ORDER BY D.DAY_NO, D.VISIT_ORDER) AS RN "
+ 				+ "FROM TRAVEL_PLAN_DETAIL D "
+ 				+ "JOIN PLACE PL ON D.PLACE_ID = PL.PLACE_ID"
+ 				+ ") P ON T.PLAN_ID = P.PLAN_ID AND P.RN = 1 "
+ 				+ "WHERE S.MEMBER_ID = ? "
+ 				+ "ORDER BY S.REG_DATE DESC, T.PLAN_ID DESC";
+ 		return jdbc.queryForList(sql, loginId);
+ 	}
+ 	
     public String placeImagename(int placeId) {
 		
 		String sql = "select image_name from place where place_id = ?";

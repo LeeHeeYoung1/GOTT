@@ -277,7 +277,7 @@ form {
 
 			<div class="buttons">
 				<button class="payment">결제하기</button>
-				<button type="button" class="backBtn">돌아가기</button>
+				<button type="button" class="backBtn" onclick="history.back()">뒤로가기</button>
 			</div>
 		</form>
 	</div>
