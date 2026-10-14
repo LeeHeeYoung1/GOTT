@@ -336,6 +336,11 @@
 			position: relative;
 			padding-top: 25px;
         }
+        
+        .ourpromisebox img {
+   		 width: 270px;
+    		height: 200px;
+			}
        
         .planbox,
         .hotelbox {
@@ -895,14 +900,14 @@
             </div>
         </div>
         <div class="ourpromisebox">
-            <img src="https://picsum.photos/270/200?random=2">
+            <img src="/images/24hoursCare.png">
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">24시간 고객 케어</p>
                 <p>24시간 언제든 궁금한 점을 해결해 드립니다.</p>
             </div>
         </div>
         <div class="ourpromisebox">
-            <img src="https://picsum.photos/270/200?random=3">
+            <img src="/images/trust.png">
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">신뢰할 수 있는 정보</p>
                 <p>정확하고 검증된 여행 정보를 제공합니다.</p>
