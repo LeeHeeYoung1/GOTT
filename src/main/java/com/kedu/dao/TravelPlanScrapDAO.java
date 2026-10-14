@@ -1,8 +1,13 @@
 package com.kedu.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.kedu.dto.TravelPlanDTO;
 
 @Repository
 public class TravelPlanScrapDAO {
@@ -24,5 +29,13 @@ public class TravelPlanScrapDAO {
 		String sql = "select count(*) from travel_plan_scrap where plan_id = ? and member_id = ?";
 		return jdbc.queryForObject(sql, Integer.class, seq, loginId) > 0;
 	}
-
+	
+	public List<TravelPlanDTO> scrapPlan(String loginId){
+		String sql = "select p.* "
+				+ "  from travel_plan_scrap s "
+				+ "  join travel_plan p on p.plan_id = s.plan_id "
+				+ " where s.member_id = ? "
+				+ " order by s.reg_date desc, p.plan_id desc";
+		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), loginId);
+	}
 }

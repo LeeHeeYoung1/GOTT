@@ -247,4 +247,10 @@ public class TravelPlanController {
 		tpsrdao.scrapDown(seq, (String)session.getAttribute("loginId"));
 		return "redirect:/travelPlan/detail?planId="+seq;
 	}
+	
+	@RequestMapping("/mypageScrapDown")
+	public String mypageScrapDown(int seq, HttpSession session) {
+		tpsrdao.scrapDown(seq, (String)session.getAttribute("loginId"));
+		return "redirect:/members/mypage";
+	}
 }
