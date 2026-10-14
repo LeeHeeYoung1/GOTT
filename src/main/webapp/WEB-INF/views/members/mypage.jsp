@@ -1352,12 +1352,12 @@ body{
                         <div class="couponBox">
                             <strong>첫 회원가입 3%쿠폰</strong>
                             <p>?????까지 100만원 이상 결제시</p>
-                            <button type="button">사용하기</button>
+                            <button type="button" onclick="location.href='/reservation/list?cpage=1'">사용하기</button>
                         </div>
                         <div class="couponBox">
                             <strong>첫 회원가입 10%쿠폰</strong>
                             <p>?????까지 300만원 이상 결제시</p>
-                            <button type="button">사용하기</button>
+                            <button type="button" onclick="location.href='/reservation/list?cpage=1'">사용하기</button>
                         </div>
                  </div>
             </div>
