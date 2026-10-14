@@ -230,7 +230,7 @@ public class MembersControllers {
 	}
 	
 	
-	@RequestMapping("event/tourTypeTest")
+	@RequestMapping("/tourTypeTest")
 	public String tourTypeTest() {
 		return "event/tourTypeTest";
 	}

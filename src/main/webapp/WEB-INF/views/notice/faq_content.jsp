@@ -221,20 +221,18 @@
         </div>
 
         <c:if test="${not empty flist}">
-            <div class="faqDetailFileBox">
+    <div class="faqDetailFileBox">
+        <div class="faqDetailFileTitle">첨부파일</div>
 
-                <div class="faqDetailFileTitle">첨부파일</div>
-
-                <div class="faqDetailFileList">
-                    <c:forEach var="i" items="${flist}">
-                        <a href="/notice/download?oriname=${i.oriname}&sysname=${i.sysname}">
-                            ${i.sysname}
-                        </a>
-                    </c:forEach>
-                </div>
-
-            </div>
-        </c:if>
+        <div class="faqDetailFileList">
+            <c:forEach var="i" items="${flist}">
+                <a href="/notice/download?oriname=${i.oriname}&sysname=${i.sysname}">
+                    ${i.oriname}
+                </a>
+            </c:forEach>
+        </div>
+    </div>
+</c:if>
 
         <div class="faqDetailContent" id="faqContent">${faq.content}</div>
 
