@@ -111,20 +111,12 @@ public class ReservationService {
 	
 	 
 	    // 8. 쿠폰 사용 처리
-	    System.out.println("전달받은 memberCouponId = " + memberCouponId);
-
 	    if (memberCouponId != null) {
 	        CouponDTO coupon = cdao.selectUsableCoupon(id, memberCouponId, originalPrice);
-	        System.out.println("쿠폰 검증 결과 = " + (coupon != null ? "사용 가능" : "사용 불가"));
-
-	        int couponResult = cdao.useCoupon(id, memberCouponId, originalPrice);
-	        System.out.println("쿠폰 사용 처리 결과 = " + couponResult);
-
+	        int couponResult = cdao.useCoupon(id, memberCouponId, originalPrice, paymentId);
 	        if (couponResult != 1) {
 	            throw new Exception("쿠폰 사용 처리 실패");
 	        }
-
-	        System.out.println("쿠폰 사용 처리 직후 확인 완료");
 	    }
 	
 	    // 9. 실제 결제 금액 기준 적립 마일리지 계산
@@ -256,21 +248,19 @@ public class ReservationService {
 	    }
 
 	    
-	    // 5. 예약으로 적립한 마일리지 회수
+	 // 5. 예약으로 적립한 마일리지 회수
 	    if (earnedMileage > 0) {
 	        int revokeResult = rdao.subtractMileage(memberId, earnedMileage);
 	        if (revokeResult != 1) {
 	            throw new Exception("적립 마일리지 회수에 실패했습니다. 보유 마일리지를 확인해 주세요.");
 	        }
-
 	        int revokeHistoryResult = rdao.insertMileageHistory(
 	                memberId, paymentId, "REVOKE",
 	                earnedMileage, "예약 취소로 적립 마일리지 회수");
-
 	        if (revokeHistoryResult != 1) {
 	            throw new Exception("마일리지 회수 내역 저장에 실패했습니다.");
 	        }
 	    }
-	}
 
+	    }
 }

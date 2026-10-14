@@ -91,4 +91,21 @@ public class MembersDAO {
 	    String sql = "SELECT * FROM MILEAGE_HISTORY WHERE MEMBER_ID = ? ORDER BY REG_DATE DESC, SEQ DESC";
 	    return jdbc.query(sql, new BeanPropertyRowMapper<>(MileageHistoryDTO.class), memberId);
 	}
+	
+	// 마일리지 내역 페이지별 조회
+	public List<MileageHistoryDTO> mileageHistory(String memberId, int cpage, int pagesize) {
+	    int start = (cpage - 1) * pagesize + 1;
+	    int end = cpage * pagesize;
+	    String sql = "SELECT * FROM ("
+	            + "SELECT mh.*, ROW_NUMBER() OVER (ORDER BY REG_DATE DESC, SEQ DESC) AS rn "
+	            + "FROM MILEAGE_HISTORY mh WHERE MEMBER_ID = ?"
+	            + ") WHERE rn BETWEEN ? AND ?";
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(MileageHistoryDTO.class), memberId, start, end);
+	}
+
+	// 마일리지 내역 전체 개수
+	public int mileageHistoryCount(String memberId) {
+	    String sql = "SELECT COUNT(*) FROM MILEAGE_HISTORY WHERE MEMBER_ID = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
 }
