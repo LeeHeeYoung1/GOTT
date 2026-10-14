@@ -1453,7 +1453,7 @@ body {
 							<li><a href="/members/wishlist">찜한 목록</a></li>
 							<li><a href="/members/planner">여행 일정 플래너</a></li>
 							<li><a href="/review/reviewlist">내가 쓴 리뷰</a></li>
-							<li><a href="#">내가 쓴 게시글</a></li>
+							<li><a href="/board/boardlist">내가 쓴 게시글</a></li>
 						</ul>
 						<span>혜택</span>
 						<ul>
@@ -1714,9 +1714,9 @@ body {
 					                            </button>
 					                            <button type="button" class="detailBtn">예약 상세</button>
 					                            <c:if test="${reservationType eq 'upcoming'}">
-					                                <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}">예약 변경</button>
-					                                <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
-					                            </c:if>
+												    <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" data-checkin="${rs.checkIn}">예약 변경</button>
+												    <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
+												</c:if>
 					                        </div>
 					                    </div>
 					                    <div class="flipCardBack">
@@ -1731,10 +1731,13 @@ body {
 					                        </div>
 					                        <div class="reservationCondition">
 					                            <button type="button" class="backBtn">돌아가기</button>
-					                            <c:if test="${reservationType eq 'upcoming'}">
-					                                <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
-					                                <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: rgb(153, 44, 44);">예약 취소</button>
-					                            </c:if>
+												<c:if test="${reservationType eq 'upcoming'}">
+												    <button type="button" class="updateBtn" 
+												        data-payment-id="${rs.paymentId}" 
+												        data-checkin="${rs.checkIn}">예약 변경</button>
+												    <button type="button" class="cancelBtn" 
+												        data-payment-id="${rs.paymentId}">예약 취소</button>
+												</c:if>
 					                        </div>
 					                    </div>
 					                </div>
@@ -1863,10 +1866,7 @@ body {
 										href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${page}#reviewSection"
 										class="${page == reviewCpage ? 'active' : ''}">${page}</a>
 								</c:forEach>
-								<c:if test="${reviewCpage < reviewTotalPage}">
-									<a
-										href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${reviewCpage + 1}#reviewSection">&gt;</a>
-								</c:if>
+								
 							</div>
 						</c:if>
 					</div>
@@ -1974,7 +1974,6 @@ body {
 	</c:choose>
 
 <script>
-
 $(document).ready(function() {
 
     // 예약 탭 클릭
@@ -1993,7 +1992,10 @@ $(document).ready(function() {
         try {
             const res = await fetch("${pageContext.request.contextPath}/reservation/cancelMyReservation", {
                 method: "POST",
-                headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    "Accept": "text/plain; charset=UTF-8"
+                },
                 body: "paymentId=" + encodeURIComponent(paymentId)
             });
             const text = await res.text();
@@ -2013,10 +2015,19 @@ $(document).ready(function() {
     // 예약 변경 버튼
     $(".updateBtn").on("click", function() {
         let paymentId = $(this).data("payment-id");
+        let checkIn = $(this).data("checkin");
+
         if (!paymentId) {
             alert("예약 정보를 찾을 수 없습니다.");
             return;
         }
+
+        const today = new Date().toISOString().slice(0, 10);
+        if (checkIn === today) {
+            alert("체크인 당일에는 예약 변경이 불가합니다.");
+            return;
+        }
+
         location.href = "${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId);
     });
 
@@ -2031,7 +2042,6 @@ $(document).ready(function() {
     });
 
 });
-
 </script>
 </body>
 </html>
