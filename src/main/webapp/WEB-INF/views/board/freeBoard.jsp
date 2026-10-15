@@ -354,16 +354,21 @@ button:hover {
                     + "&keyword=" + $("#keyword").val();
             }
         </script>
-
-        <button id="writeBtn">글쓰기</button>
-
-        <script>
-            $("#writeBtn").on("click", function() {
-                location.href = "/board/boardWrite?cpage=${cpage}";
-            });
-        </script>
-
-    </div>
+		
+	<c:choose>
+    <c:when test="${loginId != null}">
+        <button id="writeBtn"
+            onclick="location.href='/board/boardWrite?cpage=${cpage}'">
+            글쓰기
+        </button>
+    </c:when>
+    <c:otherwise>
+        <button id="writeBtn"
+            onclick="alert('로그인하세요.'); location.href='/members/loginpage'">
+            글쓰기
+        </button>
+    </c:otherwise>
+</c:choose>    </div>
 
     <!-- 게시글 목록 -->
     <div class="freeBoardContentsBox">
