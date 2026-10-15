@@ -261,11 +261,40 @@ body {
 	font-weight: 700;
 }
 
-.emptyRank {
-	padding: 40px 10px;
-	color: #94a3b8;
-	font-size: 13px;
-	text-align: center;
+/* ===== 하단 홈으로 버튼 ===== */
+.bottom {
+	display: flex;
+	justify-content: center;
+	padding: 0 20px 60px;
+}
+
+#homeBtn {
+	min-width: 180px;
+	height: 48px;
+	padding: 0 28px;
+	border: 1px solid #0f766e;
+	border-radius: 10px;
+	background: #0f766e;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	letter-spacing: -0.2px;
+	color: #fff;
+	cursor: pointer;
+	box-shadow: 0 4px 14px rgba(15, 118, 110, .22);
+	transition: background .2s, box-shadow .2s, transform .2s;
+}
+
+#homeBtn:hover {
+	background: #0b5d57;
+	border-color: #0b5d57;
+	box-shadow: 0 8px 20px rgba(15, 118, 110, .3);
+	transform: translateY(-2px);
+}
+
+#homeBtn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 8px rgba(15, 118, 110, .25);
 }
 </style>
 </head>
