@@ -38,4 +38,9 @@ public class TravelPlanScrapDAO {
 				+ " order by s.reg_date desc, p.plan_id desc";
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), loginId);
 	}
+	
+	public List<Integer> topFivePlanId(){
+		String sql = "select plan_id from (select plan_id, count(*) cn from travel_plan_scrap group by plan_id order by cn desc) where ROWNUM <= 5";
+		return jdbc.queryForList(sql, Integer.class);
+	}
 }

@@ -462,4 +462,16 @@ public class TravelPlanDAO {
     	return jdbc.queryForObject(sql, Integer.class);
     }
     
+    public TravelPlanDTO selectOne(int plan_id){
+    	String sql = "select * from travel_plan where plan_id = ?";
+    	return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), plan_id);
+    }
+    
+	public Integer getPlaceId(int plan_id) {
+		
+		String sql = "select place_id from (select place_id from travel_plan_detail where plan_id = ? order by day_no, visit_order) where rownum = 1";
+		
+		return jdbc.queryForObject(sql, Integer.class, plan_id);
+		
+	}
 }
