@@ -13,6 +13,7 @@ public class ReviewDTO {
 	private String tag;
 	private String image1;
 	private int view_count;
+	private boolean liked;
 
 	public ReviewDTO() {}
 
@@ -108,5 +109,13 @@ public class ReviewDTO {
 
 	public void setView_count(int view_count) {
 		this.view_count = view_count;
+	}
+	
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
 	}
 }

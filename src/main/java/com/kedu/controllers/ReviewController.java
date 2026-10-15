@@ -37,7 +37,7 @@ public class ReviewController {
 	private ReviewRecommendDAO rrdao;
 	
 	@RequestMapping("/reviewBoard")
-	public String reviewList(int cpage, String sort, String tag_list, Model model) {
+	public String reviewList(int cpage, String sort, String tag_list, Model model, HttpSession session) {
 		if (sort == null) {
 			sort = "new";
 		}
@@ -46,6 +46,15 @@ public class ReviewController {
 		}
 		
 		List<ReviewDTO> rList = rdao.selectSort(cpage * 9 - 8, cpage * 9, sort, tag_list);
+		
+		String loginId = (String)session.getAttribute("loginId");
+		
+		for(ReviewDTO review : rList) {
+			if(loginId != null) {
+				review.setLiked(rrdao.isRecommend(review.getSeq(), loginId));
+			}
+		}
+		
 		model.addAttribute("rList", rList);
 		model.addAttribute("recordTotalCount", rdao.selectCount(tag_list));
 		model.addAttribute("recordCountPerPage", 9);
@@ -54,6 +63,23 @@ public class ReviewController {
 		model.addAttribute("sort", sort);
 		model.addAttribute("tag_list", tag_list);
 		return "board/reviewBoard";
+	}
+	
+	@RequestMapping("/toggleRecommend")
+	public String toggleRecommend(int seq, HttpSession session) {
+		String loginId = (String)session.getAttribute("loginId");
+		
+		if(loginId == null) {
+			return "members/loginPage";
+		}
+		
+		if(rrdao.isRecommend(seq, loginId)) {
+			rrdao.recommendDown(seq, loginId);
+			return "unliked";
+		}else {
+			rrdao.recommendUp(seq, loginId);
+			return "liked";
+		}
 	}
 	
 	@RequestMapping("/review_write")
