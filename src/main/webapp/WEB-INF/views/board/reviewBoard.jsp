@@ -719,8 +719,7 @@ button:hover {
 		next.innerHTML = ">";
 		navi.append(next);
 	}
-	
-<<<<<<< HEAD
+
 	function shareReview(seq, placeId) {
 	    // 현재 사이트 주소와 리뷰 상세 페이지 주소를 결합
 	    const url = window.location.origin
@@ -738,8 +737,6 @@ button:hover {
 	        });
 	}
 	
-</script>
-=======
 	function toggleRecommend(seq, heart) {
 	    $.ajax({
 	        url: "/review/toggleRecommend",
@@ -761,6 +758,6 @@ button:hover {
 	        }
 	    });
 	}
+	
 	</script>
->>>>>>> 870aadd30a0b33bb17ff9af8771a0e683cf17012
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
