@@ -622,202 +622,258 @@ body {
 }
 /* ================= 예약 카드 ================= */
 .reservationList {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 .flipCard {
-    width: 100%;
-    height: 200px;
-    margin-top: 0;
-    perspective: 1200px;
-    background: transparent;
+  width: 100%;
+  height: 220px;
+  margin-top: 0;
+  perspective: 1200px;
+  background: transparent;
 }
 .flipCardInner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform .55s ease;
-    transform-style: preserve-3d;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform .55s ease;
+  transform-style: preserve-3d;
 }
 .flipCard.flipped .flipCardInner {
-    transform: rotateY(180deg);
+  transform: rotateY(180deg);
 }
 .flipCardFront,
 .flipCardBack {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 18px;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    background: #fff;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 24px;
-    overflow: hidden;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, .035);
+  transition: box-shadow .2s ease, border-color .2s ease;
 }
 .flipCardFront {
-    transform: rotateY(0deg);
+  transform: rotateY(0deg);
 }
 .flipCardBack {
-    transform: rotateY(180deg);
-    background: #f8faff;
+  transform: rotateY(180deg);
+  background: #f8faff;
 }
 .flipCard:hover .flipCardFront,
 .flipCard:hover .flipCardBack {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+  border-color: #dbe3ef;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, .08);
 }
-/* 호텔 이미지 */
+/* 숙소 이미지 */
 .flipCardFront .img {
-    width: 210px;
-    height: 145px;
-    flex: 0 0 210px;
-    overflow: hidden;
-    border-radius: 8px;
-    background: #f1f1f1;
+  width: 220px;
+  height: 170px;
+  flex: 0 0 220px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f1f5f9;
 }
 .flipCardFront .img img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .3s ease;
 }
-/* 예약 상세 텍스트 */
+.flipCard:hover .flipCardFront .img img {
+  transform: scale(1.03);
+}
+/* 예약 정보 */
 .flipCard .reservationInfo {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
 }
 .flipCard .reservationInfo h3 {
-    margin: 0 0 12px;
-    color: #222;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.4;
-    overflow-wrap: anywhere;
+  margin: 0 0 12px;
+  color: #1f2937;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 .flipCard .reservationInfo p {
-    margin: 5px 0;
-    color: #666;
-    font-size: 13px;
-    line-height: 1.55;
-    overflow-wrap: anywhere;
+  margin: 5px 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 .flipCard .reservationInfo p:last-child {
-    margin-top: 7px;
-    color: #222;
-    font-size: 14px;
-    font-weight: 600;
+  margin-top: 9px;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 700;
 }
 .flipCard .reservationInfo strong {
-    color: #555;
+  color: #475569;
 }
-/* 오른쪽 버튼 영역 */
+/* 예약 상태 및 버튼 */
 .flipCard .reservationCondition {
-    width: 120px;
-    height: 100%;
-    flex: 0 0 120px;
-    box-sizing: border-box;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
-    gap: 8px;
-    padding-left: 15px;
-    border-left: 1px solid #edf0f4;
+  width: 130px;
+  height: 100%;
+  flex: 0 0 130px;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 8px;
+  padding-left: 16px;
+  border-left: 1px solid #edf0f4;
 }
 .flipCard .reservationCondition button {
-    width: 100%;
-    min-height: 35px;
-    height: auto;
-    padding: 8px 10px;
-    border: 1px solid #d9d9d9;
-    border-radius: 6px;
-    background: #fff;
-    color: #333;
-    font-size: 12px;
-    line-height: 1.35;
-    cursor: pointer;
-    white-space: normal;
-    overflow-wrap: anywhere;
+  width: 100%;
+  min-height: 36px;
+  height: auto;
+  padding: 8px 10px;
+  border: 1px solid #d9e0e8;
+  border-radius: 7px;
+  background: #fff;
+  color: #334155;
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 .flipCard .reservationCondition button:first-child,
 .flipCard .reservationCondition button:disabled {
-    border-color: #eff6ff;
-    background: #eff6ff;
-    color: #2563eb;
-    font-weight: 600;
-    cursor: default;
+  border-color: #dbeafe;
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 700;
+  cursor: default;
 }
 .flipCard .reservationCondition button:disabled {
-    opacity: 1;
+  opacity: 1;
 }
 .flipCard .reservationCondition button:not(:disabled):hover {
-    background: #222;
-    color: #fff;
-    border-color: #222;
+  background: #222;
+  color: #fff;
+  border-color: #222;
 }
-/* 상세정보 뒷면 */
+/* 카드 뒷면 상세 정보 */
 .flipCardBack .reservationInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  overflow-y: auto;
 }
 .flipCardBack .reservationInfo h3 {
-    margin-bottom: 10px;
-    font-size: 17px;
+  margin: 0 0 10px;
+  font-size: 17px;
 }
 .flipCardBack .reservationInfo p {
-    margin: 3px 0;
-    font-size: 12px;
-    line-height: 1.45;
+  margin: 3px 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
 }
 .flipCardBack .reservationInfo p:last-child {
-    margin-top: 5px;
-    font-size: 13px;
-    font-weight: 600;
+  margin-top: 5px;
+  color: #1f2937;
+  font-size: 13px;
+  font-weight: 700;
 }
 /* 예약 카드 반응형 */
-@media (max-width: 700px) {
-    .flipCard {
-        height: auto;
-        min-height: 0;
-    }
-    .flipCardInner {
-        min-height: 360px;
-    }
-    .flipCardFront,
-    .flipCardBack {
-        padding: 12px;
-        gap: 12px;
-    }
-    .flipCardFront {
-        flex-wrap: wrap;
-        align-content: center;
-    }
-    .flipCardFront .img {
-        width: 100%;
-        height: 120px;
-        flex: 0 0 100%;
-    }
-    .flipCardFront .reservationInfo {
-        flex: 1 1 50%;
-    }
-    .flipCard .reservationCondition {
-        width: 100px;
-        flex: 0 0 100px;
-        padding-left: 10px;
-    }
-    .flipCardBack .reservationInfo {
-        overflow-y: auto;
-        max-height: 100%;
-    }
+@media (max-width: 900px) {
+  .flipCard {
+    height: 230px;
+  }
+  .flipCardFront,
+  .flipCardBack {
+    gap: 16px;
+    padding: 16px;
+  }
+  .flipCardFront .img {
+    width: 180px;
+    height: 155px;
+    flex-basis: 180px;
+  }
+  .flipCard .reservationCondition {
+    width: 115px;
+    flex-basis: 115px;
+    padding-left: 12px;
+  }
+}
+@media (max-width: 600px) {
+  .reservationList {
+    gap: 14px;
+  }
+  .flipCard {
+    height: 420px;
+  }
+  .flipCardInner {
+    height: 100%;
+  }
+  .flipCardFront,
+  .flipCardBack {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 14px;
+  }
+  .flipCardFront .img {
+    width: 100%;
+    height: 145px;
+    flex: 0 0 145px;
+  }
+  .flipCard .reservationInfo {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  .flipCard .reservationInfo h3 {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  .flipCard .reservationInfo p {
+    margin: 4px 0;
+    font-size: 12px;
+  }
+  .flipCard .reservationCondition {
+    width: 100%;
+    height: auto;
+    flex: 0 0 auto;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    padding: 10px 0 0;
+    border-left: 0;
+    border-top: 1px solid #edf0f4;
+  }
+  .flipCard .reservationCondition button {
+    min-height: 32px;
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+  .flipCardBack .reservationInfo {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+  .flipCardBack .reservationInfo h3 {
+    font-size: 16px;
+  }
 }
 .couponContainer {
   width: 100%;
@@ -1580,7 +1636,7 @@ body {
 															<strong>· 회수 마일리지 - ${rs.mileage}M</strong>
 														</c:when>
 														<c:otherwise>
-															<strong>적립예정 마일리지</strong><fmt:formatNumber value="${pendingMileage}" pattern="#,##0"/>원
+															<strong>적립예정 마일리지 + <fmt:formatNumber value="${pendingMileage}" pattern="#,##0"/>M</strong>
 														</c:otherwise>
 													</c:choose>
 												</p>
