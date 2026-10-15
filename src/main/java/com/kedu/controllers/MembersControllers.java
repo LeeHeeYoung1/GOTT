@@ -267,6 +267,8 @@ public class MembersControllers {
 		List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
 		
 		List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
+		
+		
 
 		// 8. 모델 전달
 		model.addAttribute("tourType", tourType);
@@ -282,6 +284,7 @@ public class MembersControllers {
 		model.addAttribute("myWishTotalCount", myWishTotalCount);
 
 		model.addAttribute("mileage", mileage);
+		model.addAttribute("mileageTotalCount", mileageTotalCount);
 		model.addAttribute("mileageCpage", mileageCpage);
 		model.addAttribute("mileageTotalPage", mileageTotalPage);
 		model.addAttribute("mileageHistory", mileageHistory);
@@ -292,6 +295,7 @@ public class MembersControllers {
 		model.addAttribute("today", LocalDate.now());
 
 		model.addAttribute("reviewCount", reviewCount);
+		model.addAttribute("reviewTotalCount", reviewTotalCount);
 		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("reviewCpage", reviewCpage);
 		model.addAttribute("reviewTotalPage", reviewTotalPage);
@@ -510,6 +514,7 @@ public class MembersControllers {
 	    model.addAttribute("mileage", mileage);
 	    model.addAttribute("mileageHistory", mileageHistory);
 	    model.addAttribute("mileageCpage", mileageCpage);
+	    model.addAttribute("mileageTotalCount", mileageTotalCount);
 	    model.addAttribute("mileageTotalPage", mileageTotalPage);
 	
 	    return "members/mileage";

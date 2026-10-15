@@ -94,7 +94,7 @@ button{font-family:inherit;cursor:pointer}
     <div class="mileageSummary">
         <div class="summaryCard">
             <div class="summaryLabel">마일리지 이용 내역</div>
-            <div class="summaryValue"><fmt:formatNumber value="${mileageHistory.size()}" pattern="#,##0"/><span>건</span></div>
+            <div class="summaryValue"><fmt:formatNumber value="${mileageTotalCount}" pattern="#,##0"/><span>건</span></div>
             <div class="summaryDesc">적립 및 사용 기록</div>
         </div>
         <div class="summaryCard">
