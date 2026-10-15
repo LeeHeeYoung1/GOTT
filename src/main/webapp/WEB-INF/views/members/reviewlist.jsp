@@ -110,9 +110,9 @@
                                 <span class="reviewRating">★ <c:out value="${review.rating}"/> / 5</span>
                                 <span class="reviewDate"><fmt:formatDate value="${review.reg_date}" pattern="yyyy.MM.dd"/></span>
                             </div>
-                            <h4 class="reviewPlace">내가 남긴 여행 후기</h4>
-                            <div class="reviewText"><c:out value="${review.contents}"/></div>
-                            <div class="reviewBottom">나의 리뷰 <span>→</span></div>
+                            <div class="reviewPlace">${review.contents}</div>
+                            <div class="reviewText"></div>
+                            <div class="reviewBottom">나의 리뷰 <a href="/review/detail?seq=${review.seq}&place_id=${review.target_id}"><span>→</span></a></div>
                         </div>
                     </div>
                 </c:forEach>

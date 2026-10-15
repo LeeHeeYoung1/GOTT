@@ -59,6 +59,16 @@ public class BoardDAO {
 	    );
 	}
 	
+	public List<BoardDTO> selectByMember(String nickname, int start, int end) {
+	    String sql = "select * from (select board.*, row_number() over(order by seq desc) rn from board where writer = ?) where rn between ? and ?";
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(BoardDTO.class), nickname, start, end);
+	}
+
+	public int boardCountByMember(String nickname) {
+	    String sql = "select count(*) from board where writer = ?";
+	    return jdbc.queryForObject(sql, Integer.class, nickname);
+	}
+	
 	public void delete(int seq) {
 
 	    String sql = "delete from board where seq = ?";

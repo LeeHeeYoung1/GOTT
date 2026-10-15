@@ -344,4 +344,34 @@ public String replyBoard(int cpage, Model model) {
 	    }
 	}
 	
+	@RequestMapping("/boardlist")
+	public String boardList(Integer cpage, Model model, HttpSession session) {
+		if (cpage == null) cpage = 1;
+	    String nickname = (String) session.getAttribute("nickname");
+	    
+	    if (nickname == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	    
+	    List<BoardDTO> list = bdao.selectByMember(nickname, cpage * 10 - 9, cpage * 10);
+	    
+	    for (BoardDTO board : list) {
+	        board.setRecommendCount(recommendDao.recommendCount(board.getSeq()));
+	    }
+	    
+	    model.addAttribute("boardList", list);
+	    model.addAttribute("nickname", nickname);
+	    
+	    int totalCount = bdao.boardCountByMember(nickname);
+	    int totalPage = (int) Math.ceil((double) totalCount / 10);
+	    
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("totalPage", totalPage);
+	    model.addAttribute("cpage", cpage);
+	    
+	    return "members/boardlist";
+	}
+	
+	
+	
 }

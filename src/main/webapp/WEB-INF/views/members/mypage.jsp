@@ -1453,7 +1453,9 @@ body {
 							<li><a href="/members/wishlist">찜한 목록</a></li>
 							<li><a href="/members/planner">여행 일정 플래너</a></li>
 							<li><a href="/review/reviewlist">내가 쓴 리뷰</a></li>
-							<li><a href="#">내가 쓴 게시글</a></li>
+							<li><a href="/board/boardlist">내가 쓴 게시글</a></li>
+							<li><a href="/bookmark/bookmarklist">북마크</a></li>
+							
 						</ul>
 						<span>혜택</span>
 						<ul>
@@ -1714,9 +1716,9 @@ body {
 					                            </button>
 					                            <button type="button" class="detailBtn">예약 상세</button>
 					                            <c:if test="${reservationType eq 'upcoming'}">
-					                                <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}">예약 변경</button>
-					                                <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
-					                            </c:if>
+												    <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" data-checkin="${rs.checkIn}">예약 변경</button>
+												    <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}">예약 취소</button>
+												</c:if>
 					                        </div>
 					                    </div>
 					                    <div class="flipCardBack">
@@ -1731,10 +1733,13 @@ body {
 					                        </div>
 					                        <div class="reservationCondition">
 					                            <button type="button" class="backBtn">돌아가기</button>
-					                            <c:if test="${reservationType eq 'upcoming'}">
-					                                <button type="button" class="updateBtn" data-payment-id="${rs.paymentId}" style="background-color: blue;">예약 변경</button>
-					                                <button type="button" class="cancelBtn" data-payment-id="${rs.paymentId}" style="background-color: rgb(153, 44, 44);">예약 취소</button>
-					                            </c:if>
+												<c:if test="${reservationType eq 'upcoming'}">
+												    <button type="button" class="updateBtn" 
+												        data-payment-id="${rs.paymentId}" 
+												        data-checkin="${rs.checkIn}">예약 변경</button>
+												    <button type="button" class="cancelBtn" 
+												        data-payment-id="${rs.paymentId}">예약 취소</button>
+												</c:if>
 					                        </div>
 					                    </div>
 					                </div>
@@ -1863,10 +1868,7 @@ body {
 										href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${page}#reviewSection"
 										class="${page == reviewCpage ? 'active' : ''}">${page}</a>
 								</c:forEach>
-								<c:if test="${reviewCpage < reviewTotalPage}">
-									<a
-										href="${pageContext.request.contextPath}/members/mypage?cpage=${cpage}&wishCpage=${wishCpage}&mileageCpage=${mileageCpage}&plannerCpage=${plannerCpage}&reviewCpage=${reviewCpage + 1}#reviewSection">&gt;</a>
-								</c:if>
+								
 							</div>
 						</c:if>
 					</div>
@@ -1974,62 +1976,74 @@ body {
 	</c:choose>
 
 <script>
-
 $(document).ready(function() {
+
+    // 예약 탭 클릭
     $(".reservationVar .tab").on("click", function() {
         const selectedTab = $(this).attr("data-tab");
         const url = new URL(window.location.href);
-
         url.searchParams.set("reservationTab", selectedTab);
         url.searchParams.set("cpage", "1");
-
         window.location.href = url.pathname + url.search + "#reservationSection";
     });
-});
 
-$(".cancelBtn").on("click", async function() {
-    if (!confirm("이 결제를 취소할까요?")) return;
-    let paymentId = $(this).data("payment-id");
-    try {
-        const res = await fetch("${pageContext.request.contextPath}/reservation/cancelMyReservation", {
-            method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"},
-            body: "paymentId=" + encodeURIComponent(paymentId)
-        });
-        const text = await res.text();
-        console.log("취소 응답:", text);
-        if (res.ok && text.trim() === "success") {
-            alert("결제와 예약이 취소되었으며, 사용 마일리지를 복구했습니다.");
-            location.reload();
-        } else {
-            alert("취소 처리 결과: " + text);
+    // 예약 취소 버튼
+    $(".cancelBtn").on("click", async function() {
+        if (!confirm("이 결제를 취소할까요?")) return;
+        let paymentId = $(this).data("payment-id");
+        try {
+            const res = await fetch("${pageContext.request.contextPath}/reservation/cancelMyReservation", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    "Accept": "text/plain; charset=UTF-8"
+                },
+                body: "paymentId=" + encodeURIComponent(paymentId)
+            });
+            const text = await res.text();
+            console.log("취소 응답:", text);
+            if (res.ok && text.trim() === "success") {
+                alert("결제와 예약이 취소되었으며, 사용 마일리지를 복구했습니다.");
+                location.reload();
+            } else {
+                alert("취소 처리 결과: " + text);
+            }
+        } catch (error) {
+            console.error("요청 실패:", error);
+            alert("취소 요청 중 오류가 발생했습니다.");
         }
-    } catch (error) {
-        console.error("요청 실패:", error);
-        alert("취소 요청 중 오류가 발생했습니다.");
-    }
+    });
+
+    // 예약 변경 버튼
+    $(".updateBtn").on("click", function() {
+        let paymentId = $(this).data("payment-id");
+        let checkIn = $(this).data("checkin");
+
+        if (!paymentId) {
+            alert("예약 정보를 찾을 수 없습니다.");
+            return;
+        }
+
+        const today = new Date().toISOString().slice(0, 10);
+        if (checkIn === today) {
+            alert("체크인 당일에는 예약 변경이 불가합니다.");
+            return;
+        }
+
+        location.href = "${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId);
+    });
+
+    // 카드 앞면 (상세 보기)
+    $(".detailBtn").on("click", function() {
+        $(this).closest(".flipCard").addClass("flipped");
+    });
+
+    // 카드 뒷면 (뒤로)
+    $(".backBtn").on("click", function() {
+        $(this).closest(".flipCard").removeClass("flipped");
+    });
+
 });
-
-$(".updateBtn").on("click", function() {
-    let paymentId = $(this).data("payment-id");
-    if (!paymentId) {
-        alert("예약 정보를 찾을 수 없습니다.");
-        return;
-    }
-    location.href = "${pageContext.request.contextPath}/reservation/reservationUpdate?paymentId=" + encodeURIComponent(paymentId);
-});
-
-
-$(".detailBtn").on("click", function() {
-    $(this).closest(".flipCard").addClass("flipped");
-});
-
-$(".backBtn").on("click", function() {
-    $(this).closest(".flipCard").removeClass("flipped");
-});
-
-
-
 </script>
 </body>
 </html>
