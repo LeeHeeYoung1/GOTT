@@ -76,6 +76,10 @@ button{font-family:inherit;cursor:pointer}
 .summaryCard{padding:16px 18px}
 .summaryValue{font-size:24px}
 }
+
+.pagination{display:flex;justify-content:center;align-items:center;gap:7px;margin:25px 0}
+.pagination a{display:flex;justify-content:center;align-items:center;min-width:34px;height:34px;padding:0 10px;border:1px solid #e0e5eb;border-radius:6px;background:#fff;color:#596574;font-size:13px;transition:.2s}
+.pagination a:hover,.pagination a.active{background:#263238;border-color:#263238;color:#fff}
 </style>
 </head>
 <body>
@@ -161,6 +165,16 @@ button{font-family:inherit;cursor:pointer}
             </table>
         </div>
     </div>
+    
+    <c:if test="${mileageTotalPage > 1}">
+        <div class="pagination">
+            <c:forEach var="i" begin="1" end="${mileageTotalPage}">
+                <a href="${pageContext.request.contextPath}/members/mileage?mileageCpage=${i}"
+                   class="${mileageCpage == i ? 'active' : ''}">${i}</a>
+            </c:forEach>
+        </div>
+    </c:if>
+    
     <div class="bottomInfo">
         <strong>마일리지 안내</strong>
         <p>· 적립은 초록색, 사용 및 회수는 빨간색으로 표시됩니다.</p>
