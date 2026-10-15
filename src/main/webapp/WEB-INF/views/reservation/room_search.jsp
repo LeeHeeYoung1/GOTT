@@ -14,11 +14,6 @@
 }
 
 /* ===== 페이지 영역 ===== */
-.main {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 0 24px;
-}
 
 .search_bar {
 	display: contents;
@@ -447,7 +442,7 @@
 </style>
 
 
-<div class="main">
+<div class="container">
 	<form class="search_bar" action="/reservation/search">
 		<div class="body1">
 			<div class="body_title">

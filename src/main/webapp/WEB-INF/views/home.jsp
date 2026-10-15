@@ -882,6 +882,11 @@
 		    color:#8e8e8e;
 		    font-size:13px;
 		}
+<<<<<<< HEAD
+		.reviewShareIcon:hover {
+			cursor: pointer;
+		}	
+=======
 .reviewContainer .reviewHeart {
     cursor: pointer;
     color: #999;
@@ -890,6 +895,7 @@
 .reviewContainer .reviewHeart.liked {
     color: #ff4d6d;
 }
+>>>>>>> 870aadd30a0b33bb17ff9af8771a0e683cf17012
 		
     </style>
 
@@ -924,7 +930,7 @@
         		
         		<c:forEach var="i" items="${banner}">
             		<div class="eventbox">
-		           		<a href="/members/signuppage">
+		           		<a href="<c:out value='${i.link_url}'/>">
 		                  	<img src="/images/${i.image_name}" alt="${i.title}">
 		                </a>
 		           </div>
@@ -1124,13 +1130,17 @@
 					                </div>
 				                </a>
 				                <div class="reviewInfo">
-									<div class="reviewIcons">
-									    <span class="reviewHeart ${rv.liked ? 'liked' : ''}"
-									          onclick="toggleRecommend(${rv.seq}, this)">${rv.liked ? '♥' : '♡'}</span>
-									    <span class="reviewShareIcon">↗</span>
-									</div>
+				                    <div class="reviewIcons">
+				                        <span class="reviewHeart ${rv.liked ? 'liked' : ''}"
+										 onclick="toggleRecommend(${rv.seq}, this)"> ${rv.liked ? '♥' : '♡'}</span>
+										<span class="reviewShareIcon" onclick="shareReview(${rv.seq}, ${rv.target_id})"
+									      title="리뷰 링크 복사">
+									     	<i class="fa-solid fa-link"></i> 
+									    </span>
+				                    </div>
+
 				                    <div class="reviewtext">
-					                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
+					                    <p class="reviewLike">⭐ <strong>${rv.rating}</strong></p>
 					                    <p class="reviewDescription">${rv.contents}</p>
 					                    <c:if test="${not empty rv.tag}">
 					                        <p class="reviewTag">#${rv.tag}</p>
@@ -1138,10 +1148,6 @@
 					                    <p class="reviewDate">
 					                        ${rv.reg_date}
 					                    </p>
-				                    </div>
-				                    <div class="reviewActions">
-				                        <a href="/review/update?seq=${rv.seq}">수정</a>
-				                        <a href="/review/delete?seq=${rv.seq}" onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>
 				                    </div>
 				                </div>
 				            </div>
@@ -1437,6 +1443,23 @@ document.addEventListener("DOMContentLoaded", function () {
     setupClones();
     startAutoSlide();
 });
+
+		function shareReview(seq, placeId) {
+		    // 현재 사이트 주소와 리뷰 상세 페이지 주소를 결합
+		    const url = window.location.origin
+		        + "/review/detail?seq=" + seq
+		        + "&place_id=" + encodeURIComponent(placeId);
+		
+		    // 리뷰 링크를 클립보드에 복사
+		    navigator.clipboard.writeText(url)
+		        .then(function() {
+		            alert("리뷰 링크가 복사되었습니다!");
+		        })
+		        .catch(function() {
+		            // 클립보드 복사가 안 될 경우 링크를 직접 보여줌
+		            prompt("아래 링크를 복사해주세요.", url);
+		        });
+		}
 
 function toggleRecommend(seq, heart) {
     $.ajax({

@@ -10,16 +10,6 @@
 	crossorigin="anonymous"></script>
 
 <style>
-* {
-	box-sizing: border-box;
-}
-
-.qnaMain {
-	width: 1200px;
-	max-width: calc(100% - 40px);
-	margin: 0 auto;
-	padding-bottom: 80px;
-}
 
 .qnaTitleBox {
 	text-align: center;
@@ -369,7 +359,7 @@
 }
 </style>
 
-<div class="qnaMain">
+<div class="container">
 
 	<div class="qnaTitleBox">
 		<h2>Q&A</h2>
