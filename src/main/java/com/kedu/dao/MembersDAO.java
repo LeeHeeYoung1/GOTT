@@ -39,7 +39,7 @@ public class MembersDAO {
 
 	@Transactional
 	public int signup(MembersDTO mdto) {
-	    String sql = "INSERT INTO members VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP, 3000, 'user', ?)";
+	    String sql = "INSERT INTO members VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP, 2000, 'user', ?)";
 	    int result = jdbc.update(sql, mdto.getId(), mdto.getPw(), mdto.getName(), mdto.getNickname(),
 	            mdto.getPhone(), mdto.getEmail(), mdto.getGender(), mdto.getDob(), mdto.getZipcode(),
 	            mdto.getAddress1(), mdto.getAddress2(), mdto.getPrivacy_agree());
@@ -49,7 +49,7 @@ public class MembersDAO {
 	                + "(SEQ, MEMBER_ID, RESERVATION_ID, PAYMENT_ID, TYPE, AMOUNT, BALANCE, REASON, REG_DATE) "
 	                + "VALUES (MILEAGE_HISTORY_SEQ.NEXTVAL, ?, NULL, NULL, ?, ?, ?, ?, SYSDATE)";
 	
-	        jdbc.update(mileageSql, mdto.getId(), "적립", 3000, 3000, "회원가입 축하 마일리지");
+	        jdbc.update(mileageSql, mdto.getId(), "적립", 2000, 2000, "회원가입 축하 마일리지");
 	    }
 	
 	    return result;
