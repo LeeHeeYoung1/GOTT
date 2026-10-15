@@ -269,32 +269,29 @@
                     <hr>
 
                     <div class="sideTitle">
-                        <span>예약/활동</span>
-                        <ul>
-                            <li><a href="/members/mypage">마이페이지 홈</a></li>
-                            <li><a href="#">예약 내역</a></li>
-                            <li><a href="#">찜한 여행지 · 숙소</a></li>
-                            <li><a href="#">여행 일정 플래너</a></li>
-                            <li><a href="#">내가 쓴 리뷰</a></li>
-                            <li><a href="#">내가 쓴 게시글</a></li>
-                            <li><a href="/event/tourTypeTest">여행성향 테스트</a></li>
-                        </ul>
+						<span>예약/활동</span>
+						<ul>
+							<li><a href="/members/mypage">마이페이지 홈</a></li>
+							<li><a href="/members/reservationpage">예약 내역</a></li>
+							<li><a href="/members/wishlist">찜한 목록</a></li>
+							<li><a href="/members/planner">여행 일정 플래너</a></li>
+							<li><a href="/review/reviewlist">내가 쓴 리뷰</a></li>
+							<li><a href="/board/boardlist">내가 쓴 게시글</a></li>
+							<li><a href="/bookmark/bookmarklist">북마크</a></li>
 
-                        <span>혜택</span>
-                        <ul>
-                            <li><a href="#">포인트 내역</a></li>
-                            <li><a href="/coupon/myCoupon">쿠폰함</a></li>
-                        </ul>
-
-                        <span>계정</span>
-                        <ul>
-                            <li><a href="/members/update">내 정보 수정</a></li>
-                            <li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
-                            <li><a href="#">알림 설정</a></li>
-                            <li><a href="#">1:1 문의</a></li>
-                            <li class="active"><a href="/members/deleted">회원탈퇴</a></li>
-                        </ul>
-                    </div>
+						</ul>
+						<span>혜택</span>
+						<ul>
+							<li><a href="/members/mileage">마일리지 내역</a></li>
+							<li><a href="/coupon/myCoupon">쿠폰함</a></li>
+						</ul>
+						<span>계정</span>
+						<ul>
+							<li><a href="/members/checkPassword">내 정보 수정</a></li>
+							<li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
+							<li class="active"><a href="/members/deleted">회원탈퇴</a></li>
+						</ul>
+					</div>
                 </div>
             </div>
 

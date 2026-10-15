@@ -120,199 +120,238 @@ public class MembersControllers {
 	}
 	
 
+
 	@RequestMapping("/mypage")
-	public String mypage(Integer cpage, Integer wishCpage, Integer mileageCpage, Integer plannerCpage,
-			Integer reviewCpage, String reservationTab, HttpSession session, Model model) {
-
-		String memberId = (String) session.getAttribute("loginId");
-		if (memberId == null) {
-			return "redirect:/members/loginpage";
-		}
-
-		int pagesize = 3;
-
-		// 첫 숙박 완료 후 10% 쿠폰 발급 확인
-		cdao.issueFirstStayCoupon(memberId);
-
-		String tourType = tdao.selectMyType(memberId);
-
-		// 1. 예약 내역 탭별 페이징
-		if (reservationTab == null || reservationTab.isEmpty()) {
-			reservationTab = "all";
-		}
-
-		if (!"all".equals(reservationTab) && !"upcoming".equals(reservationTab) && !"completed".equals(reservationTab)
-				&& !"cancelled".equals(reservationTab)) {
-			reservationTab = "all";
-		}
-
-		if (cpage == null || cpage < 1) {
-			cpage = 1;
-		}
-
-		int totalCount = rdao.reservationCount(memberId, reservationTab);
-		int totalPage = (int) Math.ceil((double) totalCount / pagesize);
-
-		if (totalPage > 0 && cpage > totalPage) {
-			cpage = totalPage;
-		}
-		if (totalPage == 0) {
-			cpage = 1;
-		}
-
-		ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize, reservationTab);
-
-		// DAO의 분류값을 기준으로 JSP에 전달
-		LocalDate today = LocalDate.now();
-		for (ReservationDTO rs : myRsList) {
-			if ("예약취소".equals(rs.getStatus())) {
-				rs.setReservationType("cancelled");
-			} else if (!rs.getCheckOut().toLocalDate().isAfter(today)) {
-				rs.setReservationType("completed");
-			} else {
-				rs.setReservationType("upcoming");
-			}
-		}
-
-		// 2. 찜 목록 페이징
-		if (wishCpage == null || wishCpage < 1) {
-			wishCpage = 1;
-		}
-
-		int wishTotalCount = wdao.countByWish(memberId);
-		int wishTotalPage = (int) Math.ceil((double) wishTotalCount / pagesize);
-
-		if (wishTotalPage > 0 && wishCpage > wishTotalPage) {
-			wishCpage = wishTotalPage;
-		}
-		if (wishTotalPage == 0) {
-			wishCpage = 1;
-		}
-
-		int wishStart = (wishCpage - 1) * pagesize + 1;
-		int wishEnd = wishCpage * pagesize;
-		List<PlaceDTO> wishList = wdao.selectByWish(memberId, wishStart, wishEnd);
-
-		// 3. 마일리지 내역 페이징
-		int mileagePagesize = 10;
-
-		if (mileageCpage == null || mileageCpage < 1) {
-			mileageCpage = 1;
-		}
-
-		int mileageTotalCount = mdao.mileageHistoryCount(memberId);
-		int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / mileagePagesize);
-
-		if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
-			mileageCpage = mileageTotalPage;
-		}
-		if (mileageTotalPage == 0) {
-			mileageCpage = 1;
-		}
-
-		int mileage = mdao.getMileage(memberId);
-		List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId, mileageCpage, mileagePagesize);
-
-		// 4. 마이페이지 요약 정보
-		int myWishTotalCount = wdao.countByWish(memberId);
-		int upcomingCount = rdao.upcomingReservationCount(memberId);
-		int reviewCount = rvdao.selectCount(memberId);
-
-		// 5. 이용 예정 및 이용 완료 예약
-		ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
-		ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
-
-		// 6. 내가 작성한 리뷰 페이징
-		int reviewPagesize = 3;
-
-		if (reviewCpage == null || reviewCpage < 1) {
-			reviewCpage = 1;
-		}
-
-		int reviewTotalCount = rvdao.countMyReview(memberId);
-		int reviewTotalPage = (int) Math.ceil((double) reviewTotalCount / reviewPagesize);
-
-		if (reviewTotalPage > 0 && reviewCpage > reviewTotalPage) {
-			reviewCpage = reviewTotalPage;
-		}
-		if (reviewTotalPage == 0) {
-			reviewCpage = 1;
-		}
-
-		List<ReviewDTO> reviewList = rvdao.selectMyReview(memberId, reviewCpage, reviewPagesize);
-
-		// 7. 내가 공유한 여행 일정 페이징
-		int plannerPagesize = 3;
-
-		if (plannerCpage == null || plannerCpage < 1) {
-			plannerCpage = 1;
-		}
-
-		List<?> allPlannerList = tpdao.selectMyPlansWithCount(memberId);
-		int plannerTotalCount = allPlannerList.size();
-		int plannerTotalPage = (int) Math.ceil((double) plannerTotalCount / plannerPagesize);
-
-		if (plannerTotalPage > 0 && plannerCpage > plannerTotalPage) {
-			plannerCpage = plannerTotalPage;
-		}
-		if (plannerTotalPage == 0) {
-			plannerCpage = 1;
-		}
-
-		int plannerStart = (plannerCpage - 1) * plannerPagesize;
-		int plannerEnd = Math.min(plannerStart + plannerPagesize, plannerTotalCount);
-		List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
-		
-		List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
-		
-		
-
-		// 8. 모델 전달
-		model.addAttribute("tourType", tourType);
-
-		model.addAttribute("myRsList", myRsList);
-		model.addAttribute("cpage", cpage);
-		model.addAttribute("totalPage", totalPage);
-		model.addAttribute("reservationTab", reservationTab);
-
-		model.addAttribute("wishList", wishList);
-		model.addAttribute("wishCpage", wishCpage);
-		model.addAttribute("wishTotalPage", wishTotalPage);
-		model.addAttribute("myWishTotalCount", myWishTotalCount);
-
-		model.addAttribute("mileage", mileage);
-		model.addAttribute("mileageTotalCount", mileageTotalCount);
-		model.addAttribute("mileageCpage", mileageCpage);
-		model.addAttribute("mileageTotalPage", mileageTotalPage);
-		model.addAttribute("mileageHistory", mileageHistory);
-
-		model.addAttribute("upcomingCount", upcomingCount);
-		model.addAttribute("upcomingList", upcomingList);
-		model.addAttribute("completedList", completedList);
-		model.addAttribute("today", LocalDate.now());
-
-		model.addAttribute("reviewCount", reviewCount);
-		model.addAttribute("reviewTotalCount", reviewTotalCount);
-		model.addAttribute("reviewList", reviewList);
-		model.addAttribute("reviewCpage", reviewCpage);
-		model.addAttribute("reviewTotalPage", reviewTotalPage);
-
-		model.addAttribute("myCoupons", cdao.selectMyCoupons(memberId));
-
-		model.addAttribute("myPlannerList", myPlannerList);
-		model.addAttribute("plannerCpage", plannerCpage);
-		model.addAttribute("plannerTotalPage", plannerTotalPage);
-		
-		model.addAttribute("scrapPlanList", scrapPlanList);
-		
-		Object message = session.getAttribute("reservationUpdateMessage");
-		if (message != null) {
-			model.addAttribute("reservationUpdateMessage", message);
-			session.removeAttribute("reservationUpdateMessage");
-		}
-
-		return "members/mypage";
+	public String mypage(Integer cpage, Integer wishCpage, String wishType,
+	        Integer mileageCpage, Integer plannerCpage, Integer reviewCpage,
+	        String reservationTab, HttpSession session, Model model) {
+	
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	
+	    int pagesize = 3;
+	
+	    // 첫 숙박 완료 후 10% 쿠폰 발급 확인
+	    cdao.issueFirstStayCoupon(memberId);
+	
+	    String tourType = tdao.selectMyType(memberId);
+	
+	    // 1. 예약 내역 탭별 페이징
+	    if (reservationTab == null || reservationTab.isEmpty()) {
+	        reservationTab = "all";
+	    }
+	
+	    if (!"all".equals(reservationTab) && !"upcoming".equals(reservationTab)
+	            && !"completed".equals(reservationTab) && !"cancelled".equals(reservationTab)) {
+	        reservationTab = "all";
+	    }
+	
+	    if (cpage == null || cpage < 1) {
+	        cpage = 1;
+	    }
+	
+	    int totalCount = rdao.reservationCount(memberId, reservationTab);
+	    int totalPage = (int) Math.ceil((double) totalCount / pagesize);
+	
+	    if (totalPage > 0 && cpage > totalPage) {
+	        cpage = totalPage;
+	    }
+	    if (totalPage == 0) {
+	        cpage = 1;
+	    }
+	
+	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize, reservationTab);
+	
+	    // 예약 상태 분류
+	    LocalDate today = LocalDate.now();
+	    for (ReservationDTO rs : myRsList) {
+	        if ("예약취소".equals(rs.getStatus())) {
+	            rs.setReservationType("cancelled");
+	        } else if (!rs.getCheckOut().toLocalDate().isAfter(today)) {
+	            rs.setReservationType("completed");
+	        } else {
+	            rs.setReservationType("upcoming");
+	        }
+	    }
+	
+	    // 2. 카테고리별 찜 목록 페이징
+	    if (wishType == null || wishType.isEmpty()) {
+	        wishType = "all";
+	    }
+	
+	    if (!"all".equals(wishType) && !"spot".equals(wishType)
+	            && !"food".equals(wishType) && !"stay".equals(wishType)) {
+	        wishType = "all";
+	    }
+	
+	    if (wishCpage == null || wishCpage < 1) {
+	        wishCpage = 1;
+	    }
+	
+	    String dbType = null;
+	
+	    if ("spot".equals(wishType)) {
+	        dbType = "SPOT";
+	    } else if ("food".equals(wishType)) {
+	        dbType = "FOOD";
+	    } else if ("stay".equals(wishType)) {
+	        dbType = "STAY";
+	    }
+	
+	    // 전체 또는 선택 카테고리의 찜 개수 조회
+	    int wishTotalCount;
+	    if ("all".equals(wishType)) {
+	        wishTotalCount = wdao.countByWish(memberId);
+	    } else {
+	        wishTotalCount = wdao.countByWish(memberId, dbType);
+	    }
+	
+	    int wishTotalPage = (int) Math.ceil((double) wishTotalCount / pagesize);
+	
+	    if (wishTotalPage > 0 && wishCpage > wishTotalPage) {
+	        wishCpage = wishTotalPage;
+	    }
+	    if (wishTotalPage == 0) {
+	        wishCpage = 1;
+	    }
+	
+	    int wishStart = (wishCpage - 1) * pagesize + 1;
+	    int wishEnd = wishCpage * pagesize;
+	
+	    // 전체 또는 선택 카테고리의 찜 목록 조회
+	    List<PlaceDTO> wishList;
+	    if ("all".equals(wishType)) {
+	        wishList = wdao.selectByWish(memberId, wishStart, wishEnd);
+	    } else {
+	        wishList = wdao.selectByWish(memberId, dbType, wishStart, wishEnd);
+	    }
+	
+	    // 3. 마일리지 내역 페이징
+	    int mileagePagesize = 10;
+	
+	    if (mileageCpage == null || mileageCpage < 1) {
+	        mileageCpage = 1;
+	    }
+	
+	    int mileageTotalCount = mdao.mileageHistoryCount(memberId);
+	    int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / mileagePagesize);
+	
+	    if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
+	        mileageCpage = mileageTotalPage;
+	    }
+	    if (mileageTotalPage == 0) {
+	        mileageCpage = 1;
+	    }
+	
+	    int mileage = mdao.getMileage(memberId);
+	    List<MileageHistoryDTO> mileageHistory =
+	            mdao.mileageHistory(memberId, mileageCpage, mileagePagesize);
+	
+	    // 4. 마이페이지 요약 정보
+	    int myWishTotalCount = wdao.countByWish(memberId);
+	    int upcomingCount = rdao.upcomingReservationCount(memberId);
+	    int reviewCount = rvdao.selectCount(memberId);
+	
+	    // 5. 이용 예정 및 이용 완료 예약
+	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
+	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
+	
+	    // 6. 내가 작성한 리뷰 페이징
+	    int reviewPagesize = 3;
+	
+	    if (reviewCpage == null || reviewCpage < 1) {
+	        reviewCpage = 1;
+	    }
+	
+	    int reviewTotalCount = rvdao.countMyReview(memberId);
+	    int reviewTotalPage = (int) Math.ceil((double) reviewTotalCount / reviewPagesize);
+	
+	    if (reviewTotalPage > 0 && reviewCpage > reviewTotalPage) {
+	        reviewCpage = reviewTotalPage;
+	    }
+	    if (reviewTotalPage == 0) {
+	        reviewCpage = 1;
+	    }
+	
+	    List<ReviewDTO> reviewList =
+	            rvdao.selectMyReview(memberId, reviewCpage, reviewPagesize);
+	
+	    // 7. 내가 공유한 여행 일정 페이징
+	    int plannerPagesize = 3;
+	
+	    if (plannerCpage == null || plannerCpage < 1) {
+	        plannerCpage = 1;
+	    }
+	
+	    List<?> allPlannerList = tpdao.selectMyPlansWithCount(memberId);
+	    int plannerTotalCount = allPlannerList.size();
+	    int plannerTotalPage = (int) Math.ceil((double) plannerTotalCount / plannerPagesize);
+	
+	    if (plannerTotalPage > 0 && plannerCpage > plannerTotalPage) {
+	        plannerCpage = plannerTotalPage;
+	    }
+	    if (plannerTotalPage == 0) {
+	        plannerCpage = 1;
+	    }
+	
+	    int plannerStart = (plannerCpage - 1) * plannerPagesize;
+	    int plannerEnd = Math.min(plannerStart + plannerPagesize, plannerTotalCount);
+	    List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
+	
+	    List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
+	
+	    // 8. 모델 전달
+	    model.addAttribute("tourType", tourType);
+	
+	    model.addAttribute("myRsList", myRsList);
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("totalPage", totalPage);
+	    model.addAttribute("reservationTab", reservationTab);
+	
+	    model.addAttribute("wishList", wishList);
+	    model.addAttribute("wishCpage", wishCpage);
+	    model.addAttribute("wishTotalPage", wishTotalPage);
+	    model.addAttribute("wishTotalCount", wishTotalCount);
+	    model.addAttribute("wishType", wishType);
+	    model.addAttribute("myWishTotalCount", myWishTotalCount);
+	
+	    model.addAttribute("mileage", mileage);
+	    model.addAttribute("mileageTotalCount", mileageTotalCount);
+	    model.addAttribute("mileageCpage", mileageCpage);
+	    model.addAttribute("mileageTotalPage", mileageTotalPage);
+	    model.addAttribute("mileageHistory", mileageHistory);
+	
+	    model.addAttribute("upcomingCount", upcomingCount);
+	    model.addAttribute("upcomingList", upcomingList);
+	    model.addAttribute("completedList", completedList);
+	    model.addAttribute("today", LocalDate.now());
+	
+	    model.addAttribute("reviewCount", reviewCount);
+	    model.addAttribute("reviewTotalCount", reviewTotalCount);
+	    model.addAttribute("reviewList", reviewList);
+	    model.addAttribute("reviewCpage", reviewCpage);
+	    model.addAttribute("reviewTotalPage", reviewTotalPage);
+	
+	    model.addAttribute("myCoupons", cdao.selectMyCoupons(memberId));
+	
+	    model.addAttribute("myPlannerList", myPlannerList);
+	    model.addAttribute("plannerCpage", plannerCpage);
+	    model.addAttribute("plannerTotalPage", plannerTotalPage);
+	
+	    model.addAttribute("scrapPlanList", scrapPlanList);
+	
+	    // 예약 변경 메시지
+	    Object message = session.getAttribute("reservationUpdateMessage");
+	    if (message != null) {
+	        model.addAttribute("reservationUpdateMessage", message);
+	        session.removeAttribute("reservationUpdateMessage");
+	    }
+	
+	    return "members/mypage";
 	}
+
 	
 
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
