@@ -122,6 +122,14 @@ public class PermitCollector {
 			return "전남광주통합특별시" + addr.substring("광주광역시".length());
 		if (addr.startsWith("전라남도"))
 			return "전남광주통합특별시" + addr.substring("전라남도".length());
+		if (addr.startsWith("전라북도"))
+			return "전북특별자치도" + addr.substring("전라북도".length());
+		if (addr.startsWith("강원도"))
+			return "강원특별자치도" + addr.substring("강원도".length());
+		if (addr.startsWith("제주도"))
+			return "제주특별자치도" + addr.substring("제주도".length());
+		if (addr.startsWith("세종시"))
+			return "세종특별자치시" + addr.substring("세종시".length());
 		return addr;
 	}
 

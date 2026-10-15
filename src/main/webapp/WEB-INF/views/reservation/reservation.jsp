@@ -213,7 +213,9 @@ form {
 	<div class="container">
 		<div class="header">${placeOne.name}</div>
 		<hr>
-		<form action="${pageContext.request.contextPath}/reservation/finalPayment" method="get">
+		<form
+			action="${pageContext.request.contextPath}/reservation/finalPayment"
+			method="get">
 			<div class="photo">
 				<div class="room_img">
 					<c:if test="${not empty roomDto.image1}">
@@ -242,8 +244,8 @@ form {
 
 
 			<div class="room_info">
-				<input type="hidden" name="placeId" value="${placeId}">
-				<input type="hidden" name="roomId" value="${roomDto.roomId}">
+				<input type="hidden" name="placeId" value="${placeId}"> <input
+					type="hidden" name="roomId" value="${roomDto.roomId}">
 				<p class="roomName">${roomDto.roomName}</p>
 				<p class="roomCount">잔여 객실 수 : ${roomDto.roomCount}</p>
 				<div class="roomAmenity">
@@ -283,4 +285,35 @@ form {
 	</div>
 
 </body>
+<script>
+	let photoIdx = 0;
+	let photoCount = $(".room_img img").length;
+
+	if (photoCount <= 1) {
+		$(".leftBtn").hide();
+		$(".rightBtn").hide();
+	}
+
+	$(".rightBtn").on("click", function() {
+		photoIdx = photoIdx + 1;
+		if (photoIdx > photoCount - 1) {
+			photoIdx = 0;
+		}
+		moveSlide();
+	});
+
+	$(".leftBtn").on("click", function() {
+		photoIdx = photoIdx - 1;
+		if (photoIdx < 0) {
+			photoIdx = photoCount - 1;
+		}
+		moveSlide();
+	});
+
+	function moveSlide() {
+		$(".room_img").css("transform",
+				"translateX(-" + (photoIdx * 100) + "%)");
+	}
+</script>
+
 </html>
