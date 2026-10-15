@@ -1,4 +1,3 @@
-
 package com.kedu.controllers;
 
 import java.time.LocalDate;
@@ -305,7 +304,7 @@ public class MembersControllers {
 		model.addAttribute("plannerTotalPage", plannerTotalPage);
 		
 		model.addAttribute("scrapPlanList", scrapPlanList);
-
+		
 		Object message = session.getAttribute("reservationUpdateMessage");
 		if (message != null) {
 			model.addAttribute("reservationUpdateMessage", message);
@@ -314,59 +313,82 @@ public class MembersControllers {
 
 		return "members/mypage";
 	}
+	
 
-	
-	
-	@RequestMapping("/update")
-	public String update() {
-		return "members/update";
-	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(MembersDTO mdto, HttpSession session) {
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	public String update(HttpSession session) {
 	    String id = (String) session.getAttribute("loginId");
 	    if (id == null) {
 	        return "redirect:/members/loginpage";
 	    }
-	   
-	    mdto.setId(id);
-	    int result = mdao.update(mdto);
-	    if(result>0) {
-	    	session.setAttribute("nickname", mdto.getNickname());
-	    	session.setAttribute("phone", mdto.getPhone());
-	    	session.setAttribute("email", mdto.getEmail());
-	    	session.setAttribute("zipcode", mdto.getZipcode());
-	    	session.setAttribute("address1", mdto.getAddress1());
-	    	session.setAttribute("address2", mdto.getAddress2());
+	    Boolean passwordChecked = (Boolean) session.getAttribute("passwordChecked");
+	    if (!Boolean.TRUE.equals(passwordChecked)) {
+	        return "redirect:/members/checkPassword";
 	    }
+
+	    return "members/update";
+	}
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(MembersDTO mdto, HttpSession session) {
+	    String id = (String) session.getAttribute("loginId");
+
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
+
+	    Boolean passwordChecked = (Boolean) session.getAttribute("passwordChecked");
+	    if (!Boolean.TRUE.equals(passwordChecked)) {
+	        return "redirect:/members/checkPassword";
+	    }
+
+	    mdto.setId(id);
+
+	    int result = mdao.update(mdto);
+
+	    if (result > 0) {
+	        session.setAttribute("nickname", mdto.getNickname());
+	        session.setAttribute("phone", mdto.getPhone());
+	        session.setAttribute("email", mdto.getEmail());
+	        session.setAttribute("zipcode", mdto.getZipcode());
+	        session.setAttribute("address1", mdto.getAddress1());
+	        session.setAttribute("address2", mdto.getAddress2());
+	    }
+
+	    session.removeAttribute("passwordChecked");
+
 	    return "redirect:/members/mypage";
 	}
 
-	@RequestMapping("/checkPassword")
+	// 비밀번호 확인 페이지
+	@RequestMapping(value = "/checkPassword", method = RequestMethod.GET)
 	public String checkPassword(HttpSession session) {
 	    if (session.getAttribute("loginId") == null) {
 	        return "redirect:/members/loginpage";
 	    }
+	    // 확인 화면에 다시 들어오면 이전 확인 기록 삭제
+	    session.removeAttribute("passwordChecked");
 	    return "members/checkpassword";
 	}
-	
 
+	// 비밀번호 확인 처리
 	@RequestMapping(value = "/checkPassword", method = RequestMethod.POST)
 	public String checkPassword(String password, HttpSession session, Model model) {
-	    String id = (String) session.getAttribute("loginId");	
+	    String id = (String) session.getAttribute("loginId");
 	    if (id == null) {
 	        return "redirect:/members/loginpage";
 	    }
-	
-	    boolean result = mdao.checkPassword(id, EncryptionUtils.encryptSHA512(password));
-	
+
+		boolean result = mdao.checkPassword(id, EncryptionUtils.encryptSHA512(password));
 	    if (result) {
+	        session.setAttribute("passwordChecked", true);
 	        return "redirect:/members/update";
 	    }
-	
+
 	    model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
 	    return "members/checkpassword";
 	}
+
 
 	
 	@RequestMapping("/deleted")

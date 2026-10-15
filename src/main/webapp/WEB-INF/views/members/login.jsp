@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,224 +9,151 @@
 <link rel="stylesheet" href="/css/public.css">
 <title>GOTT 로그인</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-	
-	 <style>
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
 
-        .header {
-            width: 100%;
-            height: 70px;
-            padding: 0 30px;
-        }
+<style>
+    .title {
+        width: 100%;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8fafc;
+    }
 
-        .logobox {
-            width: 120px;
-            height: 70px;
-            margin-left: 50px;
-        }
+    .title h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+    }
 
-        .logobox img {
-            width: 100%;
-            height: 100%;
-        }
+    .main {
+        width: 100%;
+        min-height: 400px;
+        display: flex;
+        padding: 40px 60px;
+        gap: 50px;
+        box-sizing: border-box;
+    }
 
-        .nav {
-            width: 50%;
-            margin: 0 auto;
-        }
+    .mainleft {
+        width: 220px;
+        flex-shrink: 0;
+    }
 
-        .textzone {
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-        }
+    .linkbar {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: white;
+        box-sizing: border-box;
+    }
 
-        .textzone:hover {
-            color: #2563eb;
-        }
+    .linkbartitle {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        font-size: 17px;
+        font-weight: 700;
+        background-color: #f1f5f9;
+        border-bottom: 1px solid #e5e7eb;
+        box-sizing: border-box;
+    }
 
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .linkbarmain {
+        width: 100%;
+        min-height: 180px;
+        padding: 15px;
+        line-height: 2;
+        box-sizing: border-box;
+    }
 
-        .textbox {
-            padding: 7px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .textbox:hover {
-            background-color: #f3f4f6;
-        }
+    .linkbarmain a:hover {
+        color: #2563eb;
+    }
 
-        .icon {
-            margin-left: 10px;
-            font-size: 20px;
-        }
-        .icon:hover {
-            cursor: pointer;
-        }
-        .icon:active {
+    .mainright {
+        flex: 1;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 35px 40px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background-color: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        box-sizing: border-box;
+    }
 
-        }
-        .title {
-            width: 100%;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8fafc;
-        }
+    .mainright legend {
+        padding: 0 10px;
+        font-size: 20px;
+        font-weight: 700;
+    }
 
-        .title h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-        }
+    .mainright input {
+        width: 100%;
+        height: 48px;
+        margin-bottom: 12px;
+        padding: 0 15px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+    }
 
+    .mainright input:focus {
+        border-color: #1d97c0;
+    }
 
+    .mainright button {
+        height: 45px;
+        padding: 0 25px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .mainright button:hover {
+        background-color: #1d4ed8;
+    }
+
+    hr {
+        margin: 0;
+        border: none;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    @media (max-width: 768px) {
         .main {
-            width: 100%;
-            height: 400px;
-            display: flex;
-            padding: 40px 60px;
-            gap: 50px;
+            flex-direction: column;
+            padding: 25px 20px;
+            gap: 25px;
         }
 
         .mainleft {
-            width: 220px;
-            flex-shrink: 0;
-        }
-
-        .linkbar {
             width: 100%;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: white;
-        }
-
-        .linkbartitle {
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            font-size: 17px;
-            font-weight: 700;
-            background-color: #f1f5f9;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .linkbarmain {
-            width: 100%;
-            min-height: 180px;
-            padding: 15px;
-            line-height: 2;
-        }
-        .linkbarmain a:hover {
-            cursor: pointer;
-            color: #2563eb;
         }
 
         .mainright {
-            flex: 1;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 35px 40px;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            background-color: white;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .mainright legend {
-            padding: 0 10px;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .mainright input {
             width: 100%;
-            height: 48px;
-            margin-bottom: 12px;
-            padding: 0 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-            outline: none;
+            padding: 30px 20px;
         }
-
-        .mainright input:focus {
-            border-color: #1d97c0;
-        }
-
-        .mainright button {
-            height: 45px;
-            padding: 0 25px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            background-color: #2563eb;
-            color: white;
-        }
-
-        hr {
-            margin: 0;
-            border: none;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .footer {
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #777;
-            background-color: #f8fafc;
-            font-size: 13px;
-        }
-
-        .footer p {
-            margin: 0;
-        }
-        .footer .textbox {
-            margin-top: 10px;
-            color: #6B7280;
-            background-color: #F8FAFA;
-        }
-
-    </style>
+    }
+</style>
 </head>
 
 <body>
-
 <div class="container">
-    <div class="header flex-between">
-        <div class="logobox">
-            <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
-        </div>
-        <div class="nav flex-between">
-            <div class="textzone">이벤트</div>
-            <div class="textzone">지역</div>
-            <div class="textzone">추천여행지</div>
-            <div class="textzone">숙박업소</div>
-            <div class="textzone">리뷰</div>
-            <div class="textzone">여행플래너</div>
-            <div class="textzone">공지사항</div>
-        </div>
-        <div class="user-menu">
-            <div class="icon"><i class="fa-solid fa-bars"></i></div>
-        </div>
-
-    </div>
+    <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
     <div class="title">
         <h1>로그인</h1>
@@ -237,7 +164,7 @@
             <div class="linkbar">
                 <div class="linkbartitle">메뉴</div>
                 <div class="linkbarmain">
-                	<a href="/">홈으로</a><br>
+                    <a href="/">홈으로</a><br>
                     <a href="/members/loginpage">로그인</a><br>
                     <a href="/members/signuppage">회원가입</a><br>
                     <a href="/members/idsearchpage">아이디 찾기</a><br>
@@ -245,59 +172,59 @@
                 </div>
             </div>
         </div>
-        <form id="loginfrm" action="/members/login">
+
+        <form id="loginfrm" action="/members/login" method="post">
             <fieldset class="mainright">
                 <legend>로그인</legend>
-                <input id="id" name="id" type="text" placeholder="ID를 입력하세요">
-                <input id="pw" name="pw" type="password" placeholder="Password를 입력하세요">
+                <input id="id" name="id" type="text"
+                       placeholder="ID를 입력하세요" autocomplete="username">
+                <input id="pw" name="pw" type="password"
+                       placeholder="Password를 입력하세요"
+                       autocomplete="current-password">
                 <button type="submit">로그인</button>
-                <button id="signup" type="button"> 회원가입</button>
+                <button id="signup" type="button">회원가입</button>
             </fieldset>
         </form>
     </div>
+
     <hr>
-    <div class="footer">
-        <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-        <p>회사명 : GOTT | 대표 : ??? | 사업자등록번호 : 123-45-67890</p>
-        <p>이용약관 | 개인정보처리방침 | 고객센터</p>
-        <div class="textbox">사이트로고</div>
-    </div>
+
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </div>
 
 <script>
+    $("#loginfrm").on("submit", function(e) {
+        e.preventDefault();
 
-	$("#loginfrm").on("submit", function(e) {
-		e.preventDefault();
-		let id = $("#id").val();
-		let pw = $("#pw").val();
-		
-		if(id == "" || pw == "") {
-	        alert("아이디와 비밀번호를 입력해주세요.");
-	        return;
-	    }
-		
-		$.ajax({
-	        url: "/members/login",
-	        type: "post",
-	        data: {
-	            id: id,
-	            pw: pw
-	        }
-	    }).done(function(resp) {
+        let id = $("#id").val().trim();
+        let pw = $("#pw").val();
 
-	        if(resp == 1) {
-	            location.href = "/";
-	        } else {
-	            alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-	        }
-	    });
-	})
+        if (id === "" || pw === "") {
+            alert("아이디와 비밀번호를 입력해주세요.");
+            return;
+        }
 
-    $("#signup").on("click", function(){
-        location.href="/members/signuppage";
-    })
+        $.ajax({
+            url: "/members/login",
+            type: "post",
+            data: {
+                id: id,
+                pw: pw
+            }
+        }).done(function(resp) {
+            if (resp == 1) {
+                location.href = "/";
+            } else {
+                alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+            }
+        }).fail(function() {
+            alert("로그인 요청 중 오류가 발생했습니다. 다시 시도해주세요.");
+        });
+    });
 
+    $("#signup").on("click", function() {
+        location.href = "/members/signuppage";
+    });
 </script>
-
 </body>
 </html>
