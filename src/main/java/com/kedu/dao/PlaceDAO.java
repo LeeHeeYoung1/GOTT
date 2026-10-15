@@ -293,4 +293,9 @@ public class PlaceDAO {
 
         return jdbc.queryForObject(sql, String.class);
     }
+    
+ 	public String regionByPlaceId(int placeId) {
+ 		String sql = "select region from place where place_id = ?";
+ 		return jdbc.queryForObject(sql, String.class, placeId);
+ 	}
 }

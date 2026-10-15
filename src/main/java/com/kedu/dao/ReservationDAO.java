@@ -417,4 +417,24 @@ public class ReservationDAO {
 		return jdbc.queryForObject(sql, Integer.class, monthStart, monthEnd);
 	}
 	
+	//지역별 예약 분포
+	public int reservationRegion() {
+		String sql = "select sum(total_price) from reservation where status = '예약완료' and check_out <= sysdate";
+		return jdbc.queryForObject(sql, Integer.class);
+	}
+	
+	//예약된 방들의 place_id 뽑기
+	public List<Integer> reservedPlaceIds() {
+		String sql = "select rm.place_id from reservation r join room rm on rm.room_id = r.room_id";
+		return jdbc.queryForList(sql, Integer.class);
+	}
+	
+	//인기 숙소 top5 place_id 뽑기
+	public List<Integer> topFiveReserved() {
+		String sql = "select place_id FROM (select rm.place_id, COUNT(*) AS cnt from reservation r "
+				+ "     JOIN room rm ON rm.room_id = r.room_id "
+				+ "    GROUP BY rm.place_id "
+				+ "    ORDER BY cnt DESC) WHERE ROWNUM <= 5";
+		return jdbc.queryForList(sql, Integer.class);
+	}
 }

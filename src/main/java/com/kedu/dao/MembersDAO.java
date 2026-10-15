@@ -125,7 +125,7 @@ public class MembersDAO {
 	
 	//전체 회원 수 조회
 	public int totalMembers() {
-		String sql = "select count(*) from members";
+		String sql = "select count(*) from members where role = 'user'";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
 }
