@@ -53,11 +53,17 @@ public class Travel_TypeDAO {
         return jdbc.queryForObject(sql, Integer.class, memberId);
     }
 
-    public void issueCoupon(String memberId) {
-        String sql = "insert into members_coupon (member_coupon_id, coupon_id, member_id, issue_date, expire_date, status) "
-                + "select member_coupon_seq.nextval, coupon_id, ?, sysdate, least(end_date, add_months(sysdate, 3)), 'AVAILABLE' "
-                + "from coupon where coupon_id = 5 and active_yn = 'Y' and start_date <= sysdate and end_date >= sysdate";
+    public int issueCoupon(String memberId) {
+        String sql = "insert into members_coupon "
+                + "(member_coupon_id, coupon_id, member_id, issue_date, expire_date, status) "
+                + "select member_coupon_seq.nextval, coupon_id, ?, sysdate, "
+                + "least(end_date, add_months(sysdate, 3)), 'AVAILABLE' "
+                + "from coupon "
+                + "where coupon_id = 5 "
+                + "and active_yn = 'Y' "
+                + "and start_date <= sysdate "
+                + "and end_date >= sysdate";
 
-        jdbc.update(sql, memberId);
+        return jdbc.update(sql, memberId);
     }
 }

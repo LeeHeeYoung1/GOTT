@@ -1306,11 +1306,12 @@ body {
 </style>
 </head>
 <body>
-	<c:if test="${not empty message}">
-		<script>
-	        alert("${message}");
-	    </script>
-	</c:if>
+<c:if test="${not empty tourTypeMessage}">
+    <script>
+        alert("${tourTypeMessage}");
+    </script>
+    <c:remove var="tourTypeMessage"/>
+</c:if>
 
 	<c:choose>
 		<c:when test="${loginId != null}">

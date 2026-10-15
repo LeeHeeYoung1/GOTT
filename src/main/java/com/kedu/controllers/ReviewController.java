@@ -65,6 +65,7 @@ public class ReviewController {
 		return "board/reviewBoard";
 	}
 	
+	@ResponseBody
 	@RequestMapping("/toggleRecommend")
 	public String toggleRecommend(int seq, HttpSession session) {
 		String loginId = (String)session.getAttribute("loginId");

@@ -882,12 +882,22 @@
 		    color:#8e8e8e;
 		    font-size:13px;
 		}
+<<<<<<< HEAD
 		.reviewShareIcon:hover {
 			cursor: pointer;
 		}	
+=======
+.reviewContainer .reviewHeart {
+    cursor: pointer;
+    color: #999;
+}
+
+.reviewContainer .reviewHeart.liked {
+    color: #ff4d6d;
+}
+>>>>>>> 870aadd30a0b33bb17ff9af8771a0e683cf17012
 		
     </style>
-
 
 <div class="container">
 
@@ -1120,6 +1130,7 @@
 					                </div>
 				                </a>
 				                <div class="reviewInfo">
+<<<<<<< HEAD
 				                    <div class="reviewIcons">
 				                        <span class="reviewHeart ${rv.liked ? 'liked' : ''}"
 										 onclick="toggleRecommend(${rv.seq}, this)"> ${rv.liked ? '♥' : '♡'}</span>
@@ -1128,6 +1139,13 @@
 									     	<i class="fa-solid fa-link"></i> 
 									    </span>
 				                    </div>
+=======
+									<div class="reviewIcons">
+									    <span class="reviewHeart ${rv.liked ? 'liked' : ''}"
+									          onclick="toggleRecommend(${rv.seq}, this)">${rv.liked ? '♥' : '♡'}</span>
+									    <span class="reviewShareIcon">↗</span>
+									</div>
+>>>>>>> 870aadd30a0b33bb17ff9af8771a0e683cf17012
 				                    <div class="reviewtext">
 					                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
 					                    <p class="reviewDescription">${rv.contents}</p>
@@ -1433,6 +1451,7 @@ document.addEventListener("DOMContentLoaded", function () {
     startAutoSlide();
 });
 
+<<<<<<< HEAD
 		function shareReview(seq, placeId) {
 		    // 현재 사이트 주소와 리뷰 상세 페이지 주소를 결합
 		    const url = window.location.origin
@@ -1450,6 +1469,29 @@ document.addEventListener("DOMContentLoaded", function () {
 		        });
 		}
 
+=======
+function toggleRecommend(seq, heart) {
+    $.ajax({
+        url: "/review/toggleRecommend",
+        type: "post",
+        data: {
+            seq: seq
+        },
+        success: function(result) {
+            if (result == "login") {
+                alert("로그인이 필요합니다.");
+                location.href = "/members/loginpage";
+            } else if (result == "liked") {
+                heart.innerHTML = "♥";
+                heart.classList.add("liked");
+            } else if (result == "unliked") {
+                heart.innerHTML = "♡";
+                heart.classList.remove("liked");
+            }
+        }
+    });
+}
+>>>>>>> 870aadd30a0b33bb17ff9af8771a0e683cf17012
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

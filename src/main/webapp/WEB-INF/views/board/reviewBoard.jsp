@@ -720,6 +720,7 @@ button:hover {
 		navi.append(next);
 	}
 	
+<<<<<<< HEAD
 	function shareReview(seq, placeId) {
 	    // 현재 사이트 주소와 리뷰 상세 페이지 주소를 결합
 	    const url = window.location.origin
@@ -738,4 +739,28 @@ button:hover {
 	}
 	
 </script>
+=======
+	function toggleRecommend(seq, heart) {
+	    $.ajax({
+	        url: "/review/toggleRecommend",
+	        type: "post",
+	        data: {
+	            seq: seq
+	        },
+	        success: function(result) {
+	            if (result == "login") {
+	                alert("로그인이 필요합니다.");
+	                location.href = "/members/loginpage";
+	            } else if (result == "liked") {
+	                heart.innerHTML = "♥";
+	                heart.classList.add("liked");
+	            } else if (result == "unliked") {
+	                heart.innerHTML = "♡";
+	                heart.classList.remove("liked");
+	            }
+	        }
+	    });
+	}
+	</script>
+>>>>>>> 870aadd30a0b33bb17ff9af8771a0e683cf17012
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
