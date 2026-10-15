@@ -326,77 +326,116 @@ public class ReservationController {
 	      return PriceUtil.totalPrice(checkIn, checkOut, roomDto.getPriceWeekday(), roomDto.getPriceWeekend());
 	  }
 	  
-	  @RequestMapping("/cancelMyReservation")
-	  @ResponseBody
-	  public String cancelMyReservation(String paymentId, HttpSession session) {
-	      String memberId = (String) session.getAttribute("loginId");
-	      if (memberId == null) return "로그인이 필요합니다.";
-	      if (!rdao.canModifyReservation(paymentId, memberId)) {
-	    	    return "체크인 당일 또는 이후에는 예약을 변경하거나 취소할 수 없습니다.";
-	    	}
-	      if (paymentId == null || paymentId.trim().isEmpty()) return "결제 정보가 없습니다.";
 
-	      try {
-	          ReservationDTO reservation = rdao.reservationOne(paymentId);
-	          if (reservation == null || !memberId.equals(reservation.getMemberId())) {
-	              return "예약 정보를 찾을 수 없습니다.";
-	          }
-	          if (!"예약완료".equals(reservation.getStatus())) {
-	              return "이미 취소되었거나 취소할 수 없는 예약입니다.";
-	          }
-	          if (apiSecret == null || apiSecret.trim().isEmpty()) {
-	              return "결제 API 설정을 확인해 주세요.";
-	          }
+	@RequestMapping("/cancelMyReservation")
+	@ResponseBody
+	public String cancelMyReservation(String paymentId, HttpSession session) {
+	    String memberId = (String) session.getAttribute("loginId");
+	
+	    if (memberId == null) {
+	        return "로그인이 필요합니다.";
+	    }
+	    if (paymentId == null || paymentId.trim().isEmpty()) {
+	        return "결제 정보가 없습니다.";
+	    }
+	
+	    try {
+	        // 1. 예약 및 회원 정보 확인
+	        ReservationDTO reservation = rdao.reservationOne(paymentId);
+	
+	        if (reservation == null || !memberId.equals(reservation.getMemberId())) {
+	            return "예약 정보를 찾을 수 없습니다.";
+	        }
+	        if (!"예약완료".equals(reservation.getStatus())) {
+	            return "이미 취소되었거나 취소할 수 없는 예약입니다.";
+	        }
+	        if (!rdao.canModifyReservation(paymentId, memberId)) {
+	            return "체크인 당일 또는 이후에는 예약을 취소할 수 없습니다.";
+	        }
+	        if (apiSecret == null || apiSecret.trim().isEmpty()) {
+	            return "결제 API 설정을 확인해 주세요.";
+	        }
+	
+	        // 2. PortOne에서 실제 결제 상태 조회
+	        String encodedPaymentId =
+	                java.net.URLEncoder.encode(paymentId, "UTF-8");
+	
+	        String paymentUrl =
+	                "https://api.portone.io/payments/" + encodedPaymentId;
+	
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.set("Authorization", "PortOne " + apiSecret);
+	
+	        HttpEntity<String> entity = new HttpEntity<>(headers);
+	        RestTemplate restTemplate = new RestTemplate();
+	        ObjectMapper mapper = new ObjectMapper();
+	
+	        ResponseEntity<String> paymentResponse = restTemplate.exchange(
+	                paymentUrl, HttpMethod.GET, entity, String.class);
+	
+	        JsonNode payment = mapper.readTree(paymentResponse.getBody());
+	        String status = payment.path("status").asText();
+	
+	        // 이미 전액 취소된 결제는 중복 취소하지 않음
+	        if ("CANCELLED".equals(status)) {
+	            return "이미 전체 취소된 결제입니다. 예약 및 결제 내역을 확인해 주세요.";
+	        }
+	
+	        // 정상 결제 및 부분 취소 결제 허용
+	        if (!"PAID".equals(status)
+	                && !"PARTIAL_CANCELLED".equals(status)) {
+	            return "현재 결제 상태에서는 취소할 수 없습니다. 상태: " + status;
+	        }
+	
+	        // 3. 남은 취소 가능 금액 전체 취소 요청
+	        // amount를 생략하면 남은 취소 가능 금액 전체를 취소 요청함
+	        HttpHeaders cancelHeaders = new HttpHeaders();
+	        cancelHeaders.set("Authorization", "PortOne " + apiSecret);
+	        cancelHeaders.setContentType(
+	                org.springframework.http.MediaType.APPLICATION_JSON);
+	
+	        com.fasterxml.jackson.databind.node.ObjectNode cancelBody =
+	                mapper.createObjectNode();
+	        cancelBody.put("reason", "CUSTOMER_REQUEST");
+	
+	        HttpEntity<String> cancelEntity = new HttpEntity<>(
+	                mapper.writeValueAsString(cancelBody), cancelHeaders);
+	
+	        String cancelUrl =
+	                "https://api.portone.io/payments/"
+	                + encodedPaymentId + "/cancel";
+	
+	        ResponseEntity<String> cancelResponse = restTemplate.exchange(
+	                cancelUrl, HttpMethod.POST, cancelEntity, String.class);
+	
+	        JsonNode cancelResult = mapper.readTree(cancelResponse.getBody());
+	        String cancelStatus =
+	                cancelResult.path("cancellation").path("status").asText();
+	
+	        // 취소 완료 여부를 확인한 경우에만 DB 처리
+	        if (!"SUCCEEDED".equals(cancelStatus)) {
+	            return "결제 취소가 아직 완료되지 않았습니다. 상태: "
+	                    + cancelStatus + ". 결제 내역을 확인해 주세요.";
+	        }
+	
+	        // 4. 기존 서비스 로직으로 예약 취소 및 마일리지 처리
+	        reservationService.cancelReservationAndRestoreMileage(
+	                paymentId, memberId);
+	
+	        return "success";
+	
+	    } catch (org.springframework.web.client.HttpStatusCodeException e) {
+	        // PortOne이 반환한 HTTP 오류 응답 확인
+	        System.err.println("PortOne HTTP 상태: " + e.getStatusCode());
+	        System.err.println("PortOne 오류 응답: " + e.getResponseBodyAsString());
+	        return "결제 취소 요청이 거부되었습니다. 결제 내역을 확인해 주세요.";
+	
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "예약 취소 처리 중 오류가 발생했습니다. 결제 내역을 확인해 주세요.";
+	    }
+	}
 
-	          String encodedPaymentId = java.net.URLEncoder.encode(paymentId, "UTF-8");
-	          String url = "https://api.portone.io/payments/" + encodedPaymentId;
-
-	          HttpHeaders headers = new HttpHeaders();
-	          headers.set("Authorization", "PortOne " + apiSecret);
-	          HttpEntity<String> entity = new HttpEntity<>(headers);
-	          RestTemplate restTemplate = new RestTemplate();
-
-	          ResponseEntity<String> paymentResponse = restTemplate.exchange(
-	                  url, HttpMethod.GET, entity, String.class);
-
-	          ObjectMapper mapper = new ObjectMapper();
-	          JsonNode payment = mapper.readTree(paymentResponse.getBody());
-
-	          if (!"PAID".equals(payment.path("status").asText())) {
-	              return "결제가 완료된 상태가 아니어서 취소할 수 없습니다.";
-	          }
-
-	          HttpHeaders cancelHeaders = new HttpHeaders();
-	          cancelHeaders.set("Authorization", "PortOne " + apiSecret);
-	          cancelHeaders.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-
-	          String cancelBody = "{\"reason\":\"CUSTOMER_REQUEST\"}";
-	          HttpEntity<String> cancelEntity = new HttpEntity<>(cancelBody, cancelHeaders);
-	          String cancelUrl = "https://api.portone.io/payments/" + encodedPaymentId + "/cancel";
-
-	          ResponseEntity<String> cancelResponse = restTemplate.exchange(
-	                  cancelUrl, HttpMethod.POST, cancelEntity, String.class);
-
-	          JsonNode cancelResult = mapper.readTree(cancelResponse.getBody());
-	          String cancelStatus = cancelResult.path("cancellation").path("status").asText();
-
-	          if (!"SUCCEEDED".equals(cancelStatus)) {
-	              return "결제 취소 완료 여부를 확인할 수 없습니다. 결제 내역을 확인해 주세요.";
-	          }
-
-	          try {
-	        	    reservationService.cancelReservationAndRestoreMileage(paymentId, memberId);
-	        	    return "success";
-	        	} catch (Exception e) {
-	        	    e.printStackTrace();
-	        	    return "결제는 취소되었지만 예약 또는 마일리지 처리에 실패했습니다. 관리자에게 문의해 주세요.";
-	        	}
-
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	          return "예약 취소 처리 중 오류가 발생했습니다. 결제 내역을 확인해 주세요.";
-	      }
-	  }
 
 
 		@RequestMapping("/reservationUpdateSave")
