@@ -196,286 +196,291 @@ button:hover {
 /* ===== 인스타그램 스타일 리뷰 카드 ===== */
 /* 리뷰 카드를 3열 그리드로 배치 */
 .reviewList {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
-    align-items: start;
+	width: 100%;
+	max-width: 1000px;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 20px;
+	align-items: start;
 }
 
 /* 리뷰 사진 영역만 상세 페이지로 이동하도록 링크 설정 */
 .reviewImageLink {
-    display: block;
-    color: inherit;
-    text-decoration: none;
+	display: block;
+	color: inherit;
+	text-decoration: none;
 }
 
 .reviewHeart {
-    cursor: pointer;
-    color: #999;
-    font-size: 20px;
+	cursor: pointer;
+	color: #999;
+	font-size: 20px;
 }
 
 .reviewHeart.liked {
-    color: #ff4d6d;
+	color: #ff4d6d;
 }
 
 /* 인스타그램 게시물처럼 보이는 카드 바깥 영역 */
 .reviewCard {
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid #dbdbdb;
-    border-radius: 12px;
-    background: #fff;
-    color: #262626;
-    transition: transform .25s, box-shadow .25s;
+	min-width: 0;
+	overflow: hidden;
+	border: 1px solid #dbdbdb;
+	border-radius: 12px;
+	background: #fff;
+	color: #262626;
+	transition: transform .25s, box-shadow .25s;
 }
 
 /* 카드에 마우스를 올리면 살짝 올라오고 그림자 표시 */
 .reviewCard:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+	transform: translateY(-4px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
 }
 
 /* 카드 위쪽의 작성자 프로필과 이름 영역 */
 .reviewUser {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 13px 14px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 13px 14px;
 }
 
 /* 인스타그램 느낌의 원형 프로필 테두리 */
 .reviewProfile {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    padding: 2px;
-    background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 38px;
+	height: 38px;
+	flex-shrink: 0;
+	border-radius: 50%;
+	padding: 2px;
+	background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
 }
 
 /* 원형 프로필 안의 글자 */
 .reviewProfile span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    background: #fff;
-    color: #d62976;
-    font-size: 14px;
-    font-weight: 800;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	background: #fff;
+	color: #d62976;
+	font-size: 14px;
+	font-weight: 800;
 }
 
 /* 작성자 이름과 리뷰 종류를 세로로 배치 */
 .reviewUserInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	min-width: 0;
 }
 
 /* 작성자 이름이 길면 한 줄로 줄여서 표시 */
 .reviewUserInfo strong {
-    overflow: hidden;
-    color: #262626;
-    font-size: 13px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+	overflow: hidden;
+	color: #262626;
+	font-size: 13px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* 리뷰 종류 설명 문구 */
 .reviewUserInfo span {
-    color: #8e8e8e;
-    font-size: 11px;
+	color: #8e8e8e;
+	font-size: 11px;
 }
 
 /* 카드 오른쪽 위의 더보기 표시 */
 .reviewMore {
-    margin-left: auto;
-    color: #262626;
-    font-size: 17px;
-    letter-spacing: 2px;
+	margin-left: auto;
+	color: #262626;
+	font-size: 17px;
+	letter-spacing: 2px;
 }
 
 /* 리뷰 이미지를 정사각형 영역으로 표시 */
 .reviewImage {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    background: #fafafa;
+	width: 100%;
+	aspect-ratio: 1/1;
+	overflow: hidden;
+	background: #fafafa;
 }
 
 /* 이미지가 영역을 채우도록 크기와 잘림 방식 설정 */
 .reviewImage img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform .35s;
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .35s;
 }
 
 /* 카드에 마우스를 올리면 이미지가 살짝 확대 */
 .reviewCard:hover .reviewImage img {
-    transform: scale(1.03);
+	transform: scale(1.03);
 }
 
 /* 이미지가 없는 리뷰에 보여줄 대체 영역 */
 .reviewNoImage {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    color: #c13584;
-    background: linear-gradient(135deg, #fff0f6, #f3e8ff, #e8f4ff);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	color: #c13584;
+	background: linear-gradient(135deg, #fff0f6, #f3e8ff, #e8f4ff);
 }
 
 /* 대체 영역의 아이콘 크기 */
 .reviewNoImage span {
-    font-size: 45px;
+	font-size: 45px;
 }
 
 /* 대체 영역의 안내 문구 */
 .reviewNoImage p {
-    margin: 12px 0 0;
-    color: #777;
-    font-size: 12px;
+	margin: 12px 0 0;
+	color: #777;
+	font-size: 12px;
 }
 
 /* 이미지 아래의 좋아요, 내용, 태그, 날짜 영역 */
 .reviewInfo {
-    padding: 13px 14px 15px;
+	padding: 13px 14px 15px;
 }
 
 /* 좋아요와 댓글, 공유 아이콘을 가로로 배치 */
 .reviewIcons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
-    font-size: 24px;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-bottom: 10px;
+	font-size: 24px;
 }
 
 /* 하트 아이콘 색상과 크기 */
 .reviewHeart {
-    color: #ed4956;
-    font-size: 29px;
+	color: #ed4956;
+	font-size: 29px;
 }
 
 /* 공유 아이콘을 카드 오른쪽으로 배치 */
 .reviewShareIcon {
-    margin-left: auto;
-    font-size: 25px;
+	margin-left: auto;
+	font-size: 25px;
 }
 
 /* 좋아요 수 표시 문구 */
 .reviewLike {
-    margin: 0 0 10px;
-    color: #262626;
-    font-size: 13px;
+	margin: 0 0 10px;
+	color: #262626;
+	font-size: 13px;
 }
 
 /* 좋아요 수 강조 */
 .reviewLike strong {
-    color: #c13584;
-    font-size: 15px;
+	color: #c13584;
+	font-size: 15px;
 }
 
 /* 리뷰 내용을 최대 3줄까지만 표시 */
 .reviewDescription {
-    display: -webkit-box;
-    overflow: hidden;
-    margin: 0 0 9px;
-    color: #262626;
-    font-size: 13px;
-    line-height: 1.7;
-    overflow-wrap: anywhere;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+	display: -webkit-box;
+	overflow: hidden;
+	margin: 0 0 9px;
+	color: #262626;
+	font-size: 13px;
+	line-height: 1.7;
+	overflow-wrap: anywhere;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
 }
 
 /* 리뷰 내용 안쪽 문단의 기본 여백 제거 */
 .reviewDescription p {
-    margin: 0;
+	margin: 0;
+}
+
+.likeCount{
+	font-size:15px;
 }
 
 /* 리뷰 본문 안의 이미지나 영상이 카드 배치를 깨지 않도록 숨김 */
-.reviewDescription img, .reviewDescription video, .reviewDescription iframe {
-    display: none;
+.reviewDescription img, .reviewDescription video, .reviewDescription iframe
+	{
+	display: none;
 }
 
 /* 리뷰 태그 표시 */
 .reviewTag {
-    margin: 0 0 10px;
-    color: #00376b;
-    font-size: 12px;
+	margin: 0 0 10px;
+	color: #00376b;
+	font-size: 12px;
 }
 
 /* 리뷰 작성 날짜 표시 */
 .reviewDate {
-    margin: 10px 0 0;
-    color: #a8a8a8;
-    font-size: 10px;
+	margin: 10px 0 0;
+	color: #a8a8a8;
+	font-size: 10px;
 }
 
 /* 리뷰가 없을 때 안내 문구를 보여주는 영역 */
 .emptyReview {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-    padding: 30px 15px;
-    border: 1px dashed #dbdbdb;
-    border-radius: 12px;
-    background: #fff;
-    text-align: center;
+	grid-column: 1/-1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 200px;
+	padding: 30px 15px;
+	border: 1px dashed #dbdbdb;
+	border-radius: 12px;
+	background: #fff;
+	text-align: center;
 }
 
 /* 리뷰 없음 아이콘 */
 .emptyReview span {
-    margin-bottom: 12px;
-    color: #c13584;
-    font-size: 42px;
+	margin-bottom: 12px;
+	color: #c13584;
+	font-size: 42px;
 }
 
 /* 리뷰 없음 제목 */
 .emptyReview strong {
-    color: #262626;
-    font-size: 16px;
+	color: #262626;
+	font-size: 16px;
 }
 
 /* 리뷰 없음 안내 문구 */
 .emptyReview p {
-    margin: 8px 0 0;
-    color: #8e8e8e;
-    font-size: 13px;
+	margin: 8px 0 0;
+	color: #8e8e8e;
+	font-size: 13px;
 }
 
 /* 화면 너비가 900px 이하이면 카드 2열로 변경 */
-@media (max-width: 900px) {
-    .reviewList {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+@media ( max-width : 900px) {
+	.reviewList {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 
 /* 휴대폰처럼 화면이 좁으면 카드 1열로 변경 */
-@media (max-width: 600px) {
-    .reviewList {
-        grid-template-columns: 1fr;
-        max-width: 420px;
-    }
+@media ( max-width : 600px) {
+	.reviewList {
+		grid-template-columns: 1fr;
+		max-width: 420px;
+	}
 }
 
 /* ===== 페이지네이션 ===== */
@@ -584,60 +589,73 @@ button:hover {
 
 	<div class="reviewList">
 
-		<c:forEach var="i" items="${rList}">
-			<div class="reviewCard">
-					<div class="reviewUser">
-						<div class="reviewProfile"><span>G</span></div>
-						<div class="reviewUserInfo">
-							<strong>${i.member_id}</strong>
-							<span>${i.target_type} 리뷰</span>
-						</div>
-						<div class="reviewMore">•••</div>
-					</div>
+    <c:forEach var="i" items="${rList}">
+        <div class="reviewCard">
+            <div class="reviewUser">
+                <div class="reviewProfile">
+                    <span>G</span>
+                </div>
+                <div class="reviewUserInfo">
+                    <strong>${i.member_id}</strong>
+                    <span>${i.target_type} 리뷰</span>
+                </div>
+                <div class="reviewMore">•••</div>
+            </div>
 
-					<a class="reviewImageLink" href="/review/detail?seq=${i.seq}&place_id=${i.target_id}">
-						<div class="reviewImage">
-							<c:choose>
-							<c:when test="${not empty i.image1}">
-								<img src="${i.image1}" alt="리뷰 이미지">
-							</c:when>
-							<c:otherwise>
-								<div class="reviewNoImage">
-									<span>✈</span>
-									<p>여행의 순간을 기록해 보세요</p>
-								</div>
-							</c:otherwise>
-							</c:choose>
-						</div>
-					</a>
+            <a class="reviewImageLink"
+                href="/review/detail?seq=${i.seq}&place_id=${i.target_id}">
+                <div class="reviewImage">
+                    <c:choose>
+                        <c:when test="${not empty i.image1}">
+                            <img src="${i.image1}" alt="리뷰 이미지">
+                        </c:when>
+                        <c:otherwise>
+                            <div class="reviewNoImage">
+                                <span>✈</span>
+                                <p>여행의 순간을 기록해 보세요</p>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </a>
 
-					<div class="reviewInfo">
-						<div class="reviewIcons">
-							<span class="reviewHeart ${i.liked ? 'liked' : ''}"
-							 onclick="toggleRecommend(${i.seq}, this)"> ${i.liked ? '♥' : '♡'}</span>
-							<span>◯</span>
-							<span class="reviewShareIcon">↗</span>
-						</div>
-						<p class="reviewLike">평점 <strong>${i.rating}</strong></p>
-						<div class="reviewDescription">${i.contents}</div>
-						<c:if test="${not empty i.tag}">
-							<p class="reviewTag">${i.tag}</p>
-						</c:if>
-						<p class="reviewDate"><fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" /></p>
-					</div>
-			</div>
-		</c:forEach>
+            <div class="reviewInfo">
+                <div class="reviewIcons">
+                    <span class="reviewHeart ${i.liked ? 'liked' : ''}"
+                        onclick="toggleRecommend(${i.seq}, this)">${i.liked ? '♥' : '♡'}</span>
 
-		<c:if test="${empty rList}">
-			<div class="emptyReview">
-				<span>♡</span>
-				<strong>아직 작성한 리뷰가 없어요</strong>
-				<p>여행의 소중한 순간을 리뷰로 남겨보세요.</p>
-			</div>
-		</c:if>
-	</div>
+                    <span class="likeCount" id="likeCount${i.seq}">${i.recommendCount}</span>
 
-	<div class="reviewNavi" id="navi">${navi}</div>
+                    <span>◯</span>
+                    <span class="reviewShareIcon">↗</span>
+                </div>
+
+                <p class="reviewLike">⭐ <strong>${i.rating}</strong></p>
+
+                <div class="reviewDescription">${i.contents}</div>
+
+                <c:if test="${not empty i.tag}">
+                    <p class="reviewTag">${i.tag}</p>
+                </c:if>
+
+                <p class="reviewDate">
+                    <fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" />
+                </p>
+            </div>
+        </div>
+    </c:forEach>
+
+    <c:if test="${empty rList}">
+        <div class="emptyReview">
+            <span>♡</span>
+            <strong>아직 작성한 리뷰가 없어요</strong>
+            <p>여행의 소중한 순간을 리뷰로 남겨보세요.</p>
+        </div>
+    </c:if>
+
+</div>
+
+<div class="reviewNavi" id="navi">${navi}</div>
 </div>
 
 
@@ -739,9 +757,16 @@ button:hover {
 	            } else if (result == "liked") {
 	                heart.innerHTML = "♥";
 	                heart.classList.add("liked");
+
+	                let count = document.getElementById("likeCount" + seq);
+	                count.innerHTML = Number(count.innerHTML) + 1;
+
 	            } else if (result == "unliked") {
 	                heart.innerHTML = "♡";
 	                heart.classList.remove("liked");
+
+	                let count = document.getElementById("likeCount" + seq);
+	                count.innerHTML = Number(count.innerHTML) - 1;
 	            }
 	        }
 	    });

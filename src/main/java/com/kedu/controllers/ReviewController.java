@@ -71,7 +71,7 @@ public class ReviewController {
 		String loginId = (String)session.getAttribute("loginId");
 		
 		if(loginId == null) {
-			return "members/loginPage";
+			return "login";
 		}
 		
 		if(rrdao.isRecommend(seq, loginId)) {

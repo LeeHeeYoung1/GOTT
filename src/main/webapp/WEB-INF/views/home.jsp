@@ -1130,7 +1130,7 @@
 									    <span class="reviewShareIcon">↗</span>
 									</div>
 				                    <div class="reviewtext">
-					                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
+					                    <p class="reviewLike">⭐ <strong>${rv.rating}</strong></p>
 					                    <p class="reviewDescription">${rv.contents}</p>
 					                    <c:if test="${not empty rv.tag}">
 					                        <p class="reviewTag">#${rv.tag}</p>
