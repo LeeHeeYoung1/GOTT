@@ -17,7 +17,6 @@ import com.kedu.dao.TravelPlanDAO;
 import com.kedu.dto.BannerDTO;
 import com.kedu.dto.NoticeDTO;
 import com.kedu.dto.ReviewDTO;
-import com.kedu.services.BannerService;
 
 
 @Controller
@@ -31,9 +30,6 @@ public class HomeController {
 	
 	@Autowired
 	private NoticeDAO ndao;
-	
-	@Autowired
-	private BannerService bannerService;
 	
 	@Autowired
 	private BannerDAO bannerDAO;
@@ -52,7 +48,7 @@ public class HomeController {
 		stayImgs[2] = pdao.randomImgMB();
 		
 		List<NoticeDTO> ilist = ndao.important();
-		List<BannerDTO> banner = bannerService.getBannerList();
+		List<BannerDTO> banner = bannerDAO.getBannerList();
 		
 		List<ReviewDTO> reviewList = rvdao.selectRecentReviews();
 		

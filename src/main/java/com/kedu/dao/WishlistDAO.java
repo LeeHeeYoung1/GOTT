@@ -46,9 +46,32 @@ public class WishlistDAO {
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 
+	// 전체 찜 목록 페이지네이션
+    public List<PlaceDTO> selectByWish(String memberId, int start, int end) {
+        String sql = "SELECT * FROM ("
+                + "SELECT p.*, ROW_NUMBER() OVER (ORDER BY w.REG_DATE DESC, w.WISHLIST_ID DESC) AS RN "
+                + "FROM WISHLIST w "
+                + "JOIN PLACE p ON w.TARGET_ID = p.PLACE_ID "
+                + "WHERE w.MEMBER_ID = ?) WHERE RN BETWEEN ? AND ?";
+        return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),
+                memberId, start, end);
+    }
 
-	public List<PlaceDTO> selectByWish(String memberId, int start, int end) {
-	    String sql = "SELECT * FROM (SELECT p.*, ROW_NUMBER() OVER (ORDER BY w.REG_DATE DESC, w.WISHLIST_ID DESC) AS RN FROM WISHLIST w JOIN PLACE p ON w.TARGET_ID = p.PLACE_ID WHERE w.MEMBER_ID = ?) WHERE RN BETWEEN ? AND ?";
-	    return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), memberId, start, end);
+	// 카테고리별 찜 목록 조회 및 페이지네이션
+	public List<PlaceDTO> selectByWish(String memberId, String type, int start, int end) {
+		String sql = "SELECT * FROM ("
+				+ "SELECT p.*, ROW_NUMBER() OVER (ORDER BY w.REG_DATE DESC, w.WISHLIST_ID DESC) AS RN "
+				+ "FROM WISHLIST w " + "JOIN PLACE p ON w.TARGET_ID = p.PLACE_ID "
+				+ "WHERE w.MEMBER_ID = ? AND p.PLACE_TYPE = ?" + ") WHERE RN BETWEEN ? AND ?";
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceDTO.class),
+	            memberId, type, start, end);
 	}
+
+	// 카테고리별 찜 개수 조회
+	public int countByWish(String memberId, String type) {
+		String sql = "SELECT COUNT(*) FROM WISHLIST w " + "JOIN PLACE p ON w.TARGET_ID = p.PLACE_ID "
+				+ "WHERE w.MEMBER_ID = ? AND p.PLACE_TYPE = ?";
+	    return jdbc.queryForObject(sql, Integer.class, memberId, type);
+	}
+	
 }

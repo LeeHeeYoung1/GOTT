@@ -14,7 +14,10 @@ import com.kedu.dao.MembersDAO;
 import com.kedu.dao.PlaceDAO;
 import com.kedu.dao.ReservationDAO;
 import com.kedu.dao.ReviewDAO;
+import com.kedu.dao.TravelPlanDAO;
+import com.kedu.dao.TravelPlanScrapDAO;
 import com.kedu.dto.PlaceDTO;
+import com.kedu.dto.TravelPlanDTO;
 
 @Controller
 @RequestMapping("/dashBoard")
@@ -22,18 +25,18 @@ public class DashBoardController {
 	
 	@Autowired
 	MembersDAO mdao;
-	
 	@Autowired
 	ReservationDAO rdao;
-	
 	@Autowired
-	BoardDAO bdao
-	;
+	BoardDAO bdao;
 	@Autowired
 	ReviewDAO rvdao;
-	
 	@Autowired
 	PlaceDAO pdao;
+	@Autowired
+	TravelPlanScrapDAO tpsdao;
+	@Autowired
+	TravelPlanDAO tpdao;
 	
 	@RequestMapping("/dashHome")
 	public String dashHome(Model model){
@@ -61,6 +64,19 @@ public class DashBoardController {
 			topFiveStay.add(rdao.placeOne(i));
 		}
 		
+		List<Integer> topFivePlanId = tpsdao.topFivePlanId();
+		List<TravelPlanDTO> topFivePlan = new ArrayList<>();
+		List<Integer> topFivePlanPlaceId = new ArrayList<>();
+		List<String> topFivePlanImages = new ArrayList<>();
+		for (int i : topFivePlanId) {
+			topFivePlan.add(tpdao.selectOne(i));
+			topFivePlanPlaceId.add(tpdao.getPlaceId(i));
+		}
+		
+		for (int i : topFivePlanPlaceId) {
+			topFivePlanImages.add(tpdao.placeImagename(i));
+		}
+		
 		model.addAttribute("totalMembers", mdao.totalMembers());
 		model.addAttribute("totalReservation", rdao.totalReservation());
 		model.addAttribute("cancelReservation", rdao.cancelReservation());
@@ -71,6 +87,8 @@ public class DashBoardController {
 		model.addAttribute("monthlySales", monthlySales);
 		model.addAttribute("regions", regions);
 		model.addAttribute("topFiveStay", topFiveStay);
+		model.addAttribute("topFivePlan", topFivePlan);
+		model.addAttribute("topFivePlanImages", topFivePlanImages);
 		
 		return "/dashBoard/dashBoard";
 	}

@@ -308,8 +308,7 @@
                         <li><a href="/members/wishlist">찜한 여행지 · 숙소</a></li>
                         <li><a href="/members/planner">여행 일정 플래너</a></li>
                         <li><a href="/review/reviewlist">내가 쓴 리뷰</a></li>
-                        <li><a href="#">내가 쓴 게시글</a></li>
-                        <li><a href="/event/tourTypeTest">여행성향 테스트</a></li>
+                        <li><a href="/board/boardlist">내가 쓴 게시글</a></li>
                     </ul>
 
                     <span>혜택</span>
@@ -322,7 +321,6 @@
                     <ul>
                         <li class="active"><a href="/members/update">내 정보 수정</a></li>
                         <li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
-                        <li><a href="#">알림 설정</a></li>
                         <li><a href="#">1:1 문의</a></li>
                         <li><a href="/members/deleted">회원탈퇴</a></li>
                     </ul>
