@@ -251,35 +251,77 @@
             margin: 20px;
             position: relative;
         }
-        .eventbannerzone {
-        	width: 90%;
-            max-width: 1200px;
-            margin: 5px auto 0;
-            height: 270px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            position: relative;
-            padding-top: 30px;
-        }
         
-        .eventbox {
-            height: auto;
-            position: relative;
-    		overflow: hidden;
-    		border-radius: 14px;
-    		background-color: #F8FAFC;
-    		cursor: pointer;
-        }
-
-        .eventbox img {
-            width: 100%;
-		    height: 100%;
-		    display: block;
-		    object-fit: contain;
-		    transition: transform 0.4s ease;
+		.eventbannerzone {
+		    position: relative;
+		    width: 90%;
+		    max-width: 1200px;
+		    margin: 0 auto;
+		    padding-top: 30px;
+		}
+		
+		.event-viewport {
+		    width: 100%;
+		    overflow: hidden;
+		}
+		
+		.event-track {
+		    display: flex;
+		    gap: 10px;
+		    transform: translateX(0);
+		    transition: transform 0.5s ease;
+		    will-change: transform;
+		}
+		
+		.event-track .eventbox {
+		    flex: 0 0 calc((100% - 20px) / 3);
+		    min-width: 0;
+		    height: auto;
+		    aspect-ratio: 1.65 / 1;
+		    margin: 0;
+		    overflow: hidden;
 		    border-radius: 14px;
-        }
+		    
+		}
+		
+		.event-track .eventbox img {
+		    display: block;
+		    width: 100%;
+		    height: 100%;
+		    object-fit: contain;
+		    transition: transform 0.3s ease;
+		}
+		
+		.event-arrow {
+		    position: absolute;
+		    top: 55%;
+		    z-index: 5;
+		    width: 38px;
+		    height: 38px;
+		    border: none;
+		    border-radius: 50%;
+		    background: #fff;
+		    color: #263238;
+		    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+		    cursor: pointer;
+		    transform: translateY(-50%);
+		}
+		
+		.event-prev {
+		    left: -20px;
+		}
+		
+		.event-next {
+		    right: -20px;
+		}
+		
+		.event-arrow:hover {
+		    background: #e2e8f0;
+		}
+		.event-arrow:disabled {
+		    opacity: 0.4;
+		    cursor: default;
+		}
         
         .ourtext {
             border: 1px solid black;
@@ -866,14 +908,27 @@
     <div class="eventbannerzone">
         <div class="moreview"><a href="/event/eventpage">더 보기</a></div>
         
-        		<c:forEach var="i" items="${banner}" end="2">
+        	<button type="button" class="event-arrow event-prev" aria-label="이전 이벤트">
+		        &#10094;
+		    </button>	
+		    
+		    <div class="event-viewport" id="eventViewport">
+        		<div class="event-track" id="eventTrack">
+        		
+        		<c:forEach var="i" items="${banner}">
             		<div class="eventbox">
 		           		<a href="/members/signuppage">
 		                  	<img src="/images/${i.image_name}" alt="${i.title}">
 		                </a>
 		           </div>
 		        </c:forEach>
-		           
+		        
+		        </div>
+		    </div>  
+		    
+		    <button type="button" class="event-arrow event-next" aria-label="다음 이벤트">
+		        &#10095;
+		    </button>
 		           
         <div id="ourpromise"></div>
     </div>
@@ -1141,6 +1196,7 @@
     
 	
 </div>
+
 <script>
 
 	var container = document.getElementById('map');
@@ -1206,6 +1262,173 @@ $("#searchInput").on("keyup", function () {
             }
         });
     });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("eventTrack");
+    const viewport = document.getElementById("eventViewport");
+    const prevButton = document.querySelector(".event-prev");
+    const nextButton = document.querySelector(".event-next");
+
+    if (!track || !viewport || !prevButton || !nextButton) {
+        return;
+    }
+
+    const originalCards = Array.from(track.children);
+    const originalCount = originalCards.length;
+
+    if (originalCount === 0) {
+        prevButton.hidden = true;
+        nextButton.hidden = true;
+        return;
+    }
+
+    let visibleCount = getVisibleCount();
+    let index = 0;
+    let timer = null;
+    let isAnimating = false;
+
+    function getVisibleCount() {
+        if (window.innerWidth <= 560) return 1;
+        if (window.innerWidth <= 900) return 2;
+        return 3;
+    }
+
+    // 이벤트가 화면에 꽉 차면 슬라이드하지 않음
+    function canSlide() {
+        return originalCount > visibleCount;
+    }
+
+    // 무한 슬라이드를 위해 앞뒤에 배너 복제
+    function setupClones() {
+        track.innerHTML = "";
+
+        const count = Math.min(visibleCount, originalCount);
+
+        // 앞쪽에는 마지막 배너들을 배치
+        originalCards.slice(-count).forEach(function (card) {
+            const clone = card.cloneNode(true);
+            clone.setAttribute("aria-hidden", "true");
+            track.appendChild(clone);
+        });
+
+        // 원래 DB 배너
+        originalCards.forEach(function (card) {
+            track.appendChild(card);
+        });
+
+        // 뒤쪽에는 처음 배너들을 배치
+        originalCards.slice(0, count).forEach(function (card) {
+            const clone = card.cloneNode(true);
+            clone.setAttribute("aria-hidden", "true");
+            track.appendChild(clone);
+        });
+
+        index = count;
+        moveTo(index, false);
+    }
+
+    function getStep() {
+        const card = track.querySelector(".eventbox");
+
+        if (!card) return 0;
+
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+
+        return card.getBoundingClientRect().width + gap;
+    }
+
+    function moveTo(position, animate) {
+        track.style.transition = animate
+            ? "transform 0.5s ease"
+            : "none";
+
+        track.style.transform =
+            "translateX(-" + (getStep() * position) + "px)";
+    }
+
+    function nextSlide() {
+        if (!canSlide() || isAnimating) return;
+
+        isAnimating = true;
+        index++;
+        moveTo(index, true);
+    }
+
+    function prevSlide() {
+        if (!canSlide() || isAnimating) return;
+
+        isAnimating = true;
+        index--;
+        moveTo(index, true);
+    }
+
+    // 복제 배너에 도착하면 원래 배너 위치로 순간 이동
+    track.addEventListener("transitionend", function (event) {
+        if (event.target !== track ||
+            event.propertyName !== "transform") {
+            return;
+        }
+
+        const cloneCount = Math.min(visibleCount, originalCount);
+
+        if (index >= originalCount + cloneCount) {
+            index = cloneCount;
+            moveTo(index, false);
+        } else if (index < cloneCount) {
+            index = originalCount + cloneCount - 1;
+            moveTo(index, false);
+        }
+
+        isAnimating = false;
+    });
+
+    function stopAutoSlide() {
+        clearInterval(timer);
+        timer = null;
+    }
+
+    function startAutoSlide() {
+        stopAutoSlide();
+
+        if (canSlide()) {
+            timer = setInterval(nextSlide, 4000);
+        }
+    }
+
+    nextButton.addEventListener("click", function () {
+        nextSlide();
+        startAutoSlide();
+    });
+
+    prevButton.addEventListener("click", function () {
+        prevSlide();
+        startAutoSlide();
+    });
+
+    // 마우스를 올리면 잠시 정지
+    viewport.addEventListener("mouseenter", stopAutoSlide);
+    viewport.addEventListener("mouseleave", startAutoSlide);
+
+    // 화면 크기가 바뀌면 복제 및 위치 재설정
+    let resizeTimer;
+
+    window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+
+        resizeTimer = setTimeout(function () {
+            stopAutoSlide();
+
+            visibleCount = getVisibleCount();
+            setupClones();
+
+            isAnimating = false;
+            startAutoSlide();
+        }, 150);
+    });
+
+    setupClones();
+    startAutoSlide();
+});
 
 </script>
 
