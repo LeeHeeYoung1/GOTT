@@ -35,15 +35,6 @@ button:hover {
 	border-color: #222;
 }
 
-/* 메인 */
-/* 페이지 전체 콘텐츠의 너비와 가운데 정렬 */
-.main {
-	width: 1200px;
-	max-width: calc(100% - 40px);
-	margin: 0 auto;
-	padding-bottom: 80px;
-}
-
 /* 제목 */
 /* 페이지 제목 영역 */
 .titleBox {
@@ -462,7 +453,9 @@ button:hover {
     color: #8e8e8e;
     font-size: 13px;
 }
-
+.reviewShareIcon:hover {
+	cursor: pointer;
+}
 /* 화면 너비가 900px 이하이면 카드 2열로 변경 */
 @media (max-width: 900px) {
     .reviewList {
@@ -525,7 +518,7 @@ button:hover {
 
 <!-- 메인 -->
 
-<div class="main">
+<div class="container">
 
 	<div class="titleBox">
 		<h2>리뷰게시판</h2>
@@ -615,8 +608,10 @@ button:hover {
 						<div class="reviewIcons">
 							<span class="reviewHeart ${i.liked ? 'liked' : ''}"
 							 onclick="toggleRecommend(${i.seq}, this)"> ${i.liked ? '♥' : '♡'}</span>
-							<span>◯</span>
-							<span class="reviewShareIcon">↗</span>
+							<span class="reviewShareIcon" onclick="shareReview(${i.seq}, ${i.target_id})"
+						      title="리뷰 링크 복사">
+						    	<i class="fa-solid fa-link"></i>   
+						    </span>
 						</div>
 						<p class="reviewLike">평점 <strong>${i.rating}</strong></p>
 						<div class="reviewDescription">${i.contents}</div>
@@ -724,6 +719,23 @@ button:hover {
 		next.innerHTML = ">";
 		navi.append(next);
 	}
+
+	function shareReview(seq, placeId) {
+	    // 현재 사이트 주소와 리뷰 상세 페이지 주소를 결합
+	    const url = window.location.origin
+	        + "/review/detail?seq=" + seq
+	        + "&place_id=" + encodeURIComponent(placeId);
+
+	    // 리뷰 링크를 클립보드에 복사
+	    navigator.clipboard.writeText(url)
+	        .then(function() {
+	            alert("리뷰 링크가 복사되었습니다!");
+	        })
+	        .catch(function() {
+	            // 클립보드 복사가 안 될 경우 링크를 직접 보여줌
+	            prompt("아래 링크를 복사해주세요.", url);
+	        });
+	}
 	
 	function toggleRecommend(seq, heart) {
 	    $.ajax({
@@ -746,5 +758,6 @@ button:hover {
 	        }
 	    });
 	}
+	
 	</script>
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
