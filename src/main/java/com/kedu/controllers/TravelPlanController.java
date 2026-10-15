@@ -189,51 +189,58 @@ public class TravelPlanController {
         return "members/plannerList";
     }
 
-    // 여행 일정 상세 페이지
-    @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public String detail(Integer planId, Model model, HttpSession session) {
-        if (planId == null) {
-            return "redirect:/travelPlan/list";
-        }
 
-        TravelPlanDTO plan = dao.selectPlanForView(planId);
-        if (plan == null) {
-            return "redirect:/travelPlan/list";
-        }
+@RequestMapping(value = "/detail", method = RequestMethod.GET)
+public String detail(Integer planId, int cpage, String region,
+        String nights, String sort, Model model, HttpSession session) {
 
-        String memberId = (String) session.getAttribute("loginId");
-
-        // 비공개 일정은 작성자만 조회 가능
-        if (!"Y".equals(plan.getIs_public())
-                && (memberId == null || !memberId.equals(plan.getMember_id()))) {
-            return "redirect:/travelPlan/list";
-        }
-
-        List<Map<String, Object>> detailList = dao.selectPlanDetailsWithPlace(planId);
-        List<Integer> dayNumbers = new ArrayList<>();
-
-        int totalDays = (int) ChronoUnit.DAYS.between(
-                plan.getStart_date().toLocalDate(),
-                plan.getEnd_date().toLocalDate()) + 1;
-
-        for (int i = 1; i <= totalDays; i++) {
-            dayNumbers.add(i);
-        }
-        
-        List<TravelPlanReplyDTO> tprList = tprdao.selectByPlanId(planId);
-		model.addAttribute("tprList", tprList);
-		
-		boolean isScrap = tpsrdao.isScrap(planId, memberId);
-
-        List<PlaceDTO> idAndImg = dao.selectImages(planId);
-        model.addAttribute("plan", plan);
-        model.addAttribute("detailList", detailList);
-        model.addAttribute("dayNumbers", dayNumbers);
-        model.addAttribute("idAndImg", idAndImg);
-        model.addAttribute("isScrap", isScrap);
-        
-        return "members/planDetail";
+    if (planId == null) {
+        return "redirect:/travelPlan/list?cpage=1";
     }
+
+    TravelPlanDTO plan = dao.selectPlanForView(planId);
+
+    if (plan == null) {
+        return "redirect:/travelPlan/list?cpage=1";
+    }
+
+    String memberId = (String) session.getAttribute("loginId");
+
+    if (!"Y".equals(plan.getIs_public())
+            && (memberId == null || !memberId.equals(plan.getMember_id()))) {
+        return "redirect:/travelPlan/list?cpage=1";
+    }
+
+    List<Map<String, Object>> detailList = dao.selectPlanDetailsWithPlace(planId);
+    List<Integer> dayNumbers = new ArrayList<>();
+
+    int totalDays = (int) ChronoUnit.DAYS.between(
+            plan.getStart_date().toLocalDate(),
+            plan.getEnd_date().toLocalDate()) + 1;
+
+    for (int i = 1; i <= totalDays; i++) {
+        dayNumbers.add(i);
+    }
+
+    List<TravelPlanReplyDTO> tprList = tprdao.selectByPlanId(planId);
+    boolean isScrap = tpsrdao.isScrap(planId, memberId);
+    List<PlaceDTO> idAndImg = dao.selectImages(planId);
+
+    model.addAttribute("tprList", tprList);
+    model.addAttribute("plan", plan);
+    model.addAttribute("detailList", detailList);
+    model.addAttribute("dayNumbers", dayNumbers);
+    model.addAttribute("idAndImg", idAndImg);
+    model.addAttribute("isScrap", isScrap);
+
+    model.addAttribute("cpage", cpage);
+    model.addAttribute("region", region == null ? "" : region);
+    model.addAttribute("nights", nights == null ? "" : nights);
+    model.addAttribute("sort", sort == null ? "new" : sort);
+
+    return "members/planDetail";
+}
+
     
     @RequestMapping("/scrapUp")
 	public String scrapUp(int seq, HttpSession session) {

@@ -10,21 +10,25 @@
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
 <style>
+/* 모든 요소의 크기에 padding과 border를 포함해서 계산 */
 * {
 	box-sizing: border-box;
 }
 
+/* 링크의 기본 글자색과 밑줄 설정 */
 a {
 	color: inherit;
 	text-decoration: none;
 }
 
+/* 버튼 기본 모양 */
 button {
 	border: 1px solid #d5d5d5;
 	background-color: white;
 	cursor: pointer;
 }
 
+/* 버튼에 마우스를 올렸을 때 색상 변경 */
 button:hover {
 	background-color: #222;
 	color: white;
@@ -32,6 +36,7 @@ button:hover {
 }
 
 /* 메인 */
+/* 페이지 전체 콘텐츠의 너비와 가운데 정렬 */
 .main {
 	width: 1200px;
 	max-width: calc(100% - 40px);
@@ -40,17 +45,20 @@ button:hover {
 }
 
 /* 제목 */
+/* 페이지 제목 영역 */
 .titleBox {
 	text-align: center;
 	padding: 35px 0 20px;
 }
 
+/* 큰 제목 스타일 */
 .titleBox h2 {
 	margin: 0 0 5px;
 	font-size: 25px;
 	color: #222;
 }
 
+/* 제목 아래 설명 문구 스타일 */
 .titleBox h5 {
 	margin: 0;
 	font-size: 12px;
@@ -59,6 +67,7 @@ button:hover {
 }
 
 /* 경로 */
+/* 현재 페이지 위치를 보여주는 경로 영역 */
 .breadcrumb {
 	margin: 0 100px;
 	padding: 10px 0;
@@ -67,18 +76,21 @@ button:hover {
 	border-top: 1px solid #eee;
 }
 
+/* 경로 중 현재 페이지 이름 강조 */
 .breadcrumb span {
 	color: #333;
 	font-weight: 600;
 }
 
 /* 탭 */
+/* 자유게시판과 리뷰게시판 탭 배치 */
 .tabs {
 	display: flex;
 	margin: 10px 100px 0;
 	border-bottom: 1px solid #222;
 }
 
+/* 각 탭의 기본 모양 */
 .tabs a {
 	min-width: 120px;
 	padding: 9px 18px;
@@ -90,6 +102,7 @@ button:hover {
 	font-size: 12px;
 }
 
+/* 현재 선택된 탭 강조 */
 .tabs a.on {
 	background: #222;
 	border-color: #222;
@@ -97,6 +110,7 @@ button:hover {
 }
 
 /* 카테고리 — 체크박스 칩 */
+/* 리뷰 카테고리 버튼들을 가운데에 여러 줄로 배치 */
 .tag_list {
 	width: 520px;
 	max-width: 100%;
@@ -107,6 +121,7 @@ button:hover {
 	gap: 4px;
 }
 
+/* 카테고리 버튼 기본 스타일 */
 .tag_list label {
 	padding: 4px 9px;
 	border: 1px solid #ddd;
@@ -119,11 +134,13 @@ button:hover {
 	transition: border-color .15s, background .15s, color .15s;
 }
 
+/* 카테고리 버튼에 마우스를 올렸을 때 */
 .tag_list label:hover {
 	border-color: #999;
 	color: #333;
 }
 
+/* 선택한 카테고리 버튼 강조 */
 .tag_list label:has(input:checked) {
 	border-color: #222;
 	background: #222;
@@ -131,11 +148,13 @@ button:hover {
 	font-weight: 600;
 }
 
+/* 체크박스 자체는 숨기고 라벨을 버튼처럼 사용 */
 .tag_list input {
 	display: none;
 }
 
 /* 게시판 정보 */
+/* 게시글 수, 정렬 메뉴, 글쓰기 버튼 영역 */
 .searchOption {
 	width: 900px;
 	max-width: 100%;
@@ -146,10 +165,12 @@ button:hover {
 	color: #777;
 }
 
+/* 게시글 수를 왼쪽으로 배치 */
 .totalCount {
 	margin-right: auto;
 }
 
+/* 리뷰 정렬 선택 메뉴 */
 .sort {
 	height: 32px;
 	padding: 0 8px;
@@ -160,6 +181,7 @@ button:hover {
 	font-size: 11px;
 }
 
+/* 리뷰 작성 버튼 */
 .writeBtn {
 	height: 32px;
 	margin-left: 6px;
@@ -171,101 +193,293 @@ button:hover {
 	font-size: 11px;
 }
 
-/* ===== 리뷰 카드 ===== */
+/* ===== 인스타그램 스타일 리뷰 카드 ===== */
+/* 리뷰 카드를 3열 그리드로 배치 */
 .reviewList {
-	width: 900px;
-	max-width: 100%;
-	margin: 0 auto;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 18px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
 }
 
-/* 카드를 감싼 a — grid 칸을 꽉 채우게 */
-.reviewList>a {
-	display: flex;
-	min-width: 0;
+/* 리뷰 사진 영역만 상세 페이지로 이동하도록 링크 설정 */
+.reviewImageLink {
+    display: block;
+    color: inherit;
+    text-decoration: none;
 }
 
+.reviewHeart {
+    cursor: pointer;
+    color: #999;
+    font-size: 20px;
+}
+
+.reviewHeart.liked {
+    color: #ff4d6d;
+}
+
+/* 인스타그램 게시물처럼 보이는 카드 바깥 영역 */
 .reviewCard {
-	flex: 1;
-	min-width: 0;
-	display: flex;
-	flex-direction: column;
-	border: 1px solid rgba(255, 255, 255, 0.15);
-	border-radius: 12px;
-	background: rgba(0, 0, 0, 0.78);
-	overflow: hidden;
-	cursor: pointer;
-	transition: transform .18s, box-shadow .18s, border-color .18s;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #dbdbdb;
+    border-radius: 12px;
+    background: #fff;
+    color: #262626;
+    transition: transform .25s, box-shadow .25s;
 }
 
+/* 카드에 마우스를 올리면 살짝 올라오고 그림자 표시 */
 .reviewCard:hover {
-	transform: translateY(-3px);
-	border-color: rgba(255, 255, 255, 0.35);
-	box-shadow: 0 8px 22px rgba(0, 0, 0, .18);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
 }
 
-/* --- 사진 --- */
-.reviewCard>img {
-	width: 100%;
-	height: 230px;
-	object-fit: cover;
-	object-position: center;
-	display: block;
-	flex-shrink: 0;
-	background: #2a2a2a;
-	transition: transform .35s ease;
+/* 카드 위쪽의 작성자 프로필과 이름 영역 */
+.reviewUser {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 14px;
 }
 
-.reviewCard:hover>img {
-	transform: scale(1.04);
+/* 인스타그램 느낌의 원형 프로필 테두리 */
+.reviewProfile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
 }
 
-/* --- 본문 — 항상 3줄 높이 --- */
-.reviewContents {
-	position: relative;
-	flex-shrink: 0;
-	padding: 14px 16px 0;
-	height: calc(1.65em * 3 + 14px);
-	overflow: hidden;
-	font-size: 13px;
-	line-height: 1.65;
-	color: #f0f0f0;
-	word-break: break-all;
+/* 원형 프로필 안의 글자 */
+.reviewProfile span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #fff;
+    color: #d62976;
+    font-size: 14px;
+    font-weight: 800;
 }
 
-/* summernote 가 넣은 태그 정리 */
-.reviewContents p {
-	margin: 0;
+/* 작성자 이름과 리뷰 종류를 세로로 배치 */
+.reviewUserInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
 }
 
-.reviewContents img, .reviewContents video, .reviewContents iframe {
-	display: none;
+/* 작성자 이름이 길면 한 줄로 줄여서 표시 */
+.reviewUserInfo strong {
+    overflow: hidden;
+    color: #262626;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.reviewContents * {
-	font-size: 13px !important;
-	line-height: 1.65 !important;
-	color: #f0f0f0 !important;
-	background: transparent !important;
+/* 리뷰 종류 설명 문구 */
+.reviewUserInfo span {
+    color: #8e8e8e;
+    font-size: 11px;
 }
 
-/* --- 날짜 --- */
+/* 카드 오른쪽 위의 더보기 표시 */
+.reviewMore {
+    margin-left: auto;
+    color: #262626;
+    font-size: 17px;
+    letter-spacing: 2px;
+}
+
+/* 리뷰 이미지를 정사각형 영역으로 표시 */
+.reviewImage {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+/* 이미지가 영역을 채우도록 크기와 잘림 방식 설정 */
+.reviewImage img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .35s;
+}
+
+/* 카드에 마우스를 올리면 이미지가 살짝 확대 */
+.reviewCard:hover .reviewImage img {
+    transform: scale(1.03);
+}
+
+/* 이미지가 없는 리뷰에 보여줄 대체 영역 */
+.reviewNoImage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #c13584;
+    background: linear-gradient(135deg, #fff0f6, #f3e8ff, #e8f4ff);
+}
+
+/* 대체 영역의 아이콘 크기 */
+.reviewNoImage span {
+    font-size: 45px;
+}
+
+/* 대체 영역의 안내 문구 */
+.reviewNoImage p {
+    margin: 12px 0 0;
+    color: #777;
+    font-size: 12px;
+}
+
+/* 이미지 아래의 좋아요, 내용, 태그, 날짜 영역 */
+.reviewInfo {
+    padding: 13px 14px 15px;
+}
+
+/* 좋아요와 댓글, 공유 아이콘을 가로로 배치 */
+.reviewIcons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+/* 하트 아이콘 색상과 크기 */
+.reviewHeart {
+    color: #ed4956;
+    font-size: 29px;
+}
+
+/* 공유 아이콘을 카드 오른쪽으로 배치 */
+.reviewShareIcon {
+    margin-left: auto;
+    font-size: 25px;
+}
+
+/* 좋아요 수 표시 문구 */
+.reviewLike {
+    margin: 0 0 10px;
+    color: #262626;
+    font-size: 13px;
+}
+
+/* 좋아요 수 강조 */
+.reviewLike strong {
+    color: #c13584;
+    font-size: 15px;
+}
+
+/* 리뷰 내용을 최대 3줄까지만 표시 */
+.reviewDescription {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0 0 9px;
+    color: #262626;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+/* 리뷰 내용 안쪽 문단의 기본 여백 제거 */
+.reviewDescription p {
+    margin: 0;
+}
+
+/* 리뷰 본문 안의 이미지나 영상이 카드 배치를 깨지 않도록 숨김 */
+.reviewDescription img, .reviewDescription video, .reviewDescription iframe {
+    display: none;
+}
+
+/* 리뷰 태그 표시 */
+.reviewTag {
+    margin: 0 0 10px;
+    color: #00376b;
+    font-size: 12px;
+}
+
+/* 리뷰 작성 날짜 표시 */
 .reviewDate {
-	margin-top: auto;
-	padding: 10px 16px 14px;
-	font-size: 11px;
-	color: rgba(255, 255, 255, 0.5);
-	text-align: right;
-	letter-spacing: .02em;
+    margin: 10px 0 0;
+    color: #a8a8a8;
+    font-size: 10px;
 }
 
-.reviewDate p {
-	margin: 0;
+/* 리뷰가 없을 때 안내 문구를 보여주는 영역 */
+.emptyReview {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    padding: 30px 15px;
+    border: 1px dashed #dbdbdb;
+    border-radius: 12px;
+    background: #fff;
+    text-align: center;
+}
+
+/* 리뷰 없음 아이콘 */
+.emptyReview span {
+    margin-bottom: 12px;
+    color: #c13584;
+    font-size: 42px;
+}
+
+/* 리뷰 없음 제목 */
+.emptyReview strong {
+    color: #262626;
+    font-size: 16px;
+}
+
+/* 리뷰 없음 안내 문구 */
+.emptyReview p {
+    margin: 8px 0 0;
+    color: #8e8e8e;
+    font-size: 13px;
+}
+
+/* 화면 너비가 900px 이하이면 카드 2열로 변경 */
+@media (max-width: 900px) {
+    .reviewList {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* 휴대폰처럼 화면이 좁으면 카드 1열로 변경 */
+@media (max-width: 600px) {
+    .reviewList {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+    }
 }
 
 /* ===== 페이지네이션 ===== */
+/* 페이지 이동 버튼 전체 영역 */
 #navi {
 	width: 900px;
 	max-width: 100%;
@@ -277,6 +491,7 @@ button:hover {
 	gap: 6px;
 }
 
+/* 페이지 번호 버튼 기본 모양 */
 #navi a {
 	min-width: 34px;
 	height: 34px;
@@ -294,11 +509,13 @@ button:hover {
 	transition: background .15s, border-color .15s, color .15s;
 }
 
+/* 페이지 번호에 마우스를 올렸을 때 */
 #navi a:hover {
 	border-color: #222;
 	color: #222;
 }
 
+/* 현재 페이지 번호 강조 */
 #navi a.on {
 	background: #222;
 	border-color: #222;
@@ -368,19 +585,56 @@ button:hover {
 	<div class="reviewList">
 
 		<c:forEach var="i" items="${rList}">
-
-			<a href="/review/detail?seq=${i.seq}&place_id=${i.target_id}">
-				<div class="reviewCard">
-					<img src="${i.image1}">
-					<div class="reviewContents">${i.contents}</div>
-					<div class="reviewDate">
-						<p>
-							<fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" />
-						</p>
+			<div class="reviewCard">
+					<div class="reviewUser">
+						<div class="reviewProfile"><span>G</span></div>
+						<div class="reviewUserInfo">
+							<strong>${i.member_id}</strong>
+							<span>${i.target_type} 리뷰</span>
+						</div>
+						<div class="reviewMore">•••</div>
 					</div>
-				</div>
-			</a>
+
+					<a class="reviewImageLink" href="/review/detail?seq=${i.seq}&place_id=${i.target_id}">
+						<div class="reviewImage">
+							<c:choose>
+							<c:when test="${not empty i.image1}">
+								<img src="${i.image1}" alt="리뷰 이미지">
+							</c:when>
+							<c:otherwise>
+								<div class="reviewNoImage">
+									<span>✈</span>
+									<p>여행의 순간을 기록해 보세요</p>
+								</div>
+							</c:otherwise>
+							</c:choose>
+						</div>
+					</a>
+
+					<div class="reviewInfo">
+						<div class="reviewIcons">
+							<span class="reviewHeart ${i.liked ? 'liked' : ''}"
+							 onclick="toggleRecommend(${i.seq}, this)"> ${i.liked ? '♥' : '♡'}</span>
+							<span>◯</span>
+							<span class="reviewShareIcon">↗</span>
+						</div>
+						<p class="reviewLike">평점 <strong>${i.rating}</strong></p>
+						<div class="reviewDescription">${i.contents}</div>
+						<c:if test="${not empty i.tag}">
+							<p class="reviewTag">${i.tag}</p>
+						</c:if>
+						<p class="reviewDate"><fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" /></p>
+					</div>
+			</div>
 		</c:forEach>
+
+		<c:if test="${empty rList}">
+			<div class="emptyReview">
+				<span>♡</span>
+				<strong>아직 작성한 리뷰가 없어요</strong>
+				<p>여행의 소중한 순간을 리뷰로 남겨보세요.</p>
+			</div>
+		</c:if>
 	</div>
 
 	<div class="reviewNavi" id="navi">${navi}</div>
