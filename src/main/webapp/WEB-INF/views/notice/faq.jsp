@@ -6,16 +6,6 @@
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
 <style>
-* {
-	box-sizing: border-box;
-}
-
-.main {
-	width: 1200px;
-	max-width: calc(100% - 40px);
-	margin: 0 auto;
-	padding-bottom: 80px;
-}
 
 .titleBox {
 	text-align: center;
@@ -378,7 +368,7 @@
 }
 </style>
 
-<div class="main">
+<div class="container">
 
 	<div class="titleBox">
 		<h2>FAQ</h2>
