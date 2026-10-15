@@ -249,24 +249,7 @@
 <body>
 
 <div class="container">
-    <div class="header flex-between">
-        <div class="logobox">
-            <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
-        </div>
-        <div class="nav flex-between">
-            <div class="textzone">이벤트</div>
-            <div class="textzone">지역</div>
-            <div class="textzone">추천여행지</div>
-            <div class="textzone">숙박업소</div>
-            <div class="textzone">리뷰</div>
-            <div class="textzone">여행플래너</div>
-            <div class="textzone">공지사항</div>
-        </div>
-        <div class="user-menu">
-            <div class="icon"><i class="fa-solid fa-bars"></i></div>
-        </div>
-
-    </div>
+    <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
     <div class="title">
         <h1>비밀번호 찾기</h1>
@@ -307,12 +290,7 @@
             </fieldset>
     </div>
     <hr>
-    <div class="footer">
-        <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-        <p>회사명 : GOTT | 대표 : ??? | 사업자등록번호 : 123-45-67890</p>
-        <p>이용약관 | 개인정보처리방침 | 고객센터</p>
-        <div class="textbox">사이트로고</div>
-    </div>
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </div>
 
 <script>
