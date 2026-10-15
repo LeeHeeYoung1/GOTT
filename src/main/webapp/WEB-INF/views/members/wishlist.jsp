@@ -544,16 +544,7 @@ body {
                         <span>숙소</span>
                     </div>
                 </div>
-                <div class="wishToolbar">
-                    <div class="rightGroup">
-                        <select id="regionFilter">
-                            <option value="ALL">지역 전체</option>
-                        </select>
-                        <select id="sortFilter">
-                            <option value="recent">최근 저장순</option>
-                        </select>
-                    </div>
-                </div>
+                
                 <div class="wishCategorySection" data-section-type="SPOT">
                     <div class="sectionTitle"><span>관광지</span></div>
                     <div class="regionChips">

@@ -83,6 +83,7 @@ button{font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <div class="mileagePage">
     <div class="pageHeader">
         <div>
@@ -182,5 +183,6 @@ button{font-family:inherit;cursor:pointer}
         <p>· 현재 보유 마일리지와 상세 적립 내역은 각각의 기준에 따라 표시됩니다.</p>
     </div>
 </div>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>
