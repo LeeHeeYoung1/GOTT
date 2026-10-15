@@ -64,8 +64,6 @@ public class MembersControllers {
 	@ResponseBody
 	@RequestMapping("/login")
 	public int login(MembersDTO mdto, HttpSession session) {
-		System.out.println("===== 마이페이지 진입 =====");
-		System.out.println("loginId = " + session.getAttribute("loginId"));
 		int result = mdao.login(mdto);
 		
 		if(result == 1) {
@@ -267,6 +265,8 @@ public class MembersControllers {
 		List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
 		
 		List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
+		
+		
 
 		// 8. 모델 전달
 		model.addAttribute("tourType", tourType);
@@ -282,6 +282,7 @@ public class MembersControllers {
 		model.addAttribute("myWishTotalCount", myWishTotalCount);
 
 		model.addAttribute("mileage", mileage);
+		model.addAttribute("mileageTotalCount", mileageTotalCount);
 		model.addAttribute("mileageCpage", mileageCpage);
 		model.addAttribute("mileageTotalPage", mileageTotalPage);
 		model.addAttribute("mileageHistory", mileageHistory);
@@ -292,6 +293,7 @@ public class MembersControllers {
 		model.addAttribute("today", LocalDate.now());
 
 		model.addAttribute("reviewCount", reviewCount);
+		model.addAttribute("reviewTotalCount", reviewTotalCount);
 		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("reviewCpage", reviewCpage);
 		model.addAttribute("reviewTotalPage", reviewTotalPage);
@@ -323,6 +325,10 @@ public class MembersControllers {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(MembersDTO mdto, HttpSession session) {
 	    String id = (String) session.getAttribute("loginId");
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	   
 	    mdto.setId(id);
 	    int result = mdao.update(mdto);
 	    if(result>0) {
@@ -335,6 +341,33 @@ public class MembersControllers {
 	    }
 	    return "redirect:/members/mypage";
 	}
+
+	@RequestMapping("/checkPassword")
+	public String checkPassword(HttpSession session) {
+	    if (session.getAttribute("loginId") == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	    return "members/checkpassword";
+	}
+	
+
+	@RequestMapping(value = "/checkPassword", method = RequestMethod.POST)
+	public String checkPassword(String password, HttpSession session, Model model) {
+	    String id = (String) session.getAttribute("loginId");	
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	
+	    boolean result = mdao.checkPassword(id, EncryptionUtils.encryptSHA512(password));
+	
+	    if (result) {
+	        return "redirect:/members/update";
+	    }
+	
+	    model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+	    return "members/checkpassword";
+	}
+
 	
 	@RequestMapping("/deleted")
 	public String deleted() {
@@ -510,6 +543,7 @@ public class MembersControllers {
 	    model.addAttribute("mileage", mileage);
 	    model.addAttribute("mileageHistory", mileageHistory);
 	    model.addAttribute("mileageCpage", mileageCpage);
+	    model.addAttribute("mileageTotalCount", mileageTotalCount);
 	    model.addAttribute("mileageTotalPage", mileageTotalPage);
 	
 	    return "members/mileage";

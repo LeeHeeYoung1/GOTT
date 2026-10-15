@@ -1463,7 +1463,7 @@ body {
 						</ul>
 						<span>계정</span>
 						<ul>
-							<li><a href="/members/update">내 정보 수정</a></li>
+							<li><a href="/members/checkPassword">내 정보 수정</a></li>
 							<li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
 							<li><a href="#">1:1 문의</a></li>
 							<li><a href="/members/deleted">회원탈퇴</a></li>
@@ -1474,7 +1474,7 @@ body {
 					<nav class="mybarBox">
 						<a class="a1"><strong>${upcomingCount}</strong><span>다가오는
 								예약</span></a> <a class="a2"><strong>${myWishTotalCount}</strong><span>찜한
-								목록</span></a> <a class="a3"><strong>${reviewCount}</strong><span>작성한
+								목록</span></a> <a class="a3"><strong>${reviewTotalCount}</strong><span>작성한
 								리뷰</span></a> <a class="a4"><strong><fmt:formatNumber
 									value="${mileage}" pattern="#,##0" />M</strong><span>보유마일리지</span></a> <a
 							class="a5"><strong><fmt:formatDate

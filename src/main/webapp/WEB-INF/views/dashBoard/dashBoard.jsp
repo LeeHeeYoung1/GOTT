@@ -169,7 +169,7 @@ body {
 
 .stayRank {
 	grid-column: 1;
-	grid-row: 1 / 3;
+	grid-row: 1/3;
 	margin: 0;
 	color: #0f766e;
 	font-size: 13px;
@@ -180,7 +180,7 @@ body {
 
 .topFiveStay img {
 	grid-column: 2;
-	grid-row: 1 / 3;
+	grid-row: 1/3;
 	width: 64px;
 	height: 64px;
 	object-fit: cover;
@@ -318,7 +318,7 @@ body {
 				<h3>인기 숙소 TOP 5</h3>
 				<c:forEach var="i" items="${topFiveStay}" varStatus="st">
 					<div class="topFiveStay">
-						<p class="stayRank">${st.count} 위</p>
+						<p class="stayRank">${st.count}위</p>
 						<img src="${i.image_name}">
 						<p>${i.name}
 						<p>${i.address}</p>
@@ -327,9 +327,19 @@ body {
 			</div>
 			<div class="popularPlan">
 				<h3>인기 여행 일정 TOP 5</h3>
-
+				<c:forEach var="i" items="${topFivePlan}" varStatus="st">
+					<div class="topFiveStay">
+						<p class="stayRank">${st.count}위</p>
+						<img src="${topFivePlanImages[st.index]}">
+						<p>${i.plan_title}
+						<p>${i.start_date}~ ${i.end_date}</p>
+					</div>
+				</c:forEach>
 			</div>
 		</div>
+	</div>
+	<div class="bottom">
+		<button type="button" id="homeBtn">홈으로</button>
 	</div>
 
 </body>
@@ -480,5 +490,9 @@ new Chart(document.getElementById("regionChart"), {
 		}
 	}
 });
+
+$("#homeBtn").on("click", function(){
+	history.back();
+})
 </script>
 </html>
