@@ -10,16 +10,6 @@
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
 <style>
-/* 모든 요소의 크기에 padding과 border를 포함해서 계산 */
-* {
-	box-sizing: border-box;
-}
-
-/* 링크의 기본 글자색과 밑줄 설정 */
-a {
-	color: inherit;
-	text-decoration: none;
-}
 
 /* 버튼 기본 모양 */
 button {
@@ -719,7 +709,6 @@ button:hover {
 		next.innerHTML = ">";
 		navi.append(next);
 	}
-
 	function shareReview(seq, placeId) {
 	    // 현재 사이트 주소와 리뷰 상세 페이지 주소를 결합
 	    const url = window.location.origin
@@ -729,7 +718,7 @@ button:hover {
 	    // 리뷰 링크를 클립보드에 복사
 	    navigator.clipboard.writeText(url)
 	        .then(function() {
-	            alert("리뷰 링크가 복사되었습니다!");
+	            alert("리뷰 링크가 복사되었습니다!");s
 	        })
 	        .catch(function() {
 	            // 클립보드 복사가 안 될 경우 링크를 직접 보여줌
