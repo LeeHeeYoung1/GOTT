@@ -318,11 +318,9 @@ public class MembersControllers {
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String update(HttpSession session) {
 	    String id = (String) session.getAttribute("loginId");
-
 	    if (id == null) {
 	        return "redirect:/members/loginpage";
 	    }
-
 	    Boolean passwordChecked = (Boolean) session.getAttribute("passwordChecked");
 	    if (!Boolean.TRUE.equals(passwordChecked)) {
 	        return "redirect:/members/checkPassword";
