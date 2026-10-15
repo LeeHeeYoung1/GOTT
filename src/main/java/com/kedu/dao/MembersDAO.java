@@ -54,6 +54,13 @@ public class MembersDAO {
 	
 	    return result;
 	}
+	
+	public boolean checkPassword(String id,String password) {
+		String sql = "select count(*) from members where id = ? and pw = ?";
+		
+		Integer count = jdbc.queryForObject(sql, Integer.class,id,password);
+		return count != null && count > 0;
+	}
 
 	
 	public MembersDTO selectById(String id) {
