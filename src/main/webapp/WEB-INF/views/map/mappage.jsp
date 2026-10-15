@@ -468,7 +468,7 @@
 	        <!-- 새 카카오 장소 검색 -->
 	        <div class="placeSearch">
 	            <input type="text" id="placeSearchInput"
-	                placeholder="장소, 음식점, 관광지 검색" autocomplete="off"
+	                placeholder="숙박, 음식점, 관광지 검색" autocomplete="off"
 	                aria-label="장소 검색">
 	
 	            <button type="button" id="placeSearchBtn">검색</button>

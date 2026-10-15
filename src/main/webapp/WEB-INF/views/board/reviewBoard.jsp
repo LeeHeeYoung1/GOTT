@@ -10,7 +10,6 @@
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
 <style>
-
 /* 버튼 기본 모양 */
 button {
 	border: 1px solid #d5d5d5;
@@ -618,7 +617,8 @@ button:hover {
 						</span>
 					</div>
 					<p class="reviewLike">
-						평점 <strong>${i.rating}</strong>
+						좋아요 <strong>${i.rating}</strong>
+						
 					</p>
 					<div class="reviewDescription">${i.contents}</div>
 					<c:if test="${not empty i.tag}">
