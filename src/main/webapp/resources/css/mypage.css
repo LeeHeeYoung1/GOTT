@@ -1590,3 +1590,7 @@ body {
 .emptyReservation {
 	width: 100%;
 }
+
+.scrapPlanHeader{
+	margin-top: 50px;
+}
