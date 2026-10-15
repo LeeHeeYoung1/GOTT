@@ -35,15 +35,6 @@ button:hover {
 	border-color: #222;
 }
 
-/* 메인 */
-/* 페이지 전체 콘텐츠의 너비와 가운데 정렬 */
-.main {
-	width: 1200px;
-	max-width: calc(100% - 40px);
-	margin: 0 auto;
-	padding-bottom: 80px;
-}
-
 /* 제목 */
 /* 페이지 제목 영역 */
 .titleBox {
@@ -409,8 +400,8 @@ button:hover {
 	margin: 0;
 }
 
-.likeCount{
-	font-size:15px;
+.likeCount {
+	font-size: 15px;
 }
 
 /* 리뷰 본문 안의 이미지나 영상이 카드 배치를 깨지 않도록 숨김 */
@@ -448,6 +439,9 @@ button:hover {
 	text-align: center;
 }
 
+.reviewHeart:hover {
+	cursor: pointer;
+}
 /* 리뷰 없음 아이콘 */
 .emptyReview span {
 	margin-bottom: 12px;
@@ -468,6 +462,9 @@ button:hover {
 	font-size: 13px;
 }
 
+.reviewShareIcon:hover {
+	cursor: pointer;
+}
 /* 화면 너비가 900px 이하이면 카드 2열로 변경 */
 @media ( max-width : 900px) {
 	.reviewList {
@@ -530,7 +527,7 @@ button:hover {
 
 <!-- 메인 -->
 
-<div class="main">
+<div class="container">
 
 	<div class="titleBox">
 		<h2>리뷰게시판</h2>
@@ -589,73 +586,72 @@ button:hover {
 
 	<div class="reviewList">
 
-    <c:forEach var="i" items="${rList}">
-        <div class="reviewCard">
-            <div class="reviewUser">
-                <div class="reviewProfile">
-                    <span>G</span>
-                </div>
-                <div class="reviewUserInfo">
-                    <strong>${i.member_id}</strong>
-                    <span>${i.target_type} 리뷰</span>
-                </div>
-                <div class="reviewMore">•••</div>
-            </div>
+		<c:forEach var="i" items="${rList}">
+			<div class="reviewCard">
+				<div class="reviewUser">
+					<div class="reviewProfile">
+						<span>G</span>
+					</div>
+					<div class="reviewUserInfo">
+						<strong>${i.member_id}</strong> <span>${i.target_type} 리뷰</span>
+					</div>
+					<div class="reviewMore">•••</div>
+				</div>
 
-            <a class="reviewImageLink"
-                href="/review/detail?seq=${i.seq}&place_id=${i.target_id}">
-                <div class="reviewImage">
-                    <c:choose>
-                        <c:when test="${not empty i.image1}">
-                            <img src="${i.image1}" alt="리뷰 이미지">
-                        </c:when>
-                        <c:otherwise>
-                            <div class="reviewNoImage">
-                                <span>✈</span>
-                                <p>여행의 순간을 기록해 보세요</p>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </a>
+				<a class="reviewImageLink"
+					href="/review/detail?seq=${i.seq}&place_id=${i.target_id}">
+					<div class="reviewImage">
+						<c:choose>
+							<c:when test="${not empty i.image1}">
+								<img src="${i.image1}" alt="리뷰 이미지">
+							</c:when>
+							<c:otherwise>
+								<div class="reviewNoImage">
+									<span>✈</span>
+									<p>여행의 순간을 기록해 보세요</p>
+								</div>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</a>
 
-            <div class="reviewInfo">
-                <div class="reviewIcons">
-                    <span class="reviewHeart ${i.liked ? 'liked' : ''}"
-                        onclick="toggleRecommend(${i.seq}, this)">${i.liked ? '♥' : '♡'}</span>
+				<div class="reviewInfo">
+					<div class="reviewIcons">
+						<span class="reviewHeart ${i.liked ? 'liked' : ''}"
+							onclick="toggleRecommend(${i.seq}, this)">${i.liked ? '♥' : '♡'}</span>
 
-                    <span class="likeCount" id="likeCount${i.seq}">${i.recommendCount}</span>
+						<span class="likeCount" id="likeCount${i.seq}">${i.recommendCount}</span>
 
-                    <span>◯</span>
-                    <span class="reviewShareIcon">↗</span>
-                </div>
+						<span class="reviewShareIcon"
+							onclick="shareReview(${i.seq}, ${i.target_id})" title="리뷰 링크 복사">
+							<i class="fa-solid fa-link"></i>
+						</span>
+					</div>
+					<p class="reviewLike">
+						평점 <strong>${i.rating}</strong>
+					</p>
+					<div class="reviewDescription">${i.contents}</div>
+					<c:if test="${not empty i.tag}">
+						<p class="reviewTag">${i.tag}</p>
+					</c:if>
+					<p class="reviewDate">
+						<fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" />
+					</p>
+				</div>
+			</div>
+		</c:forEach>
 
-                <p class="reviewLike">⭐ <strong>${i.rating}</strong></p>
 
-                <div class="reviewDescription">${i.contents}</div>
+		<c:if test="${empty rList}">
+			<div class="emptyReview">
+				<span>♡</span> <strong>아직 작성한 리뷰가 없어요</strong>
+				<p>여행의 소중한 순간을 리뷰로 남겨보세요.</p>
+			</div>
+		</c:if>
 
-                <c:if test="${not empty i.tag}">
-                    <p class="reviewTag">${i.tag}</p>
-                </c:if>
+	</div>
 
-                <p class="reviewDate">
-                    <fmt:formatDate value="${i.reg_date}" pattern="yyyy.MM.dd" />
-                </p>
-            </div>
-        </div>
-    </c:forEach>
-
-    <c:if test="${empty rList}">
-        <div class="emptyReview">
-            <span>♡</span>
-            <strong>아직 작성한 리뷰가 없어요</strong>
-            <p>여행의 소중한 순간을 리뷰로 남겨보세요.</p>
-        </div>
-    </c:if>
-
-</div>
-
-<div class="reviewNavi" id="navi">${navi}</div>
+	<div class="reviewNavi" id="navi">${navi}</div>
 </div>
 
 
@@ -742,6 +738,23 @@ button:hover {
 		next.innerHTML = ">";
 		navi.append(next);
 	}
+
+	function shareReview(seq, placeId) {
+	    // 현재 사이트 주소와 리뷰 상세 페이지 주소를 결합
+	    const url = window.location.origin
+	        + "/review/detail?seq=" + seq
+	        + "&place_id=" + encodeURIComponent(placeId);
+
+	    // 리뷰 링크를 클립보드에 복사
+	    navigator.clipboard.writeText(url)
+	        .then(function() {
+	            alert("리뷰 링크가 복사되었습니다!");
+	        })
+	        .catch(function() {
+	            // 클립보드 복사가 안 될 경우 링크를 직접 보여줌
+	            prompt("아래 링크를 복사해주세요.", url);
+	        });
+	}
 	
 	function toggleRecommend(seq, heart) {
 	    $.ajax({
@@ -771,5 +784,6 @@ button:hover {
 	        }
 	    });
 	}
+	
 	</script>
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

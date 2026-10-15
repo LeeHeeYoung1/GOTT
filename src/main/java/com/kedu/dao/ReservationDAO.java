@@ -28,31 +28,30 @@ public class ReservationDAO {
 		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(PlaceDTO.class), placeId);
 	}
 
-	public int insert(RoomDTO dto, String checkIn, String checkOut, int price, int guest, String paymentId, HttpSession session) {
-	    String sql = "INSERT INTO RESERVATION (SEQ, MEMBER_ID, RESERVE_DATE, PRICE, CHECK_IN, CHECK_OUT, GUEST_NUM, STATUS, MILEAGE, ROOM_ID, PAYMENT_ID, TOTAL_PRICE) "
-	            + "VALUES (RESERVATION_SEQ.NEXTVAL, ?, SYSTIMESTAMP, ?, ?, ?, ?, '예약완료', ?, ?, ?, ?)";
-	    int mileage = (int)(price * 0.05);
-		return jdbc.update(sql, session.getAttribute("loginId"), price, checkIn, checkOut, guest, mileage,
-				dto.getRoomId(), paymentId,PriceUtil.totalPrice(checkIn, checkOut, dto.getPriceWeekday(), dto.getPriceWeekend()));
+	public int insert(RoomDTO dto, String checkIn, String checkOut, int price, int guest, String paymentId,
+			HttpSession session) {
+		String sql = "INSERT INTO RESERVATION (SEQ, MEMBER_ID, RESERVE_DATE, PRICE, CHECK_IN, CHECK_OUT, GUEST_NUM, STATUS, MILEAGE, ROOM_ID, PAYMENT_ID, TOTAL_PRICE) "
+				+ "VALUES (RESERVATION_SEQ.NEXTVAL, ?, SYSTIMESTAMP, ?, ?, ?, ?, '예약완료', 0, ?, ?, ?)";
+		return jdbc.update(sql, session.getAttribute("loginId"), price, checkIn, checkOut, guest, dto.getRoomId(),
+				paymentId, PriceUtil.totalPrice(checkIn, checkOut, dto.getPriceWeekday(), dto.getPriceWeekend()));
 	}
-	
+
 	public int delete(String paymentId) {
 		String sql = "update reservation set status = '예약취소' where payment_Id = ?";
-	    return jdbc.update(sql,paymentId);
+		return jdbc.update(sql, paymentId);
 	}
-	
-	public int reservationMileage(String id,int mileage) {
+
+	public int reservationMileage(String id, int mileage) {
 		String sql = "update members set mileage = mileage - ? where id = ? and mileage >= ?";
-		return jdbc.update(sql,mileage,id,mileage);
+		return jdbc.update(sql, mileage, id, mileage);
 	}
-	
+
 	// 마일리지 총액 조회
 	public int selectUsedMileage(String paymentId, String memberId) {
-	    String sql = "SELECT NVL(SUM(AMOUNT), 0) FROM MILEAGE_HISTORY "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND TYPE = 'USE'";
-	    return jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
+		String sql = "SELECT NVL(SUM(AMOUNT), 0) FROM MILEAGE_HISTORY "
+				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND TYPE = 'USE'";
+		return jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
 	}
-	
 
 	// 회원 현재 마일리지 조회
 	public int selectMileage(String memberId) {
@@ -74,22 +73,21 @@ public class ReservationDAO {
 				+ "WHERE r.PAYMENT_ID = ? AND r.MEMBER_ID = ?";
 		return jdbc.update(sql, type, amount, reason, paymentId, memberId);
 	}
-	
+
 	// 해당 예약으로 적립한 마일리지 조회
 	public int selectEarnedMileage(String paymentId, String memberId) {
-	    String sql = "SELECT NVL(SUM(AMOUNT), 0) FROM MILEAGE_HISTORY "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND TYPE = 'EARN'";
-	    return jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
+		String sql = "SELECT NVL(SUM(AMOUNT), 0) FROM MILEAGE_HISTORY "
+				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND TYPE = 'EARN'";
+		return jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
 	}
 
 	// 적립 마일리지 회수
 	public int subtractMileage(String memberId, int mileage) {
-	    String sql = "UPDATE MEMBERS SET MILEAGE = NVL(MILEAGE, 0) - ? "
-	            + "WHERE ID = ? AND NVL(MILEAGE, 0) >= ?";
-	    return jdbc.update(sql, mileage, memberId, mileage);
+		String sql = "UPDATE MEMBERS SET MILEAGE = NVL(MILEAGE, 0) - ? " + "WHERE ID = ? AND NVL(MILEAGE, 0) >= ?";
+		return jdbc.update(sql, mileage, memberId, mileage);
 	}
 
-	//예약내역전체조회
+	// 예약내역전체조회
 
 	public ArrayList<ReservationDTO> myRsList(String memberId) {
 		String sql = "SELECT reservation.*, room.room_name, room.image1, " + "CASE "
@@ -97,89 +95,66 @@ public class ReservationDAO {
 				+ "WHEN reservation.check_out <= TRUNC(SYSDATE) THEN 'completed' " + "ELSE 'upcoming' "
 				+ "END AS reservation_type " + "FROM reservation " + "JOIN room ON reservation.room_id = room.room_id "
 				+ "WHERE reservation.member_id = ? " + "ORDER BY reservation.reserve_date DESC";
-	
-		return (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId
-	    );
+
+		return (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId);
 	}
 
-	
 	// 이용 예정 예약 목록
 	public ArrayList<ReservationDTO> myUpcomingList(String memberId) {
-	    String sql = "SELECT r.*, rm.room_name, rm.image1 "
-	            + "FROM reservation r "
-	            + "JOIN room rm ON r.room_id = rm.room_id "
-	            + "WHERE r.member_id = ? "
-	            + "AND r.status = '예약완료' "
-	            + "AND r.check_out >= TRUNC(SYSDATE) "
-	            + "ORDER BY r.check_in ASC";
-	    return (ArrayList<ReservationDTO>) jdbc.query(
-	            sql,
-	            new BeanPropertyRowMapper<>(ReservationDTO.class),
-	            memberId
-	    );
+		String sql = "SELECT r.*, rm.room_name, rm.image1 " + "FROM reservation r "
+				+ "JOIN room rm ON r.room_id = rm.room_id " + "WHERE r.member_id = ? " + "AND r.status = '예약완료' "
+				+ "AND r.check_out >= TRUNC(SYSDATE) " + "ORDER BY r.check_in ASC";
+		return (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId);
 	}
 
 	// 이용 완료 예약 목록
 	public ArrayList<ReservationDTO> myCompletedList(String memberId) {
-	    String sql = "SELECT r.*, rm.room_name, rm.image1,\r\n"
-	    		+ "       CASE\r\n"
-	    		+ "           WHEN r.status = '예약취소' THEN 'cancelled'\r\n"
-	    		+ "           WHEN r.check_out < TRUNC(SYSDATE) THEN 'completed'\r\n"
-	    		+ "           ELSE 'upcoming'\r\n"
-	    		+ "       END AS reservation_type\r\n"
-	    		+ "FROM reservation r\r\n"
-	    		+ "JOIN room rm ON r.room_id = rm.room_id\r\n"
-	    		+ "WHERE r.member_id = ?\r\n"
-	    		+ "ORDER BY r.reserve_date DESC";
-	    return (ArrayList<ReservationDTO>) jdbc.query(
-	            sql,
-	            new BeanPropertyRowMapper<>(ReservationDTO.class),
-	            memberId
-	    );
+		String sql = "SELECT r.*, rm.room_name, rm.image1,\r\n" + "       CASE\r\n"
+				+ "           WHEN r.status = '예약취소' THEN 'cancelled'\r\n"
+				+ "           WHEN r.check_out < TRUNC(SYSDATE) THEN 'completed'\r\n" + "           ELSE 'upcoming'\r\n"
+				+ "       END AS reservation_type\r\n" + "FROM reservation r\r\n"
+				+ "JOIN room rm ON r.room_id = rm.room_id\r\n" + "WHERE r.member_id = ?\r\n"
+				+ "ORDER BY r.reserve_date DESC";
+		return (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId);
 	}
-	
+
 	// 이용날짜당일 및 지나면 취소불가
 	public boolean canModifyReservation(String paymentId, String memberId) {
-	    String sql = "SELECT COUNT(*) FROM reservation "
-	               + "WHERE payment_id = ? "
-	               + "AND member_id = ? "
-	               + "AND status = '예약완료' "
-	               + "AND check_in > TRUNC(SYSDATE)";
-	    Integer count = jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
-	    return count != null && count > 0;
+		String sql = "SELECT COUNT(*) FROM reservation " + "WHERE payment_id = ? " + "AND member_id = ? "
+				+ "AND status = '예약완료' " + "AND check_in > TRUNC(SYSDATE)";
+		Integer count = jdbc.queryForObject(sql, Integer.class, paymentId, memberId);
+		return count != null && count > 0;
 	}
-	
+
 	// 다가오는 예약 건수
 	public int upcomingReservationCount(String memberId) {
-	    String sql = "SELECT COUNT(*) FROM reservation "
-	            + "WHERE member_id = ? "
-	            + "AND status = '예약완료' "
-	            + "AND check_out >= TRUNC(SYSDATE)";
-	    return jdbc.queryForObject(sql, Integer.class, memberId);
+		String sql = "SELECT COUNT(*) FROM reservation " + "WHERE member_id = ? " + "AND status = '예약완료' "
+				+ "AND check_out >= TRUNC(SYSDATE)";
+		return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
-	
+
 	public int reservationCount(String memberId, String reservationTab) {
-	    String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ? ";
+		String sql = "SELECT COUNT(*) FROM reservation WHERE member_id = ? ";
 
-	    if ("cancelled".equals(reservationTab)) {
-	        sql += "AND status = '예약취소' ";
-	    } else if ("completed".equals(reservationTab)) {
-	        sql += "AND status <> '예약취소' AND check_out <= TRUNC(SYSDATE) ";
-	    } else if ("upcoming".equals(reservationTab)) {
-	        sql += "AND status <> '예약취소' AND check_out > TRUNC(SYSDATE) ";
-	    }
+		if ("cancelled".equals(reservationTab)) {
+			sql += "AND status = '예약취소' ";
+		} else if ("completed".equals(reservationTab)) {
+			sql += "AND status <> '예약취소' AND check_out <= TRUNC(SYSDATE) ";
+		} else if ("upcoming".equals(reservationTab)) {
+			sql += "AND status <> '예약취소' AND check_out > TRUNC(SYSDATE) ";
+		}
 
-	    return jdbc.queryForObject(sql, Integer.class, memberId);
+		return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
-	
+
 	public int updateReservation(String paymentId, String status) {
-	    String sql = "UPDATE RESERVATION SET status = ? WHERE payment_Id = ?";
-	    return jdbc.update(sql, status, paymentId);
+		String sql = "UPDATE RESERVATION SET status = ? WHERE payment_Id = ?";
+		return jdbc.update(sql, status, paymentId);
 	}
-	
+
 	public ArrayList<ReservationDTO> myRsList(String memberId, int cpage, int pagesize, String reservationTab) {
-	    int start = (cpage - 1) * pagesize + 1;
-	    int end = cpage * pagesize;
+		int start = (cpage - 1) * pagesize + 1;
+		int end = cpage * pagesize;
 
 		String sql = "SELECT * FROM ( " + "SELECT reservation.*, room.room_name, room.image1, " + "CASE "
 				+ "WHEN reservation.status = '예약취소' THEN 'cancelled' "
@@ -188,86 +163,76 @@ public class ReservationDAO {
 				+ "FROM reservation " + "JOIN room ON reservation.room_id = room.room_id "
 				+ "WHERE reservation.member_id = ? ";
 
-	    if ("cancelled".equals(reservationTab)) {
-	        sql += "AND reservation.status = '예약취소' ";
-	    } else if ("completed".equals(reservationTab)) {
-	        sql += "AND reservation.status <> '예약취소' "
-	                + "AND reservation.check_out <= TRUNC(SYSDATE) ";
-	    } else if ("upcoming".equals(reservationTab)) {
-	        sql += "AND reservation.status <> '예약취소' "
-	                + "AND reservation.check_out > TRUNC(SYSDATE) ";
-	    }
+		if ("cancelled".equals(reservationTab)) {
+			sql += "AND reservation.status = '예약취소' ";
+		} else if ("completed".equals(reservationTab)) {
+			sql += "AND reservation.status <> '예약취소' " + "AND reservation.check_out <= TRUNC(SYSDATE) ";
+		} else if ("upcoming".equals(reservationTab)) {
+			sql += "AND reservation.status <> '예약취소' " + "AND reservation.check_out > TRUNC(SYSDATE) ";
+		}
 
-	    sql += ") WHERE rn BETWEEN ? AND ?";
+		sql += ") WHERE rn BETWEEN ? AND ?";
 
-	    return (ArrayList<ReservationDTO>) jdbc.query(
-	            sql,
-	            new BeanPropertyRowMapper<>(ReservationDTO.class),
-	            memberId, start, end
-	    );
+		return (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId,
+				start, end);
 	}
-	
-	
+
 	public ReservationDTO reservationOne(String paymentId) {
-	    String sql = "SELECT r.*, rm.room_name, rm.image1, rm.place_id "
-	            + "FROM reservation r "
-	            + "JOIN room rm ON r.room_id = rm.room_id "
-	            + "WHERE r.payment_id = ?";
-	    return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
+		String sql = "SELECT r.*, rm.room_name, rm.image1, rm.place_id " + "FROM reservation r "
+				+ "JOIN room rm ON r.room_id = rm.room_id " + "WHERE r.payment_id = ?";
+		return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), paymentId);
 	}
-	
-	public int updateReservationDetails(String paymentId, String memberId, int roomId,
-	        java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int totalPrice) {
-	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
-	            + "GUEST_NUM = ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND UPDATE_COUNT = 0";
-	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, totalPrice, paymentId, memberId);
+
+	public int updateReservationDetails(String paymentId, String memberId, int roomId, java.sql.Date checkIn,
+			java.sql.Date checkOut, int guestNum, int totalPrice) {
+		String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
+				+ "GUEST_NUM = ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
+				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND UPDATE_COUNT = 0";
+		return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, totalPrice, paymentId, memberId);
 	}
-	
-	public int ReservationHistory(int reservationSeq, String paymentId, String reservationPaymentId, String memberId, String paymentType, int amount, String status) {
-	    String sql = "INSERT INTO RESERVATION_HISTORY (HISTORY_ID, RESERVATION_SEQ, PAYMENT_ID, RESERVATION_PAYMENT_ID, MEMBER_ID, PAYMENT_TYPE, AMOUNT, STATUS, CREATED_AT) "
-	            + "VALUES (RESERVATION_HISTORY_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP)";
-	    return jdbc.update(sql, reservationSeq, paymentId, reservationPaymentId, memberId, paymentType, amount, status);
+
+	public int ReservationHistory(int reservationSeq, String paymentId, String reservationPaymentId, String memberId,
+			String paymentType, int amount, String status) {
+		String sql = "INSERT INTO RESERVATION_HISTORY (HISTORY_ID, RESERVATION_SEQ, PAYMENT_ID, RESERVATION_PAYMENT_ID, MEMBER_ID, PAYMENT_TYPE, AMOUNT, STATUS, CREATED_AT) "
+				+ "VALUES (RESERVATION_HISTORY_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP)";
+		return jdbc.update(sql, reservationSeq, paymentId, reservationPaymentId, memberId, paymentType, amount, status);
 	}
-	
-	public int updateReservationAfterAdditionalPayment(String paymentId, String memberId,
-	        int roomId, java.sql.Date checkIn, java.sql.Date checkOut,
-	        int guestNum, int additionalPaid, int newTotalPrice) {
-	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
-	            + "GUEST_NUM = ?, PRICE = PRICE + ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND UPDATE_COUNT = 0";
-	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum,
-	            additionalPaid, newTotalPrice, paymentId, memberId);
+
+	public int updateReservationAfterAdditionalPayment(String paymentId, String memberId, int roomId,
+			java.sql.Date checkIn, java.sql.Date checkOut, int guestNum, int additionalPaid, int newTotalPrice) {
+		String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
+				+ "GUEST_NUM = ?, PRICE = PRICE + ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
+				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' AND UPDATE_COUNT = 0";
+		return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, additionalPaid, newTotalPrice, paymentId,
+				memberId);
 	}
-	
-	public int updateReservationAfterRefund(String paymentId, String memberId, int roomId,
-	        java.sql.Date checkIn, java.sql.Date checkOut, int guestNum,
-	        int refundAmount, int newTotalPrice) {
-	    String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
-	            + "GUEST_NUM = ?, PRICE = PRICE - ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' "
-	            + "AND UPDATE_COUNT = 0 AND PRICE >= ?";
-	    return jdbc.update(sql, roomId, checkIn, checkOut, guestNum,
-	            refundAmount, newTotalPrice, paymentId, memberId, refundAmount);
+
+	public int updateReservationAfterRefund(String paymentId, String memberId, int roomId, java.sql.Date checkIn,
+			java.sql.Date checkOut, int guestNum, int refundAmount, int newTotalPrice) {
+		String sql = "UPDATE RESERVATION SET ROOM_ID = ?, CHECK_IN = ?, CHECK_OUT = ?, "
+				+ "GUEST_NUM = ?, PRICE = PRICE - ?, TOTAL_PRICE = ?, UPDATE_COUNT = 1 "
+				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료' " + "AND UPDATE_COUNT = 0 AND PRICE >= ?";
+		return jdbc.update(sql, roomId, checkIn, checkOut, guestNum, refundAmount, newTotalPrice, paymentId, memberId,
+				refundAmount);
 	}
-	
+
 	public int countRePaymentHistory(String newPaymentId) {
-	    String sql = "SELECT COUNT(*) FROM RESERVATION_HISTORY WHERE RESERVATION_PAYMENT_ID = ?";
-	    return jdbc.queryForObject(sql, Integer.class, newPaymentId);
+		String sql = "SELECT COUNT(*) FROM RESERVATION_HISTORY WHERE RESERVATION_PAYMENT_ID = ?";
+		return jdbc.queryForObject(sql, Integer.class, newPaymentId);
 	}
-	
+
 	public int cancelReservation(String paymentId, String memberId) {
-	    String sql = "UPDATE RESERVATION SET STATUS = '예약취소' "
-	            + "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
-	    return jdbc.update(sql, paymentId, memberId);
+		String sql = "UPDATE RESERVATION SET STATUS = '예약취소' "
+				+ "WHERE PAYMENT_ID = ? AND MEMBER_ID = ? AND STATUS = '예약완료'";
+		return jdbc.update(sql, paymentId, memberId);
 	}
-	
-	
+
 	public int selectCount() {
 		String sql = "select count(*) from place p " + " where p.place_type = 'STAY' "
 				+ "   and exists (select 1 from room r where r.place_id = p.place_id)";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
+
 	public List<PlaceRoomDTO> searchFromTo(PlaceDTO pdto, String[] amenity, Integer maxPrice, String checkIn,
 			String checkOut, Integer adult, Integer child, int start, int end) {
 
@@ -298,8 +263,7 @@ public class ReservationDAO {
 		int c = (child == null) ? 0 : child;
 		Integer guest = (a + c > 0) ? Integer.valueOf(a + c) : null;
 
-		String sql = "select * from ("
-				+ "select x.*, rownum rn from ("
+		String sql = "select * from (" + "select x.*, rownum rn from ("
 				+ "select t.place_id, t.name, t.region, t.address, t.place_type, t.image_name, t.latitude, t.longitude, t.avg_rating, "
 				+ "min(t.price_weekday) as min_price, sum(t.room_count) as total_room_count, max(t.amenities) as amenities, max(t.image1) as alter_image from "
 				+ "(select p.place_id, p.name, p.region, p.address, p.place_type, p.image_name, p.latitude, p.longitude, p.avg_rating, "
@@ -328,13 +292,12 @@ public class ReservationDAO {
 
 				// 1박 가격 — 집계 결과를 거르니 having
 				+ "having (? is null or min(t.price_weekday) <= ?) " + "order by min(t.price_weekday)"
-				+ ") x where rownum <= ?"
-				+ ") where rn >= ?";
+				+ ") x where rownum <= ?" + ") where rn >= ?";
 
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(PlaceRoomDTO.class), region, region, a1, a1, a2, a2, a3, a3,
 				a4, a4, a5, a5, guest, guest, in, out, out, in, maxPrice, maxPrice, end, start);
 	}
-	
+
 	public int searchCount(PlaceDTO pdto, String[] amenity, Integer maxPrice, String checkIn, String checkOut,
 			Integer adult, Integer child) {
 
@@ -365,8 +328,7 @@ public class ReservationDAO {
 		int c = (child == null) ? 0 : child;
 		Integer guest = (a + c > 0) ? Integer.valueOf(a + c) : null;
 
-		String sql = "select count(*) from ("
-				+ "select t.place_id from "
+		String sql = "select count(*) from (" + "select t.place_id from "
 				+ "(select p.place_id, p.region, p.place_type, "
 				+ "r.price_weekday, r.room_count, r.amenities, r.max_count, r.room_id " + "from place p "
 				+ "join room r on p.place_id = r.place_id " + "where p.place_type='STAY' "
@@ -384,57 +346,76 @@ public class ReservationDAO {
 				+ "         and v.check_in  < to_date(?, 'YYYY-MM-DD') "
 				+ "         and v.check_out > to_date(?, 'YYYY-MM-DD'))) "
 
-				+ ") t "
-				+ "group by t.place_id "
-				+ "having (? is null or min(t.price_weekday) <= ?)"
-				+ ")";
+				+ ") t " + "group by t.place_id " + "having (? is null or min(t.price_weekday) <= ?)" + ")";
 
-		return jdbc.queryForObject(sql, Integer.class, region, region, a1, a1, a2, a2, a3, a3,
-				a4, a4, a5, a5, guest, guest, in, out, out, in, maxPrice, maxPrice);
+		return jdbc.queryForObject(sql, Integer.class, region, region, a1, a1, a2, a2, a3, a3, a4, a4, a5, a5, guest,
+				guest, in, out, out, in, maxPrice, maxPrice);
 	}
-	
-	//전체 예약 건수
+
+	// 전체 예약 건수
 	public int totalReservation() {
 		String sql = "select count(*) from reservation";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
-	
-	//취소 예약 건수
+
+	// 취소 예약 건수
 	public int cancelReservation() {
 		String sql = "select count(*) from reservation where status = '예약취소'";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
-	
-	//매출 집계
+
+	// 매출 집계
 	public int totalSales() {
 		String sql = "select sum(total_price) from reservation where status = '예약완료' and check_out <= sysdate";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
-	
-	//월별 매출 집계
+
+	// 월별 매출 집계
 	public int monthlySales(String monthStart, String monthEnd) {
 		String sql = "select SUM(total_price)from reservation where status = '예약완료' and check_in  >= TO_DATE(?, 'YYYY-MM-DD') and check_out <= TO_DATE(?, 'YYYY-MM-DD')";
 		return jdbc.queryForObject(sql, Integer.class, monthStart, monthEnd);
 	}
-	
-	//지역별 예약 분포
+
+	// 지역별 예약 분포
 	public int reservationRegion() {
 		String sql = "select sum(total_price) from reservation where status = '예약완료' and check_out <= sysdate";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
-	
-	//예약된 방들의 place_id 뽑기
+
+	// 예약된 방들의 place_id 뽑기
 	public List<Integer> reservedPlaceIds() {
 		String sql = "select rm.place_id from reservation r join room rm on rm.room_id = r.room_id";
 		return jdbc.queryForList(sql, Integer.class);
 	}
-	
-	//인기 숙소 top5 place_id 뽑기
+
+	// 인기 숙소 top5 place_id 뽑기
 	public List<Integer> topFiveReserved() {
 		String sql = "select place_id FROM (select rm.place_id, COUNT(*) AS cnt from reservation r "
-				+ "     JOIN room rm ON rm.room_id = r.room_id "
-				+ "    GROUP BY rm.place_id "
+				+ "     JOIN room rm ON rm.room_id = r.room_id " + "    GROUP BY rm.place_id "
 				+ "    ORDER BY cnt DESC) WHERE ROWNUM <= 5";
 		return jdbc.queryForList(sql, Integer.class);
+	}
+
+	// 이용완료된 예약의 마일리지 적립 (로그인 시 호출)
+	public int mileageUp(String memberId) {
+
+		String addSql = "UPDATE members SET mileage = NVL(mileage, 0) + ( "
+				+ "SELECT NVL(SUM(TRUNC(r.price * 0.05)), 0) FROM reservation r "
+				+ "WHERE r.member_id = members.id AND r.mileage_status = '적립예정' "
+				+ "AND r.status = '예약완료' AND r.check_out <= TRUNC(SYSDATE)) " + "WHERE id = ?";
+
+		jdbc.update(addSql, memberId);
+
+		String mStatusSql = "UPDATE reservation SET mileage_status = '적립완료' WHERE member_id = ? "
+				+ "AND mileage_status = '적립예정' AND status = '예약완료' AND check_out <= TRUNC(SYSDATE)";
+
+		return jdbc.update(mStatusSql, memberId);
+	}
+
+	// 예약 취소 시 적립 예정 상태 해제
+	public int cancelMileageStatus(String paymentId, String memberId) {
+		String sql = "UPDATE reservation SET mileage_status = '적립취소' "
+				+ " WHERE payment_id = ? AND member_id = ? AND mileage_status = '적립예정'";
+		return jdbc.update(sql, paymentId, memberId);
 	}
 }

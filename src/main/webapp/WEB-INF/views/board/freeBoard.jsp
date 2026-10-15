@@ -12,17 +12,7 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
 
 <style>
-* {
-    box-sizing: border-box;
-}
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-}
 
 a {
     color: inherit;
@@ -40,15 +30,6 @@ button:hover {
     color: white;
     border-color: #222;
 }
-
-/* 메인 */
-.main {
-    width: 1200px;
-    max-width: calc(100% - 40px);
-    margin: 0 auto;
-    padding-bottom: 80px;
-}
-
 /* 제목 */
 .titleBox {
     text-align: center;
@@ -325,7 +306,7 @@ button:hover {
 }
 </style>
 
-<div class="main">
+<div class="container">
 
     <div class="titleBox">
         <h2>자유게시판</h2>

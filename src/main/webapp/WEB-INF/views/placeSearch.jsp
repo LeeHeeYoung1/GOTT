@@ -5,36 +5,17 @@
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
 <!DOCTYPE html>
-<html>
-<head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <title>추천 여행지</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
-    color: #222;
-    background: #fff;
-}
 
 button {
     font-family: inherit;
     font-size: 14px;
-}
-
-.wrap {
-    width: 100%;
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 0 16px;
 }
 
 .hero {
@@ -57,6 +38,7 @@ button {
     display: flex;
     gap: 8px;
     margin-top: 30px;
+    padding: 0 20px;
 }
 
 .placeSearchForm input[type="text"] {
@@ -82,6 +64,7 @@ button {
     gap: 8px;
     flex-wrap: wrap;
     margin: 40px 0 16px;
+   	padding: 0 20px;
 }
 
 .filters .label {
@@ -117,6 +100,7 @@ button {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
+    padding: 0 20px;
 }
 
 .card {
@@ -231,7 +215,7 @@ button {
 .home {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin: 20px;
 }
 
 .home button {
@@ -264,19 +248,19 @@ button {
     }
 }
 </style>
-</head>
 
-<body>
 
-    <section class="hero">
-        <div class="wrap">
-            <h1>여행지</h1>
-            <p>관광지, 맛집, 숙박업소를 모아봤어요.</p>
-        </div>
-    </section>
+    
 
-    <main class="wrap">
-
+    <div class="container">
+    
+		<section class="hero">
+	        
+	            <h1>여행지</h1>
+	            <p>관광지, 맛집, 숙박업소를 검색해 보세요.</p>
+	       
+	    </section>
+	    
         <form action="${pageContext.request.contextPath}/place/search"
               method="get" class="placeSearchForm">
 
@@ -289,7 +273,6 @@ button {
         </form>
 
         <div class="filters">
-            <span class="label">유형</span>
 
             <button type="button"
                     class="chip ${type == '전체' ? 'active' : ''}"
@@ -355,7 +338,7 @@ button {
 		
         <div class="paging" id="paging"></div>
 
-    </main>
+    </div>
 
     <script>
         let chips = document.getElementsByClassName("chip");
@@ -455,7 +438,5 @@ button {
         });
     </script>
 
-</body>
-</html>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
