@@ -14,11 +14,12 @@ public class ReviewDTO {
 	private String image1;
 	private int view_count;
 	private boolean liked;
+	private int recommendCount;
 
 	public ReviewDTO() {}
 
 	public ReviewDTO(int seq, String member_id, String target_type, int target_id, String contents, int rating,
-			Timestamp reg_date, String tag, String image1, int view_count) {
+			Timestamp reg_date, String tag, String image1, int view_count, int recommendCount) {
 		this.seq = seq;
 		this.member_id = member_id;
 		this.target_type = target_type;
@@ -29,6 +30,7 @@ public class ReviewDTO {
 		this.tag = tag;
 		this.image1 = image1;
 		this.view_count = view_count;
+		this.recommendCount = recommendCount;
 	}
 
 	public int getSeq() {
@@ -117,5 +119,12 @@ public class ReviewDTO {
 
 	public void setLiked(boolean liked) {
 		this.liked = liked;
+	}
+	public int getRecommendCount() {
+	    return recommendCount;
+	}
+
+	public void setRecommendCount(int recommendCount) {
+	    this.recommendCount = recommendCount;
 	}
 }
