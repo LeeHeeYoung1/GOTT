@@ -519,8 +519,7 @@ body {
                     <ul>
                         <li><a href="/members/update">내 정보 수정</a></li>
                         <li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
-                        <li><a href="#">알림 설정</a></li>
-                        <li><a href="#">1:1 문의</a></li>
+                        <li><a href="/notice/qna">1:1 문의</a></li>
                         <li><a href="/members/deleted">회원탈퇴</a></li>
                     </ul>
                 </div>
@@ -544,16 +543,7 @@ body {
                         <span>숙소</span>
                     </div>
                 </div>
-                <div class="wishToolbar">
-                    <div class="rightGroup">
-                        <select id="regionFilter">
-                            <option value="ALL">지역 전체</option>
-                        </select>
-                        <select id="sortFilter">
-                            <option value="recent">최근 저장순</option>
-                        </select>
-                    </div>
-                </div>
+                
                 <div class="wishCategorySection" data-section-type="SPOT">
                     <div class="sectionTitle"><span>관광지</span></div>
                     <div class="regionChips">

@@ -7,1406 +7,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/public.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/public.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/mypage.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script
 	src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <title>GOTT 마이페이지</title>
-<style>
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 16px;
-  color: #263238;
-  background-color: #f8fafa;
-  line-height: 1.5;
-}
-.mypageContainer>h2, .mypageContainer>h5 {
-  text-align: center;
-}
-.mypageContainer a {
-  color: inherit;
-  text-decoration: none;
-}
-.mypageContainer button {
-  border: 1px solid black;
-  background-color: white;
-}
-.mypageContainer button:hover {
-  background-color: #222;
-  color: white;
-  border-color: #222;
-}
-.sectionTitle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.sectionTitle>span {
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 1;
-}
-.sectionTitle>a {
-  font-size: 12px;
-  color: #777;
-  line-height: 1;
-  align-self: center;
-}
-.mypageContainer {
-  width: 1200px;
-  max-width: calc(100% - 40px);
-  margin: 0 auto;
-}
-.sideBox {
-  width: 17%;
-  float: left;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: white;
-}
-.loginId {
-  padding: 20px;
-  text-align: center;
-}
-.loginId strong {
-  font-size: 14px;
-}
-.loginId span {
-  font-size: 12px;
-  color: #797472;
-}
-.sideBox hr {
-  margin: 0;
-  border: 0;
-  border-top: 1px solid #e5e7eb;
-}
-.sideTitle {
-  padding-bottom: 10px;
-}
-.sideTitle>span {
-  display: block;
-  margin: 12px 20px 5px;
-  font-size: 12px;
-  color: #797472;
-}
-.sideTitle ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.sideTitle li {
-  padding: 6px 20px;
-  font-size: 14px;
-}
-.sideTitle li a {
-  display: block;
-  color: #222;
-  text-decoration: none;
-}
-.sideTitle li:hover {
-  background-color: #f2f2f2;
-}
-.sideTitle li.active {
-  background-color: #eff6ff;
-}
-.sideTitle li.active a {
-  color: #2563eb;
-  font-weight: 600;
-}
-.mainContainer {
-  width: 83%;
-  margin-left: 17%;
-  padding-left: 20px;
-}
-.mybarBox {
-  width: 100%;
-  display: flex;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: white;
-}
-.a1, .a2, .a3, .a4, .a5 {
-  width: 20%;
-  height: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color .2s ease;
-}
-.a2, .a3, .a4, .a5 {
-  border-left: 1px solid #e5e7eb;
-}
-.a1 strong, .a2 strong, .a3 strong, .a4 strong, .a5 strong {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 700;
-  color: #222;
-}
-.a1 span, .a2 span, .a3 span, .a4 span, .a5 span {
-  margin-top: 4px;
-  font-size: 12px;
-  color: #797472;
-}
-.a1:hover, .a2:hover, .a3:hover, .a4:hover, .a5:hover {
-  background-color: #f8fafa;
-}
-.tourTypeBox {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding: 28px 30px;
-  margin-top: 30px;
-  background: #fff;
-  border: 1px solid #e5ebe7;
-  border-radius: 12px;
-}
-.tourTypeText {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.tourTypeText strong {
-  font-size: 18px;
-  color: #333;
-  line-height: 1.5;
-}
-.tourTypeText strong span {
-  color: #27866b;
-}
-.tourTypeText p {
-  font-size: 14px;
-  color: #888;
-  line-height: 1.5;
-}
-.tourTypeBox button {
-  flex-shrink: 0;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 7px;
-  background: #27866b;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-}
-.tourTypeBox button:hover {
-  background: #206e58;
-}
-.plannerContainer {
-  margin-top: 80px;
-}
-.plannerBox {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  padding: 20px 24px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background-color: white;
-}
-.plannerBox .plannerText strong {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #222;
-}
-.plannerBox .plannerText p {
-  margin: 0;
-  font-size: 13px;
-  color: #777;
-  line-height: 1.5;
-}
-.plannerBox .plannerBtns {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.plannerBox .plannerBtns button {
-  height: 34px;
-  padding: 0 16px;
-  border-radius: 5px;
-  font-size: 12px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.plannerBox .plannerBtns .newScheduleBtn {
-  border: none;
-  background-color: #222;
-  color: white;
-  font-weight: 600;
-}
-.plannerBox .plannerBtns .newScheduleBtn:hover {
-  background-color: #000;
-}
-.plannerBox .plannerBtns .viewShareBtn {
-  border: 1px solid #d9d9d9;
-  background-color: white;
-  color: #333;
-}
-.plannerBox .plannerBtns .viewShareBtn:hover {
-  background-color: #222;
-  color: white;
-  border-color: #222;
-}
-.sharedPlanContainer {
-  margin-top: 80px;
-}
-.sharedPlanCard {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  width: 100%;
-  min-height: 140px;
-  margin-top: 12px;
-  padding: 18px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background-color: white;
-  transition: box-shadow .2s ease;
-}
-.sharedPlanCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-}
-.sharedPlanCard>.img {
-  width: 150px;
-  height: 100px;
-  flex: 0 0 150px;
-  overflow: hidden;
-  border-radius: 8px;
-  background-color: #f1f1f1;
-}
-.sharedPlanCard>.img img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.sharedPlanInfo {
-  flex: 1;
-  min-width: 0;
-  padding: 2px 25px;
-}
-.sharedPlanInfo h3 {
-  margin: 0 0 10px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #222;
-  overflow-wrap: anywhere;
-}
-.sharedPlanInfo p {
-  margin: 4px 0;
-  font-size: 13px;
-  color: #666;
-}
-.sharedPlanCondition {
-  width: 130px;
-  flex: 0 0 130px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-.sharedPlanCondition .shareBadge {
-  padding: 4px 10px;
-  border-radius: 5px;
-  background-color: #eff6ff;
-  color: #2563eb;
-  font-size: 12px;
-  font-weight: 600;
-}
-.sharedPlanCondition .btnGroup {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.sharedPlanCondition .btnGroup button {
-  width: 100%;
-  height: 32px;
-  border: 1px solid #d9d9d9;
-  border-radius: 5px;
-  background-color: white;
-  font-size: 12px;
-  color: #333;
-  cursor: pointer;
-}
-.sharedPlanCondition .btnGroup button:hover {
-  background-color: #222;
-  color: white;
-  border-color: #222;
-}
-/\* 내가 스크랩한 여행 일정 \*/
-.scrapPlanContainer {
-  margin-top: 80px;
-}
-.scrapPlanHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 50px;
-}
-.scrapPlanHeader>span {
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 1;
-}
-.scrapPlanCard {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  min-height: 140px;
-  margin-top: 12px;
-  padding: 18px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background-color: white;
-  transition: box-shadow .2s ease;
-}
-.scrapPlanCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-}
-.scrapPlanCard>.img {
-  width: 150px;
-  height: 100px;
-  flex: 0 0 150px;
-  overflow: hidden;
-  border-radius: 8px;
-  background-color: #f1f1f1;
-}
-.scrapPlanCard>.img img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.scrapPlanInfo {
-  flex: 1;
-  min-width: 0;
-  padding: 2px 25px;
-}
-.scrapPlanInfo p {
-  margin: 4px 0;
-  font-size: 13px;
-  color: #666;
-  overflow-wrap: anywhere;
-}
-.scrapPlanInfo p:first-child {
-  margin: 0 0 10px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #222;
-}
-.scrapPlanCard .btnBox {
-  width: 130px;
-  flex: 0 0 130px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-}
-.scrapPlanCard .btnBox button {
-  width: 100%;
-  height: 32px;
-  border: 1px solid #d9d9d9;
-  border-radius: 5px;
-  background-color: white;
-  font-size: 12px;
-  color: #333;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.scrapPlanCard .btnBox .scrapDeleteBtn {
-  border-color: #f0c2c2;
-  color: #c2410c;
-}
-.scrapPlanCard .btnBox .scrapDeleteBtn:hover {
-  background-color: #c2410c;
-  border-color: #c2410c;
-  color: white;
-}
-.scrapPlanCard .btnBox .scrapDetailBtn:hover {
-  background-color: #222;
-  border-color: #222;
-  color: white;
-}
-.emptyScrapPlan {
-  padding: 20px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: white;
-  color: #777;
-  font-size: 13px;
-}
-.reservationContainer {
-  margin-top: 80px;
-}
-.reservationVar {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  border-bottom: 1px solid #222;
-}
-.tab {
-  width: 110px;
-  height: 42px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ddd;
-  border-bottom: none;
-  border-radius: 7px 7px 0 0;
-  background-color: #f8f8f8;
-  font-size: 13px;
-  color: #777;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-.tab+.tab {
-  margin-left: 3px;
-}
-.tab:hover {
-  background-color: #222;
-  color: white;
-  border-color: #222;
-}
-.tab.active {
-  background-color: #222;
-  color: white;
-  border-color: #222;
-  font-weight: 600;
-}
-.reservationPaging {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 30px 0;
-}
-.reservationPaging a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  height: 35px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  color: #333;
-  text-decoration: none;
-}
-.reservationPaging a.active {
-  background-color: #333;
-  color: white;
-  border-color: #333;
-}
-.wishlistContainer {
-  width: 100%;
-  margin-top: 80px;
-}
-.wishlistTab {
-  display: flex;
-  gap: 8px;
-  margin: 14px 0 16px;
-}
-.wishlistTab button {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background-color: white;
-  font-size: 13px;
-  color: #333;
-  cursor: pointer;
-}
-.wishlistTab button.active {
-  background-color: #222;
-  color: white;
-  border-color: #222;
-  font-weight: 600;
-}
-.wishlistTab button:not(.active):hover {
-  background-color: #f2f2f2;
-}
-.wishlistGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-.wishlistCard {
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: white;
-}
-.wishlistCard .img {
-  width: 100%;
-  height: 200px;
-  background-color: #f1f1f1;
-  overflow: hidden;
-}
-.wishlistCard .img img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.wishlistInfo {
-  padding: 14px 16px;
-}
-.wishlistInfo h3 {
-  margin: 0 0 6px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #222;
-}
-.wishlistInfo p {
-  margin: 0 0 12px;
-  font-size: 12px;
-  color: #777;
-  line-height: 1.4;
-}
-.wishlistInfo button {
-  width: 100%;
-  height: 34px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: white;
-  font-size: 12px;
-  color: #333;
-  cursor: pointer;
-}
-.wishlistInfo button:hover {
-  background-color: #222;
-  color: white;
-  border-color: #222;
-}
-.wishlistPagination {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 30px 0;
-}
-.wishlistPagination a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  height: 35px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  color: #333;
-  text-decoration: none;
-  font-size: 14px;
-  background-color: white;
-  transition: all .2s ease;
-}
-.wishlistPagination a:hover {
-  background-color: #f2f2f2;
-  border-color: #999;
-}
-.wishlistPagination a.active {
-  background-color: #333;
-  color: white;
-  border-color: #333;
-  font-weight: 600;
-}
-/* ================= 예약 카드 ================= */
-.reservationList {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.flipCard {
-  width: 100%;
-  height: 220px;
-  margin-top: 0;
-  perspective: 1200px;
-  background: transparent;
-}
-.flipCardInner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform .55s ease;
-  transform-style: preserve-3d;
-}
-.flipCard.flipped .flipCardInner {
-  transform: rotateY(180deg);
-}
-.flipCardFront,
-.flipCardBack {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 20px;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  background: #fff;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 24px;
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  box-shadow: 0 3px 12px rgba(15, 23, 42, .035);
-  transition: box-shadow .2s ease, border-color .2s ease;
-}
-.flipCardFront {
-  transform: rotateY(0deg);
-}
-.flipCardBack {
-  transform: rotateY(180deg);
-  background: #f8faff;
-}
-.flipCard:hover .flipCardFront,
-.flipCard:hover .flipCardBack {
-  border-color: #dbe3ef;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, .08);
-}
-/* 숙소 이미지 */
-.flipCardFront .img {
-  width: 220px;
-  height: 170px;
-  flex: 0 0 220px;
-  overflow: hidden;
-  border-radius: 10px;
-  background: #f1f5f9;
-}
-.flipCardFront .img img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .3s ease;
-}
-.flipCard:hover .flipCardFront .img img {
-  transform: scale(1.03);
-}
-/* 예약 정보 */
-.flipCard .reservationInfo {
-  flex: 1 1 auto;
-  min-width: 0;
-  padding: 0;
-}
-.flipCard .reservationInfo h3 {
-  margin: 0 0 12px;
-  color: #1f2937;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-.flipCard .reservationInfo p {
-  margin: 5px 0;
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-}
-.flipCard .reservationInfo p:last-child {
-  margin-top: 9px;
-  color: #111827;
-  font-size: 14px;
-  font-weight: 700;
-}
-.flipCard .reservationInfo strong {
-  color: #475569;
-}
-/* 예약 상태 및 버튼 */
-.flipCard .reservationCondition {
-  width: 130px;
-  height: 100%;
-  flex: 0 0 130px;
-  box-sizing: border-box;
-  display: flex !important;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  gap: 8px;
-  padding-left: 16px;
-  border-left: 1px solid #edf0f4;
-}
-.flipCard .reservationCondition button {
-  width: 100%;
-  min-height: 36px;
-  height: auto;
-  padding: 8px 10px;
-  border: 1px solid #d9e0e8;
-  border-radius: 7px;
-  background: #fff;
-  color: #334155;
-  font-size: 12px;
-  line-height: 1.4;
-  cursor: pointer;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  transition: background .2s ease, color .2s ease, border-color .2s ease;
-}
-.flipCard .reservationCondition button:first-child,
-.flipCard .reservationCondition button:disabled {
-  border-color: #dbeafe;
-  background: #eff6ff;
-  color: #2563eb;
-  font-weight: 700;
-  cursor: default;
-}
-.flipCard .reservationCondition button:disabled {
-  opacity: 1;
-}
-.flipCard .reservationCondition button:not(:disabled):hover {
-  background: #222;
-  color: #fff;
-  border-color: #222;
-}
-/* 카드 뒷면 상세 정보 */
-.flipCardBack .reservationInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-height: 100%;
-  overflow-y: auto;
-}
-.flipCardBack .reservationInfo h3 {
-  margin: 0 0 10px;
-  font-size: 17px;
-}
-.flipCardBack .reservationInfo p {
-  margin: 3px 0;
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.5;
-}
-.flipCardBack .reservationInfo p:last-child {
-  margin-top: 5px;
-  color: #1f2937;
-  font-size: 13px;
-  font-weight: 700;
-}
-/* 예약 카드 반응형 */
-@media (max-width: 900px) {
-  .flipCard {
-    height: 230px;
-  }
-  .flipCardFront,
-  .flipCardBack {
-    gap: 16px;
-    padding: 16px;
-  }
-  .flipCardFront .img {
-    width: 180px;
-    height: 155px;
-    flex-basis: 180px;
-  }
-  .flipCard .reservationCondition {
-    width: 115px;
-    flex-basis: 115px;
-    padding-left: 12px;
-  }
-}
-@media (max-width: 600px) {
-  .reservationList {
-    gap: 14px;
-  }
-  .flipCard {
-    height: 420px;
-  }
-  .flipCardInner {
-    height: 100%;
-  }
-  .flipCardFront,
-  .flipCardBack {
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 14px;
-  }
-  .flipCardFront .img {
-    width: 100%;
-    height: 145px;
-    flex: 0 0 145px;
-  }
-  .flipCard .reservationInfo {
-    flex: 1 1 auto;
-    width: 100%;
-  }
-  .flipCard .reservationInfo h3 {
-    margin-bottom: 8px;
-    font-size: 16px;
-  }
-  .flipCard .reservationInfo p {
-    margin: 4px 0;
-    font-size: 12px;
-  }
-  .flipCard .reservationCondition {
-    width: 100%;
-    height: auto;
-    flex: 0 0 auto;
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7px;
-    padding: 10px 0 0;
-    border-left: 0;
-    border-top: 1px solid #edf0f4;
-  }
-  .flipCard .reservationCondition button {
-    min-height: 32px;
-    padding: 7px 8px;
-    font-size: 11px;
-  }
-  .flipCardBack .reservationInfo {
-    width: 100%;
-    flex: 1 1 auto;
-  }
-  .flipCardBack .reservationInfo h3 {
-    font-size: 16px;
-  }
-}
-.couponContainer {
-  width: 100%;
-  margin-top: 80px;
-  padding-bottom: 30px;
-}
-.couponSectionTitle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.couponSectionTitle span {
-  font-size: 18px;
-  font-weight: 700;
-  color: #222;
-}
-.couponSectionTitle a {
-  font-size: 13px;
-  color: #64748b;
-  text-decoration: none;
-  transition: color .2s;
-}
-.couponSectionTitle a:hover {
-  color: #2563eb;
-}
-.coupon_point {
-  padding: 20px !important;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, .03);
-}
-.coupon_point table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  text-align: center;
-}
-.coupon_point thead {
-  background: #f8fafc;
-}
-.coupon_point th {
-  height: 46px;
-  padding: 10px;
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 600;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
-}
-.coupon_point td {
-  height: 48px;
-  padding: 10px;
-  color: #475569;
-  font-size: 13px;
-  border-bottom: 1px solid #f0f2f5;
-  overflow-wrap: anywhere;
-}
-.coupon_point tbody tr {
-  transition: background .2s;
-}
-.coupon_point tbody tr:hover {
-  background: #f8fbff;
-}
-.coupon_point tbody tr:last-child td {
-  border-bottom: none;
-}
-.coupon_point th:nth-child(1), .coupon_point td:nth-child(1) {
-  width: 22%;
-  text-align: left;
-}
-.coupon_point th:nth-child(2), .coupon_point td:nth-child(2) {
-  width: 38%;
-  text-align: left;
-}
-.coupon_point th:nth-child(3), .coupon_point td:nth-child(3) {
-  width: 18%;
-}
-.coupon_point th:nth-child(4), .coupon_point td:nth-child(4) {
-  width: 22%;
-  text-align: right;
-  white-space: nowrap;
-  font-weight: 700;
-}
-.couponList {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 24px;
-}
-.couponBox {
-  width: 100%;
-  min-height: 150px;
-  padding: 20px;
-  background: linear-gradient(135deg, #f8fbff, #eef5ff);
-  border: 1px solid #dce8fa;
-  border-radius: 12px;
-  transition: transform .2s, box-shadow .2s;
-}
-.couponBox:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, .08);
-}
-.couponBox strong {
-  display: block;
-  margin-bottom: 10px;
-  color: #1e3a5f;
-  font-size: 15px;
-  font-weight: 700;
-}
-.couponBox p {
-  margin: 0 0 16px;
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.6;
-}
-.couponBox button {
-  min-width: 80px;
-  height: 32px;
-  padding: 0 14px;
-  color: #fff;
-  background: #2563eb;
-  border: 1px solid #2563eb;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .2s;
-}
-.couponBox button:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
-  color: #fff;
-}
-.plannerContainer .sectionTitle, .sharedPlanContainer .sectionTitle,
-  .reservationContainer>.sectionTitle, .wishlistContainer>.sectionTitle,
-  .reviewContainer>.sectionTitle {
-  margin-bottom: 50px;
-}
-.emptyPlanner {
-  padding: 20px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: white;
-  color: #777;
-  font-size: 13px;
-}
-/\* 인스타그램 스타일 리뷰 영역 \*/
-.reviewContainer {
-  width: 100%;
-  margin: 30px 0;
-  color: #262626;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
-.reviewContainer .sectionTitle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #efefef;
-}
-.reviewContainer .sectionTitle>span {
-  font-size: 21px;
-  font-weight: 700;
-  color: #262626;
-}
-.reviewContainer .sectionTitle>a {
-  color: #0095f6;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color .2s;
-}
-.reviewContainer .sectionTitle>a:hover {
-  color: #00376b;
-}
-.reviewContainer .reviewList {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
-  align-items: start;
-}
-.reviewContainer .reviewCard {
-  min-width: 0;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid #dbdbdb;
-  border-radius: 12px;
-  transition: transform .25s, box-shadow .25s;
-}
-.reviewContainer .reviewCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
-}
-.reviewContainer .reviewUser {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 13px 14px;
-}
-.reviewContainer .reviewProfile {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  padding: 2px;
-  background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
-}
-.reviewContainer .reviewProfile span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: #fff;
-  color: #d62976;
-  font-size: 17px;
-  font-weight: 800;
-}
-.reviewContainer .reviewUserInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-.reviewContainer .reviewUserInfo strong {
-  overflow: hidden;
-  color: #262626;
-  font-size: 13px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.reviewContainer .reviewUserInfo>span {
-  color: #8e8e8e;
-  font-size: 11px;
-}
-.reviewContainer .reviewMore {
-  margin-left: auto;
-  padding: 5px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: #262626;
-  font-size: 17px;
-  cursor: pointer;
-  outline: none;
-  box-shadow: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.reviewContainer .reviewMore:hover, .reviewContainer .reviewMore:focus,
-  .reviewContainer .reviewMore:focus-visible, .reviewContainer .reviewMore:active
-  {
-  background: transparent !important;
-  color: #262626 !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-.reviewContainer .reviewImage {
-  width: 100%;
-  aspect-ratio: 1/1;
-  overflow: hidden;
-  background: #fafafa;
-}
-.reviewContainer .reviewImage img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .35s;
-}
-.reviewContainer .reviewCard:hover .reviewImage img {
-  transform: scale(1.03);
-}
-.reviewContainer .reviewNoImage {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  color: #c13584;
-  background: linear-gradient(135deg, #fff0f6, #f3e8ff, #e8f4ff);
-}
-.reviewContainer .reviewNoImage>span {
-  font-size: 45px;
-}
-.reviewContainer .reviewNoImage p {
-  margin: 12px 0 0;
-  color: #777;
-  font-size: 12px;
-}
-.reviewContainer .reviewInfo {
-  padding: 13px 14px 15px;
-}
-.reviewContainer .reviewIcons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 10px;
-}
-.reviewContainer .reviewIcons span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #262626;
-  font-size: 25px;
-  line-height: 1;
-}
-.reviewContainer .reviewIcons .reviewHeart {
-  color: #ed4956;
-  font-size: 29px;
-}
-.reviewContainer .reviewIcons .reviewShareIcon {
-  margin-left: auto;
-  color: #262626;
-  font-size: 25px;
-}
-.reviewContainer .reviewLike {
-  margin: 0 0 10px;
-  color: #262626;
-  font-size: 13px;
-}
-.reviewContainer .reviewLike strong {
-  color: #c13584;
-  font-size: 15px;
-}
-.reviewContainer .reviewDescription {
-  display: -webkit-box;
-  overflow: hidden;
-  margin: 0 0 9px;
-  color: #262626;
-  font-size: 13px;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-.reviewContainer .reviewTag {
-  margin: 0 0 10px;
-  color: #00376b;
-  font-size: 12px;
-}
-.reviewContainer .reviewDate {
-  margin: 10px 0 0;
-  color: #a8a8a8;
-  font-size: 10px;
-}
-.reviewContainer .reviewActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid #efefef;
-}
-.reviewContainer .reviewActions a {
-  color: #8e8e8e;
-  font-size: 11px;
-  text-decoration: none;
-}
-.reviewContainer .reviewActions a:hover {
-  color: #c13584;
-}
-.reviewContainer .emptyReview {
-  grid-column: 1/-1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-  padding: 30px 15px;
-  border: 1px dashed #dbdbdb;
-  border-radius: 12px;
-  background: #fff;
-  text-align: center;
-}
-.reviewContainer .emptyReview>span {
-  margin-bottom: 12px;
-  color: #c13584;
-  font-size: 42px;
-}
-.reviewContainer .emptyReview strong {
-  color: #262626;
-  font-size: 16px;
-}
-.reviewContainer .emptyReview p {
-  margin: 8px 0 0;
-  color: #8e8e8e;
-  font-size: 13px;
-}
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-  margin: 25px 0
-}
-.pagination a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 34px;
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid #e0e5eb;
-  border-radius: 6px;
-  background: #fff;
-  color: #596574;
-  font-size: 13px;
-  text-decoration: none;
-  transition: .2s
-}
-.pagination a:hover, .pagination a.active {
-  background: #263238;
-  border-color: #263238;
-  color: #fff
-}
-.plannerPagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin: 20px 0;
-}
-.plannerPagination a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 32px;
-  height: 32px;
-  padding: 0 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  color: #555;
-  text-decoration: none;
-  font-size: 14px;
-}
-.plannerPagination a.active {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #fff;
-}
-.plannerPagination a:hover {
-  background: #eff6ff;
-}
-.tourType {
-  margin-top: 50px;
-}
-.reviewNavi {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  margin: 20px 0;
-}
-.reviewNavi a {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 32px;
-  height: 32px;
-  padding: 0 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  color: #333;
-  text-decoration: none;
-  box-sizing: border-box;
-}
-.reviewNavi a:hover {
-  background: #f1f5f9;
-}
-.reviewNavi a.active {
-  background: #2563eb;
-  color: #fff;
-  border-color: #2563eb;
-}
-
-.emptyWishlist,
-.emptyReservation {
-    grid-column: 1 / -1;        
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-    padding: 40px 20px;
-    border: 1px dashed #dbdbdb;
-    border-radius: 12px;
-    background: #fff;
-    text-align: center;
-    color: #8e8e8e;
-}
-.emptyWishlist > span,
-.emptyReservation > span {
-    font-size: 42px;
-    margin-bottom: 14px;
-    display: block;
-}
-.emptyWishlist strong,
-.emptyReservation strong {
-    font-size: 16px;
-    color: #262626;
-    display: block;
-    margin-bottom: 8px;
-}
-.emptyWishlist p,
-.emptyReservation p {
-    font-size: 13px;
-    color: #8e8e8e;
-    margin: 0;
-}
-
-.emptyReservation {
-    width: 100%;
-}
-
-</style>
 </head>
 <body>
-<c:if test="${not empty tourTypeMessage}">
-    <script>
+	<c:if test="${not empty tourTypeMessage}">
+		<script>
         alert("${tourTypeMessage}");
     </script>
-    <c:remove var="tourTypeMessage"/>
-</c:if>
+		<c:remove var="tourTypeMessage" />
+	</c:if>
 
 	<c:choose>
 		<c:when test="${loginId != null}">
@@ -1448,7 +62,7 @@ body {
 						<ul>
 							<li><a href="/members/checkPassword">내 정보 수정</a></li>
 							<li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
-							<li><a href="#">1:1 문의</a></li>
+							<li><a href="/notice/qna">1:1 문의</a></li>
 							<li><a href="/members/deleted">회원탈퇴</a></li>
 						</ul>
 					</div>
@@ -1550,7 +164,9 @@ body {
 										<div class="sharedPlanCondition">
 											<span class="shareBadge">전체 공개</span>
 											<div class="btnGroup">
-												<form action="${pageContext.request.contextPath}/travelPlan/delete" method="post"
+												<form
+													action="${pageContext.request.contextPath}/travelPlan/delete"
+													method="post"
 													onsubmit="return confirm('이 여행 일정을 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.');">
 													<input type="hidden" name="planId" value="${plan.PLAN_ID}">
 													<button type="button" class="deleteBtn"
@@ -1598,7 +214,7 @@ body {
 										</div>
 										<div class="scrapPlanInfo">
 											<p>${i.plan_title}</p>
-											<p>${i.start_date} ~ ${i.end_date} · 방문지 ${i.spot_count} 곳</p>
+											<p>${i.start_date}~${i.end_date} · 방문지 ${i.spot_count} 곳</p>
 											<p>작성자 ${i.nickname}</p>
 										</div>
 										<div class="btnBox">
@@ -1645,10 +261,10 @@ body {
 								data-tab="cancelled">취소 / 환불</span>
 						</div>
 						<div class="reservationList" id="reservationList">
-						    <c:choose>
-						        <c:when test="${not empty myRsList}">
-						            <c:forEach var="rs" items="${myRsList}">
-						               <div class="flipCard" data-tab="${reservationType}">
+							<c:choose>
+								<c:when test="${not empty myRsList}">
+									<c:forEach var="rs" items="${myRsList}">
+										<div class="flipCard" data-tab="${reservationType}">
 											<div class="flipCardInner">
 												<div class="flipCardFront">
 													<div class="img">
@@ -1664,7 +280,9 @@ body {
 																	<strong>· 회수 마일리지 - ${rs.mileage}M</strong>
 																</c:when>
 																<c:otherwise>
-																	<strong>적립예정 마일리지 + <fmt:formatNumber value="${pendingMileage}" pattern="#,##0"/>M</strong>
+																	<strong>적립예정 마일리지 + <fmt:formatNumber
+																			value="${pendingMileage}" pattern="#,##0" />M
+																	</strong>
 																</c:otherwise>
 															</c:choose>
 														</p>
@@ -1697,7 +315,11 @@ body {
 														<p>· 성인: ${rs.guestNum}명</p>
 														<p>· 예약번호: ${rs.paymentId}</p>
 														<p>· 결제금액: ${rs.price}원</p>
-														<p>· 예약일: <fmt:formatDate value="${rs.reserveDate}" pattern="yyyy-MM-dd HH:mm" /></p>
+														<p>
+															· 예약일:
+															<fmt:formatDate value="${rs.reserveDate}"
+																pattern="yyyy-MM-dd HH:mm" />
+														</p>
 													</div>
 													<div class="reservationCondition">
 														<button type="button" class="backBtn">돌아가기</button>
@@ -1712,23 +334,22 @@ body {
 												</div>
 											</div>
 										</div>
-						            </c:forEach>
-						        </c:when>
-						        <c:otherwise>
-						            <div class="emptyReservation">
-						                <span>🏨</span>
-						                <strong>예약 내역이 없어요</strong>
-						                <p>
-						                    <c:choose>
-						                        <c:when test="${reservationTab eq 'upcoming'}">이용 예정인 예약이 없습니다.</c:when>
-						                        <c:when test="${reservationTab eq 'completed'}">이용 완료된 예약이 없습니다.</c:when>
-						                        <c:when test="${reservationTab eq 'cancelled'}">취소 / 환불 내역이 없습니다.</c:when>
-						                        <c:otherwise>아직 예약한 내역이 없습니다.</c:otherwise>
-						                    </c:choose>
-						                </p>
-						            </div>
-						        </c:otherwise>
-						    </c:choose>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<div class="emptyReservation">
+										<span>🏨</span> <strong>예약 내역이 없어요</strong>
+										<p>
+											<c:choose>
+												<c:when test="${reservationTab eq 'upcoming'}">이용 예정인 예약이 없습니다.</c:when>
+												<c:when test="${reservationTab eq 'completed'}">이용 완료된 예약이 없습니다.</c:when>
+												<c:when test="${reservationTab eq 'cancelled'}">취소 / 환불 내역이 없습니다.</c:when>
+												<c:otherwise>아직 예약한 내역이 없습니다.</c:otherwise>
+											</c:choose>
+										</p>
+									</div>
+								</c:otherwise>
+							</c:choose>
 						</div>
 
 
@@ -1745,49 +366,54 @@ body {
 
 					<div class="wishlistContainer" id="wishlistSection">
 						<div class="sectionTitle">
-							<span>찜한 관광지 맛집 숙소</span> <a href="/members/wishlist">더 보기&gt;</a>
+							<span>찜한 관광지 맛집 숙소</span> <a href="/members/wishlist">더
+								보기&gt;</a>
 						</div>
 						<div class="wishlistTab">
 							<div class="wishlistTab">
-							    <button type="button" class="${wishType == 'all' ? 'active' : ''}" data-type="all">전체</button>
-							    <button type="button" class="${wishType == 'spot' ? 'active' : ''}" data-type="spot">관광지</button>
-							    <button type="button" class="${wishType == 'food' ? 'active' : ''}" data-type="food">맛집</button>
-							    <button type="button" class="${wishType == 'stay' ? 'active' : ''}" data-type="stay">숙박</button>
+								<button type="button"
+									class="${wishType == 'all' ? 'active' : ''}" data-type="all">전체</button>
+								<button type="button"
+									class="${wishType == 'spot' ? 'active' : ''}" data-type="spot">관광지</button>
+								<button type="button"
+									class="${wishType == 'food' ? 'active' : ''}" data-type="food">맛집</button>
+								<button type="button"
+									class="${wishType == 'stay' ? 'active' : ''}" data-type="stay">숙박</button>
 							</div>
 						</div>
 						<div class="wishlistGrid">
-					    <c:choose>
-					        <c:when test="${not empty wishList}">
-					            <c:forEach var="wishList" items="${wishList}">
-					                <div class="wishlistCard">
-					                    <div class="img">
-											<img src="${wishList.image_name}" alt="${wishList.name}">
+							<c:choose>
+								<c:when test="${not empty wishList}">
+									<c:forEach var="wishList" items="${wishList}">
+										<div class="wishlistCard">
+											<div class="img">
+												<img src="${wishList.image_name}" alt="${wishList.name}">
+											</div>
+											<div class="wishlistInfo">
+												<h3>${wishList.name}</h3>
+												<p>${wishList.region}</p>
+												<button type="button">자세히 보기</button>
+											</div>
 										</div>
-										<div class="wishlistInfo">
-											<h3>${wishList.name}</h3>
-											<p>${wishList.region}</p>
-											<button type="button">자세히 보기</button>
-										</div>
-					                </div>
-					            </c:forEach>
-					        </c:when>
-					        <c:otherwise>
-					            <div class="emptyWishlist">
-					                <span>🤍</span>
-					                <strong>아직 찜한 항목이 없어요</strong>
-					                <p>마음에 드는 관광지, 맛집, 숙소를 찜해보세요.</p>
-					            </div>
-					        </c:otherwise>
-					    </c:choose>
-					</div>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<div class="emptyWishlist">
+										<span>🤍</span> <strong>아직 찜한 항목이 없어요</strong>
+										<p>마음에 드는 관광지, 맛집, 숙소를 찜해보세요.</p>
+									</div>
+								</c:otherwise>
+							</c:choose>
+						</div>
 					</div>
 					<div class="wishlistPagination">
-					    <c:if test="${wishTotalPage > 0}">
-					        <c:forEach var="page" begin="1" end="${wishTotalPage}">
-					            <a href="/members/mypage?cpage=${cpage}&wishCpage=${page}&wishType=${wishType}#wishlistSection"
-					               class="${wishCpage == page ? 'active' : ''}">${page}</a>
-					        </c:forEach>
-					    </c:if>
+						<c:if test="${wishTotalPage > 0}">
+							<c:forEach var="page" begin="1" end="${wishTotalPage}">
+								<a
+									href="/members/mypage?cpage=${cpage}&wishCpage=${page}&wishType=${wishType}#wishlistSection"
+									class="${wishCpage == page ? 'active' : ''}">${page}</a>
+							</c:forEach>
+						</c:if>
 					</div>
 
 
@@ -1828,11 +454,14 @@ body {
 									<div class="reviewInfo">
 										<div class="reviewIcons">
 											<span class="reviewHeart ${rv.liked ? 'liked' : ''}"
-											 onclick="toggleRecommend(${rv.seq}, this)"> ${rv.liked ? '♥' : '♡'}</span>
-											<span class="reviewShareIcon" onclick="shareReview(${rv.seq}, ${rv.target_id})"
-										      title="리뷰 링크 복사">
-										    	<i class="fa-solid fa-link"></i>   
-										    </span>
+												onclick="toggleRecommend(${rv.seq}, this)">${rv.liked ? '♥' : '♡'}</span>
+
+											<span class="likeCount" id="likeCount${rv.seq}">${rv.recommendCount}</span>
+
+											<span class="reviewShareIcon"
+												onclick="shareReview(${rv.seq}, ${rv.target_id})"
+												title="리뷰 링크 복사"> <i class="fa-solid fa-link"></i>
+											</span>
 										</div>
 										<p class="reviewLike">
 											좋아요 <strong>${rv.rating}</strong>
@@ -2073,6 +702,37 @@ body {
 		            // 클립보드 복사가 안 될 경우 링크를 직접 보여줌
 		            prompt("아래 링크를 복사해주세요.", url);
 		        });
+		}
+		
+		function toggleRecommend(seq, heart) {
+		    $.ajax({
+		        url: "${pageContext.request.contextPath}/review/toggleRecommend",
+		        type: "post",
+		        data: {
+		            seq: seq
+		        },
+		        success: function(result) {
+		            result = result.trim();
+
+		            if (result == "login") {
+		                alert("로그인이 필요합니다.");
+		                location.href = "/members/loginpage";
+		            } else if (result == "liked") {
+		                heart.innerHTML = "♥";
+		                heart.classList.add("liked");
+
+		                let count = document.getElementById("likeCount" + seq);
+		                count.innerHTML = Number(count.innerHTML) + 1;
+
+		            } else if (result == "unliked") {
+		                heart.innerHTML = "♡";
+		                heart.classList.remove("liked");
+
+		                let count = document.getElementById("likeCount" + seq);
+		                count.innerHTML = Number(count.innerHTML) - 1;
+		            }
+		        }
+		    });
 		}
 		
 </script>
