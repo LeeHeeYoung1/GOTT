@@ -1656,7 +1656,7 @@ body {
 						<ul>
 							<li><a href="/members/checkPassword">내 정보 수정</a></li>
 							<li><a href="/members/pwsearchpage">비밀번호 변경</a></li>
-							<li><a href="#">1:1 문의</a></li>
+							<li><a href="/notice/qna">1:1 문의</a></li>
 							<li><a href="/members/deleted">회원탈퇴</a></li>
 						</ul>
 					</div>
