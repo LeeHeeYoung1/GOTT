@@ -418,4 +418,13 @@ public class ReservationDAO {
 				+ " WHERE payment_id = ? AND member_id = ? AND mileage_status = '적립예정'";
 		return jdbc.update(sql, paymentId, memberId);
 	}
+	
+	
+	// 마일리지 적립 예정 금액 조회
+	public int selectPendingMileage(String memberId) {
+		String sql = "SELECT NVL(SUM(TRUNC(r.price * 0.05)), 0) " + "FROM reservation r " + "WHERE r.member_id = ? "
+				+ "AND r.status = '예약완료' " + "AND r.mileage_status = '적립예정' " + "AND r.check_out > TRUNC(SYSDATE)";
+	    return jdbc.queryForObject(sql, Integer.class, memberId);
+	}
+
 }
