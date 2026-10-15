@@ -724,5 +724,27 @@ button:hover {
 		next.innerHTML = ">";
 		navi.append(next);
 	}
-</script>
+	
+	function toggleRecommend(seq, heart) {
+	    $.ajax({
+	        url: "/review/toggleRecommend",
+	        type: "post",
+	        data: {
+	            seq: seq
+	        },
+	        success: function(result) {
+	            if (result == "login") {
+	                alert("로그인이 필요합니다.");
+	                location.href = "/members/loginpage";
+	            } else if (result == "liked") {
+	                heart.innerHTML = "♥";
+	                heart.classList.add("liked");
+	            } else if (result == "unliked") {
+	                heart.innerHTML = "♡";
+	                heart.classList.remove("liked");
+	            }
+	        }
+	    });
+	}
+	</script>
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

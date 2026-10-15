@@ -455,10 +455,28 @@ public class MembersControllers {
 	
 	@RequestMapping("/tourTypeTestResult")
 	public String tourTypeTestResult(Travel_TypeDTO dto, HttpSession session) {
-		String id = (String)session.getAttribute("loginId");
-		dto.setMember_id(id);
-		tdao.insertType(dto);
-		return "redirect:/members/mypage";
+	    String id = (String) session.getAttribute("loginId");
+
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
+
+	    int count = tdao.countMyType(id);
+
+	    dto.setMember_id(id);
+	    tdao.insertType(dto);
+
+	    if (count == 0) {
+	        tdao.issueCoupon(id);
+
+	        session.setAttribute("tourTypeMessage",
+	                "여행성향 테스트 결과가 저장되었습니다! 쿠폰이 발급되었습니다.");
+	    } else {
+	        session.setAttribute("tourTypeMessage",
+	                "여행성향 테스트 결과가 저장되었습니다!");
+	    }
+
+	    return "redirect:/members/mypage";
 	}
 	
 	@RequestMapping("/idsearchpage")

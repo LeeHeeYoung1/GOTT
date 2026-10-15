@@ -882,9 +882,16 @@
 		    color:#8e8e8e;
 		    font-size:13px;
 		}
+.reviewContainer .reviewHeart {
+    cursor: pointer;
+    color: #999;
+}
+
+.reviewContainer .reviewHeart.liked {
+    color: #ff4d6d;
+}
 		
     </style>
-
 
 <div class="container">
 
@@ -1117,10 +1124,11 @@
 					                </div>
 				                </a>
 				                <div class="reviewInfo">
-				                    <div class="reviewIcons">
-				                        <span class="reviewHeart">♡</span>
-				                        <span class="reviewShareIcon">↗</span>
-				                    </div>
+									<div class="reviewIcons">
+									    <span class="reviewHeart ${rv.liked ? 'liked' : ''}"
+									          onclick="toggleRecommend(${rv.seq}, this)">${rv.liked ? '♥' : '♡'}</span>
+									    <span class="reviewShareIcon">↗</span>
+									</div>
 				                    <div class="reviewtext">
 					                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
 					                    <p class="reviewDescription">${rv.contents}</p>
@@ -1430,6 +1438,27 @@ document.addEventListener("DOMContentLoaded", function () {
     startAutoSlide();
 });
 
+function toggleRecommend(seq, heart) {
+    $.ajax({
+        url: "/review/toggleRecommend",
+        type: "post",
+        data: {
+            seq: seq
+        },
+        success: function(result) {
+            if (result == "login") {
+                alert("로그인이 필요합니다.");
+                location.href = "/members/loginpage";
+            } else if (result == "liked") {
+                heart.innerHTML = "♥";
+                heart.classList.add("liked");
+            } else if (result == "unliked") {
+                heart.innerHTML = "♡";
+                heart.classList.remove("liked");
+            }
+        }
+    });
+}
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>
