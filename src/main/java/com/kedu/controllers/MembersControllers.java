@@ -257,7 +257,10 @@ public class MembersControllers {
 	    // 5. 이용 예정 및 이용 완료 예약
 	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
 	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
-	
+	    
+	    // 5-1 예약내역 적립예정 마일리지
+	    int pendingMileage = rdao.selectPendingMileage(memberId);
+	    
 	    // 6. 내가 작성한 리뷰 페이징
 	    int reviewPagesize = 3;
 	
@@ -303,6 +306,7 @@ public class MembersControllers {
 	    List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
 	
 	    // 8. 모델 전달
+	    model.addAttribute("pendingMileage", pendingMileage);
 	    model.addAttribute("tourType", tourType);
 	
 	    model.addAttribute("myRsList", myRsList);

@@ -1580,7 +1580,7 @@ body {
 															<strong>· 회수 마일리지 - ${rs.mileage}M</strong>
 														</c:when>
 														<c:otherwise>
-															<strong>· 적립 마일리지 + ${rs.mileage}M</strong>
+															<strong>적립예정 마일리지</strong><fmt:formatNumber value="${pendingMileage}" pattern="#,##0"/>원
 														</c:otherwise>
 													</c:choose>
 												</p>
