@@ -947,7 +947,7 @@
    
     <div class="travelPlan">
         <div class="planzone">
-            <div class="moreview"><a href="/travelPlan/list">더 보기</a></div>
+            <div class="moreview"><a href="/travelPlan/list?cpage=1">더 보기</a></div>
             
                 <c:choose>
 		            <c:when test="${not empty planList}">
@@ -969,7 +969,7 @@
                             <div class="sharedPlanCondition">
                                 <span class="shareBadge">전체 공개</span>
                                 <div class="btnGroup">
-                                    <button type="button" class="boardViewBtn" onclick="location.href='${pageContext.request.contextPath}/travelPlan/detail?planId=${plan.PLAN_ID}'">일정 보기</button>
+                                    <button type="button" class="boardViewBtn" onclick="location.href='/travelPlan/detail?planId=${plan.PLAN_ID}&cpage=1'">일정 보기</button>
                                 </div>
                             </div>
                           </div>

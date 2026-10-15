@@ -537,7 +537,7 @@
 		</button>
 
 		<div class="backBtnBox">
-			<a href="${pageContext.request.contextPath}/travelPlan/list"
+			<a href="/travelPlan/list?cpage=${cpage}&region=${region}&night=${night}&sort=${sort}"
 				class="backButton" id="backToList">목록으로 돌아가기</a> <a
 				href="${pageContext.request.contextPath}/members/mypage"
 				class="backButton" id="backToMypage">마이페이지로 돌아가기</a>
