@@ -10,7 +10,6 @@
 	crossorigin="anonymous"></script>
 
 <style>
-
 .qnaTitleBox {
 	text-align: center;
 	padding: 35px 0 20px;
@@ -163,33 +162,33 @@
 }
 
 .qnaNumber {
-    width: 70px;
+	width: 70px;
 }
 
 .qnaTitle {
-    width: 330px;
-    text-align: left !important;
-    padding-left: 25px !important;
+	width: 330px;
+	text-align: left !important;
+	padding-left: 25px !important;
 }
 
 .qnaWriter {
-    width: 110px;
+	width: 110px;
 }
 
 .qnaPrivate {
-    width: 100px;
+	width: 100px;
 }
 
 .qnaStatus {
-    width: 110px;
+	width: 110px;
 }
 
 .qnaView {
-    width: 70px;
+	width: 70px;
 }
 
 .qnaDate {
-    width: 110px;
+	width: 110px;
 }
 
 .qnaTitle a {
@@ -392,8 +391,17 @@
 		<div class="qnaTotalCount">
 			총 <strong>${recordTotalCount}</strong>건
 		</div>
+		<c:choose> <c:when test="${loginId != null}">
 		<button type="button" id="qnaWriteBtn"
-			onclick="location.href='/notice/qna_register?cpage=${cpage}'">질문하기</button>
+			onclick="location.href='/notice/qna_register?cpage=${cpage}'">
+			질문하기</button>
+		</c:when> 
+		<c:otherwise>
+		<button type="button" id="qnaWriteBtn"
+			onclick="alert('로그인하세요.'); location.href='/members/loginpage'">
+			질문하기</button>
+		</c:otherwise> 
+		</c:choose>
 	</div>
 
 	<div class="qnaContentsBox">
@@ -474,10 +482,22 @@
 
 </div>
 <script>
-	let recordTotalCount = ${recordTotalCount};
-	let recordCountPerPage = ${recordCountPerPage};
-	let naviCountPerPage = ${naviCountPerpage};
-	let currentPage = ${cpage};
+	let recordTotalCount = $
+	{
+		recordTotalCount
+	};
+	let recordCountPerPage = $
+	{
+		recordCountPerPage
+	};
+	let naviCountPerPage = $
+	{
+		naviCountPerpage
+	};
+	let currentPage = $
+	{
+		cpage
+	};
 
 	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
 

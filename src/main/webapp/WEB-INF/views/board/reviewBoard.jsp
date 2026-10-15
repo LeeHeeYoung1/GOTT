@@ -681,6 +681,11 @@ button:hover {
 	})
 
 	$("#writeBtn").on("click", function() {
+		if ("${sessionScope.loginId}" === "") {
+			alert("로그인이 필요합니다.");
+			location.href = "/members/loginpage";
+			return;
+		}
 		location.href = "/review/review_write";
 	})
 
