@@ -94,7 +94,7 @@
         
         .sidemenu {
             width: 200px;
-            height: 500px;
+            height: 400px;
             position: fixed;
             right:80px;
             top: 150px;
@@ -118,17 +118,39 @@
         .sidemenu-title {
             width: 100%;
             height: 15%;
+            display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    border-bottom: 1px solid #e5e7eb;
         }
+        
         .sidemenu-main {
             width: 100%;
-            height: 75%;
-            justify-content: center;
-            align-content: center;
+		    height: 75%;
+		    box-sizing: border-box;
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: center;
+		    gap: 8px;
+		    padding: 0 15px;
         }
-        .sidemenu-footer {
-            width: 100%;
-            height: 10%;
-        }
+        .sidemenu-main p {
+		    width: 100%;
+		    margin: 0;
+		}
+		.sidemenu-main p a {
+		    display: flex;
+		    align-items: center;
+		    justify-content: flex-start;
+		    width: 100%;
+		    box-sizing: border-box;
+		    padding: 12px 10px;
+		    border-radius: 7px;
+		    color: #374151;
+		    text-decoration: none;
+		    font-size: 14px;
+		    transition: background-color 0.2s, color 0.2s;
+		}
         .sidemenu-main p a{
             display: flex;
 		    justify-content: center;
@@ -138,11 +160,25 @@
             background-color: #f1f5f9;
             color: #2563eb;
         }
+        .sidemenu-footer {
+		    width: 100%;
+		    height: 10%;
+		    box-sizing: border-box;
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between;
+		    gap: 8px;
+		    padding: 0 15px;
+		    border-top: 1px solid #e5e7eb;
+		}
+		.sidemenu-footer span a {
+		    color: #6b7280;
+		    font-size: 12px;
+		    text-decoration: none;
+		    white-space: nowrap;
+		}
         .sidemenu-footer span a:hover {
             color: #2563eb;
-        }
-        .sidemenu-footer {
-            padding: 0 10px;
         }
         
         
@@ -204,11 +240,11 @@
 		                <h2>메뉴</h2>
 		            </div>
 		            <div class="sidemenu-main">
-		            	<p><a href="/">메인화면</a></p>
+		            	<p><a href="/">메인 화면</a></p>
 		                <p><a href="/members/mypage">마이페이지</a></p>
-		                <p><a href="/members/wishlist">찜목록</a></p>
-		                <p><a href="/">북마크</a></p>
-		                <p><a href="/">뭐넣지</a></p>
+		                <p><a href="/members/wishlist">내 찜 목록</a></p>
+		                <p><a href="/review/reviewlist">내 리뷰 목록</a></p>
+		                <p><a href="/board/boardlist">내 게시글 목록</a></p>
 		                
 		            </div>
 		            <div class="sidemenu-footer flex-between">

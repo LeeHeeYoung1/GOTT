@@ -115,17 +115,98 @@
             color: #6B7280;
         }
         
-        .ourpromise {
-            width: 80%;
-            height: auto;
-            padding: 20px 30px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            border-radius: 10px;
-        }
+        
+		/* ===== 우리의 약속 영역 ===== */
+		.ourpromise {
+		    width: 90%;
+		    max-width: 1200px;
+		    box-sizing: border-box;
+		    height: auto;
+		    padding: 45px 20px 30px;
+		    margin: 0 auto;
+		    display: grid;
+		    grid-template-columns: repeat(3, minmax(0, 1fr));
+		    gap: 25px;
+		    position: relative;
+		}
+		
+		/* 개별 카드 */
+		.ourpromisebox {
+		    min-width: 0;
+		    margin: 0;
+		    overflow: hidden;
+		    position: relative;
+		    background-color: #fff;
+		    border: 1px solid #e5e7eb;
+		    border-radius: 16px;
+		    box-shadow: 0 4px 14px rgba(38, 50, 56, 0.06);
+		    transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+		
+		/* 카드에 마우스를 올렸을 때 */
+		.ourpromisebox:hover {
+		    transform: translateY(-6px);
+		    box-shadow: 0 12px 28px rgba(38, 50, 56, 0.12);
+		}
+		
+		/* 카드 이미지 */
+		.ourpromisebox img {
+		    display: block;
+		    width: 100%;
+		    height: 210px;
+		    object-fit: cover;
+		    transition: transform 0.4s ease;
+		}
+		
+		/* 이미지 확대 효과 */
+		.ourpromisebox:hover img {
+		    transform: scale(1.04);
+		}
+		
+		/* 카드 설명 영역 */
+		.ourtext {
+		    box-sizing: border-box;
+		    min-height: 145px;
+		    padding: 20px 18px !important;
+		    border: none;
+		    background-color: #fff;
+		}
+		
+		/* 카드 제목 */
+		.ourtext p:first-child {
+		    margin: 0 0 12px;
+		    color: #263746;
+		    font-size: 19px;
+		    font-weight: 700;
+		    letter-spacing: -0.5px;
+		}
+		
+		/* 카드 설명 */
+		.ourtext p:last-child {
+		    margin: 0;
+		    color: #6b7280;
+		    font-size: 14px;
+		    line-height: 1.9;
+		    word-break: keep-all;
+		}
+		
+		/* 더 보기 */
+		.ourpromise > .moreview {
+		    top: 8px;
+		    right: 20px;
+		}
+		
+		.ourpromise > .moreview a {
+		    color: #64748b;
+		    font-size: 14px;
+		    text-decoration: none;
+		    transition: color 0.2s ease;
+		}
+		
+		.ourpromise > .moreview a:hover {
+		    color: #2563eb;
+		}
+		
         .notice {
             width: 80%;
             max-width: 1100px;
@@ -244,13 +325,7 @@
 			display: none;
 		}
 		
-        .ourpromisebox {
-            float: left;
-            width: auto;
-            height: auto;
-            margin: 20px;
-            position: relative;
-        }
+        
         
 		.eventbannerzone {
 		    position: relative;
@@ -322,11 +397,6 @@
 		    opacity: 0.4;
 		    cursor: default;
 		}
-        
-        .ourtext {
-            border: 1px solid black;
-        }
-
         .mapzone {
             width: 700px;
             height: 700px;
@@ -380,12 +450,6 @@
 			position: relative;
 			padding-top: 25px;
         }
-        
-        .ourpromisebox img {
-   		 width: 270px;
-    		height: 200px;
-			}
-       
         .planbox,
         .hotelbox {
             height: 280px;
@@ -896,6 +960,8 @@
 		    color: #ff4d6d;
 		}
 		
+		
+		
     </style>
 
 <div class="container">
@@ -956,24 +1022,24 @@
     <div class="ourpromise">
     	<div class="moreview"><a href="/event/company">더 보기</a></div>
         <div class="ourpromisebox">
-            <img src="https://picsum.photos/270/200?random=1">
+            <img src="/images/systeam.jpg">
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">체계적인 시스템</p>
-                <p>효율적인 예약 및 정보 관리로 편의성을 제공합니다.</p>
+                <p>효율적인 예약 관리와 편리한 여행 일정 구성으로 더욱 스마트한 여행 준비를 도와드립니다.</p>
             </div>
         </div>
         <div class="ourpromisebox">
             <img src="/images/24hoursCare.png">
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">24시간 고객 케어</p>
-                <p>24시간 언제든 궁금한 점을 해결해 드립니다.</p>
+                <p>언제든 궁금한 점이나 불편한 사항을 확인하고 해결할 수 있도록 고객의 편의를 생각합니다.</p>
             </div>
         </div>
         <div class="ourpromisebox">
             <img src="/images/trust.png">
             <div class="ourtext" style="padding: 5px;">
                 <p style="font-weight: bold;">신뢰할 수 있는 정보</p>
-                <p>정확하고 검증된 여행 정보를 제공합니다.</p>
+                <p>여행지와 맛집, 숙소에 대한 유용하고 정확한 정보를 제공하여 만족스러운 여행을 지원합니다.</p>
             </div>
         </div>
     </div>
