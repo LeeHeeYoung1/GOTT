@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -254,7 +255,7 @@
         	width: 90%;
             max-width: 1200px;
             margin: 5px auto 0;
-            height: auto;
+            height: 270px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
@@ -267,9 +268,8 @@
             position: relative;
     		overflow: hidden;
     		border-radius: 14px;
-    		background-color: #eee;
+    		background-color: #F8FAFC;
     		cursor: pointer;
-    		box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);	
         }
 
         .eventbox img {
@@ -278,6 +278,7 @@
 		    display: block;
 		    object-fit: contain;
 		    transition: transform 0.4s ease;
+		    border-radius: 14px;
         }
         
         .ourtext {
@@ -864,21 +865,16 @@
     </div>
     <div class="eventbannerzone">
         <div class="moreview"><a href="/event/eventpage">더 보기</a></div>
+        
+        		<c:forEach var="i" items="${banner}" end="2">
             		<div class="eventbox">
 		           		<a href="/members/signuppage">
-		                  	<img src="/images/Welcome_coupon.jpg" alt="Welcome_coupon">
+		                  	<img src="/images/${i.image_name}" alt="${i.title}">
 		                </a>
 		           </div>
-		           <div class="eventbox">
-		           		<a href="/members/tourTypeTest">
-		                  	<img src="/images/Travel_type_test_coupon.png" alt="Travel_type_test">
-		                </a>
-		           </div>
-		           <div class="eventbox">
-		           		<a href="/reservation/list?cpage=1">
-		                  	<img src="/images/Coupon2.png" alt="Coupon2">
-		                </a>
-		           </div>
+		        </c:forEach>
+		           
+		           
         <div id="ourpromise"></div>
     </div>
 
@@ -934,6 +930,7 @@
     
 	<div id="travelPlan"></div>
     <hr>
+    <hr>
 
     <div class="title">
         <h2>최신 여행 일정</h2>
@@ -982,9 +979,9 @@
          
         	</div>
     </div>
-	<div id="hotelsuggest"></div>
+	<div id="hotelsuggest" ></div>
     <hr>
-    
+    <hr>
     <div class="title">
         <h2>숙박업소 추천</h2>
     </div>
@@ -1020,6 +1017,7 @@
         
     </div>
 	<div id="popularboard"></div>
+    <hr>
     <hr>
 
     <div class="title">
@@ -1066,14 +1064,13 @@
 				                <div class="reviewInfo">
 				                    <div class="reviewIcons">
 				                        <span class="reviewHeart">♡</span>
-				                        <span class="reviewCommentIcon">◯</span>
 				                        <span class="reviewShareIcon">↗</span>
 				                    </div>
 				                    <div class="reviewtext">
 					                    <p class="reviewLike">좋아요 <strong>${rv.rating}</strong></p>
 					                    <p class="reviewDescription">${rv.contents}</p>
 					                    <c:if test="${not empty rv.tag}">
-					                        <p class="reviewTag">${rv.tag}</p>
+					                        <p class="reviewTag">#${rv.tag}</p>
 					                    </c:if>
 					                    <p class="reviewDate">
 					                        ${rv.reg_date}
@@ -1200,13 +1197,9 @@ $("#searchInput").on("keyup", function () {
                     div.on("click", function() {
 
                         $("#searchInput").val(result[i]);
+                        $("#searchResult").empty();});
 
-                        $("#searchResult").empty();
-                    });
-
-                    $("#searchResult").append(div);
-                }
-            },
+                    $("#searchResult").append(div);}},
 
             error: function() {
                 console.log("연관검색어 검색 실패");

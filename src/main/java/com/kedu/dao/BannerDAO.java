@@ -20,7 +20,7 @@ public class BannerDAO {
 	public List<BannerDTO> getBannerList() {
 
 		 String sql = "SELECT BANNER_ID, TITLE, IMAGE_NAME, LINK_URL "
-                 + "FROM BANNER ORDER BY SORT_ORDER ASC";
+                 + "FROM BANNER ORDER BY banner_id";
 
         return jdbc.query(sql, new BeanPropertyRowMapper<>(BannerDTO.class));
     }

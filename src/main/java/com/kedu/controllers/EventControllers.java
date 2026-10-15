@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kedu.dao.BannerDAO;
 import com.kedu.dto.BannerDTO;
-import com.kedu.services.BannerService;
 
 @Controller
 @RequestMapping("/event")
 public class EventControllers {
 	
-	@Autowired
-	private BannerService bannerService;
 	
 	@Autowired
 	private BannerDAO bannerDAO;
@@ -25,7 +22,7 @@ public class EventControllers {
 	@RequestMapping("/eventpage")
 	public String eventpage(Model model) {
 		
-		List<BannerDTO> banner = bannerService.getBannerList();
+		List<BannerDTO> banner = bannerDAO.getBannerList();
 		
 		model.addAttribute("banner", banner);
 		
