@@ -84,7 +84,13 @@ public class ReviewController {
 	}
 	
 	@RequestMapping("/review_write")
-	public String review_write() {
+	public String review_write(HttpSession session) {
+		String loginId = (String) session.getAttribute("loginId");
+
+		if (loginId == null) {
+			return "redirect:/members/loginpage";
+		}
+
 		return "board/reviewWrite";
 	}
 	
