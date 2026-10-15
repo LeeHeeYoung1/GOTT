@@ -96,9 +96,12 @@
             width: 200px;
             height: 500px;
             position: fixed;
-            right: 0;
-            top: 70px;
+            right:80px;
+            top: 150px;
             background-color: rgba(255, 255, 255, 0.7);
+            
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
             
             box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
             z-index: 50;
@@ -106,6 +109,7 @@
             visibility: hidden;
     		transition: opacity 0.3s ease, visibility 0.3s ease;
         }
+        
         .sidemenu.open {
 		    opacity: 1;
     		visibility: visible;

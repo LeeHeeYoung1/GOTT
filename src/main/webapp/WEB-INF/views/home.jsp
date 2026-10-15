@@ -882,20 +882,19 @@
 		    color:#8e8e8e;
 		    font-size:13px;
 		}
-<<<<<<< HEAD
+
 		.reviewShareIcon:hover {
 			cursor: pointer;
 		}	
-=======
-.reviewContainer .reviewHeart {
-    cursor: pointer;
-    color: #999;
-}
 
-.reviewContainer .reviewHeart.liked {
-    color: #ff4d6d;
-}
->>>>>>> 870aadd30a0b33bb17ff9af8771a0e683cf17012
+		.reviewContainer .reviewHeart {
+		    cursor: pointer;
+		    color: #999;
+		}
+		
+		.reviewContainer .reviewHeart.liked {
+		    color: #ff4d6d;
+		}
 		
     </style>
 
