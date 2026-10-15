@@ -35,7 +35,7 @@ import com.kedu.services.EmailService;
 @Controller
 @RequestMapping("/members")
 public class MembersControllers {
-
+	
 	@Autowired
 	private MembersDAO mdao;
 	@Autowired
@@ -54,552 +54,579 @@ public class MembersControllers {
 	private CouponDAO cdao;
 	@Autowired
 	TravelPlanScrapDAO tpsdao;
-
+	
 	@RequestMapping("/loginpage")
 	public String loginPage() {
-		return "members/login";
+	    return "members/login";
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/login")
 	public int login(MembersDTO mdto, HttpSession session) {
 		int result = mdao.login(mdto);
-
-		if (result == 1) {
+		
+		if(result == 1) {
 			MembersDTO member = mdao.selectById(mdto.getId());
-
-			rdao.mileageUp(member.getId());
-
+			
 			session.setAttribute("loginId", member.getId());
-			session.setAttribute("name", member.getName());
-			session.setAttribute("phone", member.getPhone());
-			session.setAttribute("email", member.getEmail());
-			session.setAttribute("gender", member.getGender());
-			session.setAttribute("Dob", member.getDob());
-			session.setAttribute("zipcode", member.getZipcode());
-			session.setAttribute("address1", member.getAddress1());
-			session.setAttribute("address2", member.getAddress2());
-			session.setAttribute("nickname", member.getNickname());
-			session.setAttribute("mileage", member.getMileage());
-			session.setAttribute("regdate", member.getRegdate());
-			session.setAttribute("role", member.getRole());
-			session.setAttribute("privacy_agree", member.getPrivacy_agree());
+		    session.setAttribute("name", member.getName());
+		    session.setAttribute("phone", member.getPhone());
+		    session.setAttribute("email", member.getEmail());
+		    session.setAttribute("gender", member.getGender());
+		    session.setAttribute("Dob", member.getDob());
+		    session.setAttribute("zipcode", member.getZipcode());
+		    session.setAttribute("address1", member.getAddress1());
+		    session.setAttribute("address2", member.getAddress2());
+		    session.setAttribute("nickname", member.getNickname());
+		    session.setAttribute("mileage", member.getMileage());
+		    session.setAttribute("regdate", member.getRegdate());
+		    session.setAttribute("role", member.getRole());
+		    session.setAttribute("privacy_agree", member.getPrivacy_agree());
 		}
 		return result;
 	}
-
+	
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) throws Exception {
-		session.invalidate();
+		session.invalidate(); 
 		return "redirect:/";
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/idcheck")
 	public int idcheck(String id) {
-
+		
 		return mdao.idcheck(id);
 	}
-
+	
 	@RequestMapping("/signuppage")
 	public String signuppage() {
 		return "members/signup";
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/nicknamecheck")
 	public int nicknamecheck(String nickname) {
 		return mdao.nicknamecheck(nickname);
 	}
-
+	
 	@RequestMapping("/signup")
 	public String signup(MembersDTO mdto) {
-
+		
 		mdto.setPw(EncryptionUtils.encryptSHA512(mdto.getPw()));
 		mdao.signup(mdto);
-
+		
 		return "redirect:/members/loginpage";
 	}
+	
+
 
 	@RequestMapping("/mypage")
-	public String mypage(Integer cpage, Integer wishCpage, String wishType, Integer mileageCpage, Integer plannerCpage,
-			Integer reviewCpage, String reservationTab, HttpSession session, Model model) {
-
-		String memberId = (String) session.getAttribute("loginId");
-		if (memberId == null) {
-			return "redirect:/members/loginpage";
-		}
-
-		int pagesize = 3;
-
-		// 첫 숙박 완료 후 10% 쿠폰 발급 확인
-		cdao.issueFirstStayCoupon(memberId);
-
-		String tourType = tdao.selectMyType(memberId);
-
-		// 1. 예약 내역 탭별 페이징
-		if (reservationTab == null || reservationTab.isEmpty()) {
-			reservationTab = "all";
-		}
-
-		if (!"all".equals(reservationTab) && !"upcoming".equals(reservationTab) && !"completed".equals(reservationTab)
-				&& !"cancelled".equals(reservationTab)) {
-			reservationTab = "all";
-		}
-
-		if (cpage == null || cpage < 1) {
-			cpage = 1;
-		}
-
-		int totalCount = rdao.reservationCount(memberId, reservationTab);
-		int totalPage = (int) Math.ceil((double) totalCount / pagesize);
-
-		if (totalPage > 0 && cpage > totalPage) {
-			cpage = totalPage;
-		}
-		if (totalPage == 0) {
-			cpage = 1;
-		}
-
-		ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize, reservationTab);
-
-		// 예약 상태 분류
-		LocalDate today = LocalDate.now();
-		for (ReservationDTO rs : myRsList) {
-			if ("예약취소".equals(rs.getStatus())) {
-				rs.setReservationType("cancelled");
-			} else if (!rs.getCheckOut().toLocalDate().isAfter(today)) {
-				rs.setReservationType("completed");
-			} else {
-				rs.setReservationType("upcoming");
-			}
-		}
-
-		// 2. 카테고리별 찜 목록 페이징
-		if (wishType == null || wishType.isEmpty()) {
-			wishType = "all";
-		}
-
-		if (!"all".equals(wishType) && !"spot".equals(wishType) && !"food".equals(wishType)
-				&& !"stay".equals(wishType)) {
-			wishType = "all";
-		}
-
-		if (wishCpage == null || wishCpage < 1) {
-			wishCpage = 1;
-		}
-
-		String dbType = null;
-
-		if ("spot".equals(wishType)) {
-			dbType = "SPOT";
-		} else if ("food".equals(wishType)) {
-			dbType = "FOOD";
-		} else if ("stay".equals(wishType)) {
-			dbType = "STAY";
-		}
-
-		// 전체 또는 선택 카테고리의 찜 개수 조회
-		int wishTotalCount;
-		if ("all".equals(wishType)) {
-			wishTotalCount = wdao.countByWish(memberId);
-		} else {
-			wishTotalCount = wdao.countByWish(memberId, dbType);
-		}
-
-		int wishTotalPage = (int) Math.ceil((double) wishTotalCount / pagesize);
-
-		if (wishTotalPage > 0 && wishCpage > wishTotalPage) {
-			wishCpage = wishTotalPage;
-		}
-		if (wishTotalPage == 0) {
-			wishCpage = 1;
-		}
-
-		int wishStart = (wishCpage - 1) * pagesize + 1;
-		int wishEnd = wishCpage * pagesize;
-
-		// 전체 또는 선택 카테고리의 찜 목록 조회
-		List<PlaceDTO> wishList;
-		if ("all".equals(wishType)) {
-			wishList = wdao.selectByWish(memberId, wishStart, wishEnd);
-		} else {
-			wishList = wdao.selectByWish(memberId, dbType, wishStart, wishEnd);
-		}
-
-		// 3. 마일리지 내역 페이징
-		int mileagePagesize = 10;
-
-		if (mileageCpage == null || mileageCpage < 1) {
-			mileageCpage = 1;
-		}
-
-		int mileageTotalCount = mdao.mileageHistoryCount(memberId);
-		int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / mileagePagesize);
-
-		if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
-			mileageCpage = mileageTotalPage;
-		}
-		if (mileageTotalPage == 0) {
-			mileageCpage = 1;
-		}
-
-		int mileage = mdao.getMileage(memberId);
-		List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId, mileageCpage, mileagePagesize);
-
-		// 4. 마이페이지 요약 정보
-		int myWishTotalCount = wdao.countByWish(memberId);
-		int upcomingCount = rdao.upcomingReservationCount(memberId);
-		int reviewCount = rvdao.selectCount(memberId);
-
-		// 5. 이용 예정 및 이용 완료 예약
-		ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
-		ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
-
-		// 6. 내가 작성한 리뷰 페이징
-		int reviewPagesize = 3;
-
-		if (reviewCpage == null || reviewCpage < 1) {
-			reviewCpage = 1;
-		}
-
-		int reviewTotalCount = rvdao.countMyReview(memberId);
-		int reviewTotalPage = (int) Math.ceil((double) reviewTotalCount / reviewPagesize);
-
-		if (reviewTotalPage > 0 && reviewCpage > reviewTotalPage) {
-			reviewCpage = reviewTotalPage;
-		}
-		if (reviewTotalPage == 0) {
-			reviewCpage = 1;
-		}
-
-		List<ReviewDTO> reviewList = rvdao.selectMyReview(memberId, reviewCpage, reviewPagesize);
-
-		// 7. 내가 공유한 여행 일정 페이징
-		int plannerPagesize = 3;
-
-		if (plannerCpage == null || plannerCpage < 1) {
-			plannerCpage = 1;
-		}
-
-		List<?> allPlannerList = tpdao.selectMyPlansWithCount(memberId);
-		int plannerTotalCount = allPlannerList.size();
-		int plannerTotalPage = (int) Math.ceil((double) plannerTotalCount / plannerPagesize);
-
-		if (plannerTotalPage > 0 && plannerCpage > plannerTotalPage) {
-			plannerCpage = plannerTotalPage;
-		}
-		if (plannerTotalPage == 0) {
-			plannerCpage = 1;
-		}
-
-		int plannerStart = (plannerCpage - 1) * plannerPagesize;
-		int plannerEnd = Math.min(plannerStart + plannerPagesize, plannerTotalCount);
-		List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
-
-		List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
-
-		// 8. 모델 전달
-		model.addAttribute("tourType", tourType);
-
-		model.addAttribute("myRsList", myRsList);
-		model.addAttribute("cpage", cpage);
-		model.addAttribute("totalPage", totalPage);
-		model.addAttribute("reservationTab", reservationTab);
-
-		model.addAttribute("wishList", wishList);
-		model.addAttribute("wishCpage", wishCpage);
-		model.addAttribute("wishTotalPage", wishTotalPage);
-		model.addAttribute("wishTotalCount", wishTotalCount);
-		model.addAttribute("wishType", wishType);
-		model.addAttribute("myWishTotalCount", myWishTotalCount);
-
-		model.addAttribute("mileage", mileage);
-		model.addAttribute("mileageTotalCount", mileageTotalCount);
-		model.addAttribute("mileageCpage", mileageCpage);
-		model.addAttribute("mileageTotalPage", mileageTotalPage);
-		model.addAttribute("mileageHistory", mileageHistory);
-
-		model.addAttribute("upcomingCount", upcomingCount);
-		model.addAttribute("upcomingList", upcomingList);
-		model.addAttribute("completedList", completedList);
-		model.addAttribute("today", LocalDate.now());
-
-		model.addAttribute("reviewCount", reviewCount);
-		model.addAttribute("reviewTotalCount", reviewTotalCount);
-		model.addAttribute("reviewList", reviewList);
-		model.addAttribute("reviewCpage", reviewCpage);
-		model.addAttribute("reviewTotalPage", reviewTotalPage);
-
-		model.addAttribute("myCoupons", cdao.selectMyCoupons(memberId));
-
-		model.addAttribute("myPlannerList", myPlannerList);
-		model.addAttribute("plannerCpage", plannerCpage);
-		model.addAttribute("plannerTotalPage", plannerTotalPage);
-
-		model.addAttribute("scrapPlanList", scrapPlanList);
-
-		// 예약 변경 메시지
-		Object message = session.getAttribute("reservationUpdateMessage");
-		if (message != null) {
-			model.addAttribute("reservationUpdateMessage", message);
-			session.removeAttribute("reservationUpdateMessage");
-		}
-
-		return "members/mypage";
+	public String mypage(Integer cpage, Integer wishCpage, String wishType,
+	        Integer mileageCpage, Integer plannerCpage, Integer reviewCpage,
+	        String reservationTab, HttpSession session, Model model) {
+	
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	
+	    int pagesize = 3;
+	
+	    // 첫 숙박 완료 후 10% 쿠폰 발급 확인
+	    cdao.issueFirstStayCoupon(memberId);
+	
+	    String tourType = tdao.selectMyType(memberId);
+	
+	    // 1. 예약 내역 탭별 페이징
+	    if (reservationTab == null || reservationTab.isEmpty()) {
+	        reservationTab = "all";
+	    }
+	
+	    if (!"all".equals(reservationTab) && !"upcoming".equals(reservationTab)
+	            && !"completed".equals(reservationTab) && !"cancelled".equals(reservationTab)) {
+	        reservationTab = "all";
+	    }
+	
+	    if (cpage == null || cpage < 1) {
+	        cpage = 1;
+	    }
+	
+	    int totalCount = rdao.reservationCount(memberId, reservationTab);
+	    int totalPage = (int) Math.ceil((double) totalCount / pagesize);
+	
+	    if (totalPage > 0 && cpage > totalPage) {
+	        cpage = totalPage;
+	    }
+	    if (totalPage == 0) {
+	        cpage = 1;
+	    }
+	
+	    ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId, cpage, pagesize, reservationTab);
+	
+	    // 예약 상태 분류
+	    LocalDate today = LocalDate.now();
+	    for (ReservationDTO rs : myRsList) {
+	        if ("예약취소".equals(rs.getStatus())) {
+	            rs.setReservationType("cancelled");
+	        } else if (!rs.getCheckOut().toLocalDate().isAfter(today)) {
+	            rs.setReservationType("completed");
+	        } else {
+	            rs.setReservationType("upcoming");
+	        }
+	    }
+	
+	    // 2. 카테고리별 찜 목록 페이징
+	    if (wishType == null || wishType.isEmpty()) {
+	        wishType = "all";
+	    }
+	
+	    if (!"all".equals(wishType) && !"spot".equals(wishType)
+	            && !"food".equals(wishType) && !"stay".equals(wishType)) {
+	        wishType = "all";
+	    }
+	
+	    if (wishCpage == null || wishCpage < 1) {
+	        wishCpage = 1;
+	    }
+	
+	    String dbType = null;
+	
+	    if ("spot".equals(wishType)) {
+	        dbType = "SPOT";
+	    } else if ("food".equals(wishType)) {
+	        dbType = "FOOD";
+	    } else if ("stay".equals(wishType)) {
+	        dbType = "STAY";
+	    }
+	
+	    // 전체 또는 선택 카테고리의 찜 개수 조회
+	    int wishTotalCount;
+	    if ("all".equals(wishType)) {
+	        wishTotalCount = wdao.countByWish(memberId);
+	    } else {
+	        wishTotalCount = wdao.countByWish(memberId, dbType);
+	    }
+	
+	    int wishTotalPage = (int) Math.ceil((double) wishTotalCount / pagesize);
+	
+	    if (wishTotalPage > 0 && wishCpage > wishTotalPage) {
+	        wishCpage = wishTotalPage;
+	    }
+	    if (wishTotalPage == 0) {
+	        wishCpage = 1;
+	    }
+	
+	    int wishStart = (wishCpage - 1) * pagesize + 1;
+	    int wishEnd = wishCpage * pagesize;
+	
+	    // 전체 또는 선택 카테고리의 찜 목록 조회
+	    List<PlaceDTO> wishList;
+	    if ("all".equals(wishType)) {
+	        wishList = wdao.selectByWish(memberId, wishStart, wishEnd);
+	    } else {
+	        wishList = wdao.selectByWish(memberId, dbType, wishStart, wishEnd);
+	    }
+	
+	    // 3. 마일리지 내역 페이징
+	    int mileagePagesize = 10;
+	
+	    if (mileageCpage == null || mileageCpage < 1) {
+	        mileageCpage = 1;
+	    }
+	
+	    int mileageTotalCount = mdao.mileageHistoryCount(memberId);
+	    int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / mileagePagesize);
+	
+	    if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
+	        mileageCpage = mileageTotalPage;
+	    }
+	    if (mileageTotalPage == 0) {
+	        mileageCpage = 1;
+	    }
+	
+	    int mileage = mdao.getMileage(memberId);
+	    List<MileageHistoryDTO> mileageHistory =
+	            mdao.mileageHistory(memberId, mileageCpage, mileagePagesize);
+	
+	    // 4. 마이페이지 요약 정보
+	    int myWishTotalCount = wdao.countByWish(memberId);
+	    int upcomingCount = rdao.upcomingReservationCount(memberId);
+	    int reviewCount = rvdao.selectCount(memberId);
+	
+	    // 5. 이용 예정 및 이용 완료 예약
+	    ArrayList<ReservationDTO> upcomingList = rdao.myUpcomingList(memberId);
+	    ArrayList<ReservationDTO> completedList = rdao.myCompletedList(memberId);
+	
+	    // 6. 내가 작성한 리뷰 페이징
+	    int reviewPagesize = 3;
+	
+	    if (reviewCpage == null || reviewCpage < 1) {
+	        reviewCpage = 1;
+	    }
+	
+	    int reviewTotalCount = rvdao.countMyReview(memberId);
+	    int reviewTotalPage = (int) Math.ceil((double) reviewTotalCount / reviewPagesize);
+	
+	    if (reviewTotalPage > 0 && reviewCpage > reviewTotalPage) {
+	        reviewCpage = reviewTotalPage;
+	    }
+	    if (reviewTotalPage == 0) {
+	        reviewCpage = 1;
+	    }
+	
+	    List<ReviewDTO> reviewList =
+	            rvdao.selectMyReview(memberId, reviewCpage, reviewPagesize);
+	
+	    // 7. 내가 공유한 여행 일정 페이징
+	    int plannerPagesize = 3;
+	
+	    if (plannerCpage == null || plannerCpage < 1) {
+	        plannerCpage = 1;
+	    }
+	
+	    List<?> allPlannerList = tpdao.selectMyPlansWithCount(memberId);
+	    int plannerTotalCount = allPlannerList.size();
+	    int plannerTotalPage = (int) Math.ceil((double) plannerTotalCount / plannerPagesize);
+	
+	    if (plannerTotalPage > 0 && plannerCpage > plannerTotalPage) {
+	        plannerCpage = plannerTotalPage;
+	    }
+	    if (plannerTotalPage == 0) {
+	        plannerCpage = 1;
+	    }
+	
+	    int plannerStart = (plannerCpage - 1) * plannerPagesize;
+	    int plannerEnd = Math.min(plannerStart + plannerPagesize, plannerTotalCount);
+	    List<?> myPlannerList = allPlannerList.subList(plannerStart, plannerEnd);
+	
+	    List<Map<String, Object>> scrapPlanList = tpdao.scrapPlan(memberId);
+	
+	    // 8. 모델 전달
+	    model.addAttribute("tourType", tourType);
+	
+	    model.addAttribute("myRsList", myRsList);
+	    model.addAttribute("cpage", cpage);
+	    model.addAttribute("totalPage", totalPage);
+	    model.addAttribute("reservationTab", reservationTab);
+	
+	    model.addAttribute("wishList", wishList);
+	    model.addAttribute("wishCpage", wishCpage);
+	    model.addAttribute("wishTotalPage", wishTotalPage);
+	    model.addAttribute("wishTotalCount", wishTotalCount);
+	    model.addAttribute("wishType", wishType);
+	    model.addAttribute("myWishTotalCount", myWishTotalCount);
+	
+	    model.addAttribute("mileage", mileage);
+	    model.addAttribute("mileageTotalCount", mileageTotalCount);
+	    model.addAttribute("mileageCpage", mileageCpage);
+	    model.addAttribute("mileageTotalPage", mileageTotalPage);
+	    model.addAttribute("mileageHistory", mileageHistory);
+	
+	    model.addAttribute("upcomingCount", upcomingCount);
+	    model.addAttribute("upcomingList", upcomingList);
+	    model.addAttribute("completedList", completedList);
+	    model.addAttribute("today", LocalDate.now());
+	
+	    model.addAttribute("reviewCount", reviewCount);
+	    model.addAttribute("reviewTotalCount", reviewTotalCount);
+	    model.addAttribute("reviewList", reviewList);
+	    model.addAttribute("reviewCpage", reviewCpage);
+	    model.addAttribute("reviewTotalPage", reviewTotalPage);
+	
+	    model.addAttribute("myCoupons", cdao.selectMyCoupons(memberId));
+	
+	    model.addAttribute("myPlannerList", myPlannerList);
+	    model.addAttribute("plannerCpage", plannerCpage);
+	    model.addAttribute("plannerTotalPage", plannerTotalPage);
+	
+	    model.addAttribute("scrapPlanList", scrapPlanList);
+	
+	    // 예약 변경 메시지
+	    Object message = session.getAttribute("reservationUpdateMessage");
+	    if (message != null) {
+	        model.addAttribute("reservationUpdateMessage", message);
+	        session.removeAttribute("reservationUpdateMessage");
+	    }
+	
+	    return "members/mypage";
 	}
+
+	
 
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String update(HttpSession session) {
-		String id = (String) session.getAttribute("loginId");
-		if (id == null) {
-			return "redirect:/members/loginpage";
-		}
-		Boolean passwordChecked = (Boolean) session.getAttribute("passwordChecked");
-		if (!Boolean.TRUE.equals(passwordChecked)) {
-			return "redirect:/members/checkPassword";
-		}
+	    String id = (String) session.getAttribute("loginId");
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	    Boolean passwordChecked = (Boolean) session.getAttribute("passwordChecked");
+	    if (!Boolean.TRUE.equals(passwordChecked)) {
+	        return "redirect:/members/checkPassword";
+	    }
 
-		return "members/update";
+	    return "members/update";
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(MembersDTO mdto, HttpSession session) {
-		String id = (String) session.getAttribute("loginId");
+	    String id = (String) session.getAttribute("loginId");
 
-		if (id == null) {
-			return "redirect:/members/loginpage";
-		}
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
 
-		Boolean passwordChecked = (Boolean) session.getAttribute("passwordChecked");
-		if (!Boolean.TRUE.equals(passwordChecked)) {
-			return "redirect:/members/checkPassword";
-		}
+	    Boolean passwordChecked = (Boolean) session.getAttribute("passwordChecked");
+	    if (!Boolean.TRUE.equals(passwordChecked)) {
+	        return "redirect:/members/checkPassword";
+	    }
 
-		mdto.setId(id);
+	    mdto.setId(id);
 
-		int result = mdao.update(mdto);
+	    int result = mdao.update(mdto);
 
-		if (result > 0) {
-			session.setAttribute("nickname", mdto.getNickname());
-			session.setAttribute("phone", mdto.getPhone());
-			session.setAttribute("email", mdto.getEmail());
-			session.setAttribute("zipcode", mdto.getZipcode());
-			session.setAttribute("address1", mdto.getAddress1());
-			session.setAttribute("address2", mdto.getAddress2());
-		}
+	    if (result > 0) {
+	        session.setAttribute("nickname", mdto.getNickname());
+	        session.setAttribute("phone", mdto.getPhone());
+	        session.setAttribute("email", mdto.getEmail());
+	        session.setAttribute("zipcode", mdto.getZipcode());
+	        session.setAttribute("address1", mdto.getAddress1());
+	        session.setAttribute("address2", mdto.getAddress2());
+	    }
 
-		session.removeAttribute("passwordChecked");
+	    session.removeAttribute("passwordChecked");
 
-		return "redirect:/members/mypage";
+	    return "redirect:/members/mypage";
 	}
 
 	// 비밀번호 확인 페이지
 	@RequestMapping(value = "/checkPassword", method = RequestMethod.GET)
 	public String checkPassword(HttpSession session) {
-		if (session.getAttribute("loginId") == null) {
-			return "redirect:/members/loginpage";
-		}
-		// 확인 화면에 다시 들어오면 이전 확인 기록 삭제
-		session.removeAttribute("passwordChecked");
-		return "members/checkpassword";
+	    if (session.getAttribute("loginId") == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	    // 확인 화면에 다시 들어오면 이전 확인 기록 삭제
+	    session.removeAttribute("passwordChecked");
+	    return "members/checkpassword";
 	}
 
 	// 비밀번호 확인 처리
 	@RequestMapping(value = "/checkPassword", method = RequestMethod.POST)
 	public String checkPassword(String password, HttpSession session, Model model) {
-		String id = (String) session.getAttribute("loginId");
-		if (id == null) {
-			return "redirect:/members/loginpage";
-		}
+	    String id = (String) session.getAttribute("loginId");
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
 
 		boolean result = mdao.checkPassword(id, EncryptionUtils.encryptSHA512(password));
-		if (result) {
-			session.setAttribute("passwordChecked", true);
-			return "redirect:/members/update";
-		}
+	    if (result) {
+	        session.setAttribute("passwordChecked", true);
+	        return "redirect:/members/update";
+	    }
 
-		model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-		return "members/checkpassword";
+	    model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+	    return "members/checkpassword";
 	}
 
+
+	
 	@RequestMapping("/deleted")
 	public String deleted() {
 		return "members/deleted";
 	}
-
+	
 	@RequestMapping(value = "/deleted", method = RequestMethod.POST)
-	public String deleted(MembersDTO mdto, HttpSession session) {
-		String id = (String) session.getAttribute("loginId");
-		mdto.setPw(EncryptionUtils.encryptSHA512(mdto.getPw()));
-		int result = mdao.deleted(id, mdto);
-		if (result > 0) {
-			session.invalidate();
-			return "redirect:/";
-		}
-		return "members/login";
+	public String deleted(MembersDTO mdto,HttpSession session) {
+	    String id = (String) session.getAttribute("loginId");
+	    mdto.setPw(EncryptionUtils.encryptSHA512(mdto.getPw()));
+	    int result = mdao.deleted(id, mdto);
+	    if (result > 0) {
+	        session.invalidate();
+	        return "redirect:/";
+	    }
+	    return "members/login";
 	}
-
+	
+	
 	@RequestMapping("/tourTypeTest")
 	public String tourTypeTest() {
 		return "event/tourTypeTest";
 	}
-
+	
 	@RequestMapping("/tourTypeTestResult")
 	public String tourTypeTestResult(Travel_TypeDTO dto, HttpSession session) {
-		String id = (String) session.getAttribute("loginId");
-		dto.setMember_id(id);
-		tdao.insertType(dto);
-		return "redirect:/members/mypage";
-	}
+	    String id = (String) session.getAttribute("loginId");
 
+	    if (id == null) {
+	        return "redirect:/members/loginpage";
+	    }
+
+	    int count = tdao.countMyType(id);
+
+	    dto.setMember_id(id);
+	    tdao.insertType(dto);
+
+	    if (count == 0) {
+	        tdao.issueCoupon(id);
+
+	        session.setAttribute("tourTypeMessage",
+	                "여행성향 테스트 결과가 저장되었습니다! 쿠폰이 발급되었습니다.");
+	    } else {
+	        session.setAttribute("tourTypeMessage",
+	                "여행성향 테스트 결과가 저장되었습니다!");
+	    }
+
+	    return "redirect:/members/mypage";
+	}
+	
 	@RequestMapping("/idsearchpage")
 	public String idsearchpage() {
 		return "members/idsearch";
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/idsearch")
 	public String idsearch(MembersDTO mdto) {
-
+		
 		String id = mdao.findId(mdto);
-
-		if (id == null) {
+		
+		if(id == null) {
 			return "";
 		}
-
+		
 		return id;
 	}
-
 	@ResponseBody
 	@RequestMapping("/sendpwcode")
 	public String sendpwcode(String id, String email, HttpSession session) {
 		MembersDTO mdto = mdao.findEmail(id, email);
-
-		if (mdto == null) {
+		
+		if(mdto == null) {
 			return "notfound";
 		}
-
-		int random = (int) (Math.random() * 900000) + 100000;
+		
+		int random = (int)(Math.random() * 900000) + 100000;
 		String code = String.valueOf(random);
-
+		
 		try {
 			emailService.sendEmail(email, code);
 			session.setAttribute("pwEmailcode", code);
 			session.setAttribute("pwFindId", id);
 			session.setAttribute("pwFindEmail", email);
-
+			
 			return "success";
-		} catch (Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 			return "fail";
 		}
 	}
-
+	
 	@RequestMapping("/pwsearchpage")
 	public String pwsearchpage() {
 		return "members/pwsearch";
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/verifypwcode")
 	public String verifypwcode(String code, HttpSession session) {
-		String savedCode = (String) session.getAttribute("pwEmailcode");
-
-		if (savedCode == null) {
+		String savedCode = (String)session.getAttribute("pwEmailcode");
+		
+		if(savedCode == null) {
 			return "fail";
-		} else if (savedCode.equals(code)) {
+		} else if(savedCode.equals(code)) {
 			session.setAttribute("pwVerified", true);
 			return "success";
 		} else {
 			return "fail";
 		}
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/updatepw")
 	public String updatepw(String pw, HttpSession session) {
 		// 이메일 인증 여부 확인
-		Boolean verified = (Boolean) session.getAttribute("pwVerified");
-		if (verified == null || !verified) {
-			return "notVerified";
-		}
-		// 비밀번호를 변경할 아이디 가져오기
-		String id = (String) session.getAttribute("pwFindId");
-		if (id == null) {
-			return "fail";
-		}
-		// 비밀번호 암호화
-		String encryptedPw = EncryptionUtils.encryptSHA512(pw);
-		// DB 비밀번호 변경
-		int result = mdao.updatePassword(id, encryptedPw);
-		if (result > 0) {
-			// 비밀번호 찾기 관련 세션 삭제
-			session.removeAttribute("pwEmailcode");
-			session.removeAttribute("pwFindId");
-			session.removeAttribute("pwFindEmail");
-			session.removeAttribute("pwVerified");
-			return "success";
-		}
-		return "fail";
+	    Boolean verified = (Boolean)session.getAttribute("pwVerified");
+	    if(verified == null || !verified) {
+	        return "notVerified";
+	    }
+	    // 비밀번호를 변경할 아이디 가져오기
+	    String id = (String)session.getAttribute("pwFindId");
+	    if(id == null) {
+	        return "fail";
+	    }
+	    // 비밀번호 암호화
+	    String encryptedPw = EncryptionUtils.encryptSHA512(pw);
+	    // DB 비밀번호 변경
+	    int result = mdao.updatePassword(id, encryptedPw);
+	    if(result > 0) {
+	        // 비밀번호 찾기 관련 세션 삭제
+	        session.removeAttribute("pwEmailcode");
+	        session.removeAttribute("pwFindId");
+	        session.removeAttribute("pwFindEmail");
+	        session.removeAttribute("pwVerified");
+	        return "success";
+	    }
+	    return "fail";
 	}
-
+	
 	@RequestMapping("/planner")
 	public String planner(HttpSession session, Model model) {
-		String memberId = (String) session.getAttribute("loginId");
+		String memberId = (String) session.getAttribute("loginId");		
 		List<PlaceDTO> wishList = wdao.selectByWish(memberId);
-		model.addAttribute("wishList", wishList);
+	    model.addAttribute("wishList", wishList);	
 		return "members/planner";
 	}
-
+	
 	@RequestMapping("/wishlist")
 	public String wishlist(HttpSession session, Model model) {
-		String memberId = (String) session.getAttribute("loginId");
-		List<PlaceDTO> wishList = wdao.selectByWish(memberId);
-		model.addAttribute("wishList", wishList);
-		return "members/wishlist";
+	    String memberId = (String) session.getAttribute("loginId");
+	    List<PlaceDTO> wishList = wdao.selectByWish(memberId);
+	    model.addAttribute("wishList", wishList);
+	    return "members/wishlist";
 	}
-
+	
 	@RequestMapping("/reservationpage")
 	public String reservationpage(HttpSession session, Model model) {
 		String memberId = (String) session.getAttribute("loginId");
 		ArrayList<ReservationDTO> myRsList = rdao.myRsList(memberId);
-
+		
 		model.addAttribute("today", java.sql.Date.valueOf(java.time.LocalDate.now()));
 		model.addAttribute("myRsList", myRsList);
-		return "members/reservationpage";
+	    return "members/reservationpage";
 	}
+	
+
 
 	@RequestMapping("/mileage")
 	public String milagelist(Integer mileageCpage, HttpSession session, Model model) {
-		String memberId = (String) session.getAttribute("loginId");
-		if (memberId == null) {
-			return "redirect:/members/loginpage";
-		}
-
-		int pagesize = 10;
-		if (mileageCpage == null || mileageCpage < 1)
-			mileageCpage = 1;
-
-		int mileageTotalCount = mdao.mileageHistoryCount(memberId);
-		int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / pagesize);
-
-		if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
-			mileageCpage = mileageTotalPage;
-		}
-		if (mileageTotalPage == 0)
-			mileageCpage = 1;
-
-		int mileage = mdao.getMileage(memberId);
-		List<MileageHistoryDTO> mileageHistory = mdao.mileageHistory(memberId, mileageCpage, pagesize);
-
-		model.addAttribute("mileage", mileage);
-		model.addAttribute("mileageHistory", mileageHistory);
-		model.addAttribute("mileageCpage", mileageCpage);
-		model.addAttribute("mileageTotalCount", mileageTotalCount);
-		model.addAttribute("mileageTotalPage", mileageTotalPage);
-
-		return "members/mileage";
+	    String memberId = (String) session.getAttribute("loginId");
+	    if (memberId == null) {
+	        return "redirect:/members/loginpage";
+	    }
+	
+	    int pagesize = 10;
+	    if (mileageCpage == null || mileageCpage < 1) mileageCpage = 1;
+	
+	    int mileageTotalCount = mdao.mileageHistoryCount(memberId);
+	    int mileageTotalPage = (int) Math.ceil((double) mileageTotalCount / pagesize);
+	
+	    if (mileageTotalPage > 0 && mileageCpage > mileageTotalPage) {
+	        mileageCpage = mileageTotalPage;
+	    }
+	    if (mileageTotalPage == 0) mileageCpage = 1;
+	
+	    int mileage = mdao.getMileage(memberId);
+	    List<MileageHistoryDTO> mileageHistory =
+	            mdao.mileageHistory(memberId, mileageCpage, pagesize);
+	
+	    model.addAttribute("mileage", mileage);
+	    model.addAttribute("mileageHistory", mileageHistory);
+	    model.addAttribute("mileageCpage", mileageCpage);
+	    model.addAttribute("mileageTotalCount", mileageTotalCount);
+	    model.addAttribute("mileageTotalPage", mileageTotalPage);
+	
+	    return "members/mileage";
 	}
+
 
 }

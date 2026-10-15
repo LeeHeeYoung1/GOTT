@@ -186,6 +186,7 @@
             <div class="textzone"><a href="/members/planner">여행플래너</a></div>
             <div class="textzone"><a href="/board/freeBoard?cpage=1">게시판</a></div>
             <div class="textzone"><a href="/notice/qna?cpage=1">문의사항</a></div>
+            <c:if test="${loginId == 'admin0001'}"><div class="textzone"><a href="/dashBoard/dashHome">대시보드</a></div></c:if>
         </div>
         <c:choose>
 	        <c:when test="${loginId != null}">

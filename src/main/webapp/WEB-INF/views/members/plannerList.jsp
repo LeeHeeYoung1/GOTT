@@ -223,7 +223,7 @@
 			<c:when test="${not empty planList}">
 				<c:forEach var="plan" items="${planList}">
 					<a
-						href="${pageContext.request.contextPath}/travelPlan/detail?planId=${plan.plan_id}"
+						href="/travelPlan/detail?planId=${plan.plan_id}&cpage=${cpage}&region=${region}&nights=${nights}&sort=${sort}""
 						class="planCardLink">
 						<div class="planCard">
 							<span class="publicLabel">공개 일정</span>

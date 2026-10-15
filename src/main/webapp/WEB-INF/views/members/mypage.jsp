@@ -1306,11 +1306,12 @@ body {
 </style>
 </head>
 <body>
-	<c:if test="${not empty message}">
-		<script>
-	        alert("${message}");
-	    </script>
-	</c:if>
+<c:if test="${not empty tourTypeMessage}">
+    <script>
+        alert("${tourTypeMessage}");
+    </script>
+    <c:remove var="tourTypeMessage"/>
+</c:if>
 
 	<c:choose>
 		<c:when test="${loginId != null}">
@@ -1455,13 +1456,11 @@ body {
 										<div class="sharedPlanCondition">
 											<span class="shareBadge">전체 공개</span>
 											<div class="btnGroup">
-												<form
-													action="${pageContext.request.contextPath}/travelPlan/delete"
-													method="post"
+												<form action="${pageContext.request.contextPath}/travelPlan/delete" method="post"
 													onsubmit="return confirm('이 여행 일정을 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.');">
 													<input type="hidden" name="planId" value="${plan.PLAN_ID}">
 													<button type="button" class="deleteBtn"
-														style="background-color: red;"
+														style="background-color: #eef5ff;"
 														onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/travelPlan/delete?planId=${plan.PLAN_ID}'">삭제</button>
 												</form>
 												<button type="button" class="boardViewBtn"
