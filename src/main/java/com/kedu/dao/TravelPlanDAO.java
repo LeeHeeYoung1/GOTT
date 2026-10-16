@@ -108,6 +108,9 @@ public class TravelPlanDAO {
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class));
 	}
     
+    // 비공개 여행 일정 목록 조회
+ 
+    
     
     // 1. sort만 선택 시
  	public List<TravelPlanDTO> selectFromTo(int start, int end, String sort) {

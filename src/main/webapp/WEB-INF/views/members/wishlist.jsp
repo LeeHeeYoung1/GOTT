@@ -561,7 +561,7 @@ body {
                                         <h3>${wish.name}</h3>
                                         <p class="wishSub">${wish.region}</p>
                                         <div class="wishBtnRow">
-                                            <button type="button" class="detailBtn" data-place-id="${wish.place_id}">상세 보기</button>
+                                            
                                             <button type="button" class="unwishBtn" data-place-id="${wish.place_id}">찜 해제</button>
                                         </div>
                                     </div>
@@ -587,7 +587,7 @@ body {
                                         <h3>${wish.name}</h3>
                                         <p class="wishSub">${wish.region}</p>
                                         <div class="wishBtnRow">
-                                            <button type="button" class="detailBtn" data-place-id="${wish.place_id}">상세 보기</button>
+                                            
                                             <button type="button" class="unwishBtn" data-place-id="${wish.place_id}">찜 해제</button>
                                         </div>
                                     </div>
@@ -613,7 +613,7 @@ body {
                                         <h3>${wish.name}</h3>
                                         <p class="wishSub">${wish.region}</p>
                                         <div class="wishBtnRow">
-                                            <button type="button" class="detailBtn" data-place-id="${wish.place_id}">상세 보기</button>
+                                            
                                             <button type="button" class="unwishBtn" data-place-id="${wish.place_id}">찜 해제</button>
                                         </div>
                                     </div>

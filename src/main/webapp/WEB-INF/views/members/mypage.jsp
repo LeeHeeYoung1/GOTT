@@ -392,7 +392,7 @@
 											<div class="wishlistInfo">
 												<h3>${wishList.name}</h3>
 												<p>${wishList.region}</p>
-												<button type="button">자세히 보기</button>
+												
 											</div>
 										</div>
 									</c:forEach>
