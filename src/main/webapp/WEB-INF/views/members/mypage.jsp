@@ -472,8 +472,7 @@
 										</c:if>
 										<p class="reviewDate">${rv.reg_date}</p>
 										<div class="reviewActions">
-											<a
-												href="${pageContext.request.contextPath}/review/update?seq=${rv.seq}">수정</a>
+										<a href="${pageContext.request.contextPath}/review/detail?seq=${rv.seq}&place_id=${rv.target_id}">수정</a>
 											<a
 												href="${pageContext.request.contextPath}/review/delete?seq=${rv.seq}"
 												onclick="return confirm('리뷰를 삭제하시겠습니까?')">삭제</a>

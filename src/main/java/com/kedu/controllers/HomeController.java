@@ -54,7 +54,7 @@ public class HomeController {
         List<NoticeDTO> ilist = ndao.important();
         List<BannerDTO> banner = bannerDAO.getBannerList();
 
-        List<ReviewDTO> reviewList = rvdao.selectRecentReviews();
+        List<ReviewDTO> reviewList = rvdao.selectLikeReviews();
 
         for (ReviewDTO review : reviewList) {
             if (memberId != null) {

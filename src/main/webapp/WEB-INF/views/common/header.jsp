@@ -256,24 +256,8 @@
 	        <c:otherwise>
 	        	<div class="user-menu">
 	        		<div class="textbox"><a href="/members/loginpage">로그인</a></div>
-		            <div class="menubtn"><i class="fa-solid fa-bars"></i></div>
 		        </div>
-		        <div class="sidemenu" id="sidemenu">
-		            <div class="sidemenu-title flex-center">
-		                <h2>메뉴</h2>
-		            </div>
-		            <div class="sidemenu-main">
-		                <p><a href="/">메인페이지</a></p>
-		                <p><a href="/members/mypage">마이페이지</a></p>
-		                <p><a href="/members/wishlist">찜목록</a></p>
-		                <p><a href="/">북마크</a></p>
-		                <p><a href="/">뭐넣지</a></p>
-		            </div>
-		            <div class="sidemenu-footer flex-between">
-		                <span><a href="/members/loginpage">로그인</a></span>
-		                <span><a href="/members/signuppage">회원가입</a></span>
-		            </div>
-		        </div>
+		        
 	        </c:otherwise>
 		</c:choose>
 		
