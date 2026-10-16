@@ -356,16 +356,12 @@ a {
 						</div>
 
 						<div class="room_price">
-							<c:choose>
-								<c:when test="${i.priceWeekday != null}">
-									<fmt:formatNumber value="${i.priceWeekday}" pattern="#,###" />
+							<div class="room_price">
+								<fmt:formatNumber value="${i.priceWeekday}" pattern="#,###" />
 								원 ~
 								<fmt:formatNumber value="${i.priceWeekend}" pattern="#,###" />
-								원</c:when>
-								<c:otherwise>
-								가격은 해당 숙소에 문의하여 주시기 바랍니다.
-							</c:otherwise>
-							</c:choose>
+								원
+							</div>
 						</div>
 					</a>
 				</div>
