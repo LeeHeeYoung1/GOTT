@@ -384,13 +384,7 @@ public class TravelPlanDAO {
         return jdbc.queryForList(sql);
     }
     
-    // 공개된 여행 일정 목록 화면
-    // 이거 DAO에 들어가는게 맞아?
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String list(Model model) {
-        model.addAttribute("planList", dao.selectPublicPlans());
-        return "members/plannerList";
-    }
+    
     
     // 일정 상세 조회
     public TravelPlanDTO selectPlanForView(int planId) {
@@ -411,24 +405,20 @@ public class TravelPlanDAO {
     }
     
 
-    public List<Map<String, Object>> selectMyPlansWithCount(String memberId) {
-        String sql = "SELECT T.PLAN_ID, T.PLAN_TITLE, "
-                + "TO_CHAR(T.START_DATE, 'YYYY-MM-DD') AS START_DATE, "
-                + "TO_CHAR(T.END_DATE, 'YYYY-MM-DD') AS END_DATE, "
-                + "T.IS_PUBLIC, T.CREATED_AT, "
-                + "(SELECT COUNT(*) FROM TRAVEL_PLAN_DETAIL D WHERE D.PLAN_ID = T.PLAN_ID) AS SPOT_COUNT, "
-                + "P.IMAGE_NAME AS IMAGE_NAME "
-                + "FROM TRAVEL_PLAN T "
-                + "LEFT JOIN ("
-                + "SELECT D.PLAN_ID, PL.IMAGE_NAME, "
-                + "ROW_NUMBER() OVER (PARTITION BY D.PLAN_ID ORDER BY D.DAY_NO, D.VISIT_ORDER) AS RN "
-                + "FROM TRAVEL_PLAN_DETAIL D "
-                + "JOIN PLACE PL ON D.PLACE_ID = PL.PLACE_ID"
-                + ") P ON T.PLAN_ID = P.PLAN_ID AND P.RN = 1 "
-                + "WHERE T.MEMBER_ID = ? AND T.IS_PUBLIC = 'Y' "
-                + "ORDER BY T.CREATED_AT DESC";
-        return jdbc.queryForList(sql, memberId);
-    }
+
+	public List<Map<String, Object>> selectMyPlansWithCount(String memberId) {
+		String sql = "SELECT T.PLAN_ID, T.PLAN_TITLE, " + "TO_CHAR(T.START_DATE, 'YYYY-MM-DD') AS START_DATE, "
+				+ "TO_CHAR(T.END_DATE, 'YYYY-MM-DD') AS END_DATE, " + "T.IS_PUBLIC, T.CREATED_AT, "
+				+ "(SELECT COUNT(*) FROM TRAVEL_PLAN_DETAIL D WHERE D.PLAN_ID = T.PLAN_ID) AS SPOT_COUNT, "
+				+ "P.IMAGE_NAME AS IMAGE_NAME " + "FROM TRAVEL_PLAN T " + "LEFT JOIN ("
+				+ "SELECT D.PLAN_ID, PL.IMAGE_NAME, "
+				+ "ROW_NUMBER() OVER (PARTITION BY D.PLAN_ID ORDER BY D.DAY_NO, D.VISIT_ORDER) AS RN "
+				+ "FROM TRAVEL_PLAN_DETAIL D " + "JOIN PLACE PL ON D.PLACE_ID = PL.PLACE_ID"
+				+ ") P ON T.PLAN_ID = P.PLAN_ID AND P.RN = 1 " + "WHERE T.MEMBER_ID = ? " + "ORDER BY T.CREATED_AT DESC";
+	
+	    return jdbc.queryForList(sql, memberId);
+	}
+
     
     // 내가 스크랩한 여행 일정 목록
  	public List<Map<String, Object>> scrapPlan(String loginId) {
