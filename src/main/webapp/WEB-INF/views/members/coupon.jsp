@@ -76,7 +76,14 @@ a{text-decoration:none;color:inherit}
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <div class="couponPage">
+		<c:if test="${not empty autumn}">
+			<script>
+				alert("${autumn}");
+			</script>
+				<c:remove var="autumn"/>
+		</c:if>
     <div class="pageHeader">
+    
         <div>
             <h2>나의 쿠폰함</h2>
             <p>GOTT에서 제공하는 할인 쿠폰과 사용 상태를 확인하세요.</p>

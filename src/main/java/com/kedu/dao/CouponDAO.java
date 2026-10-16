@@ -114,5 +114,25 @@ public class CouponDAO {
 					+ ")";
 		    return jdbc.update(sql, memberId, memberId, memberId, memberId, memberId);
 		}
-
+		// 단풍 명소 10% 쿠폰 조회
+		public int countMyAutumn(String id) {
+			String sql = "select count(*) from members_coupon where member_id = ? and coupon_id = 6";
+			
+	        return jdbc.queryForObject(sql, Integer.class, id);
+		}
+		
+		// 단풍 명소 10% 쿠폰 발급
+		public int insertAutumn(String id) {
+			String sql = "insert into members_coupon "
+	                + "(member_coupon_id, coupon_id, member_id, issue_date, expire_date, status) "
+	                + "select member_coupon_seq.nextval, coupon_id, ?, sysdate, "
+	                + "least(end_date, add_months(sysdate, 3)), 'AVAILABLE' "
+	                + "from coupon "
+	                + "where coupon_id = 6 "
+	                + "and active_yn = 'Y' "
+	                + "and start_date <= sysdate "
+	                + "and end_date >= sysdate";
+			
+			return jdbc.update(sql, id);
+		}
 }
