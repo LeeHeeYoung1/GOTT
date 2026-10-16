@@ -222,30 +222,30 @@
 		<c:choose>
 			<c:when test="${not empty planList}">
 				<c:forEach var="plan" items="${planList}">
-					<a
-						href="/travelPlan/detail?planId=${plan.plan_id}&cpage=${cpage}&region=${region}&nights=${nights}&sort=${sort}""
-						class="planCardLink">
-						<div class="planCard">
-							<span class="publicLabel">공개 일정</span>
-							<h3>
-								<c:out value="${plan.plan_title}" />
-							</h3>
-							<p>
-								여행 시작일:
-								<fmt:formatDate value="${plan.start_date}" pattern="yyyy-MM-dd" />
-							</p>
-							<p>
-								여행 종료일:
-								<fmt:formatDate value="${plan.end_date}" pattern="yyyy-MM-dd" />
-							</p>
-							<p>
-								여행 인원:
-								<c:out value="${plan.person_count}" />
-								명
-							</p>
-							<span class="detailLink">일정 자세히 보기 →</span>
-						</div>
-					</a>
+				    <c:if test="${plan.is_public eq 'Y'}">
+				        <a href="/travelPlan/detail?planId=${plan.plan_id}&cpage=${cpage}&region=${region}&nights=${nights}&sort=${sort}"
+				            class="planCardLink">
+				            <div class="planCard">
+				                <span class="publicLabel">공개 일정</span>
+				                <h3>
+				                    <c:out value="${plan.plan_title}" />
+				                </h3>
+				                <p>
+				                    여행 시작일:
+				                    <fmt:formatDate value="${plan.start_date}" pattern="yyyy-MM-dd" />
+				                </p>
+				                <p>
+				                    여행 종료일:
+				                    <fmt:formatDate value="${plan.end_date}" pattern="yyyy-MM-dd" />
+				                </p>
+				                <p>
+				                    여행 인원:
+				                    <c:out value="${plan.person_count}" />명
+				                </p>
+				                <span class="detailLink">일정 자세히 보기 →</span>
+				            </div>
+				        </a>
+				    </c:if>
 				</c:forEach>
 			</c:when>
 			<c:otherwise>

@@ -400,7 +400,8 @@ $(function() {
         paymentButton.disabled = true;
 
         try {
-            const paymentId = "GOTT-" + crypto.randomUUID();
+        	const paymentId = "GOTT_" + Date.now() + "_"
+            + Math.random().toString(36).substring(2, 10);
 
             const response = await PortOne.requestPayment({
                 storeId: "store-d4a75cb3-13cc-4226-b7fc-33d40089bf40",
