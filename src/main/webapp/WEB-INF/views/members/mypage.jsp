@@ -302,24 +302,34 @@
 														</p>
 														<p>결제금액 ${rs.price}원</p>
 													</div>
+
 													<div class="reservationCondition">
-														<button type="button" disabled>
-															<c:choose>
-																<c:when test="${reservationType eq 'completed'}">이용 완료</c:when>
-																<c:when test="${reservationType eq 'cancelled'}">예약취소</c:when>
-																<c:otherwise>예약완료</c:otherwise>
-															</c:choose>
-														</button>
-														<button type="button" class="detailBtn">예약 상세</button>
-														<c:if test="${rs.reservationType eq 'upcoming'}">
-														    <button type="button" class="updateBtn"
-														        data-payment-id="${rs.paymentId}"
-														        data-checkin="${rs.checkIn}">예약 변경</button>
-														
-														    <button type="button" class="cancelBtn"
-														        data-payment-id="${rs.paymentId}">예약 취소</button>
-														</c:if>
+													    <button type="button" disabled>
+													        <c:choose>
+													            <c:when test="${rs.status eq '예약취소'}">
+													                예약취소
+													            </c:when>
+													            <c:when test="${rs.status eq '이용완료'}">
+													                이용 완료
+													            </c:when>
+													            <c:otherwise>
+													                예약완료
+													            </c:otherwise>
+													        </c:choose>
+													    </button>
+													
+													    <button type="button" class="detailBtn">예약 상세</button>
+													
+													    <c:if test="${rs.reservationType eq 'upcoming'}">
+													        <button type="button" class="updateBtn"
+													            data-payment-id="${rs.paymentId}"
+													            data-checkin="${rs.checkIn}">예약 변경</button>
+													
+													        <button type="button" class="cancelBtn"
+													            data-payment-id="${rs.paymentId}">예약 취소</button>
+													    </c:if>
 													</div>
+
 												</div>
 												<div class="flipCardBack">
 													<div class="reservationInfo">
