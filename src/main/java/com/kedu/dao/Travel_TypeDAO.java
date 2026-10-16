@@ -66,4 +66,6 @@ public class Travel_TypeDAO {
 
         return jdbc.update(sql, memberId);
     }
+    
+    
 }
