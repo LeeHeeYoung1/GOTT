@@ -22,7 +22,7 @@ public class MembersDAO {
 	public int login(MembersDTO mdto) {
 		
 		String pw = EncryptionUtils.encryptSHA512(mdto.getPw());
-		String sql = "select count(*) from members where id=? and pw=? and active_yn='y'";
+		String sql = "select count(*) from members where id=? and pw=? and active_yn='Y'";
 		return jdbc.queryForObject(sql, Integer.class, mdto.getId(), pw);
 	}
 	
@@ -39,7 +39,7 @@ public class MembersDAO {
 
 	@Transactional
 	public int signup(MembersDTO mdto) {
-	    String sql = "INSERT INTO members VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP, 2000, 'user', ?, 'y')";
+	    String sql = "INSERT INTO members VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSTIMESTAMP, 2000, 'user', ?, 'Y')";
 	    int result = jdbc.update(sql, mdto.getId(), mdto.getPw(), mdto.getName(), mdto.getNickname(),
 	            mdto.getPhone(), mdto.getEmail(), mdto.getGender(), mdto.getDob(), mdto.getZipcode(),
 	            mdto.getAddress1(), mdto.getAddress2(), mdto.getPrivacy_agree());
@@ -64,7 +64,7 @@ public class MembersDAO {
 
 	
 	public MembersDTO selectById(String id) {
-		String sql = "select * from members where id=? and active_yn = 'y'";
+		String sql = "select * from members where id=? and active_yn = 'Y'";
 		try {
 			return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(MembersDTO.class), id);
 		} catch (EmptyResultDataAccessException e) {
@@ -78,7 +78,7 @@ public class MembersDAO {
 	}
 
 	public int deleted(String id, MembersDTO mdto) {
-	    String sql = "update members set active_yn = 'n' where id = ? and pw =? and active_yn = 'y'";
+	    String sql = "update members set active_yn = 'n' where id = ? and pw =? and active_yn = 'Y'";
 	    return jdbc.update(sql, id, mdto.getPw());
 	}
 	
