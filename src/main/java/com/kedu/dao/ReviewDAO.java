@@ -101,12 +101,22 @@ public class ReviewDAO {
 	}
 
 	public ArrayList<ReviewDTO> selectMyReview(String memberId, int cpage, int pagesize) {
-		int start = (cpage - 1) * pagesize + 1;
-		int end = cpage * pagesize;
-		String sql = "SELECT * FROM (" + "SELECT r.*, ROW_NUMBER() OVER (ORDER BY r.reg_date DESC) AS rn "
-				+ "FROM review r WHERE r.member_id = ?" + ") WHERE rn BETWEEN ? AND ?";
-		return (ArrayList<ReviewDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), memberId, start,
-				end);
+	    int start = (cpage - 1) * pagesize + 1;
+	    int end = cpage * pagesize;
+
+	    String sql = "SELECT * FROM ("
+	            + "SELECT r.*, "
+	            + "(SELECT COUNT(*) FROM review_recommend rr "
+	            + "WHERE rr.review_seq = r.seq) AS recommend_count, "
+	            + "ROW_NUMBER() OVER (ORDER BY r.reg_date DESC) AS rn "
+	            + "FROM review r WHERE r.member_id = ?"
+	            + ") WHERE rn BETWEEN ? AND ?";
+
+	    return (ArrayList<ReviewDTO>) jdbc.query(
+	            sql,
+	            new BeanPropertyRowMapper<>(ReviewDTO.class),
+	            memberId, start, end
+	    );
 	}
 
 	public int countMyReview(String memberId) {

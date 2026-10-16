@@ -15,150 +15,160 @@ public class PlaceDAO {
     @Autowired
     private JdbcTemplate jdbc;
 
-    public List<PlaceDTO> search(String keyword, String type, int start, int end) {
 
-        if(keyword == null) {
-            keyword = "";
-        }
+public List<PlaceDTO> search(String keyword, String type, int start, int end) {
 
-        if(type == null) {
-            type = "전체";
-        }
+    if(keyword == null) {
+        keyword = "";
+    }
 
-        String search = "%" + keyword + "%";
-        String sql;
+    if(type == null) {
+        type = "전체";
+    }
 
-        if(type.equals("전체")) {
+    String[] words = keyword.trim().split("\\s+");
 
-            if(keyword.equals("")) {
-                sql = "select * from "
-                    + "(select Place.*, row_number() over(order by name) rn "
-                    + "from Place) "
-                    + "where rn between ? and ?";
+    String sql = "select * from "
+               + "(select Place.*, row_number() over(order by name) rn "
+               + "from Place where 1=1 ";
 
-                return jdbc.query(sql,
-                    new BeanPropertyRowMapper<>(PlaceDTO.class),
-                    start, end);
+    List<Object> params = new java.util.ArrayList<>();
+
+    if(!keyword.trim().isEmpty()) {
+
+        for(int i = 0; i < words.length; i++) {
+
+            String word = words[i];
+
+            if(word.equals("전라도")) {
+
+                sql += "and ((name like ? or region like ? or sigungu like ?) "
+                     + "or region like ?) ";
+
+                params.add("%전라%");
+                params.add("%전라%");
+                params.add("%전라%");
+                params.add("%전북%");
+
+            } else {
+
+                if(word.endsWith("도") && word.length() > 1) {
+                    word = word.substring(0, word.length() - 1);
+                }else if(word.endsWith("시") && word.length() > 1) {
+                    word = word.substring(0, word.length() - 1);
+                }
+                String search = "%" + word + "%";
+
+                sql += "and (name like ? or region like ? or sigungu like ?) ";
+
+                params.add(search);
+                params.add(search);
+                params.add(search);
             }
-
-            sql = "select * from "
-                + "(select Place.*, row_number() over(order by name) rn "
-                + "from Place "
-                + "where name like ? "
-                + "or region like ? "
-                + "or sigungu like ?) "
-                + "where rn between ? and ?";
-
-            return jdbc.query(sql,
-                new BeanPropertyRowMapper<>(PlaceDTO.class),
-                search, search, search, start, end);
-
-        } else {
-
-            String dbType = type;
-
-            if(type.equals("관광지")) {
-                dbType = "SPOT";
-            } else if(type.equals("맛집")) {
-                dbType = "FOOD";
-            } else if(type.equals("숙박업소")) {
-                dbType = "STAY";
-            }
-
-            if(keyword.equals("")) {
-                sql = "select * from "
-                    + "(select Place.*, row_number() over(order by name) rn "
-                    + "from Place where place_type = ?) "
-                    + "where rn between ? and ?";
-
-                return jdbc.query(sql,
-                    new BeanPropertyRowMapper<>(PlaceDTO.class),
-                    dbType, start, end);
-            }
-
-            sql = "select * from "
-                + "(select Place.*, row_number() over(order by name) rn "
-                + "from Place "
-                + "where (name like ? "
-                + "or region like ? "
-                + "or sigungu like ?) "
-                + "and place_type = ?) "
-                + "where rn between ? and ?";
-
-            return jdbc.query(sql,
-                new BeanPropertyRowMapper<>(PlaceDTO.class),
-                search, search, search, dbType, start, end);
         }
     }
 
-    public int searchCount(String keyword, String type) {
+    String dbType = type;
 
-        if(keyword == null) {
-            keyword = "";
-        }
+    if(type.equals("관광지")) {
+        dbType = "SPOT";
+    } else if(type.equals("맛집")) {
+        dbType = "FOOD";
+    } else if(type.equals("숙박업소")) {
+        dbType = "STAY";
+    }
 
-        if(type == null) {
-            type = "전체";
-        }
+    if(!dbType.equals("전체")) {
+        sql += "and place_type = ? ";
+        params.add(dbType);
+    }
 
-        String search = "%" + keyword + "%";
-        String sql;
+    sql += ") where rn between ? and ?";
 
-        if(keyword.equals("")) {
+    params.add(start);
+    params.add(end);
 
-            if(type.equals("전체")) {
-                sql = "select count(*) from Place";
+    return jdbc.query(
+        sql,
+        new BeanPropertyRowMapper<>(PlaceDTO.class),
+        params.toArray()
+    );
+}
 
-                return jdbc.queryForObject(sql, Integer.class);
+
+
+public int searchCount(String keyword, String type) {
+
+    if(keyword == null) {
+        keyword = "";
+    }
+
+    if(type == null) {
+        type = "전체";
+    }
+
+    String[] words = keyword.trim().split("\\s+");
+
+    String sql = "select count(*) from Place where 1=1 ";
+
+    List<Object> params = new java.util.ArrayList<>();
+
+    if(!keyword.trim().isEmpty()) {
+
+        for(int i = 0; i < words.length; i++) {
+
+            String word = words[i];
+
+            if(word.equals("전라도")) {
+
+                sql += "and ((name like ? or region like ? or sigungu like ?) "
+                     + "or region like ?) ";
+
+                params.add("%전라%");
+                params.add("%전라%");
+                params.add("%전라%");
+                params.add("%전북%");
+
+            } else {
+
+                if(word.endsWith("도") && word.length() > 1) {
+                    word = word.substring(0, word.length() - 1);
+                }else if(word.endsWith("시") && word.length() > 1) {
+                    word = word.substring(0, word.length() - 1);
+                }
+                String search = "%" + word + "%";
+
+                sql += "and (name like ? or region like ? or sigungu like ?) ";
+
+                params.add(search);
+                params.add(search);
+                params.add(search);
             }
-
-            String dbType = type;
-
-            if(type.equals("관광지")) {
-                dbType = "SPOT";
-            } else if(type.equals("맛집")) {
-                dbType = "FOOD";
-            } else if(type.equals("숙박업소")) {
-                dbType = "STAY";
-            }
-
-            sql = "select count(*) from Place where place_type = ?";
-
-            return jdbc.queryForObject(sql, Integer.class, dbType);
-        }
-
-        if(type.equals("전체")) {
-
-            sql = "select count(*) from Place "
-                + "where name like ? "
-                + "or region like ? "
-                + "or sigungu like ?";
-
-            return jdbc.queryForObject(sql,
-                Integer.class, search, search, search);
-
-        } else {
-
-            String dbType = type;
-
-            if(type.equals("관광지")) {
-                dbType = "SPOT";
-            } else if(type.equals("맛집")) {
-                dbType = "FOOD";
-            } else if(type.equals("숙박업소")) {
-                dbType = "STAY";
-            }
-
-            sql = "select count(*) from Place "
-                + "where (name like ? "
-                + "or region like ? "
-                + "or sigungu like ?) "
-                + "and place_type = ?";
-
-            return jdbc.queryForObject(sql,
-                Integer.class, search, search, search, dbType);
         }
     }
+
+    String dbType = type;
+
+    if(type.equals("관광지")) {
+        dbType = "SPOT";
+    } else if(type.equals("맛집")) {
+        dbType = "FOOD";
+    } else if(type.equals("숙박업소")) {
+        dbType = "STAY";
+    }
+
+    if(!dbType.equals("전체")) {
+        sql += "and place_type = ? ";
+        params.add(dbType);
+    }
+
+    return jdbc.queryForObject(
+        sql,
+        Integer.class,
+        params.toArray()
+    );
+}
+
 
     public List<String> searchKeyword(String keyword) {
 
