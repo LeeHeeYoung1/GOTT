@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!DOCTYPE html>
-<html>
-<head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/css/public.css">
@@ -221,9 +220,7 @@
 
 
     </style>
-</head>
 
-<body>
 
 <div class="container">
     <div class="header flex-between">
@@ -281,13 +278,7 @@
             </fieldset>
         </form>
     </div>
-    <hr>
-    <div class="footer">
-        <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-        <p>회사명 : GOTT | 대표 : ??? | 사업자등록번호 : 123-45-67890</p>
-        <p>이용약관 | 개인정보처리방침 | 고객센터</p>
-        <div class="textbox">사이트로고</div>
-    </div>
+
 </div>
 
 <script>
@@ -337,6 +328,4 @@
     })
 
 </script>
-
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
