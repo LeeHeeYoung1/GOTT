@@ -88,7 +88,7 @@ $("#cancelBtn").on("click", async function () {
 
         if (text.trim() === "OK") {
             alert("결제가 취소되었습니다.");
-            location.href = "/reservation/list";
+            location.href = "/reservation/list?cpage=1";
         } else {
             // 에러 메시지 표시
             document.getElementById("msg").textContent = text;

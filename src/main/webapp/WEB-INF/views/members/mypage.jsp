@@ -697,7 +697,7 @@
 		
 		        const today = new Date().toISOString().slice(0, 10);
 		        if (checkIn === today) {
-		            alert("체크인 당일에는 예약 변경이 불가합니다.");
+		            alert("바로결제 후 취소 아니면, 체크인 당일에는 예약 변경이 불가합니다.");
 		            return;
 		        }
 		
