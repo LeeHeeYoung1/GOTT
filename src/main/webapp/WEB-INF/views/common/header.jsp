@@ -24,6 +24,15 @@
             position: relative;
             padding-top: 70px;
         }
+        #footerLogo {
+        	width:120px;
+        	height:60px;	
+        }
+        
+        #footerLogo>img {
+        	width:100%;
+        	height:100%;
+        }
         .header {
             width: 100%;
             height: 100px;
