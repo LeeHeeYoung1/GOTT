@@ -38,4 +38,8 @@ public class TravelPlanReplyDAO {
 		return jdbc.update(sql, contents, seq);
 	}
 	
+	public int tprDeleteByPlanId(int planId) {
+		String sql = "delete from travel_plan_reply where plan_id = ?";
+		return jdbc.update(sql, planId);
+	}
 }
