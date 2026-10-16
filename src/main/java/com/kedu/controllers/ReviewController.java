@@ -102,6 +102,9 @@ public class ReviewController {
 	
 	@RequestMapping("/write")
 	public String write(ReviewDTO dto) {
+		if (dto.getTag() == null) {
+			dto.setTag("");
+		}
 		rdao.insert(dto);
 		return "redirect:/review/reviewBoard?cpage=1";
 	}
