@@ -106,7 +106,6 @@ public class ReviewController {
 		if (loginId == null) {
 			return "redirect:/members/loginpage";
 		}
-
 		dto.setMember_id(loginId);
 		rdao.insert(dto);
 		return "redirect:/review/reviewBoard?cpage=1";
