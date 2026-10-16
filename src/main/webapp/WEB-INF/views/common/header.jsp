@@ -24,9 +24,18 @@
             position: relative;
             padding-top: 70px;
         }
+        #footerLogo {
+        	width:120px;
+        	height:60px;	
+        }
+        
+        #footerLogo>img {
+        	width:100%;
+        	height:100%;
+        }
         .header {
             width: 100%;
-            height: 70px;
+            height: 100px;
             background-color: rgba(255, 255, 255, 0.95);
             position : fixed;
             top: 0;
@@ -38,9 +47,13 @@
         }
         
         .logobox {
-            width: 120px;
-            height: 70px;
+        	position : fixed;
+            width: 220px;
+            height: 110px;
             margin-left: 0px;
+            top:-5px;
+            z-index:150;
+            left:70px;
         }
 
         .logobox img {
@@ -54,8 +67,8 @@
         }
 
         .textzone {
-            font-size: 15px;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: bold;
             cursor: pointer;
         }
 
@@ -212,14 +225,13 @@
 </head>
 
 <body>
-
-<div class="container">
-    <div class="header flex-between">
-        <div class="logobox">
+<div class="logobox">
             <a href="/"><img src="/images/logo.png" alt="GOTT 로고"></a>
         </div>
-        <div class="navi flex-between">
-            <div class="textzone"><a href="/members/tourTypeTest">여행성향 테스트</a></div>
+<div class="container">
+   <div class="header flex-between">
+	 <div class="navi flex-between">
+            <div class="textzone" style="margin-left:140px;"><a href="/members/tourTypeTest">여행성향 테스트</a></div>
             <div class="textzone"><a href="/place/mappage">지역</a></div>
             <div class="textzone"><a href="${pageContext.request.contextPath}/place/search?keyword=&type=전체&cpage=1">여행지</a></div>
             <div class="textzone"><a href="/reservation/list?cpage=1">숙박업소</a></div>

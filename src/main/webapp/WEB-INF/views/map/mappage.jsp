@@ -11,7 +11,10 @@
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ea87fc26ee3f75472cb75c454c18b302&libraries=services"></script>
 
 <style>
-
+	
+	.container {
+		padding-top:18px;
+	}
 	.mapContainer {
 		width: 100%;
 	    height: 750px;

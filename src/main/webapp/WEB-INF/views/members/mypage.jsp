@@ -13,6 +13,7 @@
 <script
 	src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <title>GOTT 마이페이지</title>
+
 </head>
 <body>
 	<c:if test="${not empty tourTypeMessage}">
@@ -489,7 +490,7 @@
 											</span>
 										</div>
 										<p class="reviewLike">
-											좋아요 <strong>${rv.rating}</strong>
+											⭐ <strong>${rv.rating}</strong>
 										</p>
 										<p class="reviewDescription">${rv.contents}</p>
 										<c:if test="${not empty rv.tag}">
