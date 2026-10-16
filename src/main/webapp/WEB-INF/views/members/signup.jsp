@@ -297,6 +297,33 @@
 		    margin: 0;
 		    cursor: pointer;
 		}
+		.pw-guide {
+		    margin: 0 0 10px;
+		    padding: 12px 15px;
+		    background-color: #f8fafc;
+		    border: 1px solid #e5e7eb;
+		    border-radius: 6px;
+		    font-size: 12px;
+		    color: #64748b;
+		}
+		
+		.pw-guide p {
+		    margin: 0 0 5px;
+		    font-weight: bold;
+		    color: #334155;
+		}
+		
+		.pw-guide ul {
+		    margin: 0;
+		    padding-left: 18px;
+		    line-height: 1.7;
+		}
+		
+		.pwresult {
+		    display: block;
+		    margin-bottom: 10px;
+		    font-size: 12px;
+		}
        
     </style>
 </head>
@@ -327,8 +354,13 @@
                 <button id="idcheck" type="button">ID중복검사</button>
                 <span class="idcheckresult"></span>
                 <input id="pw" name="pw" type="password" placeholder="Password를 입력하세요">
-                <input id="pw2" type="password" placeholder="Password를 재입력하세요">
+                <div class="pw-guide" id="pwGuide">
+				    <p>비밀번호 작성 조건</p>
+				    <ul><li>대문자/소문자/숫자로 8자 이상</li></ul>
+				</div>
                 <span class="pwresult"></span>
+                <input id="pw2" type="password" placeholder="Password를 재입력하세요">
+                <span class="pw2result"></span>
                 
                 <input name="name" type="text" placeholder="이름을 입력하세요">
                 <input id="nickname" name="nickname" type="text" placeholder="닉네임을 입력하세요">
@@ -337,11 +369,11 @@
 
                 <input id="phone" name="phone" type="text" placeholder="'-' 를 제외한 번호를 입력하세요">
                 <input id="email" name="email" type="email" placeholder="email을 입력하세요.">
-                <span>* 성별을 선택하세요</span>
+                <span style="color: red;">* 성별을 선택하세요</span>
                 <input class="gender" name="gender" type="radio" value="남성">남성
                 <input class="gender" name="gender" type="radio" value="여성">여성
 
-                <input name="dob" type="date" style="margin-top: 5px;">
+                <input name="dob" type="date" style="margin-top: 5px;" max="<%= java.time.LocalDate.now() %>">
 
                 <input id="zipcode" name="zipcode" type="text" readonly placeholder="우편번호">
                 <button id="postbtn" type="button">주소 찾기</button>
@@ -386,12 +418,13 @@
     let phoneregex = /^010[0-9]{8}$/
     
     $("#idcheck").on("click", function(){
-        let id = $("#id").val();
-
-        if(id=="") {
-            alert("아이디를 입력해주세요.")
+    	
+    	let id = $("#id").val();
+        if (id == "") {
+            alert("아이디를 입력해주세요.");
             return;
         }
+
         $.ajax({
             url:"/members/idcheck",
             data:{id: id}
@@ -410,14 +443,41 @@
         $(this).removeAttr("check");
         $(".idcheckresult").text("");
     });
-
     
+    $("#pw").on("input", function(){
+    	let pw = $("#pw").val();
+        let span = $(".pwresult");
+        
+        if(pw == "") {
+        	span.text("");
+        	$("#pwGuide").show();
+        	return;
+        }
+        
+        	let pw1regex = /[A-Z]/
+            let pw2regex = /[a-z]/
+            let pw3regex = /[0-9]/
+            let pw4regex = /^[A-Z0-9a-z]{8,}$/
 
+           	if (pw1regex.test(pw) &&
+            	pw2regex.test(pw) &&
+            	pw3regex.test(pw) &&
+            	pw4regex.test(pw)) {
+
+            	span.text("비밀번호가 유효합니다.").css("color", "green");
+            	$("#pwGuide").hide();
+            	
+           	} else {
+            	span.text("비밀번호가 유효하지 않습니다.").css("color", "red");
+            	$("#pwGuide").show();
+            }
+    });
+    
     $("#pw2").on("input", function(){
 
         let pw = $("#pw").val();
         let pw2 = $("#pw2").val();
-        let span = $(".pwresult");
+        let span = $(".pw2result");
 
         if(pw2 == "") {
             span.text("");
@@ -430,32 +490,7 @@
             span.text("비밀번호가 일치하지 않습니다.").css("color", "red");
         }
 
-        let pw1regex = /[A-Z]/
-        let pw2regex = /[a-z]/
-        let pw3regex = /[0-9]/
-        let pw4regex = /^[A-Z0-9a-z]{8,}$/
-
-        if(!pw1regex.test(pw)) {
-            alert("비밀번호에 대문자를 포함해주세요.");
-            return false;
-        }
-
-        if(!pw2regex.test(pw)) {
-            alert("비밀번호에 소문자를 포함해주세요.");
-            return false;
-        }
-
-        if(!pw3regex.test(pw)) {
-            alert("비밀번호에 숫자를 포함해주세요.");
-            return false;
-        }
-
-        if(!pw4regex.test(pw)) {
-            alert("비밀번호는 영문과 숫자로 8자 이상 입력해주세요.");
-            return false;
-        }
-
-    })
+    });
     
     $("#nicknamecheck").on("click", function(){
         let nickname = $("#nickname").val();

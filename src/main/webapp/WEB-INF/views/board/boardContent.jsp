@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!DOCTYPE html>
-<html>
-<head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,17 +12,7 @@
 <title>GOTT 게시글</title>
 
 <style>
-* {
-	box-sizing: border-box;
-}
 
-body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	font-size: 16px;
-	line-height: 1.5;
-}
 
 a {
 	color: inherit;
@@ -89,14 +77,6 @@ hr {
 	border: 0;
 	border-top: 1px solid #e5e5e5;
 	margin: 0;
-}
-
-/* 메인 */
-.main {
-	width: 1200px;
-	max-width: calc(100% - 40px);
-	margin: 0 auto;
-	padding-bottom: 80px;
 }
 
 /* 제목 */
@@ -465,100 +445,46 @@ hr {
 }
 
 </style>
-
-</head>
-
-<body>
-
-	<!-- 상단바 -->
-
-	<div class="headercontainer">
-
-		<div class="logoBox">
-			<a href="/"> <img src="/images/logo.png" alt="GOTT 로고">
-			</a>
-		</div>
-
-		<nav class="nav">
-			<a href="#">이벤트</a> <a href="#">지역</a> <a href="#">추천여행지</a> <a
-				href="#">숙박업소</a> <a href="#">리뷰</a> <a href="#">여행 플래너</a> <a
-				href="#">공지사항</a>
-		</nav>
-
-		<div class="signBox">
-			<a href="/members/mypage">마이페이지</a> <a href="/members/logout">로그아웃</a>
-		</div>
-
-		<div class="menu-icon">☰</div>
-
-	</div>
-
-	<hr>
-
-
 	<!-- 메인 -->
-
-	<div class="main">
-
+	<div class="container">
 		<div class="titleBox">
-
 			<h2>게시판</h2>
-
 			<h5>여행후기, 맛집, 관광지, 액티비티, 꿀팁까지 자유롭게 나눠보세요.</h5>
-
 		</div>
 
 
 		<div class="breadcrumb">
-
 			홈 &nbsp;>&nbsp; 자유게시판 &nbsp;>&nbsp; <span>게시글</span>
-
 		</div>
-
-
 		<!-- 게시글 -->
-
 		<div class="contentsBox">
-
 			<!-- 제목 -->
-
 			<div class="contentsTitle">
-
-				<h3 class="boardTitle">${boardContent.title}</h3>
-
+				<h3 class="boardTitle">
+					${boardContent.title}
+				</h3>
 				<div class="contentsInfo">
-
 					<span>작성자 ${boardContent.writer}</span> <span>조회수
 						${boardContent.view_count}</span> <span>
 						${boardContent.write_date.toString().substring(0, 10)}<br>
 					</span>
-
 				</div>
-
 			</div>
 
 			<!-- 첨부파일 -->
 
 			<c:if test="${not empty flist}">
-
 				<div class="fileBox">
-
-					<div class="fileTitle">첨부파일</div>
-
-					<div class="fileList">
-
-						<c:forEach var="i" items="${flist}">
-
-							<a
-								href="/board/download?oriname=${i.oriname}&sysname=${i.sysname}">
-								${i.oriname} </a>
-
-						</c:forEach>
-
+					<div class="fileTitle">
+						첨부파일
 					</div>
-
+					<div class="fileList">
+						<c:forEach var="i" items="${flist}">
+							<a href="/board/download?oriname=${i.oriname}&sysname=${i.sysname}">
+								${i.oriname} </a>
+						</c:forEach>
+					</div>
 				</div>
-
 			</c:if>
 
 			<!-- 내용 -->
@@ -569,47 +495,33 @@ hr {
 
 			<div class="buttonBox">
 
-    <button class="recommendBtn" type="button">
-        <span class="heart ${checkRecommend > 0 ? 'active' : ''}">
-            ${checkRecommend > 0 ? '♥' : '♡'}
-        </span>
-        <span class="recommendCount">${recommendCount}</span>
-    </button>
-
-    <c:if test="${nickname == boardContent.writer}">
-
-        <button class="boardUpdate" type="button">
-            수정
-        </button>
-
-        <button class="boardUpdateCom" type="button" style="display: none;">
-            수정완료
-        </button>
-
-        <button class="boardBack" type="button" style="display: none;">
-            취소
-        </button>
-
-    </c:if>
-
-    <c:if test="${nickname == boardContent.writer or sessionScope.role == 'admin'}">
-
-        <button class="boardDelete" type="button">
-            삭제
-        </button>
-
-    </c:if>
-
-    <button id="goBack">목록</button>
-
-</div>
-
+		    	<button class="recommendBtn" type="button">
+			        <span class="heart ${checkRecommend > 0 ? 'active' : ''}">
+			            ${checkRecommend > 0 ? '♥' : '♡'}
+			        </span>
+			        <span class="recommendCount">${recommendCount}</span>
+			    </button>
+			    <c:if test="${nickname == boardContent.writer}">
+			        <button class="boardUpdate" type="button">
+			            수정
+			        </button>
+			        <button class="boardUpdateCom" type="button" style="display: none;">
+			            수정완료
+			        </button>
+			        <button class="boardBack" type="button" style="display: none;">
+			            취소
+			        </button>
+			    </c:if>
+			    <c:if test="${nickname == boardContent.writer or sessionScope.role == 'admin'}">
+			        <button class="boardDelete" type="button">삭제</button>
+			    </c:if>
+			    <button id="goBack">목록</button>
+		
+			</div>
+			
 		</div>
-
-	</div>
-	<hr>
-
-	<div class="replyBox">
+			<hr>
+		<div class="replyBox">
 		<div class="replyHeader">
 			<h3>댓글</h3>
 			<span>${replyCount}</span>
@@ -626,93 +538,97 @@ hr {
 			</div>
 		</form>
 
-<div class="replyList">
+		<div class="replyList">
+		
+		    <c:forEach var="reply" items="${replyList}">
+		
+		        <div class="reply ${not empty reply.parent_seq ? 'replyChild' : ''}">
+		
+		            <input type="hidden" class="replySeq" value="${reply.seq}">
+		
+		            <div class="replyInfo">
+		                <strong>${reply.writer}</strong>
+		                <span>${reply.write_date.toString().substring(0, 10)}</span>
+		            </div>
+		
+		            <div class="replyContents">${reply.contents}</div>
+		
+		            <!-- 원댓글에만 답글 버튼 표시 -->
+		            <c:if test="${empty reply.parent_seq}">
+		                <button type="button" class="replyAdd"
+		                    onclick="showReplyForm(this)">
+		                    답글
+		                </button>
+		            </c:if>
+		
+		            <!-- 대댓글 작성 폼 -->
+		            <div class="replyFormArea" style="display: none;">
+		
+		                <form action="/reply/writeReply" method="post">
+		
+		                    <input type="hidden" name="board_seq"
+		                        value="${boardContent.seq}">
+		
+		                    <input type="hidden" name="parent_seq"
+		                        value="${reply.seq}">
+		
+		                    <input type="hidden" name="cpage"
+		                        value="${cpage}">
+		
+		                    <textarea name="contents"
+		                        placeholder="답글을 입력해주세요." required></textarea>
+		
+		                    <button type="submit">답글 작성</button>
+		
+		                    <button type="button"
+		                        onclick="this.closest('.replyFormArea').style.display='none'">
+		                        취소
+		                    </button>
+		
+		                </form>
+		
+		            </div>
+		
+		            <!-- 기존 댓글 수정 및 삭제 -->
+		            <div class="replyButton">
+		
+		                <c:if test="${nickname == reply.writer}">
+		
+		                    <button class="update" type="button">수정</button>
+		
+		                    <button class="updateCom" type="button"
+		                        style="display: none;">
+		                        수정완료
+		                    </button>
+		
+		                    <button class="back" type="button"
+		                        style="display: none;">
+		                        취소
+		                    </button>
+		
+		                </c:if>
+		
+		                <c:if test="${nickname == reply.writer or sessionScope.role == 'admin'}">
+		
+		                    <button class="delete" type="button"
+		                        onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}&cpage=${cpage}'">
+		                        삭제
+		                    </button>
+		
+		                </c:if>
+		
+		            </div>
+		
+		        </div>
+		
+		    </c:forEach>
+		
+		</div>
+		</div>
+	</div>
 
-    <c:forEach var="reply" items="${replyList}">
 
-        <div class="reply ${not empty reply.parent_seq ? 'replyChild' : ''}">
-
-            <input type="hidden" class="replySeq" value="${reply.seq}">
-
-            <div class="replyInfo">
-                <strong>${reply.writer}</strong>
-                <span>${reply.write_date.toString().substring(0, 10)}</span>
-            </div>
-
-            <div class="replyContents">${reply.contents}</div>
-
-            <!-- 원댓글에만 답글 버튼 표시 -->
-            <c:if test="${empty reply.parent_seq}">
-                <button type="button" class="replyAdd"
-                    onclick="showReplyForm(this)">
-                    답글
-                </button>
-            </c:if>
-
-            <!-- 대댓글 작성 폼 -->
-            <div class="replyFormArea" style="display: none;">
-
-                <form action="/reply/writeReply" method="post">
-
-                    <input type="hidden" name="board_seq"
-                        value="${boardContent.seq}">
-
-                    <input type="hidden" name="parent_seq"
-                        value="${reply.seq}">
-
-                    <input type="hidden" name="cpage"
-                        value="${cpage}">
-
-                    <textarea name="contents"
-                        placeholder="답글을 입력해주세요." required></textarea>
-
-                    <button type="submit">답글 작성</button>
-
-                    <button type="button"
-                        onclick="this.closest('.replyFormArea').style.display='none'">
-                        취소
-                    </button>
-
-                </form>
-
-            </div>
-
-            <!-- 기존 댓글 수정 및 삭제 -->
-            <div class="replyButton">
-
-                <c:if test="${nickname == reply.writer}">
-
-                    <button class="update" type="button">수정</button>
-
-                    <button class="updateCom" type="button"
-                        style="display: none;">
-                        수정완료
-                    </button>
-
-                    <button class="back" type="button"
-                        style="display: none;">
-                        취소
-                    </button>
-
-                </c:if>
-
-                <c:if test="${nickname == reply.writer or sessionScope.role == 'admin'}">
-
-                    <button class="delete" type="button"
-                        onclick="location.href='/reply/delete?seq=${reply.seq}&board_seq=${boardContent.seq}&cpage=${cpage}'">
-                        삭제
-                    </button>
-
-                </c:if>
-
-            </div>
-
-        </div>
-
-    </c:forEach>
-
-</div>
-</div>
+	
 <script>
 
 
@@ -946,5 +862,4 @@ goBack.onclick = function() {
 };
 
 </script>
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
