@@ -43,4 +43,9 @@ public class TravelPlanScrapDAO {
 		String sql = "select plan_id from (select plan_id, count(*) cn from travel_plan_scrap group by plan_id order by cn desc) where ROWNUM <= 5";
 		return jdbc.queryForList(sql, Integer.class);
 	}
+	
+	public int tpsDeleteByPlanId(int planId) {
+		String sql = "delete from travel_plan_scrap where plan_id = ?";
+		return jdbc.update(sql, planId);
+	}
 }

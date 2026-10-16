@@ -73,8 +73,12 @@ public class DashBoardController {
 			topFivePlanPlaceId.add(tpdao.getPlaceId(i));
 		}
 		
-		for (int i : topFivePlanPlaceId) {
-			topFivePlanImages.add(tpdao.placeImagename(i));
+		for (Integer i : topFivePlanPlaceId) {
+			if (i == null) {
+				topFivePlanImages.add(null);
+			} else {
+				topFivePlanImages.add(tpdao.placeImagename(i));
+			}
 		}
 		
 		model.addAttribute("totalMembers", mdao.totalMembers());

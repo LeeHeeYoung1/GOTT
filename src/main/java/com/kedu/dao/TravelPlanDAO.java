@@ -442,12 +442,14 @@ public class TravelPlanDAO {
  		return jdbc.queryForList(sql, loginId);
  	}
  	
-    public String placeImagename(int placeId) {
-		
+ 	public String placeImagename(int placeId) {
 		String sql = "select image_name from place where place_id = ?";
-		
-		return jdbc.queryForObject(sql, String.class, placeId);
-		
+		List<String> list = jdbc.queryForList(sql, String.class, placeId);
+		if (list.size() == 0) {
+			return null;
+		} else {
+			return list.get(0);
+		}
 	}
     
     public int recordCount() {
@@ -460,11 +462,14 @@ public class TravelPlanDAO {
     	return jdbc.queryForObject(sql, new BeanPropertyRowMapper<>(TravelPlanDTO.class), plan_id);
     }
     
-	public Integer getPlaceId(int plan_id) {
-		
+    public Integer getPlaceId(int plan_id) {
 		String sql = "select place_id from (select place_id from travel_plan_detail where plan_id = ? order by day_no, visit_order) where rownum = 1";
-		
-		return jdbc.queryForObject(sql, Integer.class, plan_id);
-		
+		List<Integer> list = jdbc.queryForList(sql, Integer.class, plan_id);
+
+		if (list.size() == 0) {
+			return null;
+		} else {
+			return list.get(0);
+		}
 	}
 }

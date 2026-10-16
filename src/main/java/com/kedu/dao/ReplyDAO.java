@@ -32,6 +32,7 @@ public class ReplyDAO {
 	                dto.getWriter(),
 	                dto.getContents());
 	    }
+	    
 	}
 	
 	public List<ReplyDTO> selectByBoard(int board_seq) {

@@ -45,6 +45,8 @@ public class TravelPlanController {
 		if (memberId == null) {
 			return "redirect:/members/loginpage";
 		}
+		tprdao.tprDeleteByPlanId(planId);
+		tpsrdao.tpsDeleteByPlanId(planId);
 		dao.deletePlan(planId, memberId);
 		return "redirect:/members/mypage";
 	}

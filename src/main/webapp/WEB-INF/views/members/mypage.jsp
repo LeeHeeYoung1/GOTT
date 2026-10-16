@@ -302,24 +302,34 @@
 														</p>
 														<p>결제금액 ${rs.price}원</p>
 													</div>
+
 													<div class="reservationCondition">
-														<button type="button" disabled>
-															<c:choose>
-																<c:when test="${reservationType eq 'completed'}">이용 완료</c:when>
-																<c:when test="${reservationType eq 'cancelled'}">예약취소</c:when>
-																<c:otherwise>예약완료</c:otherwise>
-															</c:choose>
-														</button>
-														<button type="button" class="detailBtn">예약 상세</button>
-														<c:if test="${rs.reservationType eq 'upcoming'}">
-														    <button type="button" class="updateBtn"
-														        data-payment-id="${rs.paymentId}"
-														        data-checkin="${rs.checkIn}">예약 변경</button>
-														
-														    <button type="button" class="cancelBtn"
-														        data-payment-id="${rs.paymentId}">예약 취소</button>
-														</c:if>
+													    <button type="button" disabled>
+													        <c:choose>
+													            <c:when test="${rs.status eq '예약취소'}">
+													                예약취소
+													            </c:when>
+													            <c:when test="${rs.status eq '이용완료'}">
+													                이용 완료
+													            </c:when>
+													            <c:otherwise>
+													                예약완료
+													            </c:otherwise>
+													        </c:choose>
+													    </button>
+													
+													    <button type="button" class="detailBtn">예약 상세</button>
+													
+													    <c:if test="${rs.reservationType eq 'upcoming'}">
+													        <button type="button" class="updateBtn"
+													            data-payment-id="${rs.paymentId}"
+													            data-checkin="${rs.checkIn}">예약 변경</button>
+													
+													        <button type="button" class="cancelBtn"
+													            data-payment-id="${rs.paymentId}">예약 취소</button>
+													    </c:if>
 													</div>
+
 												</div>
 												<div class="flipCardBack">
 													<div class="reservationInfo">
@@ -536,24 +546,30 @@
 								<tbody>
 									<c:forEach var="mh" items="${mileageHistory}">
 										<tr>
-											<td><fmt:formatDate value="${mh.regDate}"
-													pattern="yyyy-MM-dd" /></td>
+											<td><fmt:formatDate value="${mh.regDate}" pattern="yyyy-MM-dd" /></td>
 											<td>${mh.reason}</td>
-											<td><c:choose>
+											<td>
+												<c:choose>
 													<c:when test="${mh.type eq 'EARN'}">적립</c:when>
 													<c:when test="${mh.type eq 'USE'}">사용</c:when>
-													<c:when test="${mh.type eq 'RETURN'}">복구</c:when>
-													<c:when test="${mh.type eq 'REVOKE'}">회수</c:when>
+													<c:when test="${mh.type eq 'RESTORE'}">
+													    <span style="color: green; font-weight: bold;">복구</span>
+													</c:when>
+													<c:when test="${mh.type eq 'REVOKE'}">
+														<span style="color: red; font-weight: bold;">회수</span>
+													</c:when>
 													<c:otherwise>${mh.type}</c:otherwise>
-												</c:choose></td>
-											<td><c:choose>
+												</c:choose>
+											</td>
+											<td>
+												<c:choose>
 													<c:when test="${mh.type eq 'EARN' or mh.type eq 'RETURN'}">+<fmt:formatNumber
 															value="${mh.amount}" pattern="#,##0" />M</c:when>
 													<c:when test="${mh.type eq 'USE' or mh.type eq 'REVOKE'}">- <fmt:formatNumber
 															value="${mh.amount}" pattern="#,##0" />M</c:when>
-													<c:otherwise>
-														<fmt:formatNumber value="${mh.amount}" pattern="#,##0" />M</c:otherwise>
-												</c:choose></td>
+													<c:otherwise><fmt:formatNumber value="${mh.amount}" pattern="#,##0" />M</c:otherwise>
+												</c:choose>
+											</td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -681,7 +697,7 @@
 		
 		        const today = new Date().toISOString().slice(0, 10);
 		        if (checkIn === today) {
-		            alert("체크인 당일에는 예약 변경이 불가합니다.");
+		            alert("바로결제 후 취소 아니면, 체크인 당일에는 예약 변경이 불가합니다.");
 		            return;
 		        }
 		

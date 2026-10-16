@@ -24,6 +24,19 @@ body {
 	color: #1a1a1f;
 }
 
+/* ===== 필수 표시 점 ===== */
+.regionSelect::after, .rating_label::after, .photo_head::after,
+	.contents_head::after {
+	content: "";
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	margin-left: 5px;
+	border-radius: 50%;
+	background: #e03131;
+	vertical-align: middle;
+}
+
 /* ===== 페이지 제목 ===== */
 .review_title {
 	max-width: 900px;
@@ -40,10 +53,26 @@ body {
 }
 
 .review_title p {
+	display: inline;
 	margin: 0;
 	font-size: 13px;
 	color: #8b8f96;
 	letter-spacing: -0.01em;
+}
+
+.review_title p:first-of-type {
+	display: block;
+	margin-bottom: 10px;
+}
+
+.review_title .dot {
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	margin-right: 4px;
+	border-radius: 50%;
+	background: #e03131;
+	vertical-align: middle;
 }
 
 .review_container {
@@ -88,8 +117,17 @@ body {
 
 .place_select {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 8px;
 	margin-top: 18px;
+}
+
+.regionSelect {
+	width: 100%;
+	margin-bottom: 2px;
+	font-size: 13px;
+	font-weight: 700;
+	color: #333;
 }
 
 .place_select select {
@@ -172,10 +210,11 @@ body {
 	color: #FFB400;
 }
 
-/* ===== 본문 — 사진 | 글, 아래 태그 ===== */
+/* ===== 본문 — 사진 | 라벨+글, 아래 태그 ===== */
 .review_body {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: 250px minmax(0, 1fr);
+	grid-template-rows: auto auto auto;
 	background: #fff;
 	border: 1px solid #e5e7eb;
 	border-top: 0;
@@ -185,8 +224,8 @@ body {
 
 /* --- 왼쪽: 사진 --- */
 .photo_box {
-	width: 250px;
-	flex-shrink: 0;
+	grid-column: 1;
+	grid-row: 1 / 3;
 	display: flex;
 	flex-direction: column;
 	padding: 18px 16px;
@@ -197,20 +236,10 @@ body {
 .photo_head {
 	display: flex;
 	align-items: center;
-	gap: 5px;
 	margin: 0 0 12px;
 	font-size: 13px;
 	font-weight: 700;
 	color: #333;
-}
-
-/* 필수 표시 점 */
-.photo_head::after {
-	content: "";
-	width: 5px;
-	height: 5px;
-	border-radius: 50%;
-	background: #FF6B35;
 }
 
 /* 사진 올리는 칸 */
@@ -321,9 +350,22 @@ body {
 	color: #c0392b;
 }
 
-/* --- 오른쪽: summernote --- */
+/* --- 오른쪽: 본문 라벨 + summernote --- */
+.contents_head {
+	grid-column: 2;
+	grid-row: 1;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	padding: 18px 20px 10px;
+	font-size: 13px;
+	font-weight: 700;
+	color: #333;
+}
+
 .review_body>.note-editor.note-frame {
-	flex: 1 1 300px;
+	grid-column: 2;
+	grid-row: 2;
 	min-width: 0;
 	margin: 0;
 	border: 0;
@@ -355,7 +397,8 @@ body {
 
 /* --- 아래: 태그 (한 줄 전체) --- */
 .tag_box {
-	width: 100%;
+	grid-column: 1 / -1;
+	grid-row: 3;
 	display: flex;
 	align-items: flex-start;
 	gap: 12px;
@@ -453,15 +496,17 @@ body {
 <body>
 	<div class="review_title">
 		<h1>리뷰 작성</h1>
-		<p>방문한 숙소, 맛집, 관광지의 리뷰를 사진과 함께 남겨주세요</p>
+		<p>방문한 숙소, 맛집, 관광지의 리뷰를 사진과 함께 남겨주세요. </p><p class="dot"></p><p>은 필수입력 사항힙니다.</p>
 	</div>
 	<div class="review_container">
 		<form action="/review/write" method="post">
 			<div class="review_header">
 				<p id="writer">작성자</p>
-				<input type="text" id="nickname" value="${sessionScope.nickname}" readonly>
-				<input type="hidden" name="member_id" value="${sessionScope.loginId}">
+				<input type="text" id="nickname" value="${sessionScope.nickname}"
+					readonly> <input type="hidden" name="member_id"
+					value="${sessionScope.loginId}">
 				<div class="place_select">
+					<span class="regionSelect">장소 선택</span> 
 					<select id="placeType" name="target_type">
 						<option value="">유형</option>
 						<option value="STAY">숙소</option>
@@ -516,6 +561,7 @@ body {
 						<button type="button" id="deleteBtn">사진 삭제</button>
 					</div>
 				</div>
+				<p class="contents_head">본문 필수</p>
 				<textarea id="contents" name="contents"></textarea>
 				<div class="tag_box">
 					<span class="tag_label">태그</span>
@@ -616,7 +662,7 @@ body {
 				})
 			})
 
-	$("#deleteBtn").on("click", function(){
+	$("#deleteBtn").on("click", function() {
 		$("#preview").empty();
 		$("#photo").val("");
 		$("#image1").val("");
@@ -653,16 +699,46 @@ body {
 								'72' ]
 
 					})
-					
-	$("#submit").on("click", function(e) {
-    let contents = $("#contents").summernote("code");
-    let text = $("<div>").html(contents).text().trim();
 
-    if (text.length > 5000) {
-        e.preventDefault();
-        alert("본문은 5000자 이하로 입력하세요.");
-        return;
-    }
-});
+	$("#submit").on("click", function(e) {
+		if ($("#placeType").val() === "") {
+			e.preventDefault();
+			alert("장소 유형을 선택해 주세요.");
+			return;
+		}
+
+		if ($("#target_id").val() === "") {
+			e.preventDefault();
+			alert("장소를 선택해 주세요.");
+			return;
+		}
+
+		if ($("#rating").val() === "0") {
+			e.preventDefault();
+			alert("별점을 선택해 주세요.");
+			return;
+		}
+
+		if ($("#image1").val() === "") {
+			e.preventDefault();
+			alert("사진을 등록해 주세요.");
+			return;
+		}
+		
+		let contents = $("#contents").summernote("code");
+		let text = $("<div>").html(contents).text().trim();
+
+		if (text === "") {
+			e.preventDefault();
+			alert("본문을 입력해 주세요.");
+			return;
+		}
+		
+		if (text.length > 5000) {
+			e.preventDefault();
+			alert("본문은 5000자 이하로 입력하세요.");
+			return;
+		}
+	});
 </script>
 </html>
