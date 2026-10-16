@@ -101,7 +101,13 @@ public class ReviewController {
 	}
 	
 	@RequestMapping("/write")
-	public String write(ReviewDTO dto) {
+	public String write(ReviewDTO dto, HttpSession session) {
+		String loginId = (String) session.getAttribute("loginId");
+		if (loginId == null) {
+			return "redirect:/members/loginpage";
+		}
+
+		dto.setMember_id(loginId);
 		rdao.insert(dto);
 		return "redirect:/review/reviewBoard?cpage=1";
 	}

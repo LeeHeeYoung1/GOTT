@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kedu.commons.TagSplitUtil;
 import com.kedu.dto.ReviewDTO;
@@ -17,12 +18,41 @@ public class ReviewDAO {
 	@Autowired
 	private JdbcTemplate jdbc;
 
-	public int insert(ReviewDTO dto) {
-		String sql = "insert into review values(review_seq.nextval, ?, ?, ?, ?, systimestamp, ?, ?, ?, 0)";
 
-		return jdbc.update(sql, dto.getMember_id(), dto.getTarget_type(), dto.getTarget_id(), dto.getRating(),
+	@Transactional
+	public int insert(ReviewDTO dto) {
+		String sql = "INSERT INTO review VALUES(" + "review_seq.nextval, ?, ?, ?, ?, " + "SYSTIMESTAMP, ?, ?, ?, 0)";
+		int result = jdbc.update(sql, dto.getMember_id(), dto.getTarget_type(), dto.getTarget_id(), dto.getRating(),
 				dto.getTag(), dto.getContents(), dto.getImage1());
+		if (result <= 0) {
+			return result;
+		}
+
+		String memberId = dto.getMember_id();
+		int mileage = 3000;
+
+		// 2. 회원 마일리지 잔액 증가
+		String updateSql = "UPDATE MEMBERS " + "SET MILEAGE = NVL(MILEAGE, 0) + ? " + "WHERE ID = ?";
+		int updateResult = jdbc.update(updateSql, mileage, memberId);
+		if (updateResult != 1) {
+			throw new IllegalStateException("마일리지 적립 실패");
+		}
+
+		// 3. 적립 후 잔액 조회
+		String balanceSql = "SELECT MILEAGE FROM MEMBERS WHERE ID = ?";
+		int balance = jdbc.queryForObject(balanceSql, Integer.class, memberId);
+
+		// 4. 마일리지 내역 저장
+		String historySql = "INSERT INTO MILEAGE_HISTORY " + "(SEQ, MEMBER_ID, RESERVATION_ID, PAYMENT_ID, "
+				+ "TYPE, AMOUNT, BALANCE, REASON, REG_DATE) " + "VALUES (MILEAGE_HISTORY_SEQ.NEXTVAL, ?, "
+				+ "NULL, NULL, ?, ?, ?, ?, SYSDATE)";
+
+		jdbc.update(historySql, memberId, "적립", mileage, balance, "리뷰 작성 마일리지");
+
+		return result;
 	}
+
+
 
 	public List<ReviewDTO> selectSort(int start, int end, String sort, String tag_list) {
 		String[] tagList = TagSplitUtil.tagSplit(tag_list);

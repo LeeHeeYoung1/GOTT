@@ -536,24 +536,30 @@
 								<tbody>
 									<c:forEach var="mh" items="${mileageHistory}">
 										<tr>
-											<td><fmt:formatDate value="${mh.regDate}"
-													pattern="yyyy-MM-dd" /></td>
+											<td><fmt:formatDate value="${mh.regDate}" pattern="yyyy-MM-dd" /></td>
 											<td>${mh.reason}</td>
-											<td><c:choose>
+											<td>
+												<c:choose>
 													<c:when test="${mh.type eq 'EARN'}">적립</c:when>
 													<c:when test="${mh.type eq 'USE'}">사용</c:when>
-													<c:when test="${mh.type eq 'RETURN'}">복구</c:when>
-													<c:when test="${mh.type eq 'REVOKE'}">회수</c:when>
+													<c:when test="${mh.type eq 'RESTORE'}">
+													    <span style="color: green; font-weight: bold;">복구</span>
+													</c:when>
+													<c:when test="${mh.type eq 'REVOKE'}">
+														<span style="color: red; font-weight: bold;">회수</span>
+													</c:when>
 													<c:otherwise>${mh.type}</c:otherwise>
-												</c:choose></td>
-											<td><c:choose>
+												</c:choose>
+											</td>
+											<td>
+												<c:choose>
 													<c:when test="${mh.type eq 'EARN' or mh.type eq 'RETURN'}">+<fmt:formatNumber
 															value="${mh.amount}" pattern="#,##0" />M</c:when>
 													<c:when test="${mh.type eq 'USE' or mh.type eq 'REVOKE'}">- <fmt:formatNumber
 															value="${mh.amount}" pattern="#,##0" />M</c:when>
-													<c:otherwise>
-														<fmt:formatNumber value="${mh.amount}" pattern="#,##0" />M</c:otherwise>
-												</c:choose></td>
+													<c:otherwise><fmt:formatNumber value="${mh.amount}" pattern="#,##0" />M</c:otherwise>
+												</c:choose>
+											</td>
 										</tr>
 									</c:forEach>
 								</tbody>
