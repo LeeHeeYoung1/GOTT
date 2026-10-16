@@ -1120,7 +1120,7 @@
 	<div class="finishBar">
 	    <div id="totalPlanSummary">총 0일 일정 · 방문지 0곳 등록됨</div>
 	    <div class="finishBtns">
-	        <button type="button">미리보기</button>
+	        
 	        <button type="button" id="sharePlanBtn">완성하고 공유하기</button>
 	    </div>
 	</div>
