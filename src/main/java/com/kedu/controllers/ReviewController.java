@@ -26,16 +26,16 @@ public class ReviewController {
 
 	@Autowired
 	private ReviewDAO rdao;
-	
+
 	@Autowired
 	private PlaceDAO pdao;
-	
+
 	@Autowired
 	private ReviewReplyDAO rpdao;
-	
+
 	@Autowired
 	private ReviewRecommendDAO rrdao;
-	
+
 	@RequestMapping("/reviewBoard")
 	public String reviewList(int cpage, String sort, String tag_list, Model model, HttpSession session) {
 		if (sort == null) {
@@ -44,17 +44,17 @@ public class ReviewController {
 		if (tag_list == null) {
 			tag_list = "";
 		}
-		
+
 		List<ReviewDTO> rList = rdao.selectSort(cpage * 9 - 8, cpage * 9, sort, tag_list);
-		
-		String loginId = (String)session.getAttribute("loginId");
-		
-		for(ReviewDTO review : rList) {
-			if(loginId != null) {
+
+		String loginId = (String) session.getAttribute("loginId");
+
+		for (ReviewDTO review : rList) {
+			if (loginId != null) {
 				review.setLiked(rrdao.isRecommend(review.getSeq(), loginId));
 			}
 		}
-		
+
 		model.addAttribute("rList", rList);
 		model.addAttribute("recordTotalCount", rdao.selectCount(tag_list));
 		model.addAttribute("recordCountPerPage", 9);
@@ -64,25 +64,25 @@ public class ReviewController {
 		model.addAttribute("tag_list", tag_list);
 		return "board/reviewBoard";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/toggleRecommend")
 	public String toggleRecommend(int seq, HttpSession session) {
-		String loginId = (String)session.getAttribute("loginId");
-		
-		if(loginId == null) {
+		String loginId = (String) session.getAttribute("loginId");
+
+		if (loginId == null) {
 			return "login";
 		}
-		
-		if(rrdao.isRecommend(seq, loginId)) {
+
+		if (rrdao.isRecommend(seq, loginId)) {
 			rrdao.recommendDown(seq, loginId);
 			return "unliked";
-		}else {
+		} else {
 			rrdao.recommendUp(seq, loginId);
 			return "liked";
 		}
 	}
-	
+
 	@RequestMapping("/review_write")
 	public String review_write(HttpSession session) {
 		String loginId = (String) session.getAttribute("loginId");
@@ -93,24 +93,27 @@ public class ReviewController {
 
 		return "board/reviewWrite";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/placeList")
 	public List<PlaceDTO> placeList(String placeType, String region) {
 		return pdao.placeList(placeType, region);
 	}
-	
+
 	@RequestMapping("/write")
 	public String write(ReviewDTO dto, HttpSession session) {
 		String loginId = (String) session.getAttribute("loginId");
 		if (loginId == null) {
 			return "redirect:/members/loginpage";
 		}
+		if (dto.getTag() == null) {
+			dto.setTag("");
+		}
 		dto.setMember_id(loginId);
 		rdao.insert(dto);
 		return "redirect:/review/reviewBoard?cpage=1";
 	}
-	
+
 	@RequestMapping("/detail")
 	public String datail(int seq, int place_id, Model model, HttpSession session) {
 		rdao.viewCountUp(seq);
@@ -120,7 +123,7 @@ public class ReviewController {
 		String placeName = rdao.targetSearch(rdto.getTarget_id());
 		PlaceDTO pdto = pdao.selectOne(place_id);
 		int recommend_count = rrdao.recommendCount(seq);
-		boolean isRecommend = rrdao.isRecommend(seq, (String)session.getAttribute("loginId"));
+		boolean isRecommend = rrdao.isRecommend(seq, (String) session.getAttribute("loginId"));
 		List<ReviewReplyDTO> replyList = rpdao.selectAll(seq);
 		List<ReviewReplyDTO> childList = rpdao.selectChild(seq);
 		model.addAttribute("childList", childList);
@@ -140,49 +143,48 @@ public class ReviewController {
 		rdao.delete(seq);
 		return "redirect:/review/reviewBoard?cpage=1";
 	}
-	
+
 	@RequestMapping("/update")
 	public String update(ReviewDTO rdto) {
 		rdao.update(rdto);
 		return "redirect:/review/reviewBoard?cpage=1";
 	}
-	
+
 	@RequestMapping("/recommendUp")
 	public String recommendUp(int seq, HttpSession session, Model model) {
-		rrdao.recommendUp(seq, (String)session.getAttribute("loginId"));
+		rrdao.recommendUp(seq, (String) session.getAttribute("loginId"));
 		ReviewDTO rdto = rdao.selectOne(seq);
-		return "redirect:/review/detail?seq="+seq+"&place_id="+rdto.getTarget_id();
+		return "redirect:/review/detail?seq=" + seq + "&place_id=" + rdto.getTarget_id();
 	}
-	
+
 	@RequestMapping("/recommendDown")
 	public String recommendDown(int seq, HttpSession session, Model model) {
-		rrdao.recommendDown(seq, (String)session.getAttribute("loginId"));
+		rrdao.recommendDown(seq, (String) session.getAttribute("loginId"));
 		ReviewDTO rdto = rdao.selectOne(seq);
-		return "redirect:/review/detail?seq="+seq+"&place_id="+rdto.getTarget_id();
+		return "redirect:/review/detail?seq=" + seq + "&place_id=" + rdto.getTarget_id();
 	}
-	
+
 	@RequestMapping("/reviewlist")
 	public String reviewlist(Integer cpage, HttpSession session, Model model) {
-	    String memberId = (String) session.getAttribute("loginId");
-	    if (memberId == null) {
-	        return "redirect:/members/loginpage";
-	    }
-	    if (cpage == null || cpage < 1) {
-	        cpage = 1;
-	    }
-	    int pagesize = 5;
-	    int recordTotalCount = rdao.countMyReview(memberId);
-	    int pageTotalCount = (int)Math.ceil(recordTotalCount / (double)pagesize);
-	    if (pageTotalCount > 0 && cpage > pageTotalCount) {
-	        cpage = pageTotalCount;
-	    }
-	    ArrayList<ReviewDTO> myReviewList = rdao.selectMyReview(memberId, cpage, pagesize);
-	    model.addAttribute("myReviewList", myReviewList);
-	    model.addAttribute("recordTotalCount", recordTotalCount);
-	    model.addAttribute("cpage", cpage);
-	    model.addAttribute("pageTotalCount", pageTotalCount);
-	    return "members/reviewlist";
+		String memberId = (String) session.getAttribute("loginId");
+		if (memberId == null) {
+			return "redirect:/members/loginpage";
+		}
+		if (cpage == null || cpage < 1) {
+			cpage = 1;
+		}
+		int pagesize = 5;
+		int recordTotalCount = rdao.countMyReview(memberId);
+		int pageTotalCount = (int) Math.ceil(recordTotalCount / (double) pagesize);
+		if (pageTotalCount > 0 && cpage > pageTotalCount) {
+			cpage = pageTotalCount;
+		}
+		ArrayList<ReviewDTO> myReviewList = rdao.selectMyReview(memberId, cpage, pagesize);
+		model.addAttribute("myReviewList", myReviewList);
+		model.addAttribute("recordTotalCount", recordTotalCount);
+		model.addAttribute("cpage", cpage);
+		model.addAttribute("pageTotalCount", pageTotalCount);
+		return "members/reviewlist";
 	}
-	
-	
+
 }
