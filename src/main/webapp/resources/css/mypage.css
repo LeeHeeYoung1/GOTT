@@ -1594,3 +1594,9 @@ body {
 .scrapPlanHeader{
 	margin-top: 50px;
 }
+
+.reviewContainer .reviewLike {
+   margin: 0 0 10px;
+   color: #262626;
+   font-size: 13px;
+}

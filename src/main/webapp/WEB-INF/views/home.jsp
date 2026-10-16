@@ -21,6 +21,7 @@
 <style>
 .container {
    padding-bottom: 20px;
+   padding-top:3px;
 }
 
 .searchBox {
@@ -98,6 +99,7 @@
    align-items: center;
    justify-content: center;
    background-color: #f8fafc;
+   margin-top:30px;
 }
 
 .subtitle, .title-link {

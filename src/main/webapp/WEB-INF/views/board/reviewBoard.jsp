@@ -29,6 +29,7 @@ button:hover {
 .titleBox {
 	text-align: center;
 	padding: 35px 0 20px;
+	margin-top:0;
 }
 
 /* 큰 제목 스타일 */
@@ -511,6 +512,9 @@ button:hover {
 	background: #222;
 	border-color: #222;
 	color: white;
+}
+.container{
+	padding-top:13px;
 }
 </style>
 

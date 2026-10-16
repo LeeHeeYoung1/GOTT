@@ -32,6 +32,7 @@ button:hover {
 }
 /* 제목 */
 .titleBox {
+	margin-top:-40px;
     text-align: center;
     padding: 105px 0 20px;
 }
