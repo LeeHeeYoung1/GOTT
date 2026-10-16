@@ -488,7 +488,7 @@
 											</span>
 										</div>
 										<p class="reviewLike">
-											좋아요 <strong>${rv.rating}</strong>
+											⭐ <strong>${rv.rating}</strong>
 										</p>
 										<p class="reviewDescription">${rv.contents}</p>
 										<c:if test="${not empty rv.tag}">
