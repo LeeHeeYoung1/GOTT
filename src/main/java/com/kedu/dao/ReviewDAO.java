@@ -136,5 +136,16 @@ public class ReviewDAO {
 
 		return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class));
 	}
+	
+	public List<ReviewDTO> selectLikeReviews() {
+	    String sql = "select r.*, "
+	            + "(select count(*) from review_recommend rr "
+	            + "where rr.review_seq = r.seq) as recommend_count "
+	            + "from review r "
+	            + "order by recommend_count desc, r.reg_date desc";
+
+	    return jdbc.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class));
+	}
+	
 
 }
