@@ -54,7 +54,6 @@
 
 						</ul>
 						<span>혜택</span>
-						
 						<ul>
 							<li><a href="/members/mileage">마일리지 내역</a></li>
 							<li><a href="/coupon/myCoupon">쿠폰함</a></li>
