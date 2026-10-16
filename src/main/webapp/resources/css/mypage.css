@@ -1,47 +1,19 @@
-
 * {
 	box-sizing: border-box;
 }
 
-.mypageContainer {
-    width: 1150px;
-    max-width: calc(100% - 40px);
-    margin: 0 auto;
-    color: #263238;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    padding-top: 30px;
-    padding-right:80px;
-    padding-left:80px;
-    background-color: #F8fafc;
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 16px;
+	color: #263238;
+	background-color: #f8fafa;
+	line-height: 1.5;
 }
 
-.mypageContainer h2,
-.mypageContainer h5 {
+.mypageContainer>h2, .mypageContainer>h5 {
 	text-align: center;
-}
-
-.mypageTitle {
-	margin: 24px 0 4px;
-}
-
-.mypageSubtitle {
-	margin: 0 0 16px;
-	font-size: 13px;
-	font-weight: 400;
-	color: #7c7c7c;
-}
-
-.mypageDivider {
-	margin: 0 0 20px;
-	border: 1px solid rgb(248, 246, 246);
-}
-
-.breadcrumb {
-	margin: 20px;
-	font-size: 12px;
-	color: #777;
 }
 
 .mypageContainer a {
@@ -52,7 +24,6 @@
 .mypageContainer button {
 	border: 1px solid black;
 	background-color: white;
-	cursor: pointer;
 }
 
 .mypageContainer button:hover {
@@ -67,31 +38,32 @@
 	align-items: center;
 }
 
-.sectionTitle > span {
+.sectionTitle>span {
 	font-size: 16px;
 	font-weight: bold;
 	line-height: 1;
 }
 
-.sectionTitle > a {
+.sectionTitle>a {
 	font-size: 12px;
 	color: #777;
 	line-height: 1;
 	align-self: center;
 }
 
-/* 마이페이지 사이드 메뉴 */
+.mypageContainer {
+	width: 1200px;
+	max-width: calc(100% - 40px);
+	margin: 0 auto;
+}
 
 .sideBox {
-    width: 220px;
-    float: left;
-    margin-left: 130px;
-    margin-top: 80px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: white;
-    position:fixed;
+	width: 17%;
+	float: left;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	overflow: hidden;
+	background-color: white;
 }
 
 .loginId {
@@ -118,7 +90,7 @@
 	padding-bottom: 10px;
 }
 
-.sideTitle > span {
+.sideTitle>span {
 	display: block;
 	margin: 12px 20px 5px;
 	font-size: 12px;
@@ -155,13 +127,12 @@
 	font-weight: 600;
 }
 
-/* 마이페이지 메인 */
-
 .mainContainer {
-    width: 100%;
-    margin-left: 0;
-    padding-left: 0;
+	width: 83%;
+	margin-left: 17%;
+	padding-left: 20px;
 }
+
 .mybarBox {
 	width: 100%;
 	display: flex;
@@ -203,12 +174,6 @@
 	background-color: #f8fafa;
 }
 
-/* 여행 성향 */
-
-.tourType {
-	margin-top: 50px;
-}
-
 .tourTypeBox {
 	display: flex;
 	justify-content: space-between;
@@ -238,7 +203,6 @@
 }
 
 .tourTypeText p {
-	margin: 0;
 	font-size: 14px;
 	color: #888;
 	line-height: 1.5;
@@ -258,8 +222,6 @@
 .tourTypeBox button:hover {
 	background: #206e58;
 }
-
-/* 여행 일정 플래너 */
 
 .plannerContainer {
 	margin-top: 80px;
@@ -330,8 +292,6 @@
 	border-color: #222;
 }
 
-/* 내가 공유한 여행 일정 */
-
 .sharedPlanContainer {
 	margin-top: 80px;
 }
@@ -354,7 +314,7 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
 }
 
-.sharedPlanCard > .img {
+.sharedPlanCard>.img {
 	width: 150px;
 	height: 100px;
 	flex: 0 0 150px;
@@ -363,21 +323,11 @@
 	background-color: #f1f1f1;
 }
 
-.sharedPlanCard > .img img {
+.sharedPlanCard>.img img {
 	display: block;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-}
-
-.emptyPlanImage {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #999;
-	font-size: 12px;
 }
 
 .sharedPlanInfo {
@@ -425,10 +375,6 @@
 	gap: 8px;
 }
 
-.sharedPlanCondition .btnGroup form {
-	width: 100%;
-}
-
 .sharedPlanCondition .btnGroup button {
 	width: 100%;
 	height: 32px;
@@ -446,12 +392,8 @@
 	border-color: #222;
 }
 
-.sharedPlanCondition .btnGroup .deleteBtn {
-	background-color: #eef5ff;
-}
-
-/* 내가 스크랩한 여행 일정 */
-
+/
+\* 내가 스크랩한 여행 일정 \* /
 .scrapPlanContainer {
 	margin-top: 80px;
 }
@@ -460,11 +402,10 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 50px;
 	margin-bottom: 50px;
 }
 
-.scrapPlanHeader > span {
+.scrapPlanHeader>span {
 	font-size: 16px;
 	font-weight: bold;
 	line-height: 1;
@@ -487,7 +428,7 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
 }
 
-.scrapPlanCard > .img {
+.scrapPlanCard>.img {
 	width: 150px;
 	height: 100px;
 	flex: 0 0 150px;
@@ -496,7 +437,7 @@
 	background-color: #f1f1f1;
 }
 
-.scrapPlanCard > .img img {
+.scrapPlanCard>.img img {
 	display: block;
 	width: 100%;
 	height: 100%;
@@ -561,8 +502,7 @@
 	color: white;
 }
 
-.emptyScrapPlan,
-.emptyPlanner {
+.emptyScrapPlan {
 	padding: 20px;
 	border: 1px solid #e5e7eb;
 	border-radius: 10px;
@@ -570,18 +510,6 @@
 	color: #777;
 	font-size: 13px;
 }
-
-/* 공통 섹션 제목 간격 */
-
-.plannerContainer .sectionTitle,
-.sharedPlanContainer .sectionTitle,
-.reservationContainer > .sectionTitle,
-.wishlistContainer > .sectionTitle,
-.reviewContainer > .sectionTitle {
-	margin-bottom: 50px;
-}
-
-/* 예약 내역 */
 
 .reservationContainer {
 	margin-top: 80px;
@@ -610,7 +538,7 @@
 	box-sizing: border-box;
 }
 
-.tab + .tab {
+.tab+.tab {
 	margin-left: 3px;
 }
 
@@ -651,310 +579,6 @@
 	color: white;
 	border-color: #333;
 }
-
-/* 예약 카드 */
-
-.reservationList {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-}
-
-.flipCard {
-	width: 100%;
-	height: 220px;
-	margin-top: 0;
-	perspective: 1200px;
-	background: transparent;
-}
-
-.flipCardInner {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	transition: transform .55s ease;
-	transform-style: preserve-3d;
-}
-
-.flipCard.flipped .flipCardInner {
-	transform: rotateY(180deg);
-}
-
-.flipCardFront,
-.flipCardBack {
-	position: absolute;
-	inset: 0;
-	width: 100%;
-	height: 100%;
-	box-sizing: border-box;
-	padding: 20px;
-	border: 1px solid #e5e7eb;
-	border-radius: 14px;
-	background: #fff;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 24px;
-	overflow: hidden;
-	backface-visibility: hidden;
-	-webkit-backface-visibility: hidden;
-	box-shadow: 0 3px 12px rgba(15, 23, 42, .035);
-	transition: box-shadow .2s ease, border-color .2s ease;
-}
-
-.flipCardFront {
-	transform: rotateY(0deg);
-}
-
-.flipCardBack {
-	transform: rotateY(180deg);
-	background: #f8faff;
-}
-
-.flipCard:hover .flipCardFront,
-.flipCard:hover .flipCardBack {
-	border-color: #dbe3ef;
-	box-shadow: 0 8px 22px rgba(15, 23, 42, .08);
-}
-
-/* 숙소 이미지 */
-
-.flipCardFront .img {
-	width: 220px;
-	height: 170px;
-	flex: 0 0 220px;
-	overflow: hidden;
-	border-radius: 10px;
-	background: #f1f5f9;
-}
-
-.flipCardFront .img img {
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	transition: transform .3s ease;
-}
-
-.flipCard:hover .flipCardFront .img img {
-	transform: scale(1.03);
-}
-
-/* 예약 정보 */
-
-.flipCard .reservationInfo {
-	flex: 1 1 auto;
-	min-width: 0;
-	padding: 0;
-}
-
-.flipCard .reservationInfo h3 {
-	margin: 0 0 12px;
-	color: #1f2937;
-	font-size: 18px;
-	font-weight: 700;
-	line-height: 1.4;
-	overflow-wrap: anywhere;
-}
-
-.flipCard .reservationInfo p {
-	margin: 5px 0;
-	color: #64748b;
-	font-size: 13px;
-	line-height: 1.55;
-	overflow-wrap: anywhere;
-}
-
-.flipCard .reservationInfo p:last-child {
-	margin-top: 9px;
-	color: #111827;
-	font-size: 14px;
-	font-weight: 700;
-}
-
-.flipCard .reservationInfo strong {
-	color: #475569;
-}
-
-/* 예약 상태 및 버튼 */
-
-.flipCard .reservationCondition {
-	width: 130px;
-	height: 100%;
-	flex: 0 0 130px;
-	box-sizing: border-box;
-	display: flex !important;
-	flex-direction: column;
-	justify-content: center;
-	align-items: stretch;
-	gap: 8px;
-	padding-left: 16px;
-	border-left: 1px solid #edf0f4;
-}
-
-.flipCard .reservationCondition button {
-	width: 100%;
-	min-height: 36px;
-	height: auto;
-	padding: 8px 10px;
-	border: 1px solid #d9e0e8;
-	border-radius: 7px;
-	background: #fff;
-	color: #334155;
-	font-size: 12px;
-	line-height: 1.4;
-	cursor: pointer;
-	white-space: normal;
-	overflow-wrap: anywhere;
-	transition: background .2s ease, color .2s ease, border-color .2s ease;
-}
-
-.flipCard .reservationCondition button:first-child,
-.flipCard .reservationCondition button:disabled {
-	border-color: #dbeafe;
-	background: #eff6ff;
-	color: #2563eb;
-	font-weight: 700;
-	cursor: default;
-}
-
-.flipCard .reservationCondition button:disabled {
-	opacity: 1;
-}
-
-.flipCard .reservationCondition button:not(:disabled):hover {
-	background: #222;
-	color: #fff;
-	border-color: #222;
-}
-
-/* 예약 카드 뒷면 */
-
-.flipCardBack .reservationInfo {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	max-height: 100%;
-	overflow-y: auto;
-}
-
-.flipCardBack .reservationInfo h3 {
-	margin: 0 0 10px;
-	font-size: 17px;
-}
-
-.flipCardBack .reservationInfo p {
-	margin: 3px 0;
-	color: #64748b;
-	font-size: 12px;
-	line-height: 1.5;
-}
-
-.flipCardBack .reservationInfo p:last-child {
-	margin-top: 5px;
-	color: #1f2937;
-	font-size: 13px;
-	font-weight: 700;
-}
-
-/* 예약 카드 반응형 */
-
-@media (max-width: 900px) {
-	.flipCard {
-		height: 230px;
-	}
-
-	.flipCardFront,
-	.flipCardBack {
-		gap: 16px;
-		padding: 16px;
-	}
-
-	.flipCardFront .img {
-		width: 180px;
-		height: 155px;
-		flex-basis: 180px;
-	}
-
-	.flipCard .reservationCondition {
-		width: 115px;
-		flex-basis: 115px;
-		padding-left: 12px;
-	}
-}
-
-@media (max-width: 600px) {
-	.reservationList {
-		gap: 14px;
-	}
-
-	.flipCard {
-		height: 420px;
-	}
-
-	.flipCardInner {
-		height: 100%;
-	}
-
-	.flipCardFront,
-	.flipCardBack {
-		flex-direction: column;
-		align-items: stretch;
-		justify-content: flex-start;
-		gap: 12px;
-		padding: 14px;
-	}
-
-	.flipCardFront .img {
-		width: 100%;
-		height: 145px;
-		flex: 0 0 145px;
-	}
-
-	.flipCard .reservationInfo {
-		flex: 1 1 auto;
-		width: 100%;
-	}
-
-	.flipCard .reservationInfo h3 {
-		margin-bottom: 8px;
-		font-size: 16px;
-	}
-
-	.flipCard .reservationInfo p {
-		margin: 4px 0;
-		font-size: 12px;
-	}
-
-	.flipCard .reservationCondition {
-		width: 100%;
-		height: auto;
-		flex: 0 0 auto;
-		display: grid !important;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 7px;
-		padding: 10px 0 0;
-		border-left: 0;
-		border-top: 1px solid #edf0f4;
-	}
-
-	.flipCard .reservationCondition button {
-		min-height: 32px;
-		padding: 7px 8px;
-		font-size: 11px;
-	}
-
-	.flipCardBack .reservationInfo {
-		width: 100%;
-		flex: 1 1 auto;
-	}
-
-	.flipCardBack .reservationInfo h3 {
-		font-size: 16px;
-	}
-}
-
-/* 찜 목록 */
 
 .wishlistContainer {
 	width: 100%;
@@ -1083,52 +707,278 @@
 	border-color: #333;
 	font-weight: 600;
 }
+/* ================= 예약 카드 ================= */
+.reservationList {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
 
-/* 비어 있는 목록 */
+.flipCard {
+	width: 100%;
+	height: 220px;
+	margin-top: 0;
+	perspective: 1200px;
+	background: transparent;
+}
 
-.emptyWishlist,
-.emptyReservation {
-	grid-column: 1/-1;
+.flipCardInner {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	transition: transform .55s ease;
+	transform-style: preserve-3d;
+}
+
+.flipCard.flipped .flipCardInner {
+	transform: rotateY(180deg);
+}
+
+.flipCardFront, .flipCardBack {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 20px;
+	border: 1px solid #e5e7eb;
+	border-radius: 14px;
+	background: #fff;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 24px;
+	overflow: hidden;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	box-shadow: 0 3px 12px rgba(15, 23, 42, .035);
+	transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+.flipCardFront {
+	transform: rotateY(0deg);
+}
+
+.flipCardBack {
+	transform: rotateY(180deg);
+	background: #f8faff;
+}
+
+.flipCard:hover .flipCardFront, .flipCard:hover .flipCardBack {
+	border-color: #dbe3ef;
+	box-shadow: 0 8px 22px rgba(15, 23, 42, .08);
+}
+/* 숙소 이미지 */
+.flipCardFront .img {
+	width: 220px;
+	height: 170px;
+	flex: 0 0 220px;
+	overflow: hidden;
+	border-radius: 10px;
+	background: #f1f5f9;
+}
+
+.flipCardFront .img img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .3s ease;
+}
+
+.flipCard:hover .flipCardFront .img img {
+	transform: scale(1.03);
+}
+/* 예약 정보 */
+.flipCard .reservationInfo {
+	flex: 1 1 auto;
+	min-width: 0;
+	padding: 0;
+}
+
+.flipCard .reservationInfo h3 {
+	margin: 0 0 12px;
+	color: #1f2937;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.4;
+	overflow-wrap: anywhere;
+}
+
+.flipCard .reservationInfo p {
+	margin: 5px 0;
+	color: #64748b;
+	font-size: 13px;
+	line-height: 1.55;
+	overflow-wrap: anywhere;
+}
+
+.flipCard .reservationInfo p:last-child {
+	margin-top: 9px;
+	color: #111827;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.flipCard .reservationInfo strong {
+	color: #475569;
+}
+/* 예약 상태 및 버튼 */
+.flipCard .reservationCondition {
+	width: 130px;
+	height: 100%;
+	flex: 0 0 130px;
+	box-sizing: border-box;
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	gap: 8px;
+	padding-left: 16px;
+	border-left: 1px solid #edf0f4;
+}
+
+.flipCard .reservationCondition button {
+	width: 100%;
+	min-height: 36px;
+	height: auto;
+	padding: 8px 10px;
+	border: 1px solid #d9e0e8;
+	border-radius: 7px;
+	background: #fff;
+	color: #334155;
+	font-size: 12px;
+	line-height: 1.4;
+	cursor: pointer;
+	white-space: normal;
+	overflow-wrap: anywhere;
+	transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.flipCard .reservationCondition button:first-child, .flipCard .reservationCondition button:disabled
+	{
+	border-color: #dbeafe;
+	background: #eff6ff;
+	color: #2563eb;
+	font-weight: 700;
+	cursor: default;
+}
+
+.flipCard .reservationCondition button:disabled {
+	opacity: 1;
+}
+
+.flipCard .reservationCondition button:not(:disabled):hover {
+	background: #222;
+	color: #fff;
+	border-color: #222;
+}
+/* 카드 뒷면 상세 정보 */
+.flipCardBack .reservationInfo {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
-	min-height: 200px;
-	padding: 40px 20px;
-	border: 1px dashed #dbdbdb;
-	border-radius: 12px;
-	background: #fff;
-	text-align: center;
-	color: #8e8e8e;
+	max-height: 100%;
+	overflow-y: auto;
 }
 
-.emptyWishlist > span,
-.emptyReservation > span {
-	font-size: 42px;
-	margin-bottom: 14px;
-	display: block;
+.flipCardBack .reservationInfo h3 {
+	margin: 0 0 10px;
+	font-size: 17px;
 }
 
-.emptyWishlist strong,
-.emptyReservation strong {
-	font-size: 16px;
-	color: #262626;
-	display: block;
-	margin-bottom: 8px;
+.flipCardBack .reservationInfo p {
+	margin: 3px 0;
+	color: #64748b;
+	font-size: 12px;
+	line-height: 1.5;
 }
 
-.emptyWishlist p,
-.emptyReservation p {
+.flipCardBack .reservationInfo p:last-child {
+	margin-top: 5px;
+	color: #1f2937;
 	font-size: 13px;
-	color: #8e8e8e;
-	margin: 0;
+	font-weight: 700;
+}
+/* 예약 카드 반응형 */
+@media ( max-width : 900px) {
+	.flipCard {
+		height: 230px;
+	}
+	.flipCardFront, .flipCardBack {
+		gap: 16px;
+		padding: 16px;
+	}
+	.flipCardFront .img {
+		width: 180px;
+		height: 155px;
+		flex-basis: 180px;
+	}
+	.flipCard .reservationCondition {
+		width: 115px;
+		flex-basis: 115px;
+		padding-left: 12px;
+	}
 }
 
-.emptyReservation {
-	width: 100%;
+@media ( max-width : 600px) {
+	.reservationList {
+		gap: 14px;
+	}
+	.flipCard {
+		height: 420px;
+	}
+	.flipCardInner {
+		height: 100%;
+	}
+	.flipCardFront, .flipCardBack {
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: flex-start;
+		gap: 12px;
+		padding: 14px;
+	}
+	.flipCardFront .img {
+		width: 100%;
+		height: 145px;
+		flex: 0 0 145px;
+	}
+	.flipCard .reservationInfo {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+	.flipCard .reservationInfo h3 {
+		margin-bottom: 8px;
+		font-size: 16px;
+	}
+	.flipCard .reservationInfo p {
+		margin: 4px 0;
+		font-size: 12px;
+	}
+	.flipCard .reservationCondition {
+		width: 100%;
+		height: auto;
+		flex: 0 0 auto;
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 7px;
+		padding: 10px 0 0;
+		border-left: 0;
+		border-top: 1px solid #edf0f4;
+	}
+	.flipCard .reservationCondition button {
+		min-height: 32px;
+		padding: 7px 8px;
+		font-size: 11px;
+	}
+	.flipCardBack .reservationInfo {
+		width: 100%;
+		flex: 1 1 auto;
+	}
+	.flipCardBack .reservationInfo h3 {
+		font-size: 16px;
+	}
 }
-
-/* 마일리지 및 쿠폰 */
 
 .couponContainer {
 	width: 100%;
@@ -1161,7 +1011,7 @@
 }
 
 .coupon_point {
-	padding: 20px 20px 12px !important;
+	padding: 20px !important;
 	background: #fff;
 	border: 1px solid #e5e7eb;
 	border-radius: 12px;
@@ -1210,39 +1060,25 @@
 	border-bottom: none;
 }
 
-.coupon_point th:nth-child(1),
-.coupon_point td:nth-child(1) {
+.coupon_point th:nth-child(1), .coupon_point td:nth-child(1) {
 	width: 22%;
 	text-align: left;
 }
 
-.coupon_point th:nth-child(2),
-.coupon_point td:nth-child(2) {
+.coupon_point th:nth-child(2), .coupon_point td:nth-child(2) {
 	width: 38%;
 	text-align: left;
 }
 
-.coupon_point th:nth-child(3),
-.coupon_point td:nth-child(3) {
+.coupon_point th:nth-child(3), .coupon_point td:nth-child(3) {
 	width: 18%;
 }
 
-.coupon_point th:nth-child(4),
-.coupon_point td:nth-child(4) {
+.coupon_point th:nth-child(4), .coupon_point td:nth-child(4) {
 	width: 22%;
 	text-align: right;
 	white-space: nowrap;
 	font-weight: 700;
-}
-
-.mileageRestore {
-	color: green;
-	font-weight: bold;
-}
-
-.mileageRevoke {
-	color: red;
-	font-weight: bold;
 }
 
 .couponList {
@@ -1302,75 +1138,23 @@
 	color: #fff;
 }
 
-/* 마일리지 페이지네이션 */
-
-.pagination {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 7px;
-	margin: 25px 0;
+.plannerContainer .sectionTitle, .sharedPlanContainer .sectionTitle,
+	.reservationContainer>.sectionTitle, .wishlistContainer>.sectionTitle,
+	.reviewContainer>.sectionTitle {
+	margin-bottom: 50px;
 }
 
-.pagination a {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-width: 34px;
-	height: 34px;
-	padding: 0 10px;
-	border: 1px solid #e0e5eb;
-	border-radius: 6px;
-	background: #fff;
-	color: #596574;
+.emptyPlanner {
+	padding: 20px;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	background: white;
+	color: #777;
 	font-size: 13px;
-	text-decoration: none;
-	transition: .2s;
 }
 
-.pagination a:hover,
-.pagination a.active {
-	background: #263238;
-	border-color: #263238;
-	color: #fff;
-}
-
-/* 여행 일정 페이지네이션 */
-
-.plannerPagination {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 8px;
-	margin: 20px 0;
-}
-
-.plannerPagination a {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-width: 32px;
-	height: 32px;
-	padding: 0 8px;
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	color: #555;
-	text-decoration: none;
-	font-size: 14px;
-}
-
-.plannerPagination a.active {
-	background: #2563eb;
-	border-color: #2563eb;
-	color: #fff;
-}
-
-.plannerPagination a:hover {
-	background: #eff6ff;
-}
-
-/* 리뷰 목록 */
-
+/
+\* 인스타그램 스타일 리뷰 영역 \* /
 .reviewContainer {
 	width: 100%;
 	margin: 30px 0;
@@ -1387,13 +1171,13 @@
 	border-bottom: 1px solid #efefef;
 }
 
-.reviewContainer .sectionTitle > span {
+.reviewContainer .sectionTitle>span {
 	font-size: 21px;
 	font-weight: 700;
 	color: #262626;
 }
 
-.reviewContainer .sectionTitle > a {
+.reviewContainer .sectionTitle>a {
 	color: #0095f6;
 	font-size: 13px;
 	font-weight: 600;
@@ -1401,7 +1185,7 @@
 	transition: color .2s;
 }
 
-.reviewContainer .sectionTitle > a:hover {
+.reviewContainer .sectionTitle>a:hover {
 	color: #00376b;
 }
 
@@ -1474,7 +1258,7 @@
 	white-space: nowrap;
 }
 
-.reviewContainer .reviewUserInfo > span {
+.reviewContainer .reviewUserInfo>span {
 	color: #8e8e8e;
 	font-size: 11px;
 }
@@ -1493,10 +1277,9 @@
 	-webkit-tap-highlight-color: transparent;
 }
 
-.reviewContainer .reviewMore:hover,
-.reviewContainer .reviewMore:focus,
-.reviewContainer .reviewMore:focus-visible,
-.reviewContainer .reviewMore:active {
+.reviewContainer .reviewMore:hover, .reviewContainer .reviewMore:focus,
+	.reviewContainer .reviewMore:focus-visible, .reviewContainer .reviewMore:active
+	{
 	background: transparent !important;
 	color: #262626 !important;
 	outline: none !important;
@@ -1505,7 +1288,7 @@
 
 .reviewContainer .reviewImage {
 	width: 100%;
-	aspect-ratio: 1 / 1;
+	aspect-ratio: 1/1;
 	overflow: hidden;
 	background: #fafafa;
 }
@@ -1533,7 +1316,7 @@
 	background: linear-gradient(135deg, #fff0f6, #f3e8ff, #e8f4ff);
 }
 
-.reviewContainer .reviewNoImage > span {
+.reviewContainer .reviewNoImage>span {
 	font-size: 45px;
 }
 
@@ -1566,22 +1349,12 @@
 .reviewContainer .reviewIcons .reviewHeart {
 	color: #ed4956;
 	font-size: 29px;
-	cursor: pointer;
-}
-
-.reviewContainer .reviewIcons .reviewHeart.liked {
-	color: #ff4d6d;
-}
-
-.reviewContainer .reviewIcons .likeCount {
-	font-size: 15px;
 }
 
 .reviewContainer .reviewIcons .reviewShareIcon {
 	margin-left: auto;
 	color: #262626;
 	font-size: 25px;
-	cursor: pointer;
 }
 
 .reviewContainer .reviewLike {
@@ -1634,12 +1407,24 @@
 	text-decoration: none;
 }
 
+.reviewContainer .reviewIcons .reviewHeart {
+    cursor: pointer;
+}
+
+.reviewContainer .reviewIcons .reviewHeart.liked {
+    color: #ff4d6d;
+}
+
+.reviewContainer .reviewIcons .likeCount {
+    font-size: 15px;
+}
+
 .reviewContainer .reviewActions a:hover {
 	color: #c13584;
 }
 
 .reviewContainer .emptyReview {
-	grid-column: 1 / -1;
+	grid-column: 1/-1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -1652,7 +1437,7 @@
 	text-align: center;
 }
 
-.reviewContainer .emptyReview > span {
+.reviewContainer .emptyReview>span {
 	margin-bottom: 12px;
 	color: #c13584;
 	font-size: 42px;
@@ -1669,7 +1454,71 @@
 	font-size: 13px;
 }
 
-/* 리뷰 페이지네이션 */
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 7px;
+	margin: 25px 0
+}
+
+.pagination a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 34px;
+	height: 34px;
+	padding: 0 10px;
+	border: 1px solid #e0e5eb;
+	border-radius: 6px;
+	background: #fff;
+	color: #596574;
+	font-size: 13px;
+	text-decoration: none;
+	transition: .2s
+}
+
+.pagination a:hover, .pagination a.active {
+	background: #263238;
+	border-color: #263238;
+	color: #fff
+}
+
+.plannerPagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	margin: 20px 0;
+}
+
+.plannerPagination a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 32px;
+	height: 32px;
+	padding: 0 8px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	color: #555;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+.plannerPagination a.active {
+	background: #2563eb;
+	border-color: #2563eb;
+	color: #fff;
+}
+
+.plannerPagination a:hover {
+	background: #eff6ff;
+}
+
+.tourType {
+	margin-top: 50px;
+}
 
 .reviewNavi {
 	display: flex;
@@ -1704,111 +1553,50 @@
 	border-color: #2563eb;
 }
 
-/* 반응형 */
-
-@media (max-width: 900px) {
-	.mypageContainer {
-		max-width: calc(100% - 30px);
-	}
-
-	.sideBox {
-		width: 100%;
-		float: none;
-		margin-bottom: 20px;
-	}
-
-	.mainContainer {
-		width: 100%;
-		margin-left: 0;
-		padding-left: 0;
-	}
-
-	.wishlistGrid,
-	.reviewContainer .reviewList {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-
-	.sharedPlanCard,
-	.scrapPlanCard {
-		gap: 12px;
-	}
-
-	.sharedPlanInfo,
-	.scrapPlanInfo {
-		padding: 2px 10px;
-	}
+.emptyWishlist, .emptyReservation {
+	grid-column: 1/-1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 200px;
+	padding: 40px 20px;
+	border: 1px dashed #dbdbdb;
+	border-radius: 12px;
+	background: #fff;
+	text-align: center;
+	color: #8e8e8e;
 }
 
-@media (max-width: 600px) {
-	.mypageContainer {
-		max-width: calc(100% - 20px);
-	}
+.emptyWishlist>span, .emptyReservation>span {
+	font-size: 42px;
+	margin-bottom: 14px;
+	display: block;
+}
 
-	.mybarBox {
-		flex-wrap: wrap;
-	}
+.emptyWishlist strong, .emptyReservation strong {
+	font-size: 16px;
+	color: #262626;
+	display: block;
+	margin-bottom: 8px;
+}
 
-	.a1, .a2, .a3, .a4, .a5 {
-		width: 50%;
-	}
+.emptyWishlist p, .emptyReservation p {
+	font-size: 13px;
+	color: #8e8e8e;
+	margin: 0;
+}
 
-	.tourTypeBox,
-	.plannerBox {
-		flex-direction: column;
-		align-items: stretch;
-		padding: 20px;
-	}
+.emptyReservation {
+	width: 100%;
+}
 
-	.plannerBox .plannerBtns {
-		flex-wrap: wrap;
-	}
+.scrapPlanHeader{
+	margin-top: 50px;
+}
 
-	.sharedPlanCard,
-	.scrapPlanCard {
-		flex-direction: column;
-		align-items: stretch;
-	}
-
-	.sharedPlanCard > .img,
-	.scrapPlanCard > .img {
-		width: 100%;
-		height: 180px;
-		flex-basis: auto;
-	}
-
-	.sharedPlanInfo,
-	.scrapPlanInfo {
-		padding: 10px 0;
-	}
-
-	.sharedPlanCondition,
-	.scrapPlanCard .btnBox {
-		width: 100%;
-		flex-basis: auto;
-		align-items: stretch;
-	}
-
-	.wishlistGrid,
-	.reviewContainer .reviewList,
-	.couponList {
-		grid-template-columns: 1fr;
-	}
-
-	.reservationVar {
-		flex-wrap: wrap;
-	}
-
-	.tab {
-		width: auto;
-		flex: 1;
-		font-size: 11px;
-	}
-
-	.coupon_point {
-		overflow-x: auto;
-	}
-
-	.coupon_point table {
-		min-width: 480px;
-	}
+.reviewContainer .reviewLike {
+   margin: 0 0 10px;
+   color: #262626;
+   font-size: 13px;
 }
