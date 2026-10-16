@@ -514,7 +514,7 @@
 						name="amenity" value="PC">PC
 				</div>
 				<button type="submit" class="reset">필터 적용</button>
-				<button type="reset" class="reset">필터 초기화</button>
+				<button type="button" class="reset" id="filterReset">필터 초기화</button>
 
 			</div>
 
@@ -636,6 +636,34 @@
 		next.innerHTML = ">";
 		navi.append(next);
 	}
+	
+	let now = new Date();
+	let yyyy = now.getFullYear();
+	let mm = String(now.getMonth() + 1).padStart(2, "0");
+	let dd = String(now.getDate()).padStart(2, "0");
+	let today = yyyy + "-" + mm + "-" + dd;
+	
+	$("#checkIn").attr("min", today);
+	
+	$("#checkIn").on("change", function(){
+		let checkIn = $("#checkIn").val();
+		
+		let checkOutStart = new Date(checkIn);
+		checkOutStart.setDate(checkOutStart.getDate() + 1);
+		
+		let yyyy2 = checkOutStart.getFullYear();
+		let mm2 = String(checkOutStart.getMonth() + 1).padStart(2, "0");
+		let dd2 = String(checkOutStart.getDate()).padStart(2, "0");
+		let checkOutStartDay = yyyy2 + "-" + mm2 + "-" + dd2;
+		
+		$("#checkOut").attr("min", checkOutStartDay);
+	})
+	
+	$("#filterReset").on("click", function() {
+		$(".amenity").prop("checked", false);
+		maxPrice.prop("disabled", true);
+		$(".search_bar").submit();
+	});
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

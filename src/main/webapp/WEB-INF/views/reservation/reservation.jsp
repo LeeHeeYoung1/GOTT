@@ -21,24 +21,26 @@ body {
 	background: #F5F5F5;
 	font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
 	color: #1a1a1f;
+	-webkit-font-smoothing: antialiased;
 }
 
 .container {
 	max-width: 760px;
 	margin: 0 auto;
 	background: #fff;
-	padding: 30px 28px 40px;
+	padding: 34px 32px 48px;
 	min-height: 100vh;
 }
 
 .header {
-	font-size: 22px;
+	font-size: 24px;
 	font-weight: 800;
-	letter-spacing: -0.02em;
+	letter-spacing: -0.03em;
+	line-height: 1.3;
 }
 
 hr {
-	margin: 16px 0 24px;
+	margin: 18px 0 26px;
 	border: 0;
 	border-top: 1px solid #e3e6ea;
 }
@@ -55,8 +57,8 @@ form {
 .photo {
 	position: relative;
 	max-width: 580px;
-	margin: 0 auto 22px;
-	border-radius: 8px;
+	margin: 0 auto 26px;
+	border-radius: 12px;
 	overflow: hidden;
 	background: #eef1f5;
 }
@@ -89,46 +91,55 @@ form {
 	position: absolute;
 	top: 210px;
 	transform: translateY(-50%);
-	width: 44px;
-	height: 44px;
-	border: 1px solid #ddd;
+	width: 42px;
+	height: 42px;
+	border: 0;
 	border-radius: 50%;
-	background: #fff;
+	background: rgba(255, 255, 255, .92);
 	font-size: 0;
 	color: #45484f;
 	cursor: pointer;
 	z-index: 2;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, .14);
+	transition: background .15s, color .15s, transform .15s;
 }
 
 .leftBtn::before {
 	content: "\2039";
-	font-size: 24px;
+	font-size: 26px;
 	line-height: 1;
 }
 
 .rightBtn::before {
 	content: "\203A";
-	font-size: 24px;
+	font-size: 26px;
 	line-height: 1;
 }
 
 .leftBtn {
-	left: 8px;
+	left: 14px;
 }
 
 .rightBtn {
-	right: 8px;
+	right: 14px;
 }
 
 .leftBtn:hover, .rightBtn:hover {
-	border-color: #1a1a1f;
-	background: #f6f7f8;
-	color: #1a1a1f;
+	background: #1a1a1f;
+	color: #fff;
+}
+
+.leftBtn:hover {
+	transform: translateY(-50%) translateX(-2px);
+}
+
+.rightBtn:hover {
+	transform: translateY(-50%) translateX(2px);
 }
 
 /* ===== 객실 정보 ===== */
 .room_info {
-	padding-bottom: 20px;
+	padding-bottom: 22px;
 	border-bottom: 1px solid #eef0f2;
 }
 
@@ -137,8 +148,10 @@ form {
 }
 
 .roomName {
-	font-size: 20px;
+	font-size: 21px;
 	font-weight: 700;
+	letter-spacing: -0.02em;
+	color: #1a1a1f;
 }
 
 .roomCount {
@@ -150,55 +163,112 @@ form {
 .roomAmenity {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 5px;
-	margin-top: 12px;
+	gap: 6px;
+	margin-top: 14px;
 }
 
 .roomAmenity span {
-	padding: 3px 9px;
+	padding: 4px 11px;
 	border: 1px solid #e8eaed;
-	border-radius: 3px;
+	border-radius: 4px;
+	background: #fafbfc;
 	font-size: 11px;
 	color: #6b6f76;
+	white-space: nowrap;
+}
+
+/* ===== 예약 정보 ===== */
+.checkIn, .checkOut, .guest {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0 18px;
+	padding: 14px 2px;
+	border-bottom: 1px solid #f3f5f7;
+}
+
+.checkIn p, .checkOut p, .guest p {
+	margin: 0;
+	font-size: 14px;
+	color: #45484f;
+}
+
+.guest p:first-child {
+	width: 100%;
+	margin-bottom: 4px;
+	font-size: 13px;
+	color: #9a9aa0;
+}
+
+.guest p+p {
+	font-weight: 600;
+}
+
+/* ===== 정보 없음 ===== */
+.emptyData {
+	margin: 10px 0 4px;
+	padding: 26px 20px;
+	border: 1px dashed #d7dce2;
+	border-radius: 10px;
+	background: #fafbfc;
+	font-size: 14px;
+	color: #8b8f96;
+	text-align: center;
+	line-height: 1.6;
 }
 
 /* ===== 가격 ===== */
 .room_price {
-	padding: 20px 0;
+	display: flex;
+	align-items: baseline;
+	justify-content: flex-end;
+	gap: 6px;
+	padding: 22px 2px;
 	border-bottom: 1px solid #eef0f2;
-	font-size: 18px;
-	font-weight: 700;
+	font-size: 24px;
+	font-weight: 800;
+	letter-spacing: -0.02em;
 	text-align: right;
-	line-height: 1.6;
+	line-height: 1.4;
+	color: #1a1a1f;
 }
 
 /* ===== 하단 버튼 ===== */
 .buttons {
 	display: flex;
 	gap: 10px;
-	margin-top: 28px;
+	margin-top: 32px;
 }
 
 .buttons button {
 	flex: 1;
-	height: 52px;
+	height: 54px;
 	border: 1px solid #1a1a1f;
-	border-radius: 6px;
+	border-radius: 8px;
 	background: #1a1a1f;
 	font-family: inherit;
 	font-size: 16px;
 	font-weight: 700;
+	letter-spacing: -0.02em;
 	color: #fff;
 	cursor: pointer;
+	transition: background .15s, box-shadow .15s, transform .15s;
 }
 
 .buttons button:hover {
 	background: #33363c;
+	box-shadow: 0 6px 16px rgba(26, 26, 31, .18);
+	transform: translateY(-1px);
+}
+
+.buttons button:active {
+	transform: translateY(0);
+	box-shadow: none;
 }
 
 .buttons button[type=button] {
 	flex: 0 0 140px;
-	border-color: #ddd;
+	border-color: #dfe3e8;
 	background: #fff;
 	color: #45484f;
 	font-weight: 500;
@@ -206,6 +276,8 @@ form {
 
 .buttons button[type=button]:hover {
 	background: #f6f7f8;
+	box-shadow: none;
+	transform: none;
 }
 </style>
 </head>
@@ -254,28 +326,32 @@ form {
 					</c:forEach>
 				</div>
 			</div>
-			<div class="checkIn">
-				<input type="hidden" name="checkIn" value="${checkIn }">
-				<p>체크인 : ${checkIn}</p>
-			</div>
-			<div class="checkOut">
-				<input type="hidden" name="checkOut" value="${checkOut }">
-				<p>체크아웃 : ${checkOut}</p>
-			</div>
-			<div class="guest">
-				<input type="hidden" name="guest" value="${adult +child}">
-				<p>숙박인원</p>
-				<p>성인 : ${adult}</p>
-				<p>아동 : ${child}</p>
-			</div>
-			<div class="room_price">
-				<c:choose>
-					<c:when test="${total_price != null}">
+
+			<c:choose>
+				<c:when test="${empty checkIn or empty checkOut or empty adult or empty child or empty total_price}">
+			 		<div class="emptyData">날짜 혹은 인원이 선택되지 않았습니다.</div>
+				</c:when>
+				<c:otherwise>
+					<div class="checkIn">
+						<input type="hidden" name="checkIn" value="${checkIn }">
+						<p>체크인 : ${checkIn}</p>
+					</div>
+					<div class="checkOut">
+						<input type="hidden" name="checkOut" value="${checkOut }">
+						<p>체크아웃 : ${checkOut}</p>
+					</div>
+					<div class="guest">
+						<input type="hidden" name="guest" value="${adult +child}">
+						<p>숙박인원</p>
+						<p>성인 : ${adult}</p>
+						<p>아동 : ${child}</p>
+					</div>
+					<div class="room_price">
 						<fmt:formatNumber value="${total_price}" pattern="#,###" />
-								원
-					</c:when>
-				</c:choose>
-			</div>
+						원
+					</div>
+				</c:otherwise>
+			</c:choose>
 
 			<div class="buttons">
 				<button class="payment">결제하기</button>
@@ -314,6 +390,16 @@ form {
 		$(".room_img").css("transform",
 				"translateX(-" + (photoIdx * 100) + "%)");
 	}
+	
+	let isEmptyData = ${empty checkIn or empty checkOut or empty adult or empty child or empty total_price ? 'true' : 'false'};
+
+	$("form").on("submit", function(e) {
+		if (isEmptyData) {
+			e.preventDefault();
+			alert("날짜와 인원을 먼저 선택해 주세요.");
+			location.href = "/reservation/list?cpage=1";
+		}
+	});
 </script>
 
 </html>
