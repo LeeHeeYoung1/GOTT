@@ -191,7 +191,7 @@
 
 		<div class="writeRow">
 			<label>제목</label> <input type="text" id="title" name="title"
-       class="writeInput" placeholder="제목을 입력해주세요." required>
+       class="writeInput" maxlength="100"  placeholder="제목을 입력해주세요." required>
 		</div>
 
 
@@ -224,8 +224,6 @@
 
 </div>
 <script>
-
-
 $(document).ready(function() {
 
     $('#summernote').summernote({
@@ -241,64 +239,42 @@ $(document).ready(function() {
         ],
 
         fontNames: [
-            'Arial',
-            'Arial Black',
-            'Comic Sans MS',
-            'Courier New',
-            '맑은 고딕',
-            '궁서',
-            '굴림체',
-            '굴림',
-            '돋움체',
-            '바탕체'
+            'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
+            '맑은 고딕', '궁서', '굴림체', '굴림', '돋움체', '바탕체'
         ],
 
         fontSizes: [
-            '8',
-            '9',
-            '10',
-            '11',
-            '12',
-            '14',
-            '16',
-            '18',
-            '20',
-            '22',
-            '24',
-            '28',
-            '30',
-            '36',
-            '50',
-            '72'
+            '8', '9', '10', '11', '12', '14', '16', '18',
+            '20', '22', '24', '28', '30', '36', '50', '72'
         ],
 
         height: 450,
-
         lang: "ko-KR",
-
         placeholder: "내용을 작성하세요.",
 
         callbacks: {
-
-            // 이미지 선택
-            onImageUpload: function(files, editor, welEditable) {
-
-                console.log("사진 선택됨");
-                console.log("파일:", files);
-
-                for (var i = files.length - 1; i >= 0; i--) {
-
+            onImageUpload: function(files) {
+                for (let i = 0; i < files.length; i++) {
                     uploadImageFile(files[i], this);
-
                 }
             }
         }
     });
-	
+
     $(".submitBtn").click(function(e) {
-        if ($("#title").val().trim() == "") {
+        let title = $("#title").val().trim();
+        let contents = $("#summernote").summernote("code");
+        let text = $("<div>").html(contents).text().trim();
+
+        if (title == "") {
             e.preventDefault();
             alert("제목을 입력해주세요.");
+            return;
+        }
+
+        if (title.length > 100) {
+            e.preventDefault();
+            alert("제목은 100자 이하로 입력하세요.");
             return;
         }
 
@@ -307,250 +283,120 @@ $(document).ready(function() {
             alert("내용을 입력해주세요.");
             return;
         }
+
+        if (text.length > 5000) {
+            e.preventDefault();
+            alert("본문은 5000자 이하로 입력하세요.");
+            return;
+        }
     });
-    // ----------------------------------------
-    // 이미지 업로드
-    // ----------------------------------------
-
-    function uploadImageFile(file, el) {
-
-        console.log("uploadImageFile 실행됨");
-        console.log("선택한 파일:", file);
-
-        let data = new FormData();
-
-        data.append("file", file);
-
-        $.ajax({
-
-            data: data,
-
-            type: "POST",
-
-            url: '/file/uploadImageFile',
-
-            contentType: false,
-
-            enctype: 'multipart/form-data',
-
-            processData: false,
-
-            success: function(data) {
-
-                console.log("업로드 성공:", data);
-
-                $(el).summernote(
-                    'editor.insertImage',
-                    data.url
-                );
-
-            },
-
-            error: function(xhr) {
-
-                console.log("업로드 실패");
-                console.log("상태코드:", xhr.status);
-                console.log("응답:", xhr.responseText);
-
-            }
-        });
-    }
-
-
-    // ----------------------------------------
-    // 이미지 드래그 시작
-    // ----------------------------------------
 
     let draggingImage = null;
 
+    $(document).on('dragstart', '.note-editable img', function(e) {
+        draggingImage = this;
+        e.originalEvent.dataTransfer.effectAllowed = "move";
+        e.originalEvent.dataTransfer.setData("text/plain", "image");
+        $(this).css("opacity", "0.5");
+    });
 
-    $('#summernote').on(
-        'dragstart',
-        '.note-editable img',
-        function(e) {
+    $(document).on('dragover', '.note-editable', function(e) {
+        if (draggingImage == null) {
+            return;
+        }
 
-            draggingImage = this;
+        e.preventDefault();
+        e.originalEvent.dataTransfer.dropEffect = "move";
+    });
 
-            e.originalEvent.dataTransfer.effectAllowed = "move";
+    $(document).on('drop', '.note-editable', function(e) {
+        if (draggingImage == null) {
+            return;
+        }
 
-            // 드래그할 이미지 정보 저장
-            e.originalEvent.dataTransfer.setData(
-                "text/plain",
-                "image"
+        e.preventDefault();
+
+        let range;
+
+        if (document.caretRangeFromPoint) {
+            range = document.caretRangeFromPoint(
+                e.originalEvent.clientX,
+                e.originalEvent.clientY
+            );
+        } else if (document.caretPositionFromPoint) {
+            let position = document.caretPositionFromPoint(
+                e.originalEvent.clientX,
+                e.originalEvent.clientY
             );
 
-            $(this).css("opacity", "0.5");
-
+            if (position) {
+                range = document.createRange();
+                range.setStart(position.offsetNode, position.offset);
+                range.collapse(true);
+            }
         }
-    );
 
+        if (range) {
+            let node = range.startContainer;
 
-    // ----------------------------------------
-    // 이미지 위에 드래그했을 때
-    // ----------------------------------------
-
-    $('#summernote').on(
-        'dragover',
-        '.note-editable',
-        function(e) {
-
-            if (draggingImage == null) {
-                return;
+            if (node.nodeType === 3) {
+                node = node.parentNode;
             }
 
-            e.preventDefault();
-
-            e.originalEvent.dataTransfer.dropEffect = "move";
-
-        }
-    );
-
-
-    // ----------------------------------------
-    // 이미지 또는 글 위치에 놓기
-    // ----------------------------------------
-
-    $('#summernote').on(
-        'drop',
-        '.note-editable',
-        function(e) {
-
-            if (draggingImage == null) {
-                return;
-            }
-
-            e.preventDefault();
-
-            let editable = this;
-
-            let range;
-
-            // 마우스 위치에 해당하는 글자 위치 찾기
-            if (document.caretRangeFromPoint) {
-
-                range = document.caretRangeFromPoint(
-                    e.originalEvent.clientX,
-                    e.originalEvent.clientY
-                );
-
-            } else if (document.caretPositionFromPoint) {
-
-                let position =
-                    document.caretPositionFromPoint(
-                        e.originalEvent.clientX,
-                        e.originalEvent.clientY
-                    );
-
-                if (position) {
-
-                    range = document.createRange();
-
-                    range.setStart(
-                        position.offsetNode,
-                        position.offset
-                    );
-
-                    range.collapse(true);
-                }
-            }
-
-
-            // 위치를 찾았으면 이미지 이동
-            if (range) {
-
-                let node = range.startContainer;
-
-                // 텍스트 노드라면 부모 요소 가져오기
-                if (node.nodeType === 3) {
-                    node = node.parentNode;
-                }
-
-
-                // 이미지 자신에게 놓은 경우
-                if (node === draggingImage) {
-
-                    return;
-
-                }
-
-
-                // 현재 드래그 중인 이미지 삭제
+            if (node !== draggingImage) {
                 $(draggingImage).detach();
 
+                if (node && node.parentNode) {
+                    let targetRect = node.getBoundingClientRect();
+                    let mouseX = e.originalEvent.clientX;
 
-                // 이미지가 들어갈 위치 찾기
-                let rect = range.getBoundingClientRect();
-
-                let mouseX = e.originalEvent.clientX;
-
-                let target = node;
-
-
-                // 이미지가 들어갈 위치가 왼쪽인지 오른쪽인지 확인
-                if (target && target.parentNode) {
-
-                    let targetRect =
-                        target.getBoundingClientRect();
-
-                    if (
-                        mouseX >
-                        targetRect.left +
-                        targetRect.width / 2
-                    ) {
-
-                        target.parentNode.insertBefore(
+                    if (mouseX > targetRect.left + targetRect.width / 2) {
+                        node.parentNode.insertBefore(
                             draggingImage,
-                            target.nextSibling
+                            node.nextSibling
                         );
-
                     } else {
-
-                        target.parentNode.insertBefore(
-                            draggingImage,
-                            target
-                        );
+                        node.parentNode.insertBefore(draggingImage, node);
                     }
-
                 } else {
-
-                    editable.appendChild(
-                        draggingImage
-                    );
+                    this.appendChild(draggingImage);
                 }
             }
-
-
-            $(draggingImage).css(
-                "opacity",
-                "1"
-            );
-
-            draggingImage = null;
-
         }
-    );
 
+        $(draggingImage).css("opacity", "1");
+        draggingImage = null;
+    });
 
-    // ----------------------------------------
-    // 드래그 끝
-    // ----------------------------------------
-
-    $('#summernote').on(
-        'dragend',
-        '.note-editable img',
-        function() {
-
-            $(this).css(
-                "opacity",
-                "1"
-            );
-
-            draggingImage = null;
-
-        }
-    );
+    $(document).on('dragend', '.note-editable img', function() {
+        $(this).css("opacity", "1");
+        draggingImage = null;
+    });
 
 });
+
+function uploadImageFile(file, el) {
+    let data = new FormData();
+    data.append("file", file);
+
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: "/file/uploadImageFile",
+        contentType: false,
+        enctype: "multipart/form-data",
+        processData: false,
+
+        success: function(data) {
+            $(el).summernote('editor.insertImage', data.url);
+        },
+
+        error: function(xhr) {
+            alert("이미지 업로드에 실패했습니다.");
+            console.log(xhr.responseText);
+        }
+    });
+}
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

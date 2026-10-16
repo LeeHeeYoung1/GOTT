@@ -352,18 +352,39 @@ function deleteFile(button) {
     $(button).parent().remove();
 }
 
-$("form").on("submit", function() {
-    if ($("#title").val().trim() == "") {
+$("form").on("submit", function(e) {
+    let title = $("#title").val().trim();
+    let contents = $("#contents").summernote("code");
+    let text = $("<div>").html(contents).text().trim();
+
+    if (title == "") {
+        e.preventDefault();
         alert("제목을 입력해주세요.");
         $("#title").focus();
         return false;
     }
+    
+    if (title.length > 100) {
+        e.preventDefault();
+        alert("제목은 100자 이하로 입력하세요.");
+        $("#title").focus();
+        return false;
+    }
 
-    if ($("#contents").summernote("code").trim() == "") {
+    if ($("#contents").summernote("isEmpty")) {
+        e.preventDefault();
         alert("내용을 입력해주세요.");
         return false;
     }
+
+    if (text.length > 5000) {
+        e.preventDefault();
+        alert("본문은 5000자 이하로 입력하세요.");
+        return false;
+    }
 });
+
+
 </script>
 
 </body>

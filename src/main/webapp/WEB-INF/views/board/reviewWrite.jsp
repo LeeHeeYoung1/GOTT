@@ -653,5 +653,16 @@ body {
 								'72' ]
 
 					})
+					
+	$("#submit").on("click", function(e) {
+    let contents = $("#contents").summernote("code");
+    let text = $("<div>").html(contents).text().trim();
+
+    if (text.length > 5000) {
+        e.preventDefault();
+        alert("본문은 5000자 이하로 입력하세요.");
+        return;
+    }
+});
 </script>
 </html>
