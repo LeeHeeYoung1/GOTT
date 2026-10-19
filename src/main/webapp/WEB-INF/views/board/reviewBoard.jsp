@@ -621,7 +621,7 @@ button:hover {
 						</span>
 					</div>
 					<p class="reviewLike">
-						좋아요 <strong>${i.rating}</strong>
+						⭐ <strong>${i.rating}</strong>
 						
 					</p>
 					<div class="reviewDescription">${i.contents}</div>

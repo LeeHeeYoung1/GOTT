@@ -48,7 +48,7 @@ public class TravelPlanController {
 		tprdao.tprDeleteByPlanId(planId);
 		tpsrdao.tpsDeleteByPlanId(planId);
 		dao.deletePlan(planId, memberId);
-		return "redirect:/members/mypage";
+		return "redirect:/travelPlan/list?cpage=1";
 	}
 
 	// 여행 일정 및 장소 저장

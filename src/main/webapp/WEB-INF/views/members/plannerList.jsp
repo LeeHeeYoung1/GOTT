@@ -180,11 +180,40 @@
 	color: #fff;
 	font-weight: 700;
 }
+
+.plannerWrite {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.plannerWriteBtn {
+    display: inline-block;
+    padding: 11px 20px;
+    background: #0f766e;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background .2s;
+}
+
+.plannerWriteBtn:hover {
+    background: #115e59;
+}
+
 </style>
 
 <div class="sharedPlanner">
 	<h2 class="a1">여행 일정 구경하기</h2>
 	<p class="description">다른 여행자들이 공유한 여행 계획을 확인해 보세요.</p>
+	
+	<div class="plannerWrite">
+    	<a href="/members/planner" class="plannerWriteBtn">
+        	+ 플래너 만들기
+    	</a>
+	</div>
 
 	<div class="filter" id="filter">
 		<select name="region" id="region">

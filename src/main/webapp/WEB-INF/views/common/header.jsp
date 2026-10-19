@@ -235,7 +235,7 @@
             <div class="textzone"><a href="/place/mappage">지역</a></div>
             <div class="textzone"><a href="${pageContext.request.contextPath}/place/search?keyword=&type=전체&cpage=1">여행지</a></div>
             <div class="textzone"><a href="/reservation/list?cpage=1">숙박업소</a></div>
-            <div class="textzone"><a href="/members/planner">여행플래너</a></div>
+            <div class="textzone"><a href="/travelPlan/list?cpage=1">여행플래너</a></div>
             <div class="textzone"><a href="/board/freeBoard?cpage=1">게시판</a></div>
             <div class="textzone"><a href="/notice/qna?cpage=1">문의사항</a></div>
             <c:if test="${loginId == 'admin0001'}"><div class="textzone"><a href="/dashBoard/dashHome">대시보드</a></div></c:if>
