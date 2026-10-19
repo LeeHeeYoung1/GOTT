@@ -15,10 +15,6 @@
 
 <style>
 
-/* =========================================================
-   1. 플래너 제목 영역
-   기존 public.css의 전역 스타일은 수정하지 않음
-   ========================================================= */
 .container {
 	padding-top:20px;
 }
@@ -79,7 +75,7 @@
     box-shadow: 0 4px 14px rgba(38, 50, 56, 0.04);
 }
 
-.barContainer form {
+.barContainer .planInputArea {
     width: 100%;
     display: grid;
     grid-template-columns: minmax(180px, 1.8fr) repeat(4, minmax(95px, 1fr)) auto;
@@ -87,7 +83,7 @@
     gap: 14px;
 }
 
-.barContainer form > div {
+.barContainer .planInputArea > div {
     min-width: 0;
     margin: 0 !important;
     display: flex;
@@ -96,7 +92,7 @@
     gap: 9px;
 }
 
-.barContainer form span {
+.barContainer .planInputArea span {
     min-height: 18px;
     display: flex;
     align-items: center;
@@ -722,16 +718,16 @@
         padding: 24px 20px 30px;
     }
 
-    .barContainer form {
+    .barContainer .planInputArea {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
     }
 
-    .barContainer form > div:first-child {
+    .barContainer .planInputArea > div:first-child {
         grid-column: span 2;
     }
 
-    .barContainer form > div:last-child {
+    .barContainer .planInputArea > div:last-child {
         grid-column: auto;
     }
 
@@ -786,13 +782,13 @@
         padding: 16px;
     }
 
-    .barContainer form {
+    .barContainer .planInputArea {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
     }
 
-    .barContainer form > div:first-child,
-    .barContainer form > div:last-child {
+    .barContainer .planInputArea > div:first-child,
+    .barContainer .planInputArea > div:last-child {
         grid-column: 1 / -1;
     }
 
@@ -1014,8 +1010,7 @@
 
         <!-- 위: 일정 입력 바 -->
         <div class="barContainer">
-
-            <form action="">
+            <div class="planInputArea">
                 <div style="margin: 10px;">
                     <span style="font-size: 10px;">일정 제목</span><br>
                     <input type="text" name="title" placeholder="예: 제주도 3박 4일 힐링 여행">
@@ -1056,7 +1051,7 @@
                 <div>
                     <button type="button" id="createPlaner">일정 생성</button>
                 </div>
-            </form>
+            </div>
         </div>
 
         <div class="plannerLayout">
@@ -1132,13 +1127,6 @@
 
 <script>
 
-$("#toggleBottom").on("click", function() {
-    let isOpen = $("#sharePanelContent").is(":visible");
-
-    $("#sharePanelContent").stop(true, true).slideToggle(200);
-    $("#toggleArrow").text(isOpen ? "⌄" : "⌃");
-    $(this).attr("aria-expanded", !isOpen);
-});
 
 
 $(document).ready(function() {
