@@ -369,9 +369,10 @@
 
                 <input id="phone" name="phone" type="text" placeholder="'-' 를 제외한 번호를 입력하세요">
                 <input id="email" name="email" type="email" placeholder="email을 입력하세요.">
-                <span style="color: red;">* 성별을 선택하세요</span>
+                
                 <input class="gender" name="gender" type="radio" value="남성">남성
                 <input class="gender" name="gender" type="radio" value="여성">여성
+                <span id="genderGuide" style="color: red;">* 성별을 선택하세요</span>
 
                 <input name="dob" type="date" style="margin-top: 5px;" max="<%= java.time.LocalDate.now() %>">
 
@@ -512,6 +513,10 @@
             }
         })
     })
+    
+    $("input[name='gender']").on("change", function() {
+	    $("#genderGuide").hide();
+	});
 
     $("#nickname").on("input", function(){
         $(this).removeAttr("check");

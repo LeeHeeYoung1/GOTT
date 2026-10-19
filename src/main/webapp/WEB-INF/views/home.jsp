@@ -20,7 +20,6 @@
    crossorigin="anonymous"></script>
 <style>
 .container {
-   padding-bottom: 20px;
    padding-top:3px;
 }
 
