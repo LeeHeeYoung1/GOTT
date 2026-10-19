@@ -537,10 +537,20 @@
 		</button>
 
 		<div class="backBtnBox">
-			<a href="/travelPlan/list?cpage=${cpage}&region=${region}&night=${night}&sort=${sort}"
-				class="backButton" id="backToList">목록으로 돌아가기</a> <a
-				href="${pageContext.request.contextPath}/members/mypage"
-				class="backButton" id="backToMypage">마이페이지로 돌아가기</a>
+		    <a href="/travelPlan/list?cpage=${cpage}&region=${region}&night=${night}&sort=${sort}"
+		       class="backButton" id="backToList">목록으로 돌아가기</a>
+		
+		    <a href="${pageContext.request.contextPath}/members/mypage"
+		       class="backButton" id="backToMypage">마이페이지로 돌아가기</a>
+		
+		    <c:if test="${sessionScope.loginId eq plan.member_id}">
+		        <a href="${pageContext.request.contextPath}/travelPlan/delete?planId=${plan.plan_id}"
+		           class="backButton"
+		           onclick="return confirm('정말 이 여행 일정을 삭제하시겠습니까?');"
+		           style="background: #dc2626; color: #fff; border-color: #dc2626;">
+		            일정 삭제하기
+		        </a>
+		    </c:if>
 		</div>
 	</div>
 	<div class="replyBox">
