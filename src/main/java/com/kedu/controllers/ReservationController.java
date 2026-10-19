@@ -36,7 +36,7 @@ import com.kedu.services.ReservationService;
 @Controller
 @RequestMapping("/reservation")
 public class ReservationController {
-	private String apiSecret = "1eCHxu85LeGUbtZZ3YDLU1SfgU2aZVuA6qROvuuNFiSuzSWOiRdaqGcoVVoMfbKxxbtNaRPOM6qsxBHH";
+	private String apiSecret = System.getenv("MY_API_KEY");
 	
 	@Autowired
 	private ReservationService reservationService;
