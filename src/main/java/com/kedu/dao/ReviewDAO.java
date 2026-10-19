@@ -29,7 +29,7 @@ public class ReviewDAO {
 		}
 
 		String memberId = dto.getMember_id();
-		int mileage = 3000;
+		int mileage = 2000;
 
 		// 2. 회원 마일리지 잔액 증가
 		String updateSql = "UPDATE MEMBERS " + "SET MILEAGE = NVL(MILEAGE, 0) + ? " + "WHERE ID = ?";

@@ -146,6 +146,11 @@ body {
     margin-left: 17%;
     padding-left: 20px;
 }
+.mypageContainer::after {
+    content: "";
+    display: block;
+    clear: both;
+}
 
 .wishStatBar {
     width: 100%;
