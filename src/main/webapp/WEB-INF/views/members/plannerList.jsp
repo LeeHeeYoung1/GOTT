@@ -203,6 +203,39 @@
     background: #115e59;
 }
 
+.planTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.planTitle h3 {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+
+.planWriter {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: #f1f5f9;
+    border-radius: 20px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.planWriter::before {
+  
+    color: #0d9488;
+    font-weight: 700;
+}
 </style>
 
 <div class="sharedPlanner">
@@ -256,9 +289,14 @@
 				            class="planCardLink">
 				            <div class="planCard">
 				                <span class="publicLabel">공개 일정</span>
-				                <h3>
-				                    <c:out value="${plan.plan_title}" />
-				                </h3>
+				                <div class="planTitle">
+								    <h3>
+								        <c:out value="${plan.plan_title}" />
+								    </h3>
+								    <span class="planWriter">
+								       <c:out value="${plan.member_id}" />
+								    </span>
+								</div>
 				                <p>
 				                    여행 시작일:
 				                    <fmt:formatDate value="${plan.start_date}" pattern="yyyy-MM-dd" />

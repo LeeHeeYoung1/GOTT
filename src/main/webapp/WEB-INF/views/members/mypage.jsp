@@ -416,9 +416,12 @@
 												<img src="${wishList.image_name}" alt="${wishList.name}">
 											</div>
 											<div class="wishlistInfo">
-												<h3>${wishList.name}</h3>
-												<p>${wishList.region}</p>
-												
+											    <h3><c:out value="${wishList.name}" /></h3>
+											    <p><c:out value="${wishList.region}" /></p>
+											
+											    <button type="button" class="wishlistRemoveBtn" data-place-id="${wishList.place_id}">
+											        ♥ 찜해제
+											    </button>
 											</div>
 										</div>
 									</c:forEach>
@@ -639,15 +642,39 @@
 
 	<script>
 	
-	document.querySelectorAll(".wishlistTab button").forEach(function(button) {
-	    button.addEventListener("click", function() {
-	        const url = new URL(window.location.href);
-	        url.searchParams.set("wishType", this.dataset.type);
-	        url.searchParams.set("wishCpage", "1");
-	        url.hash = "wishlistSection";
-	        window.location.href = url.toString();
-	    });
-	});
+	// 찜 목록 탭 변경
+    document.querySelectorAll(".wishlistTab button").forEach(btn => {
+        btn.onclick = function() {
+            const url = new URL(location.href);
+            url.searchParams.set("wishType", this.dataset.type);
+            url.searchParams.set("wishCpage", "1");
+            location.href = url.pathname + url.search + "#wishlistSection";
+        };
+    });
+
+    // 찜해제
+    document.querySelectorAll(".wishlistRemoveBtn").forEach(btn => {
+        btn.onclick = function() {
+            if (!confirm("찜해제 하시겠습니까?")) return;
+
+            fetch("${pageContext.request.contextPath}/wishlist/add", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: "placeId=" + this.dataset.placeId
+            })
+            .then(res => res.text())
+            .then(result => {
+                if (result.trim() === "delete") {
+                    this.closest(".wishlistCard").remove();
+                } else if (result.trim() === "login") {
+                    alert("로그인이 필요합니다.");
+                } else {
+                    alert("찜해제에 실패했습니다.");
+                }
+            })
+            .catch(() => alert("찜해제 중 오류가 발생했습니다."));
+        };
+    });
 	
 		$(document).ready(function() {
 		
