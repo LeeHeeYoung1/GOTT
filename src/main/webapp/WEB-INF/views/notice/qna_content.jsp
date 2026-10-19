@@ -455,8 +455,11 @@ button {
 
 <div class="buttonBox">
     <button type="button" id="goList">목록</button>
-</div>
 
+    <c:if test="${loginId == 'admin0001'}">
+        <button type="button" id="deleteQna">삭제</button>
+    </c:if>
+</div>
     </div>
 
     <div class="replyBox">
@@ -533,6 +536,12 @@ let originalReply = "";
 
 $("#goList").on("click", function() {
     location.href = "/notice/qna?cpage=${cpage}";
+});
+
+$("#deleteQna").on("click", function() {
+    if (confirm("해당 질문을 삭제하시겠습니까?")) {
+        location.href = "/notice/qna_delete?qid=${qna.qid}&cpage=${cpage}";
+    }
 });
 
 /* 답변 등록 */

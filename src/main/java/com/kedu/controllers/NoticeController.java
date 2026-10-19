@@ -316,65 +316,88 @@ public class NoticeController {
 	    return "redirect:/notice/qna?cpage=" + cpage;
 	}
 	
-	@RequestMapping("/qna_content")
-	public String qnaContent(String pw, int qid, int cpage,
-	        Model model, HttpSession session) {
 
-	    QnaDTO dto = qdao.qnaContent(qid);
+@RequestMapping("/qna_content")
+public String qnaContent(String pw, int qid, int cpage,
+        Model model, HttpSession session) {
 
-	    if (dto == null) {
-	        return "redirect:/notice/qna?cpage=" + cpage;
-	    }
+    QnaDTO dto = qdao.qnaContent(qid);
 
-	    // 공개 글은 바로 상세 페이지로 이동
-	    if (!"Y".equals(dto.getIs_private())) {
-	    	dto.setView_count(qdao.updateViewCount(qid));
-	        model.addAttribute("qna", dto);
-	        model.addAttribute("cpage", cpage);
-	        model.addAttribute("loginId", session.getAttribute("loginId"));
-	        List<FilesDTO> fileList = filesDAO.getFile(qid);
-	        model.addAttribute("fileList", fileList);
+    if (dto == null) {
+        return "redirect:/notice/qna?cpage=" + cpage;
+    }
 
-	        return "notice/qna_content";
-	    }
+    String loginId = (String) session.getAttribute("loginId");
 
-	    // 비공개 글: 비밀번호 인증 성공 후 상세 페이지 표시
-	    String authKey = "qnaAuth_" + qid;
+    // 공개 글이거나 관리자이면 비밀번호 확인 없이 상세 페이지 표시
+    if (!"Y".equals(dto.getIs_private())
+            || "admin0001".equals(loginId)) {
 
-	    if (Boolean.TRUE.equals(session.getAttribute(authKey))) {
-	        session.removeAttribute(authKey);
-	        dto.setView_count(qdao.updateViewCount(qid));
+        dto.setView_count(qdao.updateViewCount(qid));
 
-	        model.addAttribute("qna", dto);
-	        model.addAttribute("cpage", cpage);
-	        model.addAttribute("loginId", session.getAttribute("loginId"));
-	        List<FilesDTO> fileList = filesDAO.getFile(qid);
-	        model.addAttribute("fileList", fileList);
+        model.addAttribute("qna", dto);
+        model.addAttribute("cpage", cpage);
+        model.addAttribute("loginId", loginId);
 
-	        return "notice/qna_content";
-	    }
+        List<FilesDTO> fileList = filesDAO.getFile(qid);
+        model.addAttribute("fileList", fileList);
 
-	    // 비밀번호 입력 후 확인
-	    if (pw != null && !pw.isEmpty()) {
+        return "notice/qna_content";
+    }
 
-	        if (pw.equals(dto.getPw())) {
-	            session.setAttribute(authKey, true);
+    // 비공개 글 비밀번호 인증 여부 확인
+    String authKey = "qnaAuth_" + qid;
 
-	            model.addAttribute("qid", qid);
-	            model.addAttribute("cpage", cpage);
-	            model.addAttribute("success", true);
+    if (Boolean.TRUE.equals(session.getAttribute(authKey))) {
+        session.removeAttribute(authKey);
 
-	            return "notice/qna_password";
-	        }
+        dto.setView_count(qdao.updateViewCount(qid));
 
-	        model.addAttribute("msg", "비밀번호가 틀렸습니다.");
-	    }
+        model.addAttribute("qna", dto);
+        model.addAttribute("cpage", cpage);
+        model.addAttribute("loginId", loginId);
 
-	    model.addAttribute("qid", qid);
-	    model.addAttribute("cpage", cpage);
+        List<FilesDTO> fileList = filesDAO.getFile(qid);
+        model.addAttribute("fileList", fileList);
 
-	    return "notice/qna_password";
-	}
+        return "notice/qna_content";
+    }
+
+    // 비밀번호 입력 후 확인
+    if (pw != null && !pw.isEmpty()) {
+
+        if (pw.equals(dto.getPw())) {
+            session.setAttribute(authKey, true);
+
+            model.addAttribute("qid", qid);
+            model.addAttribute("cpage", cpage);
+            model.addAttribute("success", true);
+
+            return "notice/qna_password";
+        }
+
+        model.addAttribute("msg", "비밀번호가 틀렸습니다.");
+    }
+
+    model.addAttribute("qid", qid);
+    model.addAttribute("cpage", cpage);
+
+    return "notice/qna_password";
+}
+	
+@RequestMapping("/qna_delete")
+public String qnaDelete(int qid, int cpage, HttpSession session) {
+
+    String loginId = (String) session.getAttribute("loginId");
+
+    if (!"admin0001".equals(loginId)) {
+        return "redirect:/notice/qna?cpage=" + cpage;
+    }
+
+    qdao.deleteQna(qid);
+
+    return "redirect:/notice/qna?cpage=" + cpage;
+}
 	
 	@RequestMapping("/qna_reply")
 	public String qnaReply(int qid, int cpage, String reply,

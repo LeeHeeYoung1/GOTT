@@ -108,4 +108,9 @@ public class QnaDAO {
 	    String sql = "select qna_seq.nextval from dual";
 	    return jdbc.queryForObject(sql, Integer.class);
 	}
+	
+	public int deleteQna(int qid) {
+	    String sql = "delete from qna where qid = ?";
+	    return jdbc.update(sql, qid);
+	}
 }
