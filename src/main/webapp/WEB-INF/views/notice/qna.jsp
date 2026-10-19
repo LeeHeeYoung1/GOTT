@@ -490,22 +490,10 @@
 
 </div>
 <script>
-	let recordTotalCount = $
-	{
-		recordTotalCount
-	};
-	let recordCountPerPage = $
-	{
-		recordCountPerPage
-	};
-	let naviCountPerPage = $
-	{
-		naviCountPerpage
-	};
-	let currentPage = $
-	{
-		cpage
-	};
+	let recordTotalCount = ${recordTotalCount};
+	let recordCountPerPage = ${recordCountPerPage};
+	let naviCountPerPage = ${naviCountPerpage};
+	let currentPage = ${cpage};
 
 	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
 
