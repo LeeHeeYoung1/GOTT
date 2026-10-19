@@ -16,7 +16,7 @@ import com.kedu.dto.PlaceDTO;
 
 @Controller
 @RequestMapping("/place")
-public class SearchConroller {
+public class SearchController {
 
 	@Autowired
 	private PlaceDAO dao;

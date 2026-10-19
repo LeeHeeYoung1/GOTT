@@ -28,7 +28,7 @@ import com.kedu.dto.ReplyDTO;
 
 @Controller
 @RequestMapping("/board")
-public class BaordController {
+public class BoardController {
 	
 	@Autowired
 	private BoardDAO bdao;
