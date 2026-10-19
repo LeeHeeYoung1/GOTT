@@ -416,9 +416,12 @@
 												<img src="${wishList.image_name}" alt="${wishList.name}">
 											</div>
 											<div class="wishlistInfo">
-												<h3>${wishList.name}</h3>
-												<p>${wishList.region}</p>
-												
+											    <h3><c:out value="${wishList.name}" /></h3>
+											    <p><c:out value="${wishList.region}" /></p>
+											
+											    <button type="button" class="wishlistRemoveBtn">
+											        ♥ 찜해제
+											    </button>
 											</div>
 										</div>
 									</c:forEach>
