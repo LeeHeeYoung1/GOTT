@@ -36,11 +36,7 @@ public class ReservationDAO {
 				paymentId, PriceUtil.totalPrice(checkIn, checkOut, dto.getPriceWeekday(), dto.getPriceWeekend()));
 	}
 
-	public int delete(String paymentId) {
-		String sql = "update reservation set status = '예약취소' where payment_Id = ?";
-		return jdbc.update(sql, paymentId);
-	}
-
+	
 	public int reservationMileage(String id, int mileage) {
 		String sql = "update members set mileage = mileage - ? where id = ? and mileage >= ?";
 		return jdbc.update(sql, mileage, id, mileage);
@@ -152,30 +148,41 @@ public class ReservationDAO {
 		return jdbc.update(sql, status, paymentId);
 	}
 
-	public ArrayList<ReservationDTO> myRsList(String memberId, int cpage, int pagesize, String reservationTab) {
-		int start = (cpage - 1) * pagesize + 1;
-		int end = cpage * pagesize;
 
+	public ArrayList<ReservationDTO> myRsList(String memberId, int cpage, int pagesize, String reservationTab) {
+	    int start = (cpage - 1) * pagesize + 1;
+	    int end = cpage * pagesize;
+	
 		String sql = "SELECT * FROM ( " + "SELECT reservation.*, room.room_name, room.image1, " + "CASE "
 				+ "WHEN reservation.status = '예약취소' THEN 'cancelled' "
 				+ "WHEN reservation.check_out <= TRUNC(SYSDATE) THEN 'completed' " + "ELSE 'upcoming' "
-				+ "END AS reservation_type, " + "ROW_NUMBER() OVER (ORDER BY reservation.reserve_date DESC) AS rn "
-				+ "FROM reservation " + "JOIN room ON reservation.room_id = room.room_id "
-				+ "WHERE reservation.member_id = ? ";
-
-		if ("cancelled".equals(reservationTab)) {
-			sql += "AND reservation.status = '예약취소' ";
-		} else if ("completed".equals(reservationTab)) {
-			sql += "AND reservation.status <> '예약취소' " + "AND reservation.check_out <= TRUNC(SYSDATE) ";
-		} else if ("upcoming".equals(reservationTab)) {
-			sql += "AND reservation.status <> '예약취소' " + "AND reservation.check_out > TRUNC(SYSDATE) ";
-		}
-
-		sql += ") WHERE rn BETWEEN ? AND ?";
-
-		return (ArrayList<ReservationDTO>) jdbc.query(sql, new BeanPropertyRowMapper<>(ReservationDTO.class), memberId,
-				start, end);
+				+ "END AS reservation_type, " + "CASE " + "WHEN reservation.mileage_status = '적립예정' "
+				+ "AND reservation.status = '예약완료' " + "AND reservation.check_out > TRUNC(SYSDATE) "
+				+ "THEN TRUNC(reservation.total_price * 0.05) " + "ELSE 0 " + "END AS pending_mileage, "
+				+ "ROW_NUMBER() OVER (ORDER BY reservation.reserve_date DESC) AS rn " + "FROM reservation "
+				+ "JOIN room ON reservation.room_id = room.room_id " + "WHERE reservation.member_id = ? ";
+	
+	    if ("cancelled".equals(reservationTab)) {
+	        sql += "AND reservation.status = '예약취소' ";
+	    } else if ("completed".equals(reservationTab)) {
+	        sql += "AND reservation.status <> '예약취소' "
+	                + "AND reservation.check_out <= TRUNC(SYSDATE) ";
+	    } else if ("upcoming".equals(reservationTab)) {
+	        sql += "AND reservation.status <> '예약취소' "
+	                + "AND reservation.check_out > TRUNC(SYSDATE) ";
+	    }
+	
+	    sql += ") WHERE rn BETWEEN ? AND ?";
+	
+	    return (ArrayList<ReservationDTO>) jdbc.query(
+	            sql,
+	            new BeanPropertyRowMapper<>(ReservationDTO.class),
+	            memberId,
+	            start,
+	            end
+	    );
 	}
+
 
 	public ReservationDTO reservationOne(String paymentId) {
 		String sql = "SELECT r.*, rm.room_name, rm.image1, rm.place_id " + "FROM reservation r "
@@ -398,18 +405,29 @@ public class ReservationDAO {
 
 	// 이용완료된 예약의 마일리지 적립 (로그인 시 호출)
 	public int mileageUp(String memberId) {
+	    String addSql = "UPDATE members SET mileage = NVL(mileage, 0) + ( "
+	            + "SELECT NVL(SUM(TRUNC(r.total_price * 0.05)), 0) FROM reservation r "
+	            + "WHERE r.member_id = members.id AND r.mileage_status = '적립예정' "
+	            + "AND r.status = '예약완료' AND r.check_out <= TRUNC(SYSDATE)) "
+	            + "WHERE id = ?";
+	    jdbc.update(addSql, memberId);
 
-		String addSql = "UPDATE members SET mileage = NVL(mileage, 0) + ( "
-				+ "SELECT NVL(SUM(TRUNC(r.price * 0.05)), 0) FROM reservation r "
-				+ "WHERE r.member_id = members.id AND r.mileage_status = '적립예정' "
-				+ "AND r.status = '예약완료' AND r.check_out <= TRUNC(SYSDATE)) " + "WHERE id = ?";
+	    // 2. 마일리지 적립 내역 저장
+		String historySql = "INSERT INTO mileage_history "
+				+ "(seq, member_id, reservation_id, payment_id, type, amount, balance, reason, reg_date) "
+				+ "SELECT mileage_history_seq.NEXTVAL, r.member_id, r.seq, r.payment_id, '적립', "
+				+ "TRUNC(r.total_price * 0.05), " + "m.mileage "
+				+ "- SUM(TRUNC(r.total_price * 0.05)) OVER (PARTITION BY r.member_id) "
+				+ "+ SUM(TRUNC(r.total_price * 0.05)) OVER (" + "PARTITION BY r.member_id ORDER BY r.seq "
+				+ "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW), " + "'숙박 이용 마일리지 적립', SYSDATE "
+				+ "FROM reservation r " + "JOIN members m ON m.id = r.member_id " + "WHERE r.member_id = ? "
+				+ "AND r.mileage_status = '적립예정' " + "AND r.status = '예약완료' " + "AND r.check_out <= TRUNC(SYSDATE)";
+	    jdbc.update(historySql, memberId);
 
-		jdbc.update(addSql, memberId);
-
-		String mStatusSql = "UPDATE reservation SET mileage_status = '적립완료' WHERE member_id = ? "
-				+ "AND mileage_status = '적립예정' AND status = '예약완료' AND check_out <= TRUNC(SYSDATE)";
-
-		return jdbc.update(mStatusSql, memberId);
+	    // 3. 적립 완료 상태로 변경
+		String mStatusSql = "UPDATE reservation SET mileage_status = '적립완료' " + "WHERE member_id = ? "
+				+ "AND mileage_status = '적립예정' " + "AND status = '예약완료' " + "AND check_out <= TRUNC(SYSDATE)";
+	    return jdbc.update(mStatusSql, memberId);
 	}
 
 	// 예약 취소 시 적립 예정 상태 해제
@@ -422,8 +440,9 @@ public class ReservationDAO {
 	
 	// 마일리지 적립 예정 금액 조회
 	public int selectPendingMileage(String memberId) {
-		String sql = "SELECT NVL(SUM(TRUNC(r.price * 0.05)), 0) " + "FROM reservation r " + "WHERE r.member_id = ? "
-				+ "AND r.status = '예약완료' " + "AND r.mileage_status = '적립예정' " + "AND r.check_out > TRUNC(SYSDATE)";
+		String sql = "SELECT NVL(SUM(TRUNC(r.total_price * 0.05)), 0) " + "FROM reservation r "
+				+ "WHERE r.member_id = ? " + "AND r.status = '예약완료' " + "AND r.mileage_status = '적립예정' "
+				+ "AND r.check_out > TRUNC(SYSDATE)";
 	    return jdbc.queryForObject(sql, Integer.class, memberId);
 	}
 

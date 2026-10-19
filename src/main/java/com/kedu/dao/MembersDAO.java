@@ -51,7 +51,7 @@ public class MembersDAO {
 	                + "(SEQ, MEMBER_ID, RESERVATION_ID, PAYMENT_ID, TYPE, AMOUNT, BALANCE, REASON, REG_DATE) "
 	                + "VALUES (MILEAGE_HISTORY_SEQ.NEXTVAL, ?, NULL, NULL, ?, ?, ?, ?, SYSDATE)";
 	
-	        jdbc.update(mileageSql, mdto.getId(), "적립", 3000, 3000, "회원가입 축하 마일리지");
+	        jdbc.update(mileageSql, mdto.getId(), "적립", 2000, 2000, "회원가입 축하 마일리지");
 	    }
 	
 	    return result;
