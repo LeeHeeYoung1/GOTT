@@ -1546,6 +1546,7 @@ $(document).ready(function() {
 
              if (result == "SUCCESS") {
                  alert("여행 일정이 저장되었습니다.");
+                 location.href = "/travelPlan/list?cpage=1";
 
                  $("#shareResult").text(
                      title + " 일정이 저장되었습니다."
