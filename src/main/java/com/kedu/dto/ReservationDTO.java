@@ -27,6 +27,9 @@ public class ReservationDTO {
 	private String placeName;
 	private int updateCount;
 	private String displayStatus;
+	private int pendingMileage;
+
+	
 
 
 	
@@ -34,7 +37,7 @@ public class ReservationDTO {
 	
 	public ReservationDTO(int seq, String memberId, Timestamp reserveDate, int price,int totalPrice ,Date checkIn, Date checkOut,
 							int guestNum, String status, int mileage, int roomId,String paymentId,String roomName,String image1,
-							int placeId,String reservationType,String placeName,int updateCount,String displayStatus) {
+							int placeId,String reservationType,String placeName,int updateCount,String displayStatus,int pendingMileage) {
 		this.seq = seq;
 		this.memberId = memberId;
 		this.reserveDate = reserveDate;
@@ -54,6 +57,7 @@ public class ReservationDTO {
 		this.placeName = placeName;
 		this.updateCount = updateCount;
 		this.displayStatus = displayStatus;
+		this.pendingMileage = pendingMileage;
 	}
 	public int getTotalPrice() {
 		return totalPrice;
@@ -183,5 +187,12 @@ public class ReservationDTO {
 
 	public void setDisplayStatus(String displayStatus) {
 	    this.displayStatus = displayStatus;
+	}
+	public int getPendingMileage() {
+	    return pendingMileage;
+	}
+
+	public void setPendingMileage(int pendingMileage) {
+	    this.pendingMileage = pendingMileage;
 	}
 }
