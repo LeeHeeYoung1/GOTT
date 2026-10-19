@@ -60,31 +60,36 @@ public class MembersControllers {
 	    return "members/login";
 	}
 	
+
 	@ResponseBody
 	@RequestMapping("/login")
 	public int login(MembersDTO mdto, HttpSession session) {
-		int result = mdao.login(mdto);
-		
-		if(result == 1) {
-			MembersDTO member = mdao.selectById(mdto.getId());
-			
-			session.setAttribute("loginId", member.getId());
-		    session.setAttribute("name", member.getName());
-		    session.setAttribute("phone", member.getPhone());
-		    session.setAttribute("email", member.getEmail());
-		    session.setAttribute("gender", member.getGender());
-		    session.setAttribute("Dob", member.getDob());
-		    session.setAttribute("zipcode", member.getZipcode());
-		    session.setAttribute("address1", member.getAddress1());
-		    session.setAttribute("address2", member.getAddress2());
-		    session.setAttribute("nickname", member.getNickname());
-		    session.setAttribute("mileage", member.getMileage());
-		    session.setAttribute("regdate", member.getRegdate());
-		    session.setAttribute("role", member.getRole());
-		    session.setAttribute("privacy_agree", member.getPrivacy_agree());
-		}
-		return result;
+	    int result = mdao.login(mdto);	
+	    if (result == 1) {
+	
+	        MembersDTO member = mdao.selectById(mdto.getId());
+	        rdao.mileageUp(member.getId());
+	        member = mdao.selectById(mdto.getId());
+	
+	        session.setAttribute("loginId", member.getId());
+	        session.setAttribute("name", member.getName());
+	        session.setAttribute("phone", member.getPhone());
+	        session.setAttribute("email", member.getEmail());
+	        session.setAttribute("gender", member.getGender());
+	        session.setAttribute("Dob", member.getDob());
+	        session.setAttribute("zipcode", member.getZipcode());
+	        session.setAttribute("address1", member.getAddress1());
+	        session.setAttribute("address2", member.getAddress2());
+	        session.setAttribute("nickname", member.getNickname());
+	        session.setAttribute("mileage", member.getMileage());
+	        session.setAttribute("regdate", member.getRegdate());
+	        session.setAttribute("role", member.getRole());
+	        session.setAttribute("privacy_agree", member.getPrivacy_agree());
+	    }
+	
+	    return result;
 	}
+
 	
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) throws Exception {

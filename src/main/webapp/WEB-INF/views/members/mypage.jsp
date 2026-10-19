@@ -296,8 +296,9 @@
 																	<strong>· 회수 마일리지 - ${rs.mileage}M</strong>
 																</c:when>
 																<c:otherwise>
-																	<strong>적립예정 마일리지 + <fmt:formatNumber
-																			value="${pendingMileage}" pattern="#,##0" />M
+																	<strong>
+																	    적립예정 마일리지 +
+																	    <fmt:formatNumber value="${rs.pendingMileage}" pattern="#,##0" />M
 																	</strong>
 																</c:otherwise>
 															</c:choose>
