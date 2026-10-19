@@ -391,16 +391,17 @@
 		<div class="qnaTotalCount">
 			총 <strong>${recordTotalCount}</strong>건
 		</div>
-		<c:choose> <c:when test="${loginId != null}">
-		<button type="button" id="qnaWriteBtn"
-			onclick="location.href='/notice/qna_register?cpage=${cpage}'">
-			질문하기</button>
-		</c:when> 
-		<c:otherwise>
-		<button type="button" id="qnaWriteBtn"
-			onclick="alert('로그인하세요.'); location.href='/members/loginpage'">
-			질문하기</button>
-		</c:otherwise> 
+		<c:choose>
+			<c:when test="${loginId != null}">
+				<button type="button" id="qnaWriteBtn"
+					onclick="location.href='/notice/qna_register?cpage=${cpage}'">
+					질문하기</button>
+			</c:when>
+			<c:otherwise>
+				<button type="button" id="qnaWriteBtn"
+					onclick="alert('로그인하세요.'); location.href='/members/loginpage'">
+					질문하기</button>
+			</c:otherwise>
 		</c:choose>
 	</div>
 
@@ -431,12 +432,19 @@
 
 							<td class="qnaTitle"><c:choose>
 									<c:when test="${qna.is_private == 'Y'}">
-										<a href="#"
-											onclick="window.open('/notice/qna_content?qid=${qna.qid}&cpage=${cpage}',
-											'qnaPassword','width=400,height=300'); return false;">
-											🔒 ${qna.title} </a>
+										<c:choose>
+											<c:when test="${loginId == 'admin0001'}">
+												<a href="/notice/qna_content?qid=${qna.qid}&cpage=${cpage}">
+													🔒 ${qna.title} </a>
+											</c:when>
+											<c:otherwise>
+												<a href="#"
+													onclick="window.open('/notice/qna_content?qid=${qna.qid}&cpage=${cpage}',
+                       'qnaPassword','width=400,height=300'); return false;">
+													🔒 ${qna.title} </a>
+											</c:otherwise>
+										</c:choose>
 									</c:when>
-
 									<c:otherwise>
 										<a href="/notice/qna_content?qid=${qna.qid}&cpage=${cpage}">
 											${qna.title} </a>
@@ -482,10 +490,22 @@
 
 </div>
 <script>
-	let recordTotalCount = ${recordTotalCount};
-	let recordCountPerPage = ${recordCountPerPage};
-	let naviCountPerPage = ${naviCountPerpage};
-	let currentPage = ${cpage};
+	let recordTotalCount = $
+	{
+		recordTotalCount
+	};
+	let recordCountPerPage = $
+	{
+		recordCountPerPage
+	};
+	let naviCountPerPage = $
+	{
+		naviCountPerpage
+	};
+	let currentPage = $
+	{
+		cpage
+	};
 
 	let pageTotalCount = Math.ceil(recordTotalCount / recordCountPerPage);
 
