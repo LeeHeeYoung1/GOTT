@@ -360,6 +360,7 @@ public class MembersControllers {
 	
 	    return "members/mypage";
 	}
+	
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(MembersDTO mdto, HttpSession session) {
