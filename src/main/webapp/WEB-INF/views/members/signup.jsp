@@ -531,7 +531,7 @@
                 let address1 = $("#address1");
 
                 zipcode.val(data.zonecode);
-                address1.val(data.jibunAddress);
+                address1.val(data.jibunAddress || data.roadAddress);
             }
         }).open();
     })
@@ -540,41 +540,104 @@
         location.href="/";
     })
 	
-    $("#frm").on("submit", function(e) {
-
-        let pw = $("#pw").val();
-        let pw2 = $("#pw2").val();
-
-	    if(!$("#id").attr("check")) {
+   
+	$("#frm").on("submit", function(e) {
+	
+	    let pw = $("#pw").val();
+	    let pw2 = $("#pw2").val();
+	    let email = $("#email").val().trim();
+	    let zipcode = $("#zipcode").val().trim();
+	    let address1 = $("#address1").val().trim();
+	
+	    // 아이디 중복검사
+	    if (!$("#id").attr("check")) {
 	        alert("아이디 중복검사를 실행해주세요.");
 	        e.preventDefault();
 	        return;
 	    }
 	
-	    if(!$("#nickname").attr("check")) {
+	    // 닉네임 중복검사
+	    if (!$("#nickname").attr("check")) {
 	        alert("닉네임 중복검사를 실행해주세요.");
 	        e.preventDefault();
 	        return;
 	    }
 	
-	    if(!phoneregex.test(phonetext.val())) {
+	    // 비밀번호 입력 및 일치 확인
+	    if (pw === "" || pw2 === "") {
+	        alert("비밀번호를 입력해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    if (pw !== pw2) {
+	        alert("비밀번호가 일치하지 않습니다.");
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    // 전화번호 확인
+	    if (!phoneregex.test(phonetext.val())) {
 	        alert("연락처의 양식에 맞춰 입력해주세요.");
 	        e.preventDefault();
 	        return;
 	    }
-
-        if(pw == "" || pw2 == "") {
-            alert("비밀번호를 입력해주세요.");
-            e.preventDefault();
-            return;
-        }
-        if(pw != pw2) {
-            alert("비밀번호가 일치하지 않습니다.");
-            e.preventDefault();
-            return;
-        }
-        alert("회원가입을 환영합니다.")
+	
+	    // 이메일 필수 입력 및 형식 확인
+	    let emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	
+	    if (email === "") {
+	        alert("이메일을 입력해주세요.");
+	        $("#email").focus();
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    if (!emailregex.test(email)) {
+	        alert("올바른 이메일 형식으로 입력해주세요.");
+	        $("#email").focus();
+	        e.preventDefault();
+	        return;
+	    }
+	    
+		 // 성별 확인
+	    if (!$("input[name='gender']:checked").val()) {
+	        alert("성별을 선택해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+		 
+	 	// 생년월일 확인
+	    if ($("input[name='dob']").val() === "") {
+	        alert("생년월일을 입력해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+		
+	    // 우편번호 확인
+	    if (zipcode === "") {
+	        alert("주소 찾기를 통해 우편번호를 입력해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    // 주소 확인
+	    if (address1 === "") {
+	        alert("주소 찾기를 통해 주소를 입력해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    // 개인정보 동의 확인
+	    if (!$("#agree").is(":checked")) {
+	        alert("개인정보 수집 및 이용에 동의해주세요.");
+	        e.preventDefault();
+	        return;
+	    }
+	
+	    alert("회원가입을 환영합니다.");
 	});
+
     
 </script>
 
