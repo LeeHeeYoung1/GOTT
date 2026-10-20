@@ -36,7 +36,6 @@ public class MembersDAO {
 		return jdbc.queryForObject(sql, Integer.class, nickname);
 	}
 	
-
 	@Transactional
 	public int signup(MembersDTO mdto) {
 
@@ -141,4 +140,5 @@ public class MembersDAO {
 		String sql = "select count(*) from members where role = 'user'";
 		return jdbc.queryForObject(sql, Integer.class);
 	}
+	
 }
