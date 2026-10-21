@@ -157,14 +157,7 @@ public class ReservationController {
 	}
 
 
-	@RequestMapping("/reserve")
-	public String reserve(int roomId, String checkIn, String checkOut, int guest, String paymentId,
-			HttpSession session) {
-		RoomDTO roomDto = roomDao.roomOne(roomId);
-		int price = roomDto.getPriceWeekday();
-		rdao.insert(roomDto, checkIn, checkOut, price, guest, paymentId, session);
-		return "redirect:reservation/list?cpage=1";
-	}
+	
 
 
 

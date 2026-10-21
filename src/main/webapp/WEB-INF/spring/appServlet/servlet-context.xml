@@ -16,7 +16,7 @@
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/css/**" location="/resources/css/" />
 	<resources mapping="/media/**" location="/resources/media/" />
-	<resources mapping="/uploads/**" location="file:///D:/uploads/" />
+	<resources mapping="/uploads/**" location="file:///C:/gott_uploads/" />
 	<resources mapping="/js/**" location="resources/js/" />
 	<resources mapping="/json/**" location="resources/json/" />
 	<resources mapping="/summernote/**" location="/resources/summernote/" />

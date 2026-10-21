@@ -31,7 +31,7 @@ public class FileController {
         JsonObject jsonObject = new JsonObject();
 
         // 프로젝트의 resources/uploads 폴더
-        String fileRoot = "\\\\10.5.4.10\\gott_uploads\\";
+        String fileRoot = "C:\\gott_uploads\\";
 
         File uploadFolder = new File(fileRoot);
 
@@ -75,7 +75,7 @@ public class FileController {
     @RequestMapping("/image")
     public void image(String fileName, HttpServletResponse response) throws Exception {
 
-        String path = "\\\\10.5.4.10\\gott_uploads\\";
+    	String path = "C:\\gott_uploads\\";
 
         File file = new File(path + fileName);
 
